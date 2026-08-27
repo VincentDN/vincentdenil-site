@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Vincent De Nil, Art Director &amp; Founder</title>
+<meta name="description" content="Belgian founder and art director. I build alt-history worlds (The Divided States, WW2044, American Kingdoms) and the ventures that make them real: the Kaiser Cat Collective and Flagmaker &amp; Print.">
+<link rel="canonical" href="https://vincentdenil.com/">
+
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Atelier Vincent De Nil, Art Director &amp; Founder">
+<meta property="og:description" content="I build worlds and the companies that make them real.">
+<meta property="og:url" content="https://vincentdenil.com/">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ===================================================================
+     CANONICAL ENTITY GRAPH  (invisible: the founder play)
+     One Person node (#vincent); every venture Organization references it
+     by @id via `founder`, so Google resolves a single linked entity.
+     Keep these facts identical to flagmaker-print.com/pages/about-vincent
+     and kaisercatcinema.com/about.
+     ==================================================================== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": "https://vincentdenil.com/#profilepage",
+      "url": "https://vincentdenil.com/",
+      "name": "Atelier Vincent De Nil, Art Director & Founder",
+      "mainEntity": { "@id": "https://vincentdenil.com/#vincent" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://vincentdenil.com/#vincent",
+      "name": "Vincent De Nil",
+      "alternateName": "VincentDN",
+      "url": "https://vincentdenil.com/",
+      "jobTitle": "Art Director & Founder",
+      "description": "Belgian founder and art director, working between Stockholm and Raleigh, NC. Creates alt-history worlds (The Divided States, WW2044, American Kingdoms) and builds the ventures that fund and manufacture them: the Kaiser Cat Collective and Flagmaker & Print.",
+      "nationality": { "@type": "Country", "name": "Belgium" },
+      "workLocation": [
+        { "@type": "Place", "name": "Stockholm, Sweden" },
+        { "@type": "Place", "name": "Raleigh, North Carolina, USA" }
+      ],
+      "knowsAbout": [
+        "Alt-history worldbuilding",
+        "Vexillography (flag design)",
+        "Concept art and historical illustration",
+        "Custom flag manufacturing"
+      ],
+      "worksFor": { "@id": "https://vincentdenil.com/#atelier" },
+      "sameAs": [
+        "https://flagmaker-print.com/pages/about-vincent",
+        "https://kaisercatcinema.com/about",
+        "https://dividedstates-project.com/",
+        "https://www.artstation.com/vincentdn",
+        "https://www.linkedin.com/in/vincentdn/",
+        "https://github.com/VincentDN",
+        "https://x.com/vincentdnil",
+        "https://www.reddit.com/user/KR-VincentDN/",
+        "https://www.youtube.com/channel/UCoqMfyTcyPwd3zMx0-wZc9w"
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://vincentdenil.com/#atelier",
+      "name": "Atelier Vincent De Nil BV",
+      "url": "https://vincentdenil.com/",
+      "founder": { "@id": "https://vincentdenil.com/#vincent" },
+      "location": { "@type": "Country", "name": "Belgium" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://kaisercatcinema.com/#org",
+      "name": "Kaiser Cat Collective",
+      "url": "https://kaisercatcinema.com/",
+      "founder": { "@id": "https://vincentdenil.com/#vincent" },
+      "parentOrganization": { "@id": "https://vincentdenil.com/#atelier" }
+    },
+    {
+      "@type": "OnlineStore",
+      "@id": "https://flagmaker-print.com/#org",
+      "name": "Flagmaker & Print",
+      "url": "https://flagmaker-print.com/",
+      "founder": { "@id": "https://vincentdenil.com/#vincent" },
+      "parentOrganization": { "@id": "https://vincentdenil.com/#atelier" }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root{
+    --prussian:      #06182A;   /* deep base            */
+    --panel:         rgba(38, 74, 108, .58);
+    --panel-line:    rgba(255,255,255,.12);
+    --btn:           rgba(34, 70, 104, .55);
+    --btn-hover:     rgba(52, 92, 130, .78);
+    --text:          #EAF2F8;
+    --text-soft:     #9EBAD0;
+    --line:          rgba(255,255,255,.16);
+    --radius-card:   0;
+    --radius-btn:    0;
+    --col:           620px;
+    --ease:          cubic-bezier(.2,.7,.2,1);
+    /* -------------------------------------------------------------------
+       BACKGROUND IMAGE: drop your artwork in and point this at it, e.g.
+       --bg: url('assets/background.jpg');
+       Until then a deep prussian gradient stands in.
+       ------------------------------------------------------------------- */
+    --bg: none;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; min-height:100vh;
+    color:var(--text);
+    font-family:"Figtree", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center;
+  }
+  /* full-bleed background + prussian tint (keeps text legible over any art) */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-2;
+    background-color:var(--prussian);
+    background-image:
+      linear-gradient(158deg, rgba(7,26,44,.68), rgba(5,17,30,.90)),
+      var(--bg);
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+  }
+  body::after{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:radial-gradient(120% 80% at 50% -8%, rgba(120,170,210,.14), transparent 60%);
+  }
+
+  .wrap{
+    width:100%; max-width:var(--col);
+    padding:clamp(2rem,6vh,4rem) clamp(1.1rem,4vw,1.5rem) 2.5rem;
+    text-align:center;
+  }
+
+  /* ---------- brand lockup ---------- */
+  .brand{
+    display:inline-flex; align-items:center; gap:16px;
+    margin:0 auto 2.2rem; color:var(--text);
+  }
+  /* Placeholder emblem: replace with your real stag logo.
+     swap this <svg> for <img src="assets/logo.svg" alt="Atelier Vincent De Nil" height="60"> */
+  .emblem{ width:60px; height:60px; color:var(--text); flex:none; }
+  .wordmark{ text-align:left; line-height:1; }
+  .wordmark .a{
+    display:block; font-size:.72rem; font-weight:500;
+    letter-spacing:.44em; color:var(--text-soft); margin-bottom:.5em;
+  }
+  .wordmark .n{
+    display:block; font-size:1.5rem; font-weight:600;
+    letter-spacing:.24em; text-transform:uppercase;
+  }
+
+  /* ---------- bio card ---------- */
+  .bio-card{
+    display:flex; gap:22px; text-align:left;
+    background:var(--panel);
+    border-radius:var(--radius-card);
+    padding:22px;
+    backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+  }
+  /* Placeholder portrait: swap for <img src="assets/vincent.jpg" ...>.
+     Your existing PDX-CON 2019 photo works perfectly here. */
+  .portrait{
+    flex:none; width:150px; align-self:stretch; min-height:150px; border-radius:0;
+    background:
+      linear-gradient(160deg, rgba(58,96,132,.85), rgba(34,68,102,.85));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px; color:var(--text-soft); overflow:hidden;
+  }
+  .portrait svg{ width:46px; height:46px; opacity:.55; }
+  .portrait span{ font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; }
+  .bio h1{
+    font-size:1.34rem; font-weight:700; line-height:1.22;
+    margin:.1rem 0 .7rem; letter-spacing:-.01em;
+  }
+  .bio p{ font-size:1rem; color:#D3E1EC; margin:0; }
+  .bio p .proj{ font-style:italic; }
+  .bio p .aside{ color:var(--text-soft); }
+
+  .divider{
+    border:0; height:1px; width:100%;
+    background:var(--line);
+    margin:2rem auto;
+  }
+
+  /* ---------- central buttons ---------- */
+  .links{ display:flex; flex-direction:column; gap:14px; }
+  .btn{
+    display:block; padding:16px 22px;
+    background:var(--btn);
+    border-radius:var(--radius-btn);
+    color:var(--text); font-weight:600; font-size:1.05rem;
+    text-decoration:none;
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  }
+  .btn:hover, .btn:focus-visible{
+    background:var(--btn-hover);
+  }
+  .btn:focus-visible{ outline:2px solid #7FB2D8; outline-offset:3px; }
+
+  /* ---------- speaking (Experience pillar, optional: delete the whole block to remove) ---------- */
+  .speaking{ margin-top:2rem; text-align:left; }
+  .speaking .eyebrow{
+    font-size:.72rem; font-weight:600; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--text-soft); margin:0 0 .3rem; padding-left:4px;
+  }
+  .talk{
+    display:flex; align-items:baseline; gap:12px;
+    padding:12px 6px; border-bottom:1px solid rgba(255,255,255,.08);
+    color:var(--text);
+  }
+  .talk .yr{ font-weight:600; color:var(--text-soft); font-size:.92rem; flex:none; }
+  .talk .what{ flex:1; font-size:1rem; }
+  .talk .what small{ display:block; color:var(--text-soft); font-size:.82rem; margin-top:2px; }
+  .talk .yt{
+    color:var(--text-soft); text-decoration:none;
+    border-bottom:1px solid rgba(158,186,208,.4);
+  }
+  .talk .yt:hover, .talk .yt:focus-visible{ color:var(--text); border-bottom-color:var(--text); }
+  .talk .yt:focus-visible{ outline:2px solid #7FB2D8; outline-offset:2px; }
+
+  /* ---------- socials ---------- */
+  .socials{ display:flex; justify-content:center; gap:12px; margin:2.4rem 0 1.4rem; }
+  .socials a{
+    color:var(--text-soft); display:inline-flex; align-items:center; justify-content:center;
+    width:42px; height:42px; background:var(--btn);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  }
+  .socials a:hover, .socials a:focus-visible{ color:var(--text); background:var(--btn-hover); }
+  .socials a:focus-visible{ outline:2px solid #7FB2D8; outline-offset:3px; }
+  .socials svg{ width:20px; height:20px; }
+
+  footer{
+    color:var(--text-soft); font-size:.82rem; line-height:1.8; letter-spacing:.02em;
+  }
+  footer .mot{ font-style:italic; color:#C4D8E8; }
+  footer .credit{ display:block; margin-top:1rem; font-size:.72rem; opacity:.6; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:520px){
+    .bio-card{ flex-direction:column; align-items:center; text-align:center; }
+    .portrait{ width:170px; height:170px; }
+    .wordmark .n{ font-size:1.24rem; letter-spacing:.18em; }
+  }
+</style>
+</head>
+
+<body>
+  <main class="wrap">
+
+    <div class="brand">
+      <svg class="emblem" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Atelier Vincent De Nil emblem">
+        <!-- placeholder stag mark -->
+        <circle cx="32" cy="40" r="8"/>
+        <path d="M27 34 L23 37 M37 34 L41 37"/>
+        <path d="M28 32 C25 22 21 20 19 12"/>
+        <path d="M24.5 24 L18 20 M22.5 17 L23 9"/>
+        <path d="M36 32 C39 22 43 20 45 12"/>
+        <path d="M39.5 24 L46 20 M41.5 17 L41 9"/>
+        <path d="M29 42 h6 M31 46 q1 1.4 2 0"/>
+      </svg>
+      <div class="wordmark">
+        <span class="a">ATELIER</span>
+        <span class="n">Vincent De Nil</span>
+      </div>
+    </div>
+
+    <section class="bio-card">
+      <div class="portrait" role="img" aria-label="Vincent De Nil speaking at ParadoxCon Berlin, 'Creating the World of Kaiserreich'">
+        <!-- swap for: <img src="assets/vincent.jpg" alt="Vincent De Nil speaking at ParadoxCon Berlin, 'Creating the World of Kaiserreich'" style="width:100%;height:100%;object-fit:cover"> -->
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.5-9 6v2h18v-2c0-3.5-4-6-9-6Z"/></svg>
+        <span>Founder portrait</span>
+      </div>
+      <div class="bio">
+        <h1>I build worlds and the companies that make them real.</h1>
+        <p>Belgian founder and art director, working between Stockholm and Raleigh, NC. I create alt-history worlds (<span class="proj">The Divided States, WW2044, American Kingdoms</span>) and build the ventures that fund and manufacture them: the Kaiser Cat Collective and Flagmaker &amp; Print. <span class="aside">Occasional video game modder.</span></p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <nav class="links" aria-label="Ventures">
+      <a class="btn" href="https://flagmaker-print.com/">Flagmaker &amp; Print</a>
+      <a class="btn" href="https://kaisercatcinema.com/">Kaiser Cat Collective</a>
+      <a class="btn" href="https://kaisercatcinema.com/blogs/dev-diaries">Dev Diaries</a>
+      <a class="btn" href="https://american-kingdoms.com/">American Kingdoms</a>
+      <a class="btn" href="https://dividedstates-project.com/">The Divided States</a>
+      <a class="btn" href="https://www.artstation.com/vincentdn">Artstation - Client Portfolio</a>
+      <a class="btn" href="mailto:vincent@kaisercatcinema.com">Contact &amp; Inquiries</a>
+    </nav>
+
+    <section class="speaking" aria-label="Speaking engagements">
+      <p class="eyebrow">Speaking</p>
+      <div class="talk">
+        <span class="yr">2019</span>
+        <span class="what">ParadoxCon, Berlin<small>"Creating the World of Kaiserreich" &middot; <a class="yt" href="https://youtu.be/TVkHKuPPj5Q?si=g3XYWU5ig3L1YZkM">See it on Youtube</a></small></span>
+      </div>
+      <!-- Add your other two talks + the 2027 one here, same format. Send me
+           event / host / city / year / proof link and I'll slot them in.
+      <div class="talk">
+        <span class="yr">YEAR</span>
+        <span class="what">EVENT, CITY<small>"TALK TITLE" &middot; <a class="yt" href="PROOF_URL">See it on Youtube</a></small></span>
+      </div>
+      -->
+    </section>
+
+    <div class="socials">
+      <a href="https://www.linkedin.com/in/vincentdn/" aria-label="LinkedIn">
+        <svg viewBox="-2.5 -2 29 29" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0ZM.5 8h4V24h-4V8Zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.1c0-1.7-.03-3.9-2.37-3.9-2.38 0-2.74 1.85-2.74 3.77V24h-4V8Z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/channel/UCoqMfyTcyPwd3zMx0-wZc9w" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.5a3 3 0 0 0-2.1-2.1C19.5 3.9 12 3.9 12 3.9s-7.5 0-9.4.5A3 3 0 0 0 .5 6.5C0 8.4 0 12 0 12s0 3.6.5 5.5a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.6 24 12 24 12s0-3.6-.5-5.5ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a href="https://github.com/VincentDN" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a href="https://x.com/vincentdnil" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>
+      </a>
+      <a href="https://www.reddit.com/user/KR-VincentDN/" aria-label="Reddit">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 11.8a2.3 2.3 0 0 0-3.9-1.6 11.3 11.3 0 0 0-5.8-1.8l1-4.6 3.2.7a1.6 1.6 0 1 0 .2-1l-3.6-.8a.5.5 0 0 0-.6.4l-1.1 5.1a11.3 11.3 0 0 0-5.9 1.8A2.3 2.3 0 1 0 2 14.4a4.5 4.5 0 0 0-.1 1c0 3.4 3.9 6.1 8.6 6.1s8.6-2.7 8.6-6.1a4.5 4.5 0 0 0-.1-1 2.3 2.3 0 0 0 3-2.6ZM7 13.6a1.4 1.4 0 1 1 2.8 0 1.4 1.4 0 0 1-2.8 0Zm7.8 3.8a5 5 0 0 1-5.6 0 .5.5 0 0 1 .7-.7 4 4 0 0 0 4.2 0 .5.5 0 1 1 .7.7Zm-.4-2.4a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/></svg>
+      </a>
+    </div>
+
+    <footer>
+      All rights reserved, Atelier Vincent De Nil BV, Belgium.<br>
+      <span class="mot">Luctor et Emergo</span>
+      <span class="credit">Website built with Claude Code</span>
+    </footer>
+
+  </main>
+</body>
+</html>
