@@ -40,69 +40,133 @@
       "@type": "ProfilePage",
       "@id": "https://vincentdenil.com/#profilepage",
       "url": "https://vincentdenil.com/",
-      "name": "Atelier Vincent De Nil, Art Director & Founder",
-      "mainEntity": { "@id": "https://vincentdenil.com/#vincent" }
+      "name": "Vincent De Nil — Founder and Art Director",
+      "isPartOf": {
+        "@id": "https://vincentdenil.com/#website"
+      },
+      "mainEntity": {
+        "@id": "https://vincentdenil.com/#vincent"
+      },
+      "about": {
+        "@id": "https://vincentdenil.com/#vincent"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://vincentdenil.com/#website",
+      "url": "https://vincentdenil.com/",
+      "name": "Atelier Vincent De Nil",
+      "publisher": {
+        "@id": "https://vincentdenil.com/#atelier"
+      }
     },
     {
       "@type": "Person",
       "@id": "https://vincentdenil.com/#vincent",
+      "url": "https://vincentdenil.com/",
       "name": "Vincent De Nil",
       "alternateName": "VincentDN",
-      "url": "https://vincentdenil.com/",
-      "jobTitle": "Art Director & Founder",
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://vincentdenil.com/assets/vincent.jpg",
-        "caption": "Vincent De Nil giving his talk 'Creating the World of Kaiserreich' at PDX-CON Berlin, 2019"
+      "jobTitle": [
+        "Founder",
+        "Art Director"
+      ],
+      "description": "Belgian founder and art director working between Stockholm and Raleigh, North Carolina. Creator of alternate-history worlds and founder of the companies that develop, publish and support them.",
+      "nationality": {
+        "@type": "Country",
+        "name": "Belgium"
       },
-      "description": "Belgian founder and art director, working between Stockholm and Raleigh, NC. Creates alt-history worlds (The Divided States, WW2044, American Kingdoms) and builds the companies that fund and make them grow: the Kaiser Cat Collective and Flagmaker & Print.",
-      "nationality": { "@type": "Country", "name": "Belgium" },
       "workLocation": [
-        { "@type": "Place", "name": "Stockholm, Sweden" },
-        { "@type": "Place", "name": "Raleigh, North Carolina, USA" }
+        {
+          "@type": "Place",
+          "name": "Stockholm, Sweden"
+        },
+        {
+          "@type": "Place",
+          "name": "Raleigh, North Carolina, United States"
+        }
       ],
       "knowsAbout": [
-        "Alt-history worldbuilding",
-        "Vexillography (flag design)",
-        "Concept art and historical illustration",
-        "Custom flag manufacturing"
+        "Art direction",
+        "Alternate-history worldbuilding",
+        "Vexillography and flag design",
+        "Custom flag manufacturing",
+        "Direct-to-garment (DTG) printing",
+        "Dye-sublimation printing",
+        "Video game modding"
       ],
-      "worksFor": { "@id": "https://vincentdenil.com/#atelier" },
+      "worksFor": {
+        "@id": "https://vincentdenil.com/#atelier"
+      },
+      "founder": [
+        {
+          "@id": "https://vincentdenil.com/#atelier"
+        },
+        {
+          "@id": "https://kaisercatcinema.com/#org"
+        },
+        {
+          "@id": "https://flagmaker-print.com/#org"
+        }
+      ],
       "sameAs": [
         "https://flagmaker-print.com/pages/about-vincent",
         "https://kaisercatcinema.com/about",
-        "https://dividedstates-project.com/",
-        "https://www.artstation.com/vincentdn",
-        "https://www.linkedin.com/in/vincentdn/",
-        "https://github.com/VincentDN",
-        "https://x.com/vincentdnil",
-        "https://www.reddit.com/user/KR-VincentDN/",
-        "https://www.youtube.com/channel/UCoqMfyTcyPwd3zMx0-wZc9w"
+        "https://www.artstation.com/vincentdn"
       ]
     },
     {
       "@type": "Organization",
       "@id": "https://vincentdenil.com/#atelier",
-      "name": "Atelier Vincent De Nil BV",
       "url": "https://vincentdenil.com/",
-      "founder": { "@id": "https://vincentdenil.com/#vincent" },
-      "location": { "@type": "Country", "name": "Belgium" }
+      "name": "Atelier Vincent De Nil BV",
+      "legalName": "Atelier Vincent De Nil BV",
+      "founder": {
+        "@id": "https://vincentdenil.com/#vincent"
+      },
+      "employee": {
+        "@id": "https://vincentdenil.com/#vincent"
+      },
+      "subOrganization": [
+        {
+          "@id": "https://kaisercatcinema.com/#org"
+        },
+        {
+          "@id": "https://flagmaker-print.com/#org"
+        }
+      ]
     },
     {
       "@type": "Organization",
       "@id": "https://kaisercatcinema.com/#org",
-      "name": "Kaiser Cat Collective",
       "url": "https://kaisercatcinema.com/",
-      "founder": { "@id": "https://vincentdenil.com/#vincent" },
-      "parentOrganization": { "@id": "https://vincentdenil.com/#atelier" }
+      "name": "Kaiser Cat Collective",
+      "founder": {
+        "@id": "https://vincentdenil.com/#vincent"
+      },
+      "parentOrganization": {
+        "@id": "https://vincentdenil.com/#atelier"
+      }
     },
     {
       "@type": "OnlineStore",
       "@id": "https://flagmaker-print.com/#org",
-      "name": "Flagmaker & Print",
       "url": "https://flagmaker-print.com/",
-      "founder": { "@id": "https://vincentdenil.com/#vincent" },
-      "parentOrganization": { "@id": "https://vincentdenil.com/#atelier" }
+      "name": "Flagmaker & Print",
+      "founder": {
+        "@id": "https://vincentdenil.com/#vincent"
+      },
+      "parentOrganization": {
+        "@id": "https://vincentdenil.com/#atelier"
+      }
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://dividedstates-project.com/#project",
+      "url": "https://dividedstates-project.com/",
+      "name": "The Divided States",
+      "creator": {
+        "@id": "https://vincentdenil.com/#vincent"
+      }
     }
   ]
 }
