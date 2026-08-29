@@ -283,6 +283,16 @@
     font-size:1.34rem; font-weight:700; line-height:1.22;
     margin:.1rem 0 .7rem; letter-spacing:-.01em;
   }
+  /* typewriter rotator: caret only appears once JS starts typing */
+  .hero-rotate{ white-space:pre-wrap; }
+  .bio h1.typing .hero-rotate::after{
+    content:"|"; margin-left:1px; font-weight:400; color:#7FB2D8;
+    animation:caret-blink 1s steps(1,end) infinite;
+  }
+  @keyframes caret-blink{ 50%{ opacity:0; } }
+  @media (prefers-reduced-motion:reduce){
+    .bio h1.typing .hero-rotate::after{ display:none; animation:none; }
+  }
   .bio p{ font-size:1rem; color:#D3E1EC; margin:0; }
   .bio p .proj{ font-style:italic; }
 
@@ -371,7 +381,7 @@
         <img src="assets/vincent.jpg" alt="Vincent De Nil giving his talk 'Creating the World of Kaiserreich' at PDX-CON Berlin, 2019">
       </div>
       <div class="bio">
-        <h1>I build worlds and the companies that make them real.</h1>
+        <h1 aria-label="I build worlds and the companies that make them real."><span aria-hidden="true">I build <span class="hero-rotate">worlds and the companies that make them real.</span></span></h1>
         <p>Belgian founder and art director, working between Stockholm and Raleigh, NC. I create alt-history worlds (<span class="proj">The Divided States, WW2044, American Kingdoms</span>) and build the companies that fund and make them grow: the Kaiser Cat Collective and Flagmaker &amp; Print. Occasional video game modder.</p>
       </div>
     </section>
@@ -443,5 +453,55 @@
     </footer>
 
   </main>
+
+  <script>
+    (function(){
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var rotate = document.querySelector('.hero-rotate');
+      if(!rotate) return;
+      var h1 = rotate.closest('h1');
+      var phrases = [
+        "worlds and the companies that make them real.",
+        "teams and the projects that make them shine.",
+        "ideas and the infrastructure to make them real."
+      ];
+
+      // Reserve the tallest height so the line never reflows as words change.
+      function reserve(){
+        var keep = rotate.textContent, max = 0;
+        h1.style.minHeight = '';
+        phrases.forEach(function(p){ rotate.textContent = p; if(h1.offsetHeight > max) max = h1.offsetHeight; });
+        rotate.textContent = keep;
+        h1.style.minHeight = max + 'px';
+      }
+      reserve();
+      if(document.fonts && document.fonts.ready){ document.fonts.ready.then(reserve); }
+      var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(reserve, 150); });
+
+      // Respect reduced motion: leave the canonical line, no typing.
+      if(reduce) return;
+
+      h1.classList.add('typing');
+      var TYPE = 55, DEL = 30, HOLD = 30000, GAP = 320;
+      var i = 0, txt = phrases[0], deleting = false;
+
+      function tick(){
+        var full = phrases[i];
+        if(!deleting){
+          txt = full.slice(0, txt.length + 1);
+          rotate.textContent = txt;
+          if(txt === full){ deleting = true; return setTimeout(tick, HOLD); }
+          return setTimeout(tick, TYPE);
+        } else {
+          txt = full.slice(0, txt.length - 1);
+          rotate.textContent = txt;
+          if(txt === ''){ deleting = false; i = (i + 1) % phrases.length; return setTimeout(tick, GAP); }
+          return setTimeout(tick, DEL);
+        }
+      }
+      // Start from the canonical line already shown: hold, then delete into the cycle.
+      setTimeout(function(){ deleting = true; tick(); }, HOLD);
+    })();
+  </script>
 </body>
 </html>
