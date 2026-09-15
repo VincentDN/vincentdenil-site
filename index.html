@@ -199,6 +199,16 @@
        Until then a deep prussian gradient stands in.
        ------------------------------------------------------------------- */
     --bg: url('assets/background.jpg');
+
+    /* Nerd mode palette — swapped in via body.nerd-mode, see toggle button below. */
+    --flat-nerd:      #170202;
+    --prussian-nerd:  #200404;
+    --panel-nerd:     #2a0606;
+    --btn-nerd:       #2a0606;
+    --btn-hover-nerd: #4a0d0d;
+    --text-nerd:      #ffe9e9;
+    --text-soft-nerd: #d99;
+    --line-nerd:      rgba(255,120,120,.22);
   }
 
   *{ box-sizing:border-box; }
@@ -357,6 +367,80 @@
   footer .credit a{ color:inherit; text-decoration:underline; text-underline-offset:2px; }
   footer .credit a:hover, footer .credit a:focus-visible{ color:var(--text); }
 
+  /* ---------- nerd mode ---------- */
+  body.nerd-mode{
+    --flat: var(--flat-nerd);
+    --prussian: var(--prussian-nerd);
+    --panel: var(--panel-nerd);
+    --btn: var(--btn-nerd);
+    --btn-hover: var(--btn-hover-nerd);
+    --text: var(--text-nerd);
+    --text-soft: var(--text-soft-nerd);
+    --line: var(--line-nerd);
+  }
+  body.nerd-mode::before{ filter:grayscale(.4) sepia(.6) saturate(3) hue-rotate(-40deg) brightness(.55); }
+
+  #crtOverlay{
+    position:fixed; inset:0; z-index:5; pointer-events:none; opacity:0;
+    background:
+      repeating-linear-gradient(to bottom, rgba(0,0,0,.28) 0px, rgba(0,0,0,.28) 1px, transparent 2px, transparent 4px),
+      radial-gradient(ellipse at center, rgba(255,40,40,.14) 0%, rgba(0,0,0,.6) 130%);
+    transition:opacity .4s var(--ease);
+  }
+  body.nerd-mode #crtOverlay{ opacity:1; animation:crt-flicker 6s ease-in-out infinite; }
+  @keyframes crt-flicker{
+    0%,91%,100%{ opacity:1; }
+    92%{ opacity:.86; }
+    93%{ opacity:1; }
+    96%{ opacity:.92; }
+    97%{ opacity:1; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    body.nerd-mode #crtOverlay{ animation:none; }
+  }
+
+  /* ---------- nerd mode toggle (space invader) ---------- */
+  .invader-btn{
+    position:fixed; top:clamp(1rem,3vh,1.75rem); right:clamp(1rem,4vw,1.75rem); z-index:20;
+    width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center;
+    background:var(--btn); border:1px solid var(--panel-line); border-radius:10px;
+    color:var(--text-soft); cursor:pointer; -webkit-tap-highlight-color:transparent;
+    transition:background .2s var(--ease), color .2s var(--ease), transform .2s var(--ease), border-color .2s var(--ease);
+  }
+  .invader-btn:hover, .invader-btn:focus-visible{ background:var(--btn-hover); color:var(--text); transform:translateY(-1px); }
+  .invader-btn:focus-visible{ outline:2px solid #7FB2D8; outline-offset:3px; }
+  .invader-btn svg{ width:18px; height:18px; display:block; overflow:visible; }
+  .invader-btn .f2{ opacity:0; }
+  @media (prefers-reduced-motion:no-preference){
+    .invader-btn .f1{ animation:invader-walk-a 1.1s steps(1,end) infinite; }
+    .invader-btn .f2{ animation:invader-walk-b 1.1s steps(1,end) infinite; }
+  }
+  @keyframes invader-walk-a{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+  @keyframes invader-walk-b{ 0%,49%{opacity:0;} 50%,100%{opacity:1;} }
+  body.nerd-mode .invader-btn{ color:#ff6b6b; border-color:rgba(255,120,120,.35); }
+
+  /* tooltip, positioned below since the button sits at the top of the viewport */
+  .invader-btn[data-tooltip]{ position:fixed; }
+  .invader-btn[data-tooltip]::after{
+    content:attr(data-tooltip);
+    position:absolute; top:calc(100% + 9px); right:0;
+    width:max-content; max-width:180px;
+    background:#0A2036; color:var(--text);
+    font-size:.72rem; line-height:1.35; text-align:left; font-weight:400;
+    padding:8px 10px;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:21;
+    transition:opacity .15s var(--ease);
+  }
+  .invader-btn[data-tooltip]::before{
+    content:""; position:absolute; top:calc(100% + 3px); right:12px;
+    border:6px solid transparent; border-bottom-color:#0A2036;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:21;
+  }
+  .invader-btn[data-tooltip]:hover::after, .invader-btn[data-tooltip]:focus-visible::after,
+  .invader-btn[data-tooltip]:hover::before, .invader-btn[data-tooltip]:focus-visible::before{
+    opacity:1; visibility:visible;
+  }
+
   /* ---------- responsive ---------- */
   @media (max-width:520px){
     .bio-card{ flex-direction:column; align-items:center; }
@@ -367,6 +451,34 @@
 </head>
 
 <body>
+  <div id="crtOverlay" aria-hidden="true"></div>
+
+  <button type="button" id="nerdToggle" class="invader-btn" aria-pressed="false"
+          aria-label="Switch to nerd mode" data-tooltip="Switch to nerd mode">
+    <svg viewBox="0 0 22 16" fill="currentColor" aria-hidden="true">
+      <g class="f1">
+        <rect x="4" y="0" width="2" height="2"/><rect x="16" y="0" width="2" height="2"/>
+        <rect x="6" y="2" width="2" height="2"/><rect x="14" y="2" width="2" height="2"/>
+        <rect x="4" y="4" width="2" height="2"/><rect x="6" y="4" width="2" height="2"/><rect x="8" y="4" width="2" height="2"/><rect x="10" y="4" width="2" height="2"/><rect x="12" y="4" width="2" height="2"/><rect x="14" y="4" width="2" height="2"/><rect x="16" y="4" width="2" height="2"/>
+        <rect x="2" y="6" width="2" height="2"/><rect x="4" y="6" width="2" height="2"/><rect x="8" y="6" width="2" height="2"/><rect x="10" y="6" width="2" height="2"/><rect x="12" y="6" width="2" height="2"/><rect x="16" y="6" width="2" height="2"/><rect x="18" y="6" width="2" height="2"/>
+        <rect x="0" y="8" width="2" height="2"/><rect x="2" y="8" width="2" height="2"/><rect x="4" y="8" width="2" height="2"/><rect x="6" y="8" width="2" height="2"/><rect x="8" y="8" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="12" y="8" width="2" height="2"/><rect x="14" y="8" width="2" height="2"/><rect x="16" y="8" width="2" height="2"/><rect x="18" y="8" width="2" height="2"/><rect x="20" y="8" width="2" height="2"/>
+        <rect x="0" y="10" width="2" height="2"/><rect x="4" y="10" width="2" height="2"/><rect x="6" y="10" width="2" height="2"/><rect x="8" y="10" width="2" height="2"/><rect x="10" y="10" width="2" height="2"/><rect x="12" y="10" width="2" height="2"/><rect x="14" y="10" width="2" height="2"/><rect x="16" y="10" width="2" height="2"/><rect x="20" y="10" width="2" height="2"/>
+        <rect x="0" y="12" width="2" height="2"/><rect x="4" y="12" width="2" height="2"/><rect x="16" y="12" width="2" height="2"/><rect x="20" y="12" width="2" height="2"/>
+        <rect x="6" y="14" width="2" height="2"/><rect x="8" y="14" width="2" height="2"/><rect x="12" y="14" width="2" height="2"/><rect x="14" y="14" width="2" height="2"/>
+      </g>
+      <g class="f2">
+        <rect x="4" y="0" width="2" height="2"/><rect x="16" y="0" width="2" height="2"/>
+        <rect x="0" y="2" width="2" height="2"/><rect x="6" y="2" width="2" height="2"/><rect x="14" y="2" width="2" height="2"/><rect x="20" y="2" width="2" height="2"/>
+        <rect x="0" y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="6" y="4" width="2" height="2"/><rect x="8" y="4" width="2" height="2"/><rect x="10" y="4" width="2" height="2"/><rect x="12" y="4" width="2" height="2"/><rect x="14" y="4" width="2" height="2"/><rect x="16" y="4" width="2" height="2"/><rect x="20" y="4" width="2" height="2"/>
+        <rect x="0" y="6" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="4" y="6" width="2" height="2"/><rect x="8" y="6" width="2" height="2"/><rect x="10" y="6" width="2" height="2"/><rect x="12" y="6" width="2" height="2"/><rect x="16" y="6" width="2" height="2"/><rect x="18" y="6" width="2" height="2"/><rect x="20" y="6" width="2" height="2"/>
+        <rect x="0" y="8" width="2" height="2"/><rect x="2" y="8" width="2" height="2"/><rect x="4" y="8" width="2" height="2"/><rect x="6" y="8" width="2" height="2"/><rect x="8" y="8" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="12" y="8" width="2" height="2"/><rect x="14" y="8" width="2" height="2"/><rect x="16" y="8" width="2" height="2"/><rect x="18" y="8" width="2" height="2"/><rect x="20" y="8" width="2" height="2"/>
+        <rect x="2" y="10" width="2" height="2"/><rect x="4" y="10" width="2" height="2"/><rect x="6" y="10" width="2" height="2"/><rect x="8" y="10" width="2" height="2"/><rect x="10" y="10" width="2" height="2"/><rect x="12" y="10" width="2" height="2"/><rect x="14" y="10" width="2" height="2"/><rect x="16" y="10" width="2" height="2"/><rect x="18" y="10" width="2" height="2"/>
+        <rect x="4" y="12" width="2" height="2"/><rect x="16" y="12" width="2" height="2"/>
+        <rect x="2" y="14" width="2" height="2"/><rect x="18" y="14" width="2" height="2"/>
+      </g>
+    </svg>
+  </button>
+
   <main class="wrap">
 
     <div class="brand">
@@ -503,6 +615,96 @@
       }
       // Start from the canonical line already shown: hold, then delete into the cycle.
       setTimeout(function(){ deleting = true; tick(); }, HOLD);
+    })();
+  </script>
+
+  <!-- Hidden feature: click the space invader, top right, for nerd mode. -->
+  <script>
+    (function(){
+      var btn = document.getElementById('nerdToggle');
+      var portraitWrap = document.querySelector('.portrait');
+      var portrait = portraitWrap && portraitWrap.querySelector('img');
+      var nav = document.querySelector('.links');
+      if(!btn || !portrait || !nav) return;
+
+      var normalAvatar = {
+        src: portrait.getAttribute('src'),
+        alt: portrait.getAttribute('alt'),
+        tooltip: portraitWrap.getAttribute('data-tooltip')
+      };
+      var nerdAvatar = {
+        src: 'assets/nerd-avatar.svg',
+        alt: 'Chibi pixel-art avatar, nerd mode engaged',
+        tooltip: 'Nerd mode: engaged. (Placeholder avatar — swap assets/nerd-avatar.svg for the real one.)'
+      };
+
+      var navLinks = Array.prototype.slice.call(nav.querySelectorAll('.btn'));
+      var normalNav = navLinks.map(function(a){ return { href: a.getAttribute('href'), text: a.textContent }; });
+      var nerdNav = navLinks.map(function(_, i){ return { href: '#nerdy-project-' + (i + 1), text: 'Nerdy Project ' + (i + 1) }; });
+
+      var nerdMode = false;
+      var audioCtx = null, chipTimer = null;
+
+      function startChiptune(){
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if(!Ctx) return;
+        audioCtx = new Ctx();
+        var notes = [392.00, 523.25, 659.25, 783.99, 659.25, 523.25, 392.00, 293.66]; // placeholder 8-bit riff
+        var step = 0, stepTime = 0.16;
+
+        function scheduleNote(time, freq){
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(freq, time);
+          gain.gain.setValueAtTime(0.0001, time);
+          gain.gain.exponentialRampToValueAtTime(0.05, time + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, time + stepTime * 0.9);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(time);
+          osc.stop(time + stepTime);
+        }
+        function loop(){
+          if(!audioCtx) return;
+          scheduleNote(audioCtx.currentTime + 0.05, notes[step % notes.length]);
+          step++;
+          chipTimer = setTimeout(loop, stepTime * 1000);
+        }
+        loop();
+      }
+
+      function stopChiptune(){
+        clearTimeout(chipTimer);
+        chipTimer = null;
+        if(audioCtx){
+          var ctx = audioCtx;
+          audioCtx = null;
+          ctx.close();
+        }
+      }
+
+      btn.addEventListener('click', function(){
+        nerdMode = !nerdMode;
+        document.body.classList.toggle('nerd-mode', nerdMode);
+        btn.setAttribute('aria-pressed', String(nerdMode));
+
+        var tip = nerdMode ? 'Switch to LinkedIn mode' : 'Switch to nerd mode';
+        btn.setAttribute('data-tooltip', tip);
+        btn.setAttribute('aria-label', tip);
+
+        var avatar = nerdMode ? nerdAvatar : normalAvatar;
+        portrait.setAttribute('src', avatar.src);
+        portrait.setAttribute('alt', avatar.alt);
+        portraitWrap.setAttribute('data-tooltip', avatar.tooltip);
+
+        navLinks.forEach(function(a, i){
+          var d = nerdMode ? nerdNav[i] : normalNav[i];
+          a.setAttribute('href', d.href);
+          a.textContent = d.text;
+        });
+
+        if(nerdMode){ startChiptune(); } else { stopChiptune(); }
+      });
     })();
   </script>
 </body>
