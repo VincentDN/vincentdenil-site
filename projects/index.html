@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects | Atelier Vincent De Nil</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://vincentdenil.com/projects/">
+
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon_16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon_32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicons/favicon_48x48.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/assets/favicons/favicon_64x64.png">
+<link rel="icon" type="image/png" sizes="128x128" href="/assets/favicons/favicon_128x128.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --flat:#002b44;
+    --panel:#0b304b;
+    --panel-line:rgba(255,255,255,.12);
+    --line:rgba(255,255,255,.16);
+    --text:#EAF2F8;
+    --text-soft:#9EBAD0;
+    --col:800px;
+    --bg:url('/assets/background.jpg');
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; min-height:100vh; position:relative;
+    color:var(--text); background-color:var(--flat);
+    font-family:"Figtree", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center;
+  }
+  body::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:100vh; z-index:-2;
+    background-color:var(--flat);
+    background-image:
+      linear-gradient(to bottom, rgba(0,43,68,0) 60%, var(--flat) 100%),
+      var(--bg);
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+  }
+  .wrap{ width:100%; max-width:var(--col); padding:clamp(2rem,6vh,4rem) clamp(1.1rem,4vw,1.5rem) 2.5rem; text-align:center; }
+
+  .brand{ display:inline-flex; align-items:center; gap:20px; margin:0 auto 2.4rem; text-decoration:none; color:var(--text); }
+  .brand img{ height:64px; width:auto; display:block; }
+  .wordmark{ text-align:left; line-height:1; }
+  .wordmark .a{ display:block; font-size:.78rem; font-weight:500; letter-spacing:.44em; color:var(--text); margin-bottom:.5em; }
+  .wordmark .n{ display:block; font-size:1.6rem; font-weight:600; letter-spacing:.24em; text-transform:uppercase; color:var(--text); }
+
+  .card{ background:var(--panel); padding:34px; text-align:left; min-height:160px; }
+  h1{ font-size:1.6rem; font-weight:700; margin:0 0 .4rem; }
+  .lede{ color:#D3E1EC; margin:0; }
+
+  .back{ display:inline-block; margin-top:2rem; color:var(--text-soft); text-decoration:none; font-size:.9rem; }
+  .back:hover{ color:var(--text); }
+
+  footer{ margin-top:2.6rem; color:var(--text-soft); font-size:.82rem; line-height:1.8; }
+  footer .mot{ font-style:italic; color:#C4D8E8; }
+
+  @media (max-width:520px){
+    .card{ padding:24px; }
+    .wordmark .n{ font-size:1.3rem; letter-spacing:.18em; }
+  }
+</style>
+</head>
+
+<body>
+  <main class="wrap">
+
+    <a class="brand" href="/">
+      <img src="/assets/logo-stag.svg" alt="" width="49" height="64">
+      <span class="wordmark"><span class="a">ATELIER</span><span class="n">Vincent De Nil</span></span>
+    </a>
+
+    <section class="card">
+      <h1>Projects</h1>
+      <p class="lede">Experimental work in progress. Nothing here yet.</p>
+    </section>
+
+    <a class="back" href="/">Back to home</a>
+
+    <footer>
+      All rights reserved, Atelier Vincent De Nil BV, Belgium.<br>
+      <span class="mot">Luctor et Emergo</span>
+    </footer>
+
+  </main>
+</body>
+</html>
