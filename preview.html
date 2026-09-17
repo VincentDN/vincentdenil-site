@@ -526,6 +526,7 @@
 <body>
   <div id="crtOverlay" aria-hidden="true"></div>
   <audio id="classicalAudio" src="assets/audio/classical-surge-beyza.mp3" preload="none" loop></audio>
+  <audio id="chiptuneAudio" src="assets/audio/chiptune-jump-jump-jump-ava-low.mp3" preload="none" loop></audio>
 
   <main class="wrap">
 
@@ -757,9 +758,9 @@
         tooltip: portraitWrap.getAttribute('data-tooltip')
       };
       var nerdAvatar = {
-        src: 'assets/nerd-avatar.svg',
-        alt: 'Chibi pixel-art avatar, nerd mode engaged',
-        tooltip: 'Nerd mode: engaged. (Placeholder avatar — swap assets/nerd-avatar.svg for the real one.)'
+        src: 'assets/nerd-avatar.jpg',
+        alt: 'Chibi avatar of Vincent De Nil, nerd mode engaged',
+        tooltip: 'Nerd mode: engaged.'
       };
 
       var navLinks = Array.prototype.slice.call(nav.querySelectorAll('.btn'));
@@ -784,8 +785,9 @@
       var nerdMode = false;
 
       /* ---------------- music: chiptune (nerd mode) / classical (LinkedIn mode) ---------------- */
-      var audioCtx = null, noteTimer = null, musicOn = false;
+      var audioCtx = null, musicOn = false;
       var classicalAudio = document.getElementById('classicalAudio');
+      var chiptuneAudio = document.getElementById('chiptuneAudio');
 
       function ensureCtx(){
         if(audioCtx) return audioCtx;
@@ -809,34 +811,14 @@
         osc.stop(time + dur);
       }
 
-      // Placeholder 8-bit riff for nerd mode (swap for a real chiptune track when we have one).
-      var chiptuneNotes = [392.00, 523.25, 659.25, 783.99, 659.25, 523.25, 392.00, 293.66];
-
-      function playLoop(notes, stepTime, type, peak){
-        var ctx = ensureCtx();
-        if(!ctx) return;
-        var step = 0;
-        function loop(){
-          if(!musicOn) return;
-          scheduleTone(ctx.currentTime + 0.05, notes[step % notes.length], stepTime, type, peak);
-          step++;
-          noteTimer = setTimeout(loop, stepTime * 1000);
-        }
-        loop();
-      }
-
       function startCurrentTrack(){
-        if(nerdMode){
-          playLoop(chiptuneNotes, 0.16, 'square', 0.05);
-        } else if(classicalAudio){
-          classicalAudio.play().catch(function(){});
-        }
+        var track = nerdMode ? chiptuneAudio : classicalAudio;
+        if(track){ track.play().catch(function(){}); }
       }
 
       function stopMusic(){
-        clearTimeout(noteTimer);
-        noteTimer = null;
         if(classicalAudio){ classicalAudio.pause(); }
+        if(chiptuneAudio){ chiptuneAudio.pause(); }
       }
 
       function syncMusicBtn(){
