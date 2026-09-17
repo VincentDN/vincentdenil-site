@@ -220,21 +220,19 @@
     --line-nerd:      rgba(255,120,120,.22);
 
     /* Light mode palette — swapped in via html.light-mode, see theme toggle below.
-       --flat-light stays as-is on purpose: it also tints the hero background gradient
-       (see body::before), and that art + the brand logo should look the same in both modes. */
-    --flat-light:       #eef2f6;
-    --panel-light:      #c9d3de;
+       Light mode only changes the containers (panel/btn); the hero background
+       gradient and the brand logo stay identical in both modes, so --flat is
+       deliberately not overridden by :root.light-mode below. */
+    --panel-light:      #9caec1;
     --btn-light:        #9caec1;
     --btn-hover-light:  #8698ab;
     --text-light:       #10202f;
     --text-soft-light:  #4d6577;
-    --line-light:       rgba(16,32,47,.14);
     --panel-line-light: rgba(16,32,47,.12);
 
     --body-copy:       #D3E1EC;
     --body-copy-light: #33475a;
     --mot:             #C4D8E8;
-    --mot-light:       #2f4a61;
   }
 
   *{ box-sizing:border-box; }
@@ -415,18 +413,32 @@
   footer .credit a{ color:inherit; text-decoration:underline; text-underline-offset:2px; }
   footer .credit a:hover, footer .credit a:focus-visible{ color:var(--text); }
 
-  /* ---------- light mode ---------- */
+  /* ---------- light mode ----------
+     Only the containers (bio-card, buttons, icon bar, socials) change color;
+     the hero background stays as-is, so anything sitting directly on it
+     (the wordmark, footer, pinned dev-diary list) keeps the dark-mode text
+     colors below and is deliberately left out of this override. */
   :root.light-mode{
-    --flat: var(--flat-light);
     --panel: var(--panel-light);
     --btn: var(--btn-light);
     --btn-hover: var(--btn-hover-light);
-    --text: var(--text-light);
-    --text-soft: var(--text-soft-light);
-    --line: var(--line-light);
     --panel-line: var(--panel-line-light);
     --body-copy: var(--body-copy-light);
-    --mot: var(--mot-light);
+  }
+  :root.light-mode .bio-card,
+  :root.light-mode .btn,
+  :root.light-mode .socials a,
+  :root.light-mode .icon-btn{
+    --text: var(--text-light);
+    --text-soft: var(--text-soft-light);
+  }
+  /* nerd mode still wins over the light-mode container tint above when both are on */
+  body.nerd-mode.nerd-mode .bio-card,
+  body.nerd-mode.nerd-mode .btn,
+  body.nerd-mode.nerd-mode .socials a,
+  body.nerd-mode.nerd-mode .icon-btn{
+    --text: var(--text-nerd);
+    --text-soft: var(--text-soft-nerd);
   }
 
   /* ---------- nerd mode ---------- */
@@ -635,11 +647,11 @@
     <hr class="divider">
 
     <nav class="links" aria-label="Ventures">
-      <a class="btn" href="https://flagmaker-print.com/" data-tooltip="Custom flag manufacturing, DTG and dye-sublimation printing.">Flagmaker &amp; Print</a>
-      <a class="btn" href="https://kaisercatcinema.com/" data-tooltip="The alt-history studio behind Kaiserreich and other worldbuilding projects.">Kaiser Cat Collective</a>
+      <a class="btn" href="https://flagmaker-print.com/" data-tooltip="A global platform for DTG custom flag manufacturing and design.">Flagmaker &amp; Print</a>
+      <a class="btn" href="https://kaisercatcinema.com/" data-tooltip="A global coalition of content creators making alt-history content for every screen.">Kaiser Cat Collective</a>
       <a class="btn" href="https://kaisercatcinema.com/blogs/dev-diaries" data-tooltip="Behind-the-scenes writing on worldbuilding, games, and the ventures that fund them.">Dev Diaries</a>
-      <a class="btn" href="https://american-kingdoms.com/" data-tooltip="An alt-history setting exploring a divided North America.">American Kingdoms</a>
-      <a class="btn" href="https://dividedstates-project.com/" data-tooltip="An alt-history world imagining a fractured United States.">The Divided States</a>
+      <a class="btn" href="https://american-kingdoms.com/" data-tooltip="What if the Americas had been settled in the Dark Ages? American Kingdoms explores the idea of a &#8216;medieval America&#8217;.">American Kingdoms</a>
+      <a class="btn" href="https://dividedstates-project.com/" data-tooltip="What if there had been a Second American Civil War in the 1940s?">The Divided States</a>
       <a class="btn" href="https://www.artstation.com/vincentdn" data-tooltip="Concept art and illustration commissions for outside clients.">Artstation - Client Portfolio</a>
       <a class="btn" href="mailto:vincent@kaisercatcinema.com" data-tooltip="Get in touch about collaborations, licensing, or hiring.">Contact &amp; Inquiries</a>
     </nav>
@@ -798,13 +810,13 @@
       var normalNav = navLinks.map(function(a){ return { href: a.getAttribute('href'), text: a.textContent, tooltip: a.getAttribute('data-tooltip') }; });
       // Nerd-mode nav: any entries beyond the normal nav's count just hide the extra normal buttons.
       var nerdNavItems = [
+        { text: 'WW2044 Project', href: 'https://kaisercatcinema.com/ww2044', tooltip: 'World War II reimagined with modern-day equipment and vehicles.' },
+        { text: 'Cold War Project', href: 'https://kaisercatcinema.com/pages/about-coldwarproject', tooltip: 'What if there had been a three-way Cold War?' },
         { text: 'Open Dice Roller (MIT)', href: 'https://github.com/VincentDN/MiroDnD-3D-Dice-Roller', tooltip: 'A screen-overlay 3D dice roller built for playing D&D on Miro.' },
         { text: 'Kaiserreich on Steam', href: 'https://steamcommunity.com/workshop/filedetails/?id=1521695605', tooltip: 'Kaiserreich: Legacy of the Weltkrieg — the alt-history mod for Hearts of Iron IV.' },
-        { text: 'Dystopia Game', href: 'https://dystopia-game.com/', tooltip: 'An in-development game project.' },
+        { text: 'Dystopia Game', href: 'https://dystopia-game.com/', tooltip: 'Cyberpunk HL2 total conversion mod.' },
         { text: 'Sheepdog AI', href: 'https://github.com/VincentDN/Sheepdog-AI', tooltip: 'Lets ChatGPT and Claude tag-team a dev project, saving tokens and downtime.' },
-        { text: 'OPFOR.js', href: 'https://github.com/VincentDN/OPFOR.js', tooltip: 'A three.js experiment in improved video game shooter AI.' },
-        { text: 'WW2044 Project', href: 'https://kaisercatcinema.com/ww2044', tooltip: 'World War II reimagined with modern-day equipment and vehicles.' },
-        { text: 'Cold War Project', href: 'https://kaisercatcinema.com/pages/about-coldwarproject', tooltip: 'What if there had been a three-way Cold War?' }
+        { text: 'OPFOR.js', href: 'https://github.com/VincentDN/OPFOR.js', tooltip: 'A three.js experiment in improved video game shooter AI.' }
       ];
 
       /* ---------------- pinned dev diaries swap ---------------- */
@@ -822,6 +834,8 @@
       var audioCtx = null, musicOn = false;
       var classicalAudio = document.getElementById('classicalAudio');
       var chiptuneAudio = document.getElementById('chiptuneAudio');
+      if(classicalAudio){ classicalAudio.volume = 0.7; } // LinkedIn mode music, cut by 30%
+      if(chiptuneAudio){ chiptuneAudio.volume = 0.5; }    // nerd mode music, cut by 50%
 
       function ensureCtx(){
         if(audioCtx) return audioCtx;
