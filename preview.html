@@ -220,11 +220,13 @@
     --text-soft-nerd: #d99;
     --line-nerd:      rgba(255,120,120,.22);
 
-    /* Light mode palette — swapped in via html.light-mode, see theme toggle below. */
+    /* Light mode palette — swapped in via html.light-mode, see theme toggle below.
+       --flat-light stays as-is on purpose: it also tints the hero background gradient
+       (see body::before), and that art + the brand logo should look the same in both modes. */
     --flat-light:       #eef2f6;
-    --panel-light:      #ffffff;
-    --btn-light:        #eef1f5;
-    --btn-hover-light:  #dde5ec;
+    --panel-light:      #c9d3de;
+    --btn-light:        #9caec1;
+    --btn-hover-light:  #8698ab;
     --text-light:       #10202f;
     --text-soft-light:  #4d6577;
     --line-light:       rgba(16,32,47,.14);
@@ -342,6 +344,7 @@
   /* ---------- central buttons ---------- */
   .links{ display:flex; flex-direction:column; gap:14px; }
   .btn{
+    position:relative;
     display:block; padding:16px 22px;
     background:var(--btn);
     border-radius:var(--radius-btn);
@@ -352,6 +355,27 @@
     background:var(--btn-hover);
   }
   .btn:focus-visible{ outline:2px solid #7FB2D8; outline-offset:3px; }
+
+  /* CSS tooltip: a one-line explainer of each project, same pattern as the portrait tooltip */
+  .btn[data-tooltip]::after{
+    content:attr(data-tooltip);
+    position:absolute; bottom:calc(100% + 9px); left:50%; transform:translateX(-50%);
+    width:max-content; max-width:260px;
+    background:#0A2036; color:#EAF2F8;
+    font-size:.72rem; line-height:1.35; text-align:left; font-weight:400; letter-spacing:normal;
+    padding:8px 10px;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:6;
+    transition:opacity .15s var(--ease);
+  }
+  .btn[data-tooltip]::before{
+    content:""; position:absolute; bottom:calc(100% + 3px); left:50%; transform:translateX(-50%);
+    border:6px solid transparent; border-top-color:#0A2036;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:6;
+  }
+  .btn[data-tooltip]:hover::after, .btn[data-tooltip]:focus-visible::after,
+  .btn[data-tooltip]:hover::before, .btn[data-tooltip]:focus-visible::before{
+    opacity:1; visibility:visible;
+  }
 
   /* ---------- speaking (Experience pillar, optional: delete the whole block to remove) ---------- */
   .speaking, .pinned{ margin-top:2rem; text-align:left; }
@@ -488,6 +512,12 @@
   :root.light-mode .theme-btn .icon-sun{ display:none; }
   :root.light-mode .theme-btn .icon-moon{ display:block; }
 
+  /* nerd mode: light mode is greyed out (still hoverable, for the joke tooltip) */
+  .theme-btn.is-disabled{ opacity:.35; cursor:not-allowed; }
+  .theme-btn.is-disabled:hover, .theme-btn.is-disabled:focus-visible{
+    background:var(--btn); color:var(--text-soft);
+  }
+
   /* music toggle: swap note-on/note-off glyph by playing state */
   .music-btn .icon-muted{ display:none; }
   .music-btn.is-playing .icon-notes{ display:none; }
@@ -606,13 +636,13 @@
     <hr class="divider">
 
     <nav class="links" aria-label="Ventures">
-      <a class="btn" href="https://flagmaker-print.com/">Flagmaker &amp; Print</a>
-      <a class="btn" href="https://kaisercatcinema.com/">Kaiser Cat Collective</a>
-      <a class="btn" href="https://kaisercatcinema.com/blogs/dev-diaries">Dev Diaries</a>
-      <a class="btn" href="https://american-kingdoms.com/">American Kingdoms</a>
-      <a class="btn" href="https://dividedstates-project.com/">The Divided States</a>
-      <a class="btn" href="https://www.artstation.com/vincentdn">Artstation - Client Portfolio</a>
-      <a class="btn" href="mailto:vincent@kaisercatcinema.com">Contact &amp; Inquiries</a>
+      <a class="btn" href="https://flagmaker-print.com/" data-tooltip="Custom flag manufacturing, DTG and dye-sublimation printing.">Flagmaker &amp; Print</a>
+      <a class="btn" href="https://kaisercatcinema.com/" data-tooltip="The alt-history studio behind Kaiserreich and other worldbuilding projects.">Kaiser Cat Collective</a>
+      <a class="btn" href="https://kaisercatcinema.com/blogs/dev-diaries" data-tooltip="Behind-the-scenes writing on worldbuilding, games, and the ventures that fund them.">Dev Diaries</a>
+      <a class="btn" href="https://american-kingdoms.com/" data-tooltip="An alt-history setting exploring a divided North America.">American Kingdoms</a>
+      <a class="btn" href="https://dividedstates-project.com/" data-tooltip="An alt-history world imagining a fractured United States.">The Divided States</a>
+      <a class="btn" href="https://www.artstation.com/vincentdn" data-tooltip="Concept art and illustration commissions for outside clients.">Artstation - Client Portfolio</a>
+      <a class="btn" href="mailto:vincent@kaisercatcinema.com" data-tooltip="Get in touch about collaborations, licensing, or hiring.">Contact &amp; Inquiries</a>
     </nav>
 
     <section class="pinned" aria-label="Selected dev diaries">
@@ -737,13 +767,15 @@
         function isLight(){ return document.documentElement.classList.contains('light-mode'); }
         function syncThemeBtn(){
           var light = isLight();
-          var tip = light ? 'Switch to dark mode' : 'Switch to light mode';
+          var tip = nerdMode ? 'who uses light mode lol' : (light ? 'Switch to dark mode' : 'Switch to light mode');
           themeBtn.setAttribute('aria-pressed', String(light));
           themeBtn.setAttribute('data-tooltip', tip);
           themeBtn.setAttribute('aria-label', tip);
+          themeBtn.classList.toggle('is-disabled', nerdMode);
         }
         syncThemeBtn();
         themeBtn.addEventListener('click', function(){
+          if(nerdMode) return; // light mode is greyed out while nerd mode is on
           var light = !isLight();
           document.documentElement.classList.toggle('light-mode', light);
           try{ localStorage.setItem('vdn-theme', light ? 'light' : 'dark'); }catch(e){}
@@ -764,13 +796,15 @@
       };
 
       var navLinks = Array.prototype.slice.call(nav.querySelectorAll('.btn'));
-      var normalNav = navLinks.map(function(a){ return { href: a.getAttribute('href'), text: a.textContent }; });
-      // Nerd-mode nav: fewer entries than the normal nav, so any extra normal buttons just hide.
+      var normalNav = navLinks.map(function(a){ return { href: a.getAttribute('href'), text: a.textContent, tooltip: a.getAttribute('data-tooltip') }; });
+      // Nerd-mode nav: any entries beyond the normal nav's count just hide the extra normal buttons.
       var nerdNavItems = [
-        { text: 'Open Dice Roller (MIT)', href: 'https://github.com/VincentDN/MiroDnD-3D-Dice-Roller' },
-        { text: 'Kaiserreich on Steam', href: 'https://steamcommunity.com/workshop/filedetails/?id=1521695605' },
-        { text: 'Dystopia Game', href: 'https://dystopia-game.com/' },
-        { text: 'Sheepdog AI', href: 'https://github.com/VincentDN/Sheepdog-AI' }
+        { text: 'Open Dice Roller (MIT)', href: 'https://github.com/VincentDN/MiroDnD-3D-Dice-Roller', tooltip: 'A screen-overlay 3D dice roller built for playing D&D on Miro.' },
+        { text: 'Kaiserreich on Steam', href: 'https://steamcommunity.com/workshop/filedetails/?id=1521695605', tooltip: 'Kaiserreich: Legacy of the Weltkrieg — the alt-history mod for Hearts of Iron IV.' },
+        { text: 'Dystopia Game', href: 'https://dystopia-game.com/', tooltip: 'An in-development game project.' },
+        { text: 'Sheepdog AI', href: 'https://github.com/VincentDN/Sheepdog-AI', tooltip: 'Lets ChatGPT and Claude tag-team a dev project, saving tokens and downtime.' },
+        { text: 'WW2044 Project', href: 'https://kaisercatcinema.com/ww2044', tooltip: 'World War II reimagined with modern-day equipment and vehicles.' },
+        { text: 'Cold War Project', href: 'https://kaisercatcinema.com/pages/about-coldwarproject', tooltip: 'What if there had been a three-way Cold War?' }
       ];
 
       /* ---------------- pinned dev diaries swap ---------------- */
@@ -887,6 +921,7 @@
             if(i < nerdNavItems.length){
               a.setAttribute('href', nerdNavItems[i].href);
               a.textContent = nerdNavItems[i].text;
+              a.setAttribute('data-tooltip', nerdNavItems[i].tooltip);
               a.style.display = '';
             } else {
               a.style.display = 'none';
@@ -894,6 +929,7 @@
           } else {
             a.setAttribute('href', normalNav[i].href);
             a.textContent = normalNav[i].text;
+            a.setAttribute('data-tooltip', normalNav[i].tooltip);
             a.style.display = '';
           }
         });
@@ -902,8 +938,18 @@
           el.innerHTML = nerdMode ? nerdPinned[i] : normalPinned[i];
         });
 
-        // Music keeps playing across the switch, just on the track that matches the new mode.
-        if(musicOn){ stopMusic(); startCurrentTrack(); }
+        // Turning nerd mode on always starts the music; otherwise just keep playing
+        // across the switch, on whichever track matches the new mode.
+        if(nerdMode && !musicOn){
+          musicOn = true;
+          syncMusicBtn();
+          startCurrentTrack();
+        } else if(musicOn){
+          stopMusic();
+          startCurrentTrack();
+        }
+
+        if(themeBtn){ syncThemeBtn(); }
       });
     })();
   </script>

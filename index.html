@@ -307,6 +307,7 @@
   /* ---------- central buttons ---------- */
   .links{ display:flex; flex-direction:column; gap:14px; }
   .btn{
+    position:relative;
     display:block; padding:16px 22px;
     background:var(--btn);
     border-radius:var(--radius-btn);
@@ -317,6 +318,27 @@
     background:var(--btn-hover);
   }
   .btn:focus-visible{ outline:2px solid #7FB2D8; outline-offset:3px; }
+
+  /* CSS tooltip: a one-line explainer of each project, same pattern as the portrait tooltip */
+  .btn[data-tooltip]::after{
+    content:attr(data-tooltip);
+    position:absolute; bottom:calc(100% + 9px); left:50%; transform:translateX(-50%);
+    width:max-content; max-width:260px;
+    background:#0A2036; color:#EAF2F8;
+    font-size:.72rem; line-height:1.35; text-align:left; font-weight:400; letter-spacing:normal;
+    padding:8px 10px;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:6;
+    transition:opacity .15s var(--ease);
+  }
+  .btn[data-tooltip]::before{
+    content:""; position:absolute; bottom:calc(100% + 3px); left:50%; transform:translateX(-50%);
+    border:6px solid transparent; border-top-color:#0A2036;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:6;
+  }
+  .btn[data-tooltip]:hover::after, .btn[data-tooltip]:focus-visible::after,
+  .btn[data-tooltip]:hover::before, .btn[data-tooltip]:focus-visible::before{
+    opacity:1; visibility:visible;
+  }
 
   /* ---------- speaking (Experience pillar, optional: delete the whole block to remove) ---------- */
   .speaking, .pinned{ margin-top:2rem; text-align:left; }
@@ -391,13 +413,13 @@
     <hr class="divider">
 
     <nav class="links" aria-label="Ventures">
-      <a class="btn" href="https://flagmaker-print.com/">Flagmaker &amp; Print</a>
-      <a class="btn" href="https://kaisercatcinema.com/">Kaiser Cat Collective</a>
-      <a class="btn" href="https://kaisercatcinema.com/blogs/dev-diaries">Dev Diaries</a>
-      <a class="btn" href="https://american-kingdoms.com/">American Kingdoms</a>
-      <a class="btn" href="https://dividedstates-project.com/">The Divided States</a>
-      <a class="btn" href="https://www.artstation.com/vincentdn">Artstation - Client Portfolio</a>
-      <a class="btn" href="mailto:vincent@kaisercatcinema.com">Contact &amp; Inquiries</a>
+      <a class="btn" href="https://flagmaker-print.com/" data-tooltip="Custom flag manufacturing, DTG and dye-sublimation printing.">Flagmaker &amp; Print</a>
+      <a class="btn" href="https://kaisercatcinema.com/" data-tooltip="The alt-history studio behind Kaiserreich and other worldbuilding projects.">Kaiser Cat Collective</a>
+      <a class="btn" href="https://kaisercatcinema.com/blogs/dev-diaries" data-tooltip="Behind-the-scenes writing on worldbuilding, games, and the ventures that fund them.">Dev Diaries</a>
+      <a class="btn" href="https://american-kingdoms.com/" data-tooltip="An alt-history setting exploring a divided North America.">American Kingdoms</a>
+      <a class="btn" href="https://dividedstates-project.com/" data-tooltip="An alt-history world imagining a fractured United States.">The Divided States</a>
+      <a class="btn" href="https://www.artstation.com/vincentdn" data-tooltip="Concept art and illustration commissions for outside clients.">Artstation - Client Portfolio</a>
+      <a class="btn" href="mailto:vincent@kaisercatcinema.com" data-tooltip="Get in touch about collaborations, licensing, or hiring.">Contact &amp; Inquiries</a>
     </nav>
 
     <section class="pinned" aria-label="Selected dev diaries">
