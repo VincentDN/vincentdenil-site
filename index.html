@@ -782,7 +782,7 @@
           themeBtn.setAttribute('aria-pressed', String(light));
           themeBtn.setAttribute('data-tooltip', tip);
           themeBtn.setAttribute('aria-label', tip);
-          themeBtn.classList.toggle('is-disabled', nerdMode);
+          themeBtn.classList.toggle('is-disabled', !!nerdMode);
         }
         syncThemeBtn();
         themeBtn.addEventListener('click', function(){
