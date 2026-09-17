@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  (function(){
+    try{
+      if(localStorage.getItem('vdn-theme') === 'light'){
+        document.documentElement.classList.add('light-mode');
+      }
+    }catch(e){}
+  })();
+</script>
 <title>Atelier Vincent De Nil, Art Director &amp; Founder</title>
 <meta name="description" content="Belgian founder and art director. I build alt-history worlds (The Divided States, WW2044, American Kingdoms) and the ventures that make them real: the Kaiser Cat Collective and Flagmaker &amp; Print.">
 <link rel="canonical" href="https://vincentdenil.com/">
@@ -199,6 +208,33 @@
        Until then a deep prussian gradient stands in.
        ------------------------------------------------------------------- */
     --bg: url('assets/background.jpg');
+
+    /* Nerd mode palette — swapped in via body.nerd-mode, see toggle button below. */
+    --flat-nerd:      #170202;
+    --prussian-nerd:  #200404;
+    --panel-nerd:     #2a0606;
+    --btn-nerd:       #2a0606;
+    --btn-hover-nerd: #4a0d0d;
+    --text-nerd:      #ffe9e9;
+    --text-soft-nerd: #d99;
+    --line-nerd:      rgba(255,120,120,.22);
+
+    /* Light mode palette — swapped in via html.light-mode, see theme toggle below.
+       --flat-light stays as-is on purpose: it also tints the hero background gradient
+       (see body::before), and that art + the brand logo should look the same in both modes. */
+    --flat-light:       #eef2f6;
+    --panel-light:      #c9d3de;
+    --btn-light:        #9caec1;
+    --btn-hover-light:  #8698ab;
+    --text-light:       #10202f;
+    --text-soft-light:  #4d6577;
+    --line-light:       rgba(16,32,47,.14);
+    --panel-line-light: rgba(16,32,47,.12);
+
+    --body-copy:       #D3E1EC;
+    --body-copy-light: #33475a;
+    --mot:             #C4D8E8;
+    --mot-light:       #2f4a61;
   }
 
   *{ box-sizing:border-box; }
@@ -266,7 +302,7 @@
     content:attr(data-tooltip);
     position:absolute; bottom:calc(100% + 9px); left:50%; transform:translateX(-50%);
     width:max-content; max-width:230px;
-    background:#0A2036; color:var(--text);
+    background:#0A2036; color:#EAF2F8;
     font-size:.72rem; line-height:1.35; text-align:left; letter-spacing:normal; font-weight:400;
     padding:8px 10px;
     opacity:0; visibility:hidden; pointer-events:none; z-index:3;
@@ -295,7 +331,7 @@
   @media (prefers-reduced-motion:reduce){
     .bio h1.typing .hero-rotate::after{ display:none; animation:none; }
   }
-  .bio p{ font-size:1rem; color:#D3E1EC; margin:0; }
+  .bio p{ font-size:1rem; color:var(--body-copy); margin:0; }
   .bio p .proj{ font-style:italic; }
 
   .divider{
@@ -374,10 +410,138 @@
   footer{
     color:var(--text-soft); font-size:.82rem; line-height:1.8; letter-spacing:.02em;
   }
-  footer .mot{ font-style:italic; color:#C4D8E8; }
+  footer .mot{ font-style:italic; color:var(--mot); }
   footer .credit{ display:block; margin-top:1rem; font-size:.72rem; opacity:.6; }
   footer .credit a{ color:inherit; text-decoration:underline; text-underline-offset:2px; }
   footer .credit a:hover, footer .credit a:focus-visible{ color:var(--text); }
+
+  /* ---------- light mode ---------- */
+  :root.light-mode{
+    --flat: var(--flat-light);
+    --panel: var(--panel-light);
+    --btn: var(--btn-light);
+    --btn-hover: var(--btn-hover-light);
+    --text: var(--text-light);
+    --text-soft: var(--text-soft-light);
+    --line: var(--line-light);
+    --panel-line: var(--panel-line-light);
+    --body-copy: var(--body-copy-light);
+    --mot: var(--mot-light);
+  }
+
+  /* ---------- nerd mode ---------- */
+  body.nerd-mode{
+    --flat: var(--flat-nerd);
+    --prussian: var(--prussian-nerd);
+    --panel: var(--panel-nerd);
+    --btn: var(--btn-nerd);
+    --btn-hover: var(--btn-hover-nerd);
+    --text: var(--text-nerd);
+    --text-soft: var(--text-soft-nerd);
+    --line: var(--line-nerd);
+  }
+  body.nerd-mode::before{ filter:grayscale(.4) sepia(.6) saturate(3) hue-rotate(-40deg) brightness(.55); }
+
+  /* z-index:-1 keeps this above the background art (body::before, z-index:-2) but
+     below the page content (main, non-positioned), so the CRT look never paints
+     over the logo or any solid container - only the bare background shows it. */
+  #crtOverlay{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0;
+    background:
+      repeating-linear-gradient(to bottom, rgba(0,0,0,.28) 0px, rgba(0,0,0,.28) 1px, transparent 2px, transparent 4px),
+      radial-gradient(ellipse at center, rgba(255,40,40,.14) 0%, rgba(0,0,0,.6) 130%);
+    transition:opacity .4s var(--ease);
+    overflow:hidden;
+  }
+  body.nerd-mode #crtOverlay{ opacity:1; animation:crt-flicker 6s ease-in-out infinite; }
+  @keyframes crt-flicker{
+    0%,91%,100%{ opacity:1; }
+    92%{ opacity:.86; }
+    93%{ opacity:1; }
+    96%{ opacity:.92; }
+    97%{ opacity:1; }
+  }
+  /* scanline sweep: a soft band drifting down the background, on top of the static scanlines above */
+  #crtOverlay::after{
+    content:""; position:absolute; inset:-40% 0; pointer-events:none;
+    background:linear-gradient(to bottom, transparent 0%, rgba(255,190,190,.09) 46%, rgba(255,210,210,.18) 50%, rgba(255,190,190,.09) 54%, transparent 100%);
+    background-size:100% 45%;
+    background-repeat:no-repeat;
+    opacity:0;
+  }
+  body.nerd-mode #crtOverlay::after{ opacity:1; animation:scanline-sweep 5s linear infinite; }
+  @keyframes scanline-sweep{
+    0%{ background-position:0 -45%; }
+    100%{ background-position:0 145%; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    body.nerd-mode #crtOverlay{ animation:none; }
+    body.nerd-mode #crtOverlay::after{ animation:none; opacity:0; }
+  }
+
+  /* ---------- icon bar (theme / music / nerd mode) ---------- */
+  /* Lives inside .wrap so it lines up with the container's edge, not the viewport. */
+  .icon-bar{
+    width:100%; display:flex; justify-content:flex-end; gap:10px;
+    margin:0 0 1.6rem;
+  }
+  .icon-btn{
+    position:relative;
+    width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center;
+    background:var(--btn); border:1px solid var(--panel-line); border-radius:10px;
+    color:var(--text-soft); cursor:pointer; -webkit-tap-highlight-color:transparent;
+    transition:background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .icon-btn:hover, .icon-btn:focus-visible{ background:var(--btn-hover); color:var(--text); }
+  .icon-btn:focus-visible{ outline:2px solid #7FB2D8; outline-offset:3px; }
+  .icon-btn svg{ width:18px; height:18px; display:block; overflow:visible; }
+
+  /* space invader: two-frame walk animation */
+  .invader-btn .f2{ opacity:0; }
+  @media (prefers-reduced-motion:no-preference){
+    .invader-btn .f1{ animation:invader-walk-a 1.65s steps(1,end) infinite; }
+    .invader-btn .f2{ animation:invader-walk-b 1.65s steps(1,end) infinite; }
+  }
+  @keyframes invader-walk-a{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+  @keyframes invader-walk-b{ 0%,49%{opacity:0;} 50%,100%{opacity:1;} }
+  body.nerd-mode .invader-btn{ color:#ff6b6b; border-color:rgba(255,120,120,.35); }
+
+  /* theme toggle: swap sun/moon glyph by current mode */
+  .theme-btn .icon-moon{ display:none; }
+  :root.light-mode .theme-btn .icon-sun{ display:none; }
+  :root.light-mode .theme-btn .icon-moon{ display:block; }
+
+  /* nerd mode: light mode is greyed out (still hoverable, for the joke tooltip) */
+  .theme-btn.is-disabled{ opacity:.35; cursor:not-allowed; }
+  .theme-btn.is-disabled:hover, .theme-btn.is-disabled:focus-visible{
+    background:var(--btn); color:var(--text-soft);
+  }
+
+  /* music toggle: swap note-on/note-off glyph by playing state */
+  .music-btn .icon-muted{ display:none; }
+  .music-btn.is-playing .icon-notes{ display:none; }
+  .music-btn.is-playing .icon-muted{ display:block; }
+
+  /* tooltip, positioned below since the bar sits at the top of the page */
+  .icon-btn[data-tooltip]::after{
+    content:attr(data-tooltip);
+    position:absolute; top:calc(100% + 9px); right:0;
+    width:max-content; max-width:180px;
+    background:#0A2036; color:#EAF2F8;
+    font-size:.72rem; line-height:1.35; text-align:left; font-weight:400;
+    padding:8px 10px;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:21;
+    transition:opacity .15s var(--ease);
+  }
+  .icon-btn[data-tooltip]::before{
+    content:""; position:absolute; top:calc(100% + 3px); right:12px;
+    border:6px solid transparent; border-bottom-color:#0A2036;
+    opacity:0; visibility:hidden; pointer-events:none; z-index:21;
+  }
+  .icon-btn[data-tooltip]:hover::after, .icon-btn[data-tooltip]:focus-visible::after,
+  .icon-btn[data-tooltip]:hover::before, .icon-btn[data-tooltip]:focus-visible::before{
+    opacity:1; visibility:visible;
+  }
 
   /* ---------- responsive ---------- */
   @media (max-width:520px){
@@ -389,6 +553,10 @@
 </head>
 
 <body>
+  <div id="crtOverlay" aria-hidden="true"></div>
+  <audio id="classicalAudio" src="assets/audio/classical-surge-beyza.mp3" preload="none" loop></audio>
+  <audio id="chiptuneAudio" src="assets/audio/chiptune-jump-jump-jump-ava-low.mp3" preload="none" loop></audio>
+
   <main class="wrap">
 
     <div class="brand">
@@ -397,6 +565,60 @@
         <span class="a">ATELIER</span>
         <span class="n">Vincent De Nil</span>
       </div>
+    </div>
+
+    <div class="icon-bar" role="group" aria-label="Site controls">
+      <button type="button" id="nerdToggle" class="icon-btn invader-btn" aria-pressed="false"
+              aria-label="Switch to nerd mode" data-tooltip="Switch to nerd mode">
+        <svg viewBox="0 0 22 16" fill="currentColor" aria-hidden="true">
+          <g class="f1">
+            <rect x="4" y="0" width="2" height="2"/><rect x="16" y="0" width="2" height="2"/>
+            <rect x="6" y="2" width="2" height="2"/><rect x="14" y="2" width="2" height="2"/>
+            <rect x="4" y="4" width="2" height="2"/><rect x="6" y="4" width="2" height="2"/><rect x="8" y="4" width="2" height="2"/><rect x="10" y="4" width="2" height="2"/><rect x="12" y="4" width="2" height="2"/><rect x="14" y="4" width="2" height="2"/><rect x="16" y="4" width="2" height="2"/>
+            <rect x="2" y="6" width="2" height="2"/><rect x="4" y="6" width="2" height="2"/><rect x="8" y="6" width="2" height="2"/><rect x="10" y="6" width="2" height="2"/><rect x="12" y="6" width="2" height="2"/><rect x="16" y="6" width="2" height="2"/><rect x="18" y="6" width="2" height="2"/>
+            <rect x="0" y="8" width="2" height="2"/><rect x="2" y="8" width="2" height="2"/><rect x="4" y="8" width="2" height="2"/><rect x="6" y="8" width="2" height="2"/><rect x="8" y="8" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="12" y="8" width="2" height="2"/><rect x="14" y="8" width="2" height="2"/><rect x="16" y="8" width="2" height="2"/><rect x="18" y="8" width="2" height="2"/><rect x="20" y="8" width="2" height="2"/>
+            <rect x="0" y="10" width="2" height="2"/><rect x="4" y="10" width="2" height="2"/><rect x="6" y="10" width="2" height="2"/><rect x="8" y="10" width="2" height="2"/><rect x="10" y="10" width="2" height="2"/><rect x="12" y="10" width="2" height="2"/><rect x="14" y="10" width="2" height="2"/><rect x="16" y="10" width="2" height="2"/><rect x="20" y="10" width="2" height="2"/>
+            <rect x="0" y="12" width="2" height="2"/><rect x="4" y="12" width="2" height="2"/><rect x="16" y="12" width="2" height="2"/><rect x="20" y="12" width="2" height="2"/>
+            <rect x="6" y="14" width="2" height="2"/><rect x="8" y="14" width="2" height="2"/><rect x="12" y="14" width="2" height="2"/><rect x="14" y="14" width="2" height="2"/>
+          </g>
+          <g class="f2">
+            <rect x="4" y="0" width="2" height="2"/><rect x="16" y="0" width="2" height="2"/>
+            <rect x="0" y="2" width="2" height="2"/><rect x="6" y="2" width="2" height="2"/><rect x="14" y="2" width="2" height="2"/><rect x="20" y="2" width="2" height="2"/>
+            <rect x="0" y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="6" y="4" width="2" height="2"/><rect x="8" y="4" width="2" height="2"/><rect x="10" y="4" width="2" height="2"/><rect x="12" y="4" width="2" height="2"/><rect x="14" y="4" width="2" height="2"/><rect x="16" y="4" width="2" height="2"/><rect x="20" y="4" width="2" height="2"/>
+            <rect x="0" y="6" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="4" y="6" width="2" height="2"/><rect x="8" y="6" width="2" height="2"/><rect x="10" y="6" width="2" height="2"/><rect x="12" y="6" width="2" height="2"/><rect x="16" y="6" width="2" height="2"/><rect x="18" y="6" width="2" height="2"/><rect x="20" y="6" width="2" height="2"/>
+            <rect x="0" y="8" width="2" height="2"/><rect x="2" y="8" width="2" height="2"/><rect x="4" y="8" width="2" height="2"/><rect x="6" y="8" width="2" height="2"/><rect x="8" y="8" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="12" y="8" width="2" height="2"/><rect x="14" y="8" width="2" height="2"/><rect x="16" y="8" width="2" height="2"/><rect x="18" y="8" width="2" height="2"/><rect x="20" y="8" width="2" height="2"/>
+            <rect x="2" y="10" width="2" height="2"/><rect x="4" y="10" width="2" height="2"/><rect x="6" y="10" width="2" height="2"/><rect x="8" y="10" width="2" height="2"/><rect x="10" y="10" width="2" height="2"/><rect x="12" y="10" width="2" height="2"/><rect x="14" y="10" width="2" height="2"/><rect x="16" y="10" width="2" height="2"/><rect x="18" y="10" width="2" height="2"/>
+            <rect x="4" y="12" width="2" height="2"/><rect x="16" y="12" width="2" height="2"/>
+            <rect x="2" y="14" width="2" height="2"/><rect x="18" y="14" width="2" height="2"/>
+          </g>
+        </svg>
+      </button>
+
+      <button type="button" id="musicToggle" class="icon-btn music-btn" aria-pressed="false"
+              aria-label="Play music" data-tooltip="Play music">
+        <svg class="icon-notes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18V5l11-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="17" cy="16" r="3"/>
+        </svg>
+        <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18V5l11-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="17" cy="16" r="3"/>
+          <line x1="2" y1="2" x2="22" y2="22"/>
+        </svg>
+      </button>
+
+      <button type="button" id="themeToggle" class="icon-btn theme-btn" aria-pressed="false"
+              aria-label="Switch to light mode" data-tooltip="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"/>
+          <path d="M12 2.5v2.6M12 18.9v2.6M4.5 12H2M22 12h-2.5M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.7 6.7 0 0 0 10.5 10.5Z"/>
+        </svg>
+      </button>
     </div>
 
     <section class="bio-card">
@@ -525,6 +747,210 @@
       }
       // Start from the canonical line already shown: hold, then delete into the cycle.
       setTimeout(function(){ deleting = true; tick(); }, HOLD);
+    })();
+  </script>
+
+  <!-- Hidden feature: click the space invader, top right, for nerd mode. -->
+  <script>
+    (function(){
+      var nerdBtn = document.getElementById('nerdToggle');
+      var themeBtn = document.getElementById('themeToggle');
+      var musicBtn = document.getElementById('musicToggle');
+      var portraitWrap = document.querySelector('.portrait');
+      var portrait = portraitWrap && portraitWrap.querySelector('img');
+      var nav = document.querySelector('.links');
+      if(!nerdBtn || !portrait || !nav) return;
+
+      /* ---------------- theme (light / dark) ---------------- */
+      if(themeBtn){
+        function isLight(){ return document.documentElement.classList.contains('light-mode'); }
+        function syncThemeBtn(){
+          var light = isLight();
+          var tip = nerdMode ? 'who uses light mode lol' : (light ? 'Switch to dark mode' : 'Switch to light mode');
+          themeBtn.setAttribute('aria-pressed', String(light));
+          themeBtn.setAttribute('data-tooltip', tip);
+          themeBtn.setAttribute('aria-label', tip);
+          themeBtn.classList.toggle('is-disabled', nerdMode);
+        }
+        syncThemeBtn();
+        themeBtn.addEventListener('click', function(){
+          if(nerdMode) return; // light mode is greyed out while nerd mode is on
+          var light = !isLight();
+          document.documentElement.classList.toggle('light-mode', light);
+          try{ localStorage.setItem('vdn-theme', light ? 'light' : 'dark'); }catch(e){}
+          syncThemeBtn();
+        });
+      }
+
+      /* ---------------- avatar + nav swap ---------------- */
+      var normalAvatar = {
+        src: portrait.getAttribute('src'),
+        alt: portrait.getAttribute('alt'),
+        tooltip: portraitWrap.getAttribute('data-tooltip')
+      };
+      var nerdAvatar = {
+        src: 'assets/nerd-avatar.jpg',
+        alt: 'Chibi avatar of Vincent De Nil, nerd mode engaged',
+        tooltip: 'Nerd mode: engaged.'
+      };
+
+      var navLinks = Array.prototype.slice.call(nav.querySelectorAll('.btn'));
+      var normalNav = navLinks.map(function(a){ return { href: a.getAttribute('href'), text: a.textContent, tooltip: a.getAttribute('data-tooltip') }; });
+      // Nerd-mode nav: any entries beyond the normal nav's count just hide the extra normal buttons.
+      var nerdNavItems = [
+        { text: 'Open Dice Roller (MIT)', href: 'https://github.com/VincentDN/MiroDnD-3D-Dice-Roller', tooltip: 'A screen-overlay 3D dice roller built for playing D&D on Miro.' },
+        { text: 'Kaiserreich on Steam', href: 'https://steamcommunity.com/workshop/filedetails/?id=1521695605', tooltip: 'Kaiserreich: Legacy of the Weltkrieg — the alt-history mod for Hearts of Iron IV.' },
+        { text: 'Dystopia Game', href: 'https://dystopia-game.com/', tooltip: 'An in-development game project.' },
+        { text: 'Sheepdog AI', href: 'https://github.com/VincentDN/Sheepdog-AI', tooltip: 'Lets ChatGPT and Claude tag-team a dev project, saving tokens and downtime.' },
+        { text: 'OPFOR.js', href: 'https://github.com/VincentDN/OPFOR.js', tooltip: 'A three.js experiment in improved video game shooter AI.' },
+        { text: 'WW2044 Project', href: 'https://kaisercatcinema.com/ww2044', tooltip: 'World War II reimagined with modern-day equipment and vehicles.' },
+        { text: 'Cold War Project', href: 'https://kaisercatcinema.com/pages/about-coldwarproject', tooltip: 'What if there had been a three-way Cold War?' }
+      ];
+
+      /* ---------------- pinned dev diaries swap ---------------- */
+      var pinnedEls = Array.prototype.slice.call(document.querySelectorAll('.pinned .talk .what'));
+      var normalPinned = pinnedEls.map(function(el){ return el.innerHTML; });
+      var nerdPinned = [
+        'Cold War Project 67: Germany in the Vietnam War, 1967<small>A dev diary imagining West Germany’s entanglement in the Vietnam War inside the Cold War Project timeline &middot; <a class="yt" href="https://kaisercatcinema.com/blogs/dev-diaries/cold-war-project-67-germany-in-the-vietnam-war-1967">Read on KCC</a></small>',
+        'KCC 2026 Roadmap<small>What’s next for the Kaiser Cat Collective in 2026 &middot; <a class="yt" href="https://kaisercatcinema.com/blogs/dev-diaries/kcc-2026-roadmap">Read on KCC</a></small>',
+        'World of WW2044: German Half-Track IFVs during the Battle of the Ardennes, 2044<small>A look at German half-track IFVs in the WW2044 Battle of the Ardennes &middot; <a class="yt" href="https://kaisercatcinema.com/blogs/dev-diaries/world-of-ww2044-german-half-track-ifvs-during-the-battle-of-the-ardennes-2044">Read on KCC</a></small>'
+      ];
+
+      var nerdMode = false;
+
+      /* ---------------- music: chiptune (nerd mode) / classical (LinkedIn mode) ---------------- */
+      var audioCtx = null, musicOn = false;
+      var classicalAudio = document.getElementById('classicalAudio');
+      var chiptuneAudio = document.getElementById('chiptuneAudio');
+
+      function ensureCtx(){
+        if(audioCtx) return audioCtx;
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if(!Ctx) return null;
+        audioCtx = new Ctx();
+        return audioCtx;
+      }
+
+      function scheduleTone(time, freq, dur, type, peak){
+        var ctx = audioCtx;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, time);
+        gain.gain.setValueAtTime(0.0001, time);
+        gain.gain.exponentialRampToValueAtTime(peak, time + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + dur * 0.92);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(time);
+        osc.stop(time + dur);
+      }
+
+      function startCurrentTrack(){
+        var track = nerdMode ? chiptuneAudio : classicalAudio;
+        if(track){ track.play().catch(function(){}); }
+      }
+
+      function stopMusic(){
+        if(classicalAudio){ classicalAudio.pause(); }
+        if(chiptuneAudio){ chiptuneAudio.pause(); }
+      }
+
+      function syncMusicBtn(){
+        var tip = musicOn ? 'Pause music' : 'Play music';
+        musicBtn.setAttribute('aria-pressed', String(musicOn));
+        musicBtn.setAttribute('data-tooltip', tip);
+        musicBtn.setAttribute('aria-label', tip);
+        musicBtn.classList.toggle('is-playing', musicOn);
+      }
+
+      if(musicBtn){
+        syncMusicBtn();
+        musicBtn.addEventListener('click', function(){
+          musicOn = !musicOn;
+          if(musicOn){ startCurrentTrack(); } else { stopMusic(); }
+          syncMusicBtn();
+        });
+      }
+
+      /* ---------------- nerd mode: chiptune bleep on button hover ---------------- */
+      var HOVER_SELECTOR = '.btn, .icon-btn, .socials a, .talk .yt';
+      var lastHoverTarget = null;
+
+      function playBleep(){
+        var ctx = ensureCtx();
+        if(!ctx) return;
+        var t = ctx.currentTime + 0.01;
+        scheduleTone(t, 880, 0.07, 'square', 0.06);
+        scheduleTone(t + 0.05, 1320, 0.06, 'square', 0.045);
+      }
+
+      // Delegated on document (not the buttons themselves) so it keeps working
+      // after nav/pinned content gets swapped in and out of nerd mode.
+      document.addEventListener('mouseover', function(e){
+        if(!nerdMode || !e.target.closest) return;
+        var el = e.target.closest(HOVER_SELECTOR);
+        if(!el || el === lastHoverTarget) return;
+        lastHoverTarget = el;
+        playBleep();
+      });
+      document.addEventListener('mouseout', function(e){
+        if(!e.target.closest) return;
+        var el = e.target.closest(HOVER_SELECTOR);
+        if(el && el === lastHoverTarget && (!e.relatedTarget || !el.contains(e.relatedTarget))){
+          lastHoverTarget = null;
+        }
+      });
+
+      /* ---------------- nerd mode toggle ---------------- */
+      nerdBtn.addEventListener('click', function(){
+        nerdMode = !nerdMode;
+        document.body.classList.toggle('nerd-mode', nerdMode);
+        nerdBtn.setAttribute('aria-pressed', String(nerdMode));
+
+        var tip = nerdMode ? 'Switch to LinkedIn mode' : 'Switch to nerd mode';
+        nerdBtn.setAttribute('data-tooltip', tip);
+        nerdBtn.setAttribute('aria-label', tip);
+
+        var avatar = nerdMode ? nerdAvatar : normalAvatar;
+        portrait.setAttribute('src', avatar.src);
+        portrait.setAttribute('alt', avatar.alt);
+        portraitWrap.setAttribute('data-tooltip', avatar.tooltip);
+
+        navLinks.forEach(function(a, i){
+          if(nerdMode){
+            if(i < nerdNavItems.length){
+              a.setAttribute('href', nerdNavItems[i].href);
+              a.textContent = nerdNavItems[i].text;
+              a.setAttribute('data-tooltip', nerdNavItems[i].tooltip);
+              a.style.display = '';
+            } else {
+              a.style.display = 'none';
+            }
+          } else {
+            a.setAttribute('href', normalNav[i].href);
+            a.textContent = normalNav[i].text;
+            a.setAttribute('data-tooltip', normalNav[i].tooltip);
+            a.style.display = '';
+          }
+        });
+
+        pinnedEls.forEach(function(el, i){
+          el.innerHTML = nerdMode ? nerdPinned[i] : normalPinned[i];
+        });
+
+        // Turning nerd mode on always starts the music; otherwise just keep playing
+        // across the switch, on whichever track matches the new mode.
+        if(nerdMode && !musicOn){
+          musicOn = true;
+          syncMusicBtn();
+          startCurrentTrack();
+        } else if(musicOn){
+          stopMusic();
+          startCurrentTrack();
+        }
+
+        if(themeBtn){ syncThemeBtn(); }
+      });
     })();
   </script>
 </body>
