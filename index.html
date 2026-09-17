@@ -834,8 +834,8 @@
       var audioCtx = null, musicOn = false;
       var classicalAudio = document.getElementById('classicalAudio');
       var chiptuneAudio = document.getElementById('chiptuneAudio');
-      if(classicalAudio){ classicalAudio.volume = 0.7; } // LinkedIn mode music, cut by 30%
-      if(chiptuneAudio){ chiptuneAudio.volume = 0.5; }    // nerd mode music, cut by 50%
+      if(classicalAudio){ classicalAudio.volume = 0.56; } // LinkedIn mode music, cut by 30% then another 20%
+      if(chiptuneAudio){ chiptuneAudio.volume = 0.4; }     // nerd mode music, cut by 50% then another 20%
 
       function ensureCtx(){
         if(audioCtx) return audioCtx;
