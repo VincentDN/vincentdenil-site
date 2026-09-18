@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Projects | Atelier Vincent De Nil</title>
+<title>Index of /projects/ | Atelier Vincent De Nil</title>
 <meta name="robots" content="noindex">
 <link rel="canonical" href="https://vincentdenil.com/projects/">
 
@@ -18,75 +18,60 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-  :root{
-    --flat:#002b44;
-    --panel:#0b304b;
-    --panel-line:rgba(255,255,255,.12);
-    --line:rgba(255,255,255,.16);
-    --text:#EAF2F8;
-    --text-soft:#9EBAD0;
-    --col:800px;
-    --bg:url('/assets/background.jpg');
-  }
-  *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;}
-  body{
-    margin:0; min-height:100vh; position:relative;
-    color:var(--text); background-color:var(--flat);
-    font-family:"Figtree", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    line-height:1.6; -webkit-font-smoothing:antialiased;
-    display:flex; justify-content:center;
-  }
-  body::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:100vh; z-index:-2;
-    background-color:var(--flat);
-    background-image:
-      linear-gradient(to bottom, rgba(0,43,68,0) 60%, var(--flat) 100%),
-      var(--bg);
-    background-size:cover; background-position:center; background-repeat:no-repeat;
-  }
-  .wrap{ width:100%; max-width:var(--col); padding:clamp(2rem,6vh,4rem) clamp(1.1rem,4vw,1.5rem) 2.5rem; text-align:center; }
-
-  .brand{ display:inline-flex; align-items:center; gap:20px; margin:0 auto 2.4rem; text-decoration:none; color:var(--text); }
-  .brand img{ height:64px; width:auto; display:block; }
-  .wordmark{ text-align:left; line-height:1; }
-  .wordmark .a{ display:block; font-size:.78rem; font-weight:500; letter-spacing:.44em; color:var(--text); margin-bottom:.5em; }
-  .wordmark .n{ display:block; font-size:1.6rem; font-weight:600; letter-spacing:.24em; text-transform:uppercase; color:var(--text); }
-
-  .card{ background:var(--panel); padding:34px; text-align:left; min-height:160px; }
-  h1{ font-size:1.6rem; font-weight:700; margin:0 0 .4rem; }
-  .lede{ color:#D3E1EC; margin:0; }
-
-  .back{ display:inline-block; margin-top:2rem; color:var(--text-soft); text-decoration:none; font-size:.9rem; }
-  .back:hover{ color:var(--text); }
-
-  footer{ margin-top:2.6rem; color:var(--text-soft); font-size:.82rem; line-height:1.8; }
-  footer .mot{ font-style:italic; color:#C4D8E8; }
-
-  @media (max-width:520px){
-    .card{ padding:24px; }
-    .wordmark .n{ font-size:1.3rem; letter-spacing:.18em; }
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/ftp.css">
 </head>
 
 <body>
   <main class="wrap">
 
     <a class="brand" href="/">
-      <img src="/assets/logo-stag.svg" alt="" width="49" height="64">
+      <img src="/assets/logo-stag.svg" alt="" width="37" height="48">
       <span class="wordmark"><span class="a">ATELIER</span><span class="n">Vincent De Nil</span></span>
     </a>
 
-    <section class="card">
-      <h1>Projects</h1>
-      <p class="lede">Experimental work in progress. Nothing here yet.</p>
+    <section class="term">
+      <div class="term-bar">
+        <span class="dots">&#9679;&#9679;&#9679;</span>
+        <span class="addr">ftp://vincentdenil.com/projects/</span>
+      </div>
+
+      <pre id="tunnel" class="tunnel" aria-hidden="true"></pre>
+
+      <div class="term-body">
+        <p class="line dim">Connected to vincentdenil.com.</p>
+        <p class="line dim">220 Service ready. <span class="prompt">anonymous</span> login accepted.</p>
+        <p class="line">Remote directory: <strong>/projects/</strong></p>
+
+        <table class="listing">
+          <thead>
+            <tr><th>Name</th><th>Last modified</th><th>Size</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">[UP]</span><a href="/">../</a></td>
+              <td>&#8212;</td><td>&#8212;</td>
+            </tr>
+            <tr>
+              <td><span class="tag">[DIR]</span><a href="/projects/3d/">3D/</a></td>
+              <td>2026-09-18 00:00</td><td>&#8212;</td>
+            </tr>
+            <tr>
+              <td><span class="tag">[DIR]</span><a href="/projects/temp/">TEMP/</a></td>
+              <td>2026-09-18 00:00</td><td>&#8212;</td>
+            </tr>
+            <tr>
+              <td><span class="tag">[DIR]</span><a href="/projects/experiment/">EXPERIMENT/</a></td>
+              <td>2026-09-18 00:00</td><td>&#8212;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="line dim">3 directories, 0 files &mdash; 227 entering passive mode.</p>
+      </div>
     </section>
 
-    <a class="back" href="/">Back to home</a>
+    <a class="back" href="/">home</a>
 
     <footer>
       All rights reserved, Atelier Vincent De Nil BV, Belgium.<br>
@@ -94,5 +79,58 @@
     </footer>
 
   </main>
+
+  <script>
+    // Procedural ASCII tunnel effect (classic demoscene technique):
+    // each cell's polar coordinates are precomputed once, then a rotating,
+    // scrolling checker pattern sampled through them each frame.
+    (function(){
+      var pre = document.getElementById('tunnel');
+      if(!pre) return;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var COLS = 64, ROWS = 18;
+      var CHARS = ' .:-=+*#%@';
+      var TEX_ANGLE = 12;
+      var cx = COLS / 2, cy = ROWS / 2;
+      var cells = new Array(COLS * ROWS);
+
+      for(var y = 0; y < ROWS; y++){
+        for(var x = 0; x < COLS; x++){
+          var dx = (x - cx) / COLS;
+          var dy = ((y - cy) / ROWS) * 0.62; // squash for monospace char aspect ratio
+          var dist = Math.sqrt(dx * dx + dy * dy) + 0.0001;
+          cells[y * COLS + x] = { dist: dist, angle: Math.atan2(dy, dx) };
+        }
+      }
+
+      var t = 0;
+      function render(){
+        t += 0.09;
+        var out = '';
+        for(var y = 0; y < ROWS; y++){
+          var row = '';
+          for(var x = 0; x < COLS; x++){
+            var c = cells[y * COLS + x];
+            var u = (1 / c.dist) * 2.4 - t * 2.2;      // scroll toward viewer
+            var a = c.angle + t * 0.12;                 // slow swirl
+            var depthIdx = Math.floor(u);
+            var angleIdx = Math.floor(((a / (Math.PI * 2)) + 1) * TEX_ANGLE);
+            var checker = (depthIdx + angleIdx) & 1;
+            var fog = Math.min(1, 1 / (c.dist * 3.4));   // fades into the dark at range
+            var level = checker ? fog : fog * 0.28;
+            var idx = Math.max(0, Math.min(CHARS.length - 1, Math.round(level * (CHARS.length - 1))));
+            row += CHARS[idx];
+          }
+          out += row + (y < ROWS - 1 ? '\n' : '');
+        }
+        pre.textContent = out;
+      }
+
+      render();
+      if(reduce) return;
+      setInterval(render, 80);
+    })();
+  </script>
 </body>
 </html>

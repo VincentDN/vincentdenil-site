@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D Viewer &mdash; placeholder model | Atelier Vincent De Nil</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://vincentdenil.com/projects/3d/viewer/">
+
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon_32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --flat:#002b44;
+    --term-bar:#071c2c;
+    --term-line:rgba(160,210,255,.25);
+    --text:#EAF2F8;
+    --text-dim:#7fa8c4;
+    --link:#9fe0ff;
+  }
+  *{ box-sizing:border-box; }
+  html, body{ height:100%; }
+  body{
+    margin:0; color:var(--text); background:#04141f;
+    font-family:"JetBrains Mono","Fira Code",ui-monospace,Menlo,Consolas,monospace;
+    -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column;
+  }
+  header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 16px; background:var(--term-bar); border-bottom:1px solid var(--term-line);
+    font-size:.82rem; flex-wrap:wrap;
+  }
+  header .addr{ color:var(--text-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  header a{ color:var(--link); text-decoration:none; }
+  header a:hover, header a:focus-visible{ text-decoration:underline; color:var(--text); }
+
+  #stage{ position:relative; flex:1; min-height:0; }
+  #stage canvas{ display:block; width:100%; height:100%; }
+
+  .tag{
+    position:absolute; left:50%; bottom:22px; transform:translateX(-50%);
+    background:rgba(4,20,31,.72); border:1px solid var(--term-line);
+    color:var(--text-dim); font-size:.76rem; padding:8px 14px;
+    text-align:center; pointer-events:none; backdrop-filter:blur(2px);
+  }
+  .tag strong{ color:var(--text); font-weight:600; }
+
+  noscript{
+    display:block; padding:2rem; color:var(--text-dim); font-size:.9rem;
+  }
+</style>
+</head>
+
+<body>
+  <header>
+    <span class="addr">ftp://vincentdenil.com/projects/3D/viewer/</span>
+    <a href="/projects/3d/">.. back to /3D/</a>
+  </header>
+
+  <div id="stage">
+    <div class="tag"><strong>Placeholder model</strong> &mdash; drag to orbit, scroll to zoom. Swap this geometry for a real asset any time.</div>
+  </div>
+
+  <noscript>This 3D viewer requires JavaScript and WebGL.</noscript>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    var stage = document.getElementById('stage');
+
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x04141f);
+    scene.fog = new THREE.Fog(0x04141f, 4, 9);
+
+    var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0.6, 4.2);
+
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    stage.appendChild(renderer.domElement);
+
+    function resize(){
+      var w = stage.clientWidth, h = stage.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', resize);
+
+    // Placeholder model: a low-poly icosahedron core with a pale wireframe shell,
+    // standing in until a real .glb is dropped into this directory.
+    var group = new THREE.Group();
+
+    var core = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.15, 1),
+      new THREE.MeshStandardMaterial({ color: 0x0b304b, roughness: 0.55, metalness: 0.1, flatShading: true })
+    );
+    group.add(core);
+
+    var shell = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.2, 1),
+      new THREE.MeshBasicMaterial({ color: 0x9fe0ff, wireframe: true, transparent: true, opacity: 0.55 })
+    );
+    group.add(shell);
+
+    scene.add(group);
+
+    var key = new THREE.DirectionalLight(0xEAF2F8, 1.4);
+    key.position.set(3, 4, 2);
+    scene.add(key);
+    scene.add(new THREE.AmbientLight(0x9fe0ff, 0.5));
+
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.1;
+    controls.minDistance = 2.2;
+    controls.maxDistance = 7;
+
+    resize();
+
+    function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
