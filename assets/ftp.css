@@ -7,33 +7,24 @@
   --text:#EAF2F8;
   --text-dim:#7fa8c4;
   --link:#9fe0ff;
-  --bg:url('/assets/background.jpg');
 }
 *{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{
-  margin:0; min-height:100vh; position:relative;
+  margin:0; min-height:100vh;
   color:var(--text); background-color:var(--flat);
   font-family:"JetBrains Mono","Fira Code",ui-monospace,Menlo,Consolas,monospace;
   line-height:1.5; -webkit-font-smoothing:antialiased;
   display:flex; justify-content:center;
 }
-body::before{
-  content:""; position:absolute; top:0; left:0; right:0; height:100vh; z-index:-2;
-  background-color:var(--flat);
-  background-image:
-    linear-gradient(to bottom, rgba(0,20,32,.55) 0%, var(--flat) 100%),
-    var(--bg);
-  background-size:cover; background-position:center; background-repeat:no-repeat;
-}
 
 .wrap{ width:100%; max-width:760px; padding:clamp(2rem,6vh,4rem) clamp(1rem,4vw,1.5rem) 2.5rem; }
 
-.brand{ display:inline-flex; align-items:center; gap:16px; margin:0 0 2rem; text-decoration:none; color:var(--text); font-family:"Figtree",system-ui,sans-serif; }
-.brand img{ height:48px; width:auto; display:block; }
-.wordmark{ text-align:left; line-height:1; }
-.wordmark .a{ display:block; font-size:.68rem; font-weight:500; letter-spacing:.4em; margin-bottom:.4em; }
-.wordmark .n{ display:block; font-size:1.2rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; }
+.brand{
+  display:inline-block; margin:0 0 2rem; text-decoration:none; color:var(--text);
+  font-weight:700; font-size:1rem; letter-spacing:.04em;
+}
+.brand:hover, .brand:focus-visible{ color:var(--link); }
 
 .term{ background:var(--term-bg); border:1px solid var(--term-line); box-shadow:0 20px 60px rgba(0,0,0,.5); }
 .term-bar{
