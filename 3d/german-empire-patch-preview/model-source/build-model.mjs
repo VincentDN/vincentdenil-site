@@ -45,12 +45,12 @@ for(let row=0,y=-34.5;y<=34.5;y+=1.05,row++){
 const hooks=new THREE.Mesh(mergeGeometries(fibers),mat('#555f58'));
 hooks.name='Velcro-style hook fibers • illustrative';model.add(hooks);
 fibers.forEach(g=>g.dispose());hookGeometry.dispose();
-const rim=rounded(126.84,74.84,7.92);rim.holes.push(new THREE.Path(rounded(122.76,70.76,5.88).getPoints(24)));
-mesh(rim,2,1,black,'Outer frame • 2.2 mm wide',.08);
-const inner=rounded(119.6,67.6,4.3);
-mesh(rounded(119.48,67.48,4.24),2,.35,black,'Artwork bed • sewing channel inner edge',.06);
+const rim=rounded(126.84,74.84,7.92);rim.holes.push(new THREE.Path(rounded(121.16,69.16,5.08).getPoints(24)));
+mesh(rim,2,1,black,'Outer frame • 3 mm wide',.08);
+const inner=rounded(118,66,3.5);
+mesh(rounded(117.88,65.88,3.44),2,.35,black,'Artwork bed • sewing channel inner edge',.06);
 const clip=[[inner.getPoints(32).map(p=>[p.x,p.y])]];
-function polys(p){return SVGLoader.createShapes(p).map(s=>[s.getPoints(10),...s.holes.map(h=>h.getPoints(10))].map(r=>{let a=r.map(v=>[(v.x-188.6)*119.6/342.2,(109.8-v.y)*67.6/199.2]);if(a[0][0]!==a.at(-1)[0]||a[0][1]!==a.at(-1)[1])a.push(a[0]);return a;}));}
+function polys(p){return SVGLoader.createShapes(p).map(s=>[s.getPoints(10),...s.holes.map(h=>h.getPoints(10))].map(r=>{let a=r.map(v=>[(v.x-188.6)*118/342.2,(109.8-v.y)*66/199.2]);if(a[0][0]!==a.at(-1)[0]||a[0][1]!==a.at(-1)[1])a.push(a[0]);return a;}));}
 const all=paths.map(polys);
 function shapes(polygons,inset=0){
  if(inset){const co=new ClipperLib.ClipperOffset(2,.001*10000);for(const polygon of polygons)polygon.forEach((r,i)=>{let a=r.slice(0,-1).map(([x,y])=>({X:Math.round(x*10000),Y:Math.round(y*10000)}));if(ClipperLib.Clipper.Orientation(a)!==(i===0))a.reverse();co.AddPath(a,ClipperLib.JoinType.jtRound,ClipperLib.EndType.etClosedPolygon);});const tree=new ClipperLib.PolyTree();co.Execute(tree,-inset*10000);const paths=ClipperLib.Clipper.PolyTreeToPaths(tree);polygons=[];const rings=paths.map(p=>p.map(v=>[v.X/10000,v.Y/10000]));for(let i=0;i<rings.length;i++){if(ClipperLib.Clipper.Orientation(paths[i]))polygons.push([rings[i]]);else{const pt=paths[i][0];const parent=polygons.find(p=>ClipperLib.Clipper.PointInPolygon(pt,p[0].map(([x,y])=>({X:x*10000,Y:y*10000})))!==0);if(parent)parent.push(rings[i]);}}}
@@ -67,7 +67,7 @@ for(let i=0;i<paths.length-2;i++){
 mesh(shapes(all.at(-2)),2.85,.35,black,'Raised eagle • SVG outline',.015);
 mesh(shapes(all.at(-1)),3.2,.15,gold,'Quartered shield • SVG outline',.008);
 // Individual stitch segments follow the recessed 1.5 mm sewing channel.
-const seam=rounded(121.1,69.1,5.05);const pts=seam.getSpacedPoints(180);
+const seam=rounded(119.5,67.5,4.25);const pts=seam.getSpacedPoints(180);
 for(let i=0;i<180;i++){const a=pts[i],b=pts[i+1],d=a.distanceTo(b);const stitch=new THREE.Mesh(new THREE.CapsuleGeometry(.19,Math.max(.1,d*.55-.38),3,6),mat('#50534a'));stitch.position.set((a.x+b.x)/2,(a.y+b.y)/2,2.17);stitch.rotation.z=-Math.atan2(b.x-a.x,b.y-a.y);model.add(stitch);}
 model.scale.setScalar(.001);model.updateMatrixWorld(true);
 const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3());

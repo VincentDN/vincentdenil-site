@@ -22,8 +22,8 @@ document.querySelector('#measure').onclick=e=>{showMeasurements=!showMeasurement
 const specs=[
 ['127 mm',[0,-.039,.003],'Overall width','127 mm (12.7 cm), measured across the outside of the frame.'],
 ['75 mm',[-.065,0,.003],'Overall height','75 mm (7.5 cm), measured across the outside of the frame.'],
-['2.2 mm',[.034,.0364,.003],'Outer frame','2.2 mm wide around the patch perimeter.'],
-['1.5 mm',[.06,.012,.0023],'Sewing channel','1.5 mm recessed channel between the frame and artwork. Stitch spacing is illustrative.'],
+['3 mm',[.034,.036,.003],'Outer frame','3 mm wide around the patch perimeter.'],
+['1.5 mm',[.05975,.012,.0023],'Sewing channel','1.5 mm recessed channel between the frame and artwork. Stitch spacing is illustrative.'],
 ['1 mm',[.036,-.009,.003],'Color separation','1 mm gap between main panels. Fine eagle and shield details preserve their original SVG spacing.'],
 ['3.8 mm*',[.05,-.032,.00335],'Assumed thickness','3.8 mm maximum: 2 mm base, up to 1.35 mm emblem relief, and 0.45 mm Velcro-style backing. Depth was not supplied in the reference.']];
 const markers=specs.map(([label,p,title,body],i)=>{const b=document.createElement('button');b.className='hotspot';b.textContent=label;b.setAttribute('aria-label',title+': '+label);b.setAttribute('aria-pressed','false');b.hidden=true;stage.append(b);const open=()=>{active=i;tooltip.replaceChildren();const strong=document.createElement('strong');strong.textContent=title+' · '+label;tooltip.append(strong,document.createTextNode(body));tooltip.hidden=false;};b.addEventListener('pointerenter',open);b.addEventListener('focus',open);b.addEventListener('click',open);b.addEventListener('pointerleave',()=>{if(document.activeElement!==b){tooltip.hidden=true;active=null;}});b.addEventListener('blur',()=>{tooltip.hidden=true;active=null;});return {b,p:new THREE.Vector3(...p)};});
