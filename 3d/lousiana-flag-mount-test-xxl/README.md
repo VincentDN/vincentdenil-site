@@ -15,3 +15,5 @@ Imperial opens by default. `units.js` converts display labels only: decimal feet
 The approval button only displays `unavailable in alpha!`. It does not download, submit, approve, forward or contact any service. The previous GLB export UI is removed.
 
 Shared loading styles are in `/assets/viewer-loader.css`. The room and base viewer use a simple ring; the German Empire patch uses nested groove rings. Each inherits its project's `--accent` and respects reduced motion. Reference links are recorded in the stylesheet. Asset failure replaces the loader with the existing readable error message.
+
+Updated construction: both pole sleeves use hollow teardrop profiles that converge into the fabric at a sewn neck, rather than separate cylindrical tubes. The flag body is a closed mesh with 0.6 mm center thickness and a 2.4 mm folded perimeter hem, 18 mm wide. These thicknesses are preview assumptions. Stitch positions follow the thickened surface; the finished 10 × 6 ft envelope is retained. Vincent's marker is anchored near his feet. Mount detail favors a side view of the sleeve cross-section.
