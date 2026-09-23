@@ -43,13 +43,7 @@ function plant(x,y,z,scale=1){add(new T.CylinderGeometry(.1*scale,.08*scale,.14*
 plant(-.45,.405,2.1,.65);plant(-2.55,0,.45,1.6);
 // Small art prints on the left return wall.
 for(const [z,y,c] of [[1.05,2.13,'#bf9660'],[1.77,2.28,'#b9ba86'],[2.45,1.97,'#b78373']]){box(.055,.65,.47,[-3.36,y,z],wood,.018);box(.012,.53,.35,[-3.325,y,z],mat(c),.002);}
-// Human reference: a neutral adult mannequin with head top exactly 1.75 m.
-const skin=mat('#bcaa8a'),shirt=mat('#647b76'),pants=mat('#484e50'),shoe=mat('#393c3b');
-const HX=2.2,HZ=.68;
-function limb(a,b,r,m){return rod([HX+a[0],a[1],HZ+a[2]],[HX+b[0],b[1],HZ+b[2]],r,m,'human');}
-box(.36,.45,.22,[HX,1.21,HZ],shirt,.075,'human');box(.3,.18,.21,[HX,.935,HZ],pants,.05,'human');
-for(const side of [-1,1]){limb([side*.1,.92,0],[side*.11,.53,.025],.073,pants);limb([side*.11,.53,.025],[side*.12,.14,.015],.053,pants);box(.14,.105,.27,[HX+side*.12,.0575,HZ+.06],shoe,.035,'human');limb([side*.215,1.38,0],[side*.29,1.08,.01],.052,shirt);limb([side*.29,1.08,.01],[side*.3,.88,.06],.04,skin);sphere(.048,[HX+side*.3,.845,HZ+.06],skin,'human');}
-limb([0,1.41,0],[0,1.5,0],.055,skin);const head=sphere(.12,[HX,1.61,HZ],skin,'human');head.scale.set(.8,1.1666666667,.88);
+// Human reference is a traced planar silhouette, loaded below at 1.6764 m tall.
 // Rod centers and sleeves stay within the exact 1.8288 m finished flag height.
 for(const y of [BOTTOM+SR,TOP-SR]){
  rod([-W/2-.085,y,Z],[W/2+.085,y,Z],.0105,metal,'mount');
@@ -65,7 +59,7 @@ const dimensions=[
  {id:'height',label:'Flag height',value:'6 ft · 1.829 m',anchor:[-1.84,2.02,.17],a:[-1.77,BOTTOM,.17],b:[-1.77,TOP,.17],targets:['flag','sleeve'],text:'Finished height: 6 ft / 72 in / 1,828.8 mm, including both sleeve envelopes.'},
  {id:'sleeve',label:'Pole sleeves',value:'Ø1 in · 25.4 mm',anchor:[1.14,2.94,.19],targets:['sleeve','mount'],text:'Top and bottom sleeve openings are Ø25.4 mm (1 in). The rods are Ø21 mm, mounted on brackets 130 mm from the wall.'},
  {id:'thread',label:'Orange stitching',value:'3 mm thread*',anchor:[-1.18,1.19,.2],targets:['thread'],text:'Orange thread matches the interface accent. Two stitched rows along each sleeve, with edge stitching. 3 mm thread is deliberately exaggerated for visibility.'},
- {id:'human',label:'Standing adult',value:'1.75 m · 5 ft 9 in',anchor:[2.67,1.34,.75],a:[2.67,0,.75],b:[2.67,1.75,.75],targets:['human'],text:'Neutral adult reference, 1.75 m (approximately 5 ft 9 in) from soles to head. Its scale matches the room and flag.'},
+ {id:'human',label:'Woman silhouette',value:'5 ft 6 in · 1.676 m',anchor:[2.67,1.34,.75],a:[2.67,0,.75],b:[2.67,1.6764,.75],targets:['human'],text:'Woman silhouette traced from the supplied image: exactly 5 ft 6 in (1.6764 m) from shoe soles to the top of the head. Flat, double-sided dark-grey geometry at the same scale as the room.'},
  {id:'clearance',label:'Bottom above floor',value:'1.12 m',anchor:[-2.1,.57,.15],a:[-2.05,0,.15],b:[-2.05,BOTTOM,.15],targets:['mount'],text:'The bottom edge is 1.12 m above the floor, about 25 cm above the sofa back. Top edge is 2.949 m; the assumed ceiling is 3.25 m.'}
 ];
 function select(id){selected=selected===id?null:id;const spec=dimensions.find(d=>d.id===selected);document.querySelector('#detail').textContent=spec?.text||'Select a measurement on the model or in this list to highlight its geometry and dimension lines.';const highlighted=new Set(spec?.targets.flatMap(k=>groups[k]||[])||[]);room.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(highlighted.has(o)?orange:0);o.material.emissiveIntensity=highlighted.has(o)?.22:0;}});for(const {spec:s,button,line,entry}of labels){const active=s.id===selected;button.setAttribute('aria-pressed',String(active));entry.setAttribute('aria-pressed',String(active));if(line)line.material.color.setHex(active?orange:0x35505b);}}
@@ -78,6 +72,14 @@ try{
  const resize=()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);};new ResizeObserver(resize).observe(stage);resize();view('room');for(const button of document.querySelectorAll('[data-view]'))button.onclick=()=>view(button.dataset.view);
  document.querySelector('#dimensions').onclick=e=>{showDimensions=!showDimensions;e.currentTarget.setAttribute('aria-pressed',String(showDimensions));annotations.visible=showDimensions;};document.querySelector('#person').onclick=e=>{const visible=e.currentTarget.getAttribute('aria-pressed')!=='true';groups.human.forEach(o=>o.visible=visible);e.currentTarget.setAttribute('aria-pressed',String(visible));const h=labels.find(l=>l.spec.id==='human');h.line.visible=visible;};
  stage.addEventListener('keydown',e=>{if(e.key==='Escape')select(selected);if(e.target!==stage)return;const v=camera.position.clone().sub(controls.target);if(e.key==='ArrowLeft'||e.key==='ArrowRight')v.applyAxisAngle(new T.Vector3(0,1,0),e.key==='ArrowLeft'?.1:-.1);else if(e.key==='ArrowUp'||e.key==='ArrowDown')v.applyAxisAngle(new T.Vector3(1,0,0),e.key==='ArrowUp'?.1:-.1);else if(e.key==='+'||e.key==='=')v.multiplyScalar(.9);else if(e.key==='-')v.multiplyScalar(1.1);else return;e.preventDefault();camera.position.copy(controls.target).add(v);controls.update();});
+ const silhouetteResponse=await fetch('./woman-silhouette.json');
+ if(!silhouetteResponse.ok)throw new Error('Silhouette could not load');
+ const silhouetteData=await silhouetteResponse.json();
+ const silhouetteShape=new T.Shape(silhouetteData.rings[0].map(p=>new T.Vector2(...p)));
+ silhouetteShape.holes=silhouetteData.rings.slice(1).map(r=>new T.Path(r.map(p=>new T.Vector2(...p))));
+ const silhouetteMaterial=mat('#393c40');silhouetteMaterial.side=T.DoubleSide;
+ const woman=add(new T.ShapeGeometry(silhouetteShape),silhouetteMaterial,[2.2,0,.68],'human');
+ woman.name='Woman silhouette — 5 ft 6 in (1.6764 m)';
  const texture=await new T.TextureLoader().loadAsync('./flag.png');texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
  const cloth=new T.MeshStandardMaterial({map:texture,roughness:.96,side:T.DoubleSide});const height=H-2*SR;const geo=new T.PlaneGeometry(W,height,100,60);const pos=geo.attributes.position;
  for(let i=0;i<pos.count;i++){const x=pos.getX(i),y=pos.getY(i);pos.setZ(i,.008*Math.sin(x*14)*Math.sin(Math.PI*(y/height+.5))**2);}geo.computeVertexNormals();add(geo,cloth,[0,BOTTOM+H/2,Z+SR*.82],'flag');
