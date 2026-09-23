@@ -62,10 +62,11 @@ for(let i=0;i<paths.length-2;i++){
  for(let j=i+1;j<paths.length-2;j++)visible=pc.difference(visible,all[j]);
  const emblem=i===paths.length-3;
  const ss=shapes(visible,emblem?.08:.56);
- if(ss.length)mesh(ss,2,emblem?.85:.8,paths[i].userData.node.getAttribute('class')==='cls-6'?red:paths[i].userData.node.getAttribute('class')==='cls-1'?black:gold,emblem?'Medallion':'Raised color panel',emblem?.03:.06);
+ if(ss.length)mesh(ss,2,.8,paths[i].userData.node.getAttribute('class')==='cls-6'?red:paths[i].userData.node.getAttribute('class')==='cls-1'?black:gold,emblem?'Medallion':'Raised color panel',emblem?.03:.06);
 }
-mesh(shapes(all.at(-2)),2.85,.35,black,'Raised eagle • SVG outline',.015);
-mesh(shapes(all.at(-1)),3.2,.15,gold,'Quartered shield • SVG outline',.008);
+// Cut the tan shield pattern out of the eagle so the 2.8 mm tan medallion shows through.
+mesh(shapes(pc.difference(all.at(-2),all.at(-1))),2.8,.35,black,'Raised eagle with recessed quartered shield',.015);
+
 // Individual stitch segments follow the recessed 1.5 mm sewing channel.
 const seam=rounded(119.5,67.5,4.25);const pts=seam.getSpacedPoints(180);
 for(let i=0;i<180;i++){const a=pts[i],b=pts[i+1],d=a.distanceTo(b);const stitch=new THREE.Mesh(new THREE.CapsuleGeometry(.19,Math.max(.1,d*.55-.38),3,6),mat('#50534a'));stitch.position.set((a.x+b.x)/2,(a.y+b.y)/2,2.17);stitch.rotation.z=-Math.atan2(b.x-a.x,b.y-a.y);model.add(stitch);}
