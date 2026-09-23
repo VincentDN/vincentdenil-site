@@ -3,7 +3,6 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 const stage=document.querySelector('#stage'),status=document.querySelector('#status');
 // Meter-based dimensions. The 6 x 10 ft envelope includes both sewn sleeves.
 const W=3.048,H=1.8288,BOTTOM=1.12,TOP=BOTTOM+H,SR=.0147,OPENING=.0127,Z=.13;
@@ -35,8 +34,12 @@ for(const [x,z,angle] of [[-.95,.68,.2],[.93,.7,-.3]]){const p=box(.35,.33,.14,[
 const table=add(new T.CylinderGeometry(.52,.52,.075,64),mat('#ae9064'),[-.35,.365,2.14]);
 for(let a=0;a<Math.PI*2;a+=Math.PI*2/3)rod([-.35+Math.cos(a)*.41,.03,2.14+Math.sin(a)*.41],[-.35+Math.cos(a)*.41,.34,2.14+Math.sin(a)*.41],.028,wood);
 
+const chairStart=room.children.length;
 box(.9,.17,.8,[2.1,.33,2.65],frame,.04);box(.72,.17,.7,[2.1,.45,2.65],cream,.04);box(.8,.48,.15,[2.1,.69,2.98],cream,.045);
 for(const x of [1.72,2.48]){box(.13,.37,.82,[x,.55,2.68],frame,.025);for(const z of [2.36,2.98])rod([x,.02,z],[x,.27,z],.035,wood);}
+// Rotate all chair components 90 degrees counterclockwise as viewed from above.
+const chairPivot=new T.Vector3(2.1,0,2.65);
+for(const part of room.children.slice(chairStart)){part.position.sub(chairPivot).applyAxisAngle(new T.Vector3(0,1,0),Math.PI/2).add(chairPivot);part.rotateY(Math.PI/2);}
 add(new T.CylinderGeometry(.18,.2,.035,32),metal,[-1.95,.025,.8]);
 curve([[-1.95,.03,.8],[-1.95,1.58,.8],[-1.79,1.78,.8],[-1.58,1.58,.8]],.014,mat('#a98b51'));
 add(new T.ConeGeometry(.2,.18,32,1,true),mat('#bb9d64'),[-1.58,1.52,.8]);
@@ -44,7 +47,7 @@ function plant(x,y,z,scale=1){add(new T.CylinderGeometry(.1*scale,.08*scale,.14*
 plant(-.45,.405,2.1,.65);plant(-2.55,0,.45,1.6);
 // Small art prints on the left return wall.
 for(const [z,y,c] of [[1.05,2.13,'#bf9660'],[1.77,2.28,'#b9ba86'],[2.45,1.97,'#b78373']]){box(.055,.65,.47,[-3.36,y,z],wood,.018);box(.012,.53,.35,[-3.325,y,z],mat(c),.002);}
-// Human reference is a traced planar silhouette, loaded below at 1.6764 m tall.
+// Human reference is a traced planar silhouette, loaded below at 1.778 m tall.
 // Rod centers and sleeves stay within the exact 1.8288 m finished flag height.
 for(const y of [BOTTOM+SR,TOP-SR]){
  rod([-W/2-.085,y,Z],[W/2+.085,y,Z],.0105,metal,'mount');
@@ -54,36 +57,38 @@ for(const y of [BOTTOM+SR,TOP-SR]){
  for(const x of [-W/2,W/2]){const ring=add(new T.RingGeometry(OPENING,SR,32),blue,[x,y,Z],'sleeve');ring.rotation.y=Math.PI/2;ring.material=blue.clone();ring.material.side=T.DoubleSide;}
 }
 let renderer,camera,controls,selected=null,showDimensions=true,ready=false;
+const approval=document.querySelector('#approve'),alphaTooltip=document.querySelector('#alpha-tooltip');
+approval.onclick=()=>{alphaTooltip.hidden=false;};
+approval.addEventListener('blur',()=>{alphaTooltip.hidden=true;});
+approval.addEventListener('keydown',e=>{if(e.key==='Escape')alphaTooltip.hidden=true;});
 const labels=[],annotations=new T.Group();scene.add(annotations);
 let units='imperial';
 const length=m=>formatLength(m,units);
 const dimensions=[
- {id:'width',label:'Flag width',meters:W,anchor:[0,3.12,.17],a:[-W/2,3.09,.17],b:[W/2,3.09,.17],targets:['flag'],text:'Finished width: 10 ft / 120 in / 3,048 mm. The flag is wider than the 2.8 m sofa.'},
- {id:'height',label:'Flag height',meters:H,anchor:[-1.84,2.02,.17],a:[-1.77,BOTTOM,.17],b:[-1.77,TOP,.17],targets:['flag','sleeve'],text:'Finished height: 6 ft / 72 in / 1,828.8 mm, including both sleeve envelopes.'},
- {id:'sleeve',label:'Pole sleeves',meters:.0254,prefix:'Ø',anchor:[1.14,2.94,.19],targets:['sleeve','mount'],text:'Top and bottom sleeve openings are Ø25.4 mm (1 in). The rods are Ø21 mm, mounted on brackets 130 mm from the wall.'},
- {id:'thread',label:'Orange stitching',meters:.003,suffix:'*',anchor:[-1.18,1.19,.2],targets:['thread'],text:'Orange thread matches the interface accent. Two stitched rows along each sleeve, with edge stitching. 3 mm thread is deliberately exaggerated for visibility.'},
- {id:'human',label:'Woman silhouette',meters:1.6764,anchor:[2.67,1.34,.75],a:[2.67,0,.75],b:[2.67,1.6764,.75],targets:['human'],text:'Woman silhouette traced from the supplied image: exactly 5 ft 6 in (1.6764 m) from shoe soles to the top of the head. Flat, double-sided dark-grey geometry at the same scale as the room.'},
- {id:'clearance',label:'Bottom above floor',meters:BOTTOM,anchor:[-2.1,.57,.15],a:[-2.05,0,.15],b:[-2.05,BOTTOM,.15],targets:['mount'],text:'The bottom edge is 1.12 m above the floor, about 25 cm above the sofa back. Top edge is 2.949 m; the assumed ceiling is 3.25 m.'}
+ {id:'width',label:'Flag width',meters:W,anchor:[0,3.12,.17],a:[-W/2,3.09,.17],b:[W/2,3.09,.17],targets:['flag']},
+ {id:'height',label:'Flag height',meters:H,anchor:[-1.84,2.02,.17],a:[-1.77,BOTTOM,.17],b:[-1.77,TOP,.17],targets:['flag','sleeve']},
+ {id:'sleeve',label:'Pole sleeves',meters:.0254,prefix:'Ø',anchor:[1.14,2.94,.19],targets:['sleeve','mount']},
+ {id:'thread',label:'Orange stitching',meters:.003,suffix:'*',anchor:[-1.18,1.19,.2],targets:['thread']},
+ {id:'human',label:'Vincent for Scale',meters:1.778,anchor:[2.67,1.34,.75],a:[2.67,0,.75],b:[2.67,1.778,.75],targets:['human']},
+ {id:'clearance',label:'Bottom above floor',meters:BOTTOM,anchor:[-2.1,.57,.15],a:[-2.05,0,.15],b:[-2.05,BOTTOM,.15],targets:['mount']}
 ];
-function valueOf(spec){return (spec.prefix||'')+length(spec.meters)+(spec.suffix||'');}
+function valueOf(spec){if(spec.id==='human'&&units==='imperial')return '5ft10in (70in)';if(spec.id==='sleeve')return units==='imperial'?'Ø1in Pole':'Ø25.4mm Pole';return (spec.prefix||'')+length(spec.meters)+(spec.suffix||'');}
 function dimensionText(id){return {
  width:()=>`Finished width: ${length(W)}. The flag is wider than the ${length(2.8)} sofa.`,
  height:()=>`Finished height: ${length(H)}, including both sleeve envelopes.`,
  sleeve:()=>`Top and bottom sleeve openings: Ø${length(.0254)}. Rod diameter: Ø${length(.021)}. Brackets project ${length(.13)} from the wall.`,
  thread:()=>`Orange thread matches the interface accent. Two stitched rows along each sleeve, with edge stitching. Thread diameter ${length(.003)} is exaggerated for visibility.`,
- human:()=>`Woman silhouette traced from the supplied image: ${length(1.6764)} from shoe soles to the top of the head. Flat, double-sided dark-grey geometry at the same scale as the room.`,
+ human:()=>`Vincent for Scale — ${length(1.778)}. not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments`,
  clearance:()=>`Bottom edge: ${length(BOTTOM)} above the floor, about ${length(.25)} above the sofa back. Top edge: ${length(TOP)}. Assumed ceiling: ${length(3.25)}.`
  }[id]();}
 function updateUnits(){
  for(const {spec,button,entry} of labels){const value=valueOf(spec);button.textContent=value;button.setAttribute('aria-label',spec.label+': '+value);entry.querySelector('strong').textContent=value;}
  for(const b of document.querySelectorAll('[data-units]'))b.setAttribute('aria-pressed',String(b.dataset.units===units));
- document.querySelector('#intro').textContent=`A ${length(W)} × ${length(H)} flag above a cream sectional. Orange stitched hems and twin wall-mounted poles, with a flat dark-grey woman silhouette for scale.`;
- document.querySelector('#construction-note').textContent=`Flag size includes the top and bottom sleeves. Sleeve opening: Ø${length(.0254)}. Rod diameter: Ø${length(.021)} for clearance.`;
- document.querySelector('#room-note').textContent=`Room assumptions: ${length(6.8)} wide, ${length(3.25)} ceiling, ${length(2.8)} sofa, ${length(1.6764)} woman. Flag bottom: ${length(BOTTOM)} above the floor. Orange thread is exaggerated to ${length(.003)} for inspection. Mounts and fabric drape are illustrative.`;
+ document.querySelector('#intro').textContent=`A ${length(W)} × ${length(H)} flag above a cream sectional. Orange stitched hems and twin wall-mounted poles, with a flat dark-grey Vincent silhouette for scale.`;
  if(selected)document.querySelector('#detail').textContent=dimensionText(selected);
 }
 function select(id){selected=selected===id?null:id;const spec=dimensions.find(d=>d.id===selected);document.querySelector('#detail').textContent=(spec?dimensionText(spec.id):null)||'Select a measurement on the model or in this list to highlight its geometry and dimension lines.';const highlighted=new Set(spec?.targets.flatMap(k=>groups[k]||[])||[]);room.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(highlighted.has(o)?orange:0);o.material.emissiveIntensity=highlighted.has(o)?.22:0;}});for(const {spec:s,button,line,entry}of labels){const active=s.id===selected;button.setAttribute('aria-pressed',String(active));entry.setAttribute('aria-pressed',String(active));if(line)line.material.color.setHex(active?orange:0x35505b);}}
-for(const spec of dimensions){let line;if(spec.a){const a=new T.Vector3(...spec.a),b=new T.Vector3(...spec.b),horizontal=Math.abs(a.x-b.x)>.1,tick=new T.Vector3(horizontal?0:.045,horizontal?.045:0,0);line=new T.LineSegments(new T.BufferGeometry().setFromPoints([a,b,a.clone().sub(tick),a.clone().add(tick),b.clone().sub(tick),b.clone().add(tick)]),new T.LineBasicMaterial({color:0x35505b,depthTest:false}));line.renderOrder=20;annotations.add(line);}const button=document.createElement('button');button.className='marker';button.textContent=valueOf(spec);button.setAttribute('aria-label',spec.label+': '+valueOf(spec));button.setAttribute('aria-pressed','false');button.hidden=true;button.onclick=()=>select(spec.id);stage.append(button);const entry=document.createElement('button');entry.className='measurement';entry.setAttribute('aria-pressed','false');entry.innerHTML='<span>'+spec.label+'</span><strong>'+valueOf(spec)+'</strong>';entry.onclick=()=>select(spec.id);document.querySelector('#measurements').append(entry);labels.push({spec,button,line,entry});}
+for(const spec of dimensions){let line;if(spec.a){const a=new T.Vector3(...spec.a),b=new T.Vector3(...spec.b),horizontal=Math.abs(a.x-b.x)>.1,tick=new T.Vector3(horizontal?0:.045,horizontal?.045:0,0);line=new T.LineSegments(new T.BufferGeometry().setFromPoints([a,b,a.clone().sub(tick),a.clone().add(tick),b.clone().sub(tick),b.clone().add(tick)]),new T.LineBasicMaterial({color:0x35505b,depthTest:false}));line.renderOrder=20;annotations.add(line);}const button=document.createElement('button');button.className='marker';button.textContent=valueOf(spec);button.setAttribute('aria-label',spec.label+': '+valueOf(spec));button.setAttribute('aria-pressed','false');button.hidden=true;button.onclick=()=>select(spec.id);if(spec.id==='human')button.title='not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments';stage.append(button);const entry=document.createElement('button');entry.className='measurement';entry.setAttribute('aria-pressed','false');entry.innerHTML='<span>'+spec.label+'</span><strong>'+valueOf(spec)+'</strong>';entry.onclick=()=>select(spec.id);document.querySelector('#measurements').append(entry);labels.push({spec,button,line,entry});}
 for(const button of document.querySelectorAll('[data-units]'))button.onclick=()=>{units=button.dataset.units;updateUnits();};
 updateUnits();
 try{
@@ -94,14 +99,17 @@ try{
  const resize=()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);};new ResizeObserver(resize).observe(stage);resize();view('room');for(const button of document.querySelectorAll('[data-view]'))button.onclick=()=>view(button.dataset.view);
  document.querySelector('#dimensions').onclick=e=>{showDimensions=!showDimensions;e.currentTarget.setAttribute('aria-pressed',String(showDimensions));annotations.visible=showDimensions;};document.querySelector('#person').onclick=e=>{const visible=e.currentTarget.getAttribute('aria-pressed')!=='true';groups.human.forEach(o=>o.visible=visible);e.currentTarget.setAttribute('aria-pressed',String(visible));const h=labels.find(l=>l.spec.id==='human');h.line.visible=visible;};
  stage.addEventListener('keydown',e=>{if(e.key==='Escape')select(selected);if(e.target!==stage)return;const v=camera.position.clone().sub(controls.target);if(e.key==='ArrowLeft'||e.key==='ArrowRight')v.applyAxisAngle(new T.Vector3(0,1,0),e.key==='ArrowLeft'?.1:-.1);else if(e.key==='ArrowUp'||e.key==='ArrowDown')v.applyAxisAngle(new T.Vector3(1,0,0),e.key==='ArrowUp'?.1:-.1);else if(e.key==='+'||e.key==='=')v.multiplyScalar(.9);else if(e.key==='-')v.multiplyScalar(1.1);else return;e.preventDefault();camera.position.copy(controls.target).add(v);controls.update();});
- const silhouetteResponse=await fetch('./woman-silhouette.json');
+ const silhouetteResponse=await fetch('./vincent-silhouette.json');
  if(!silhouetteResponse.ok)throw new Error('Silhouette could not load');
  const silhouetteData=await silhouetteResponse.json();
- const silhouetteShape=new T.Shape(silhouetteData.rings[0].map(p=>new T.Vector2(...p)));
- silhouetteShape.holes=silhouetteData.rings.slice(1).map(r=>new T.Path(r.map(p=>new T.Vector2(...p))));
+ const rings=silhouetteData.rings.map(r=>r.map(p=>new T.Vector2(...p)));
+ const outlines=rings.filter(r=>T.ShapeUtils.isClockWise(r));
+ const silhouetteShapes=outlines.map(r=>new T.Shape(r));
+ function contains(r,p){let inside=false;for(let i=0,j=r.length-1;i<r.length;j=i++){const a=r[i],b=r[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)inside=!inside;}return inside;}
+ for(const hole of rings.filter(r=>!T.ShapeUtils.isClockWise(r))){const i=outlines.findIndex(r=>contains(r,hole[0]));if(i>=0)silhouetteShapes[i].holes.push(new T.Path(hole));}
  const silhouetteMaterial=mat('#393c40');silhouetteMaterial.side=T.DoubleSide;
- const woman=add(new T.ShapeGeometry(silhouetteShape),silhouetteMaterial,[2.2,0,.68],'human');
- woman.name='Woman silhouette — 5 ft 6 in (1.6764 m)';
+ const woman=add(new T.ShapeGeometry(silhouetteShapes),silhouetteMaterial,[2.2,0,.68],'human');
+ woman.name='Vincent for Scale — 5 ft 10 in (1.778 m)';
  const texture=await new T.TextureLoader().loadAsync('./flag.png');texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
  const cloth=new T.MeshStandardMaterial({map:texture,roughness:.96,side:T.DoubleSide});const height=H-2*SR;const geo=new T.PlaneGeometry(W,height,100,60);const pos=geo.attributes.position;
  for(let i=0;i<pos.count;i++){const x=pos.getX(i),y=pos.getY(i);pos.setZ(i,.008*Math.sin(x*14)*Math.sin(Math.PI*(y/height+.5))**2);}geo.computeVertexNormals();add(geo,cloth,[0,BOTTOM+H/2,Z+SR*.82],'flag');
@@ -110,7 +118,6 @@ try{
  for(const x of [-W/2+.013,W/2-.013])for(let y=BOTTOM+.06;y<TOP-.06;y+=.014)stitch([x,y,Z+.026],[x,y+.009,Z+.026]);
  add(mergeGeometries(stitches),thread,[0,0,0],'thread');stitches.forEach(g=>g.dispose());
  // Clone shared materials so highlighting affects only selected meshes.
- room.traverse(o=>{if(o.isMesh)o.material=o.material.clone();});ready=true;status.hidden=true;document.querySelector('#download').disabled=false;
- document.querySelector('#download').onclick=async e=>{const button=e.currentTarget;button.disabled=true;button.textContent='Preparing GLB…';const before=selected;select(null);try{const data=await new GLTFExporter().parseAsync(room,{binary:true,onlyVisible:false});const url=URL.createObjectURL(new Blob([data],{type:'model/gltf-binary'})),a=document.createElement('a');a.href=url;a.download='louisiana-xxl-room.glb';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}catch(err){console.error(err);document.querySelector('#detail').textContent='Export failed. Please try again.';}finally{if(before)select(before);button.disabled=false;button.textContent='Download room · GLB';}};
+ room.traverse(o=>{if(o.isMesh)o.material=o.material.clone();});ready=true;status.hidden=true;
  renderer.setAnimationLoop(()=>{controls.update();camera.updateMatrixWorld();for(const {spec,button}of labels){const p=new T.Vector3(...spec.anchor).project(camera);button.hidden=!ready||!showDimensions||p.z>1||Math.abs(p.x)>.95||Math.abs(p.y)>.95||(spec.id==='human'&&!groups.human[0].visible);const half=button.offsetWidth/2+8;button.style.left=Math.max(half,Math.min(stage.clientWidth-half,(p.x*.5+.5)*stage.clientWidth))+'px';button.style.top=(-p.y*.5+.5)*stage.clientHeight+'px';}renderer.render(scene,camera);});
 }catch(err){console.error(err);status.textContent='The scene could not load. Reload in a browser with WebGL enabled.';}
