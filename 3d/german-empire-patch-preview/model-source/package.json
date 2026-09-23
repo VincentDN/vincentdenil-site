@@ -1,0 +1,8 @@
+{
+	"dependencies": {
+		"three": "0.160.0",
+		"jsdom": "^30.1.1",
+		"polygon-clipping": "^0.15.7",
+		"clipper-lib": "^6.4.2"
+	}
+}
