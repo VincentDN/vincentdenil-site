@@ -66,7 +66,7 @@ const vincentTip=document.createElement('div');
 vincentTip.id='vincent-tooltip';vincentTip.role='tooltip';vincentTip.hidden=true;
 vincentTip.textContent='not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments';
 stage.append(vincentTip);
-const showVincentTip=()=>{vincentTip.hidden=false;};
+const showVincentTip=()=>{vincentTip.hidden=selected==='human';};
 const hideVincentTip=()=>{vincentTip.hidden=true;};
 stage.addEventListener('keydown',e=>{if(e.key==='Escape')hideVincentTip();});
 let units='imperial';
@@ -88,13 +88,19 @@ function dimensionText(id){return {
  human:()=>`Vincent for Scale — ${length(1.778)}. not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments`,
  clearance:()=>`Bottom edge: ${length(BOTTOM)} above the floor, about ${length(.25)} above the sofa back. Top edge: ${length(TOP)}. Assumed ceiling: ${length(3.25)}.`
  }[id]();}
+function renderMarker(spec,button){
+ const expanded=spec.id==='human'&&selected==='human';
+ button.classList.toggle('vincent-expanded',expanded);
+ button.replaceChildren(document.createTextNode(valueOf(spec)));
+ if(expanded){const joke=document.createElement('span');joke.className='marker-joke';joke.textContent=vincentTip.textContent;button.append(joke);}
+}
 function updateUnits(){
- for(const {spec,button,entry} of labels){const value=valueOf(spec);button.textContent=value;button.setAttribute('aria-label',spec.label+': '+value);entry.querySelector('strong').textContent=value;}
+ for(const {spec,button,entry} of labels){const value=valueOf(spec);renderMarker(spec,button);button.setAttribute('aria-label',spec.label+': '+value);entry.querySelector('strong').textContent=value;}
  for(const b of document.querySelectorAll('[data-units]'))b.setAttribute('aria-pressed',String(b.dataset.units===units));
  document.querySelector('#intro').textContent=`A ${length(W)} × ${length(H)} flag above a cream sectional. Orange stitched hems and twin wall-mounted poles, with a flat dark-grey Vincent silhouette for scale.`;
  if(selected)document.querySelector('#detail').textContent=dimensionText(selected);
 }
-function select(id){selected=selected===id?null:id;const spec=dimensions.find(d=>d.id===selected);document.querySelector('#detail').textContent=(spec?dimensionText(spec.id):null)||'Select a measurement on the model or in this list to highlight its geometry and dimension lines.';const highlighted=new Set(spec?.targets.flatMap(k=>groups[k]||[])||[]);room.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(highlighted.has(o)?orange:0);o.material.emissiveIntensity=highlighted.has(o)?.22:0;}});for(const {spec:s,button,line,entry}of labels){const active=s.id===selected;button.setAttribute('aria-pressed',String(active));entry.setAttribute('aria-pressed',String(active));if(line)line.material.color.setHex(active?orange:0x35505b);}}
+function select(id){selected=selected===id?null:id;const spec=dimensions.find(d=>d.id===selected);document.querySelector('#detail').textContent=(spec?dimensionText(spec.id):null)||'Select a measurement on the model or in this list to highlight its geometry and dimension lines.';const highlighted=new Set(spec?.targets.flatMap(k=>groups[k]||[])||[]);room.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(highlighted.has(o)?orange:0);o.material.emissiveIntensity=highlighted.has(o)?.22:0;}});for(const {spec:s,button,line,entry}of labels){const active=s.id===selected;renderMarker(s,button);if(selected==='human')hideVincentTip();button.setAttribute('aria-pressed',String(active));entry.setAttribute('aria-pressed',String(active));if(line)line.material.color.setHex(active?orange:0x35505b);}}
 for(const spec of dimensions){let line;if(spec.a){const a=new T.Vector3(...spec.a),b=new T.Vector3(...spec.b),horizontal=Math.abs(a.x-b.x)>.1,tick=new T.Vector3(horizontal?0:.045,horizontal?.045:0,0);line=new T.LineSegments(new T.BufferGeometry().setFromPoints([a,b,a.clone().sub(tick),a.clone().add(tick),b.clone().sub(tick),b.clone().add(tick)]),new T.LineBasicMaterial({color:0x35505b,depthTest:false}));line.renderOrder=20;annotations.add(line);}const button=document.createElement('button');button.className='marker';button.textContent=valueOf(spec);button.setAttribute('aria-label',spec.label+': '+valueOf(spec));button.setAttribute('aria-pressed','false');button.hidden=true;button.onclick=()=>select(spec.id);if(spec.id==='human')button.title='not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments';stage.append(button);const entry=document.createElement('button');entry.className='measurement';entry.setAttribute('aria-pressed','false');entry.innerHTML='<span>'+spec.label+'</span><strong>'+valueOf(spec)+'</strong>';entry.onclick=()=>select(spec.id);document.querySelector('#measurements').append(entry);labels.push({spec,button,line,entry});}
 const vincentLabel=labels.find(l=>l.spec.id==='human');
 for(const target of [vincentLabel.button,vincentLabel.entry]){
