@@ -9,3 +9,5 @@ Depth is illustrative, not a supplied manufacturing specification: 2 mm backing,
 The page supports drag/pinch/scroll, keyboard rotation and zoom, camera presets, auto-rotation, and focus/hover/tap measurement explanations. Measurements remain in the sidebar when WebGL is unavailable. GLB download is independent of the viewer.
 
 To rebuild the asset with Node.js, run `pnpm install --frozen-lockfile` in `model-source`, then `node build-model.mjs`. The generator removes Illustrator guide paths, resolves SVG painter-order overlaps with polygon boolean operations, and creates extruded panels with real separating grooves. The static site has no build step; serve the repository root using any static HTTP server.
+
+The tan Nordic-cross stripes are widened inward by 2 SVG units each (about 0.7 mm), giving approximately 1.35–1.4 mm visible width after the existing panel grooves. The outer cross footprint, 1 mm main-panel gaps, and emblem artwork are preserved.
