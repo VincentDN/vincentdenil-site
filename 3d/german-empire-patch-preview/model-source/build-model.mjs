@@ -3,6 +3,7 @@ import {fileURLToPath} from 'node:url';
 import * as THREE from 'three';
 import {SVGLoader} from 'three/addons/loaders/SVGLoader.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {JSDOM} from 'jsdom';
 import pc from 'polygon-clipping';
 import ClipperLib from 'clipper-lib';
@@ -18,6 +19,32 @@ function rounded(w,h,r){const s=new THREE.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);
 function mesh(shape,z,depth,material,name,bevel=.08){const geo=new THREE.ExtrudeGeometry(shape,{depth:depth-2*bevel,steps:1,bevelEnabled:bevel>0,bevelThickness:bevel,bevelSize:bevel,bevelSegments:2,curveSegments:12});geo.translate(0,0,z+bevel);const m=new THREE.Mesh(geo,material);m.name=name;model.add(m);return m;}
 // Bevels are contained inside the nominal envelope.
 mesh(rounded(126.8,74.8,7.9),0,2,black,'PVC backing • assumed 2 mm',.1);
+// A fabric carrier and dense, staggered hook fibers model the back fastening surface.
+// All dimensions are illustrative; the fibers extend 0.45 mm behind the PVC.
+mesh(rounded(123.8,71.8,6.4),-.2,.23,mat('#181c1c'),'Velcro-style fabric carrier',.035);
+const hookCurve=new THREE.CatmullRomCurve3([
+ new THREE.Vector3(0,-.25,-.19),new THREE.Vector3(0,-.2,-.34),
+ new THREE.Vector3(0,-.04,-.415),new THREE.Vector3(0,.16,-.36),
+ new THREE.Vector3(0,.12,-.27)
+]);
+const hookGeometry=new THREE.TubeGeometry(hookCurve,6,.065,3,false);
+const fibers=[];
+for(let row=0,y=-34.5;y<=34.5;y+=1.05,row++){
+ for(let col=0,x=-60.5;x<=60.5;x+=1.05,col++){
+  const px=x+(row%2)*.525,py=y;
+  const dx=Math.max(Math.abs(px)-55,0),dy=Math.max(Math.abs(py)-29,0);
+  if(dx*dx+dy*dy>5.5*5.5)continue;
+  // Deterministic slight variation avoids a perfectly machined appearance.
+  const jitter=Math.sin(row*127.1+col*311.7);
+  const geometry=hookGeometry.clone();
+  geometry.rotateZ((row%2?Math.PI:0)+jitter*.45);
+  geometry.translate(px+jitter*.09,py+Math.cos(col*17+row)*.08,0);
+  fibers.push(geometry);
+ }
+}
+const hooks=new THREE.Mesh(mergeGeometries(fibers),mat('#555f58'));
+hooks.name='Velcro-style hook fibers • illustrative';model.add(hooks);
+fibers.forEach(g=>g.dispose());hookGeometry.dispose();
 const rim=rounded(126.84,74.84,7.92);rim.holes.push(new THREE.Path(rounded(122.76,70.76,5.88).getPoints(24)));
 mesh(rim,2,1,black,'Outer frame • 2.2 mm wide',.08);
 const inner=rounded(119.6,67.6,4.3);
