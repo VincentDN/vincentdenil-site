@@ -93,7 +93,7 @@ function dimensionText(id){return {
  width:()=>`Finished width: ${length(W)}. The flag is wider than the ${length(2.8)} sofa.`,
  height:()=>`Finished height: ${length(H)}, including both sleeve envelopes.`,
  sleeve:()=>`Top and bottom sleeve openings: Ø${length(.0254)}. Rod diameter: Ø${length(.021)}. Brackets project ${length(.13)} from the wall.`,
- thread:()=>`Orange thread matches the interface accent. Two stitched rows along each sleeve, with edge stitching. Thread diameter ${length(.003)} is exaggerated for visibility.`,
+ thread:()=>`Orange thread matches the interface accent. Double stitch rows reinforce all four folded edges, with box-X stitches at every corner. Thread diameter ${length(.003)} is exaggerated for visibility.`,
  human:()=>`Vincent for Scale — ${length(1.778)}. not depicted - Vincent muttering in French about denier weights and non-DIN conforming hoist attachments`,
  clearance:()=>`Bottom edge: ${length(BOTTOM)} above the floor, about ${length(.25)} above the sofa back. Top edge: ${length(TOP)}. Assumed ceiling: ${length(3.25)}.`
  }[id]();}
@@ -144,8 +144,28 @@ try{
  renderer.domElement.addEventListener('pointermove',e=>{const hit=overVincent(e);renderer.domElement.style.cursor=hit?'help':'';if(hit)showVincentTip();else hideVincentTip();});
  renderer.domElement.addEventListener('pointerleave',hideVincentTip);
  renderer.domElement.addEventListener('click',e=>{if(overVincent(e)){select('human');showVincentTip();}else hideVincentTip();});
- const texture=await new T.TextureLoader().loadAsync('./flag.png');texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
- const cloth=new T.MeshStandardMaterial({map:texture,roughness:.96});
+ const loader=new T.TextureLoader();
+ const [texture,weave,normal]=await Promise.all(['./flag.png','./textures/polyester-weave-4k.png','./textures/polyester-normal-4k.png'].map(url=>loader.loadAsync(url)));
+ texture.colorSpace=T.SRGBColorSpace;
+ for(const map of [texture,weave,normal])map.anisotropy=renderer.capabilities.getMaxAnisotropy();
+ for(const map of [weave,normal]){map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(W/.064,(CLOTH_TOP-CLOTH_BOTTOM)/.064);}
+ // The artwork keeps its own UVs; the weave repeats at a physical 64 mm tile size.
+ function fabricMaterial(material){
+  material.normalMap=normal;material.normalScale=new T.Vector2(.65,.65);material.roughnessMap=weave;material.userData.fabric=true;
+  material.onBeforeCompile=shader=>{
+   shader.uniforms.fabricWeave={value:weave};
+   shader.fragmentShader='uniform sampler2D fabricWeave;\n'+shader.fragmentShader;
+   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb *= texture2D(fabricWeave, vNormalMapUv).r;');
+  };
+  material.customProgramCacheKey=()=> 'polyester-detail-v1';
+  return material;
+ }
+ const cloth=fabricMaterial(new T.MeshStandardMaterial({map:texture,roughness:.96}));
+ for(const sleeve of groups.sleeve){
+  const p=sleeve.geometry.attributes.position,uv=sleeve.geometry.attributes.uv;
+  for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)/W+.5,(p.getY(i)+p.getZ(i)-Z-CLOTH_BOTTOM)/(CLOTH_TOP-CLOTH_BOTTOM));
+  sleeve.material=fabricMaterial(blue.clone());
+ }
  const height=CLOTH_TOP-CLOTH_BOTTOM;
  function clothThickness(x,y){const edge=Math.min(W/2-Math.abs(x),y-CLOTH_BOTTOM,CLOTH_TOP-y);return edge<=HEM_WIDTH?HEM:FABRIC;}
  function clothCenter(x,y){return Z+.008*Math.sin(x*14)*Math.sin(Math.PI*(y-CLOTH_BOTTOM)/height)**2*Math.sin(Math.PI*(x/W+.5))**2;}
@@ -158,11 +178,22 @@ try{
  for(let i=0;i<perimeter.length;i++){const a=perimeter[i],b=perimeter[(i+1)%perimeter.length];indices.push(a,a+count,b,b,a+count,b+count);}
  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));geo.setIndex(indices);geo.computeVertexNormals();
  add(geo,cloth,[0,0,0],'flag').name='Solid fabric with thick folded perimeter hem';
- groups.thread=[];const stitches=[];function stitch(a,b){for(const p of [a,b])p[2]=clothCenter(p[0],p[1])+clothThickness(p[0],p[1])/2+.0015;const av=new T.Vector3(...a),bv=new T.Vector3(...b),delta=bv.clone().sub(av);const g=new T.CylinderGeometry(.0015,.0015,delta.length(),5);g.applyQuaternion(new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize()));g.translate(...av.add(bv).multiplyScalar(.5).toArray());stitches.push(g);}
- for(const y of [CLOTH_BOTTOM+.006,CLOTH_BOTTOM+.014,CLOTH_TOP-.006,CLOTH_TOP-.014])for(let x=-W/2+.012;x<W/2-.012;x+=.014)stitch([x,y,0],[Math.min(x+.009,W/2-.01),y,0]);
- for(const x of [-W/2+.009,W/2-.009])for(let y=CLOTH_BOTTOM+.018;y<CLOTH_TOP-.018;y+=.014)stitch([x,y,0],[x,Math.min(y+.009,CLOTH_TOP-.018),0]);
+ // A separate closed fabric strip represents the edge turned over onto the face.
+ // Its inner edge and 0.6 mm layer thickness remain visible in the mount close-up.
+ function rectangleContour(inset){const x0=-W/2+inset,x1=W/2-inset,y0=CLOTH_BOTTOM+inset,y1=CLOTH_TOP-inset;const points=[];for(const [a,b] of [[[x0,y0],[x1,y0]],[[x1,y0],[x1,y1]],[[x1,y1],[x0,y1]],[[x0,y1],[x0,y0]]]){const steps=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/.03);for(let i=0;i<steps;i++)points.push(new T.Vector2(a[0]+(b[0]-a[0])*i/steps,a[1]+(b[1]-a[1])*i/steps));}return points;}
+ const foldedShape=new T.Shape(rectangleContour(0));foldedShape.holes.push(new T.Path(rectangleContour(HEM_WIDTH).reverse()));
+ const foldedGeometry=new T.ExtrudeGeometry(foldedShape,{depth:FABRIC,bevelEnabled:false,steps:1});
+ const foldedPositions=foldedGeometry.attributes.position,foldedUV=foldedGeometry.attributes.uv;
+ for(let i=0;i<foldedPositions.count;i++){const x=foldedPositions.getX(i),y=foldedPositions.getY(i);foldedPositions.setZ(i,foldedPositions.getZ(i)+clothCenter(x,y)+HEM/2);foldedUV.setXY(i,x/W+.5,(y-CLOTH_BOTTOM)/height);}
+ foldedGeometry.computeVertexNormals();const foldedMaterial=cloth.clone();foldedMaterial.color.setHex(0xe5e9ed);
+ add(foldedGeometry,foldedMaterial,[0,0,0],'flag').name='Turned-over reinforcement fabric • 18 mm wide';
+ groups.thread=[];const stitches=[];function stitch(a,b){for(const p of [a,b])p[2]=clothCenter(p[0],p[1])+HEM/2+FABRIC+.0015;const av=new T.Vector3(...a),bv=new T.Vector3(...b),delta=bv.clone().sub(av);const g=new T.CylinderGeometry(.0015,.0015,delta.length(),5);g.applyQuaternion(new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize()));g.translate(...av.add(bv).multiplyScalar(.5).toArray());stitches.push(g);}
+ // Leave the corners clear for box-X reinforcement stitching.
+ for(const y of [CLOTH_BOTTOM+.006,CLOTH_BOTTOM+.014,CLOTH_TOP-.006,CLOTH_TOP-.014])for(let x=-W/2+.025;x<W/2-.025;x+=.014)stitch([x,y,0],[Math.min(x+.009,W/2-.025),y,0]);
+ for(const x of [-W/2+.006,-W/2+.014,W/2-.006,W/2-.014])for(let y=CLOTH_BOTTOM+.025;y<CLOTH_TOP-.025;y+=.014)stitch([x,y,0],[x,Math.min(y+.009,CLOTH_TOP-.025),0]);
+ for(const sx of [-1,1])for(const sy of [-1,1]){const edgeX=sx*W/2,edgeY=sy<0?CLOTH_BOTTOM:CLOTH_TOP;const point=(u,v)=>[edgeX-sx*u,edgeY-sy*v,0];const corners=[point(.004,.004),point(.016,.004),point(.016,.016),point(.004,.016)];for(let i=0;i<4;i++)stitch([...corners[i]],[...corners[(i+1)%4]]);stitch([...corners[0]],[...corners[2]]);stitch([...corners[1]],[...corners[3]]);}
  add(mergeGeometries(stitches),thread,[0,0,0],'thread');stitches.forEach(g=>g.dispose());
  // Clone shared materials so highlighting affects only selected meshes.
- room.traverse(o=>{if(o.isMesh)o.material=o.material.clone();});ready=true;status.hidden=true;
+ room.traverse(o=>{if(o.isMesh){o.material=o.material.clone();if(o.material.userData.fabric)fabricMaterial(o.material);}});ready=true;status.hidden=true;
  renderer.setAnimationLoop(()=>{controls.update();camera.updateMatrixWorld();for(const {spec,button}of labels){const p=new T.Vector3(...spec.anchor).project(camera);button.hidden=!ready||!showDimensions||p.z>1||Math.abs(p.x)>.95||Math.abs(p.y)>.95||(spec.id==='human'&&!groups.human[0].visible);const half=button.offsetWidth/2+8;button.style.left=Math.max(half,Math.min(stage.clientWidth-half,(p.x*.5+.5)*stage.clientWidth))+'px';button.style.top=(-p.y*.5+.5)*stage.clientHeight+'px';}renderer.render(scene,camera);});
 }catch(err){console.error(err);status.textContent='The scene could not load. Reload in a browser with WebGL enabled.';}
