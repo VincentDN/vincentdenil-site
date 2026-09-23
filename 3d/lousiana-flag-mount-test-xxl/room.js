@@ -62,6 +62,13 @@ approval.onclick=()=>{alphaTooltip.hidden=false;};
 approval.addEventListener('blur',()=>{alphaTooltip.hidden=true;});
 approval.addEventListener('keydown',e=>{if(e.key==='Escape')alphaTooltip.hidden=true;});
 const labels=[],annotations=new T.Group();scene.add(annotations);
+const vincentTip=document.createElement('div');
+vincentTip.id='vincent-tooltip';vincentTip.role='tooltip';vincentTip.hidden=true;
+vincentTip.textContent='not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments';
+stage.append(vincentTip);
+const showVincentTip=()=>{vincentTip.hidden=false;};
+const hideVincentTip=()=>{vincentTip.hidden=true;};
+stage.addEventListener('keydown',e=>{if(e.key==='Escape')hideVincentTip();});
 let units='imperial';
 const length=m=>formatLength(m,units);
 const dimensions=[
@@ -89,6 +96,13 @@ function updateUnits(){
 }
 function select(id){selected=selected===id?null:id;const spec=dimensions.find(d=>d.id===selected);document.querySelector('#detail').textContent=(spec?dimensionText(spec.id):null)||'Select a measurement on the model or in this list to highlight its geometry and dimension lines.';const highlighted=new Set(spec?.targets.flatMap(k=>groups[k]||[])||[]);room.traverse(o=>{if(o.isMesh&&o.material.emissive){o.material.emissive.setHex(highlighted.has(o)?orange:0);o.material.emissiveIntensity=highlighted.has(o)?.22:0;}});for(const {spec:s,button,line,entry}of labels){const active=s.id===selected;button.setAttribute('aria-pressed',String(active));entry.setAttribute('aria-pressed',String(active));if(line)line.material.color.setHex(active?orange:0x35505b);}}
 for(const spec of dimensions){let line;if(spec.a){const a=new T.Vector3(...spec.a),b=new T.Vector3(...spec.b),horizontal=Math.abs(a.x-b.x)>.1,tick=new T.Vector3(horizontal?0:.045,horizontal?.045:0,0);line=new T.LineSegments(new T.BufferGeometry().setFromPoints([a,b,a.clone().sub(tick),a.clone().add(tick),b.clone().sub(tick),b.clone().add(tick)]),new T.LineBasicMaterial({color:0x35505b,depthTest:false}));line.renderOrder=20;annotations.add(line);}const button=document.createElement('button');button.className='marker';button.textContent=valueOf(spec);button.setAttribute('aria-label',spec.label+': '+valueOf(spec));button.setAttribute('aria-pressed','false');button.hidden=true;button.onclick=()=>select(spec.id);if(spec.id==='human')button.title='not depicted - VIncent muttering in French about denier weights and non-DIN conforming hoist attachments';stage.append(button);const entry=document.createElement('button');entry.className='measurement';entry.setAttribute('aria-pressed','false');entry.innerHTML='<span>'+spec.label+'</span><strong>'+valueOf(spec)+'</strong>';entry.onclick=()=>select(spec.id);document.querySelector('#measurements').append(entry);labels.push({spec,button,line,entry});}
+const vincentLabel=labels.find(l=>l.spec.id==='human');
+for(const target of [vincentLabel.button,vincentLabel.entry]){
+ target.removeAttribute('title');target.setAttribute('aria-describedby','vincent-tooltip');
+ target.addEventListener('pointerenter',showVincentTip);target.addEventListener('pointerleave',hideVincentTip);
+ target.addEventListener('focus',showVincentTip);target.addEventListener('blur',hideVincentTip);
+ target.addEventListener('click',showVincentTip);
+}
 for(const button of document.querySelectorAll('[data-units]'))button.onclick=()=>{units=button.dataset.units;updateUnits();};
 updateUnits();
 try{
@@ -110,6 +124,11 @@ try{
  const silhouetteMaterial=mat('#393c40');silhouetteMaterial.side=T.DoubleSide;
  const woman=add(new T.ShapeGeometry(silhouetteShapes),silhouetteMaterial,[2.2,0,.68],'human');
  woman.name='Vincent for Scale — 5 ft 10 in (1.778 m)';
+ const figureRay=new T.Raycaster(),pointer=new T.Vector2();
+ function overVincent(e){const rect=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);figureRay.setFromCamera(pointer,camera);return woman.visible&&figureRay.intersectObject(woman).length>0;}
+ renderer.domElement.addEventListener('pointermove',e=>{const hit=overVincent(e);renderer.domElement.style.cursor=hit?'help':'';if(hit)showVincentTip();else hideVincentTip();});
+ renderer.domElement.addEventListener('pointerleave',hideVincentTip);
+ renderer.domElement.addEventListener('click',e=>{if(overVincent(e)){select('human');showVincentTip();}else hideVincentTip();});
  const texture=await new T.TextureLoader().loadAsync('./flag.png');texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
  const cloth=new T.MeshStandardMaterial({map:texture,roughness:.96,side:T.DoubleSide});const height=H-2*SR;const geo=new T.PlaneGeometry(W,height,100,60);const pos=geo.attributes.position;
  for(let i=0;i<pos.count;i++){const x=pos.getX(i),y=pos.getY(i);pos.setZ(i,.008*Math.sin(x*14)*Math.sin(Math.PI*(y/height+.5))**2);}geo.computeVertexNormals();add(geo,cloth,[0,BOTTOM+H/2,Z+SR*.82],'flag');
