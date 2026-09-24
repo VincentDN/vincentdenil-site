@@ -90,3 +90,6 @@ The hash covers the whole loadout: `mode`, `pose`, rifle build and finishes (as 
 
 ## Range drill
 `range.js` fires five rounds at a 25 m target from the Aim pose, on a timeline from the build's stats: first-shot time and split times from Handling; per-shot spread (cm, 1σ) from the sight (Sighting range), sway (weight and Ergonomics) and, for follow-up shots, Recoil squared, with uncorrected climb walking the string upward. Hits are plotted on a 90 cm ringed target as each shot fires (with the Test fire sound, flash and kick), then scored out of 50 with group size and time. Averaged over 2,000 strings the model separates builds clearly, e.g. the scoped build ≈ 44.7/50, 18 cm, 4.0 s against a bare stockless AK-15K with a drum ≈ 34.2/50, 45 cm, 2.8 s: fast and loose against slow and tight.
+
+## Side rail
+A seventh slot on the right-hand handguard rail (both rifles) takes a weapon light, a laser or a combined unit, and slides in 10 mm steps. The light carries a real `SpotLight` that lights the scene and shows in photos; the laser draws a faint beam. They trade Handling and Ergonomics (`stats.js`).

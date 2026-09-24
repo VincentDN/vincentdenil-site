@@ -38,6 +38,7 @@ export const MODELS={
    {id:'barrel',label:'Barrel & gas block',detail:'415 mm barrel with front sight and gas block.',nodes:['ak74m barrel_9']},
    {id:'muzzle',label:'Muzzle device',detail:'Zenitco DTK-1 muzzle brake on the threaded muzzle.',nodes:['dtk1 compensator_12']},
    {id:'foregrip',label:'Foregrip',detail:'Zenitco RK-1 vertical foregrip on the lower handguard rail.',nodes:['rk1 front grip_16']},
+   {id:'side',label:'Side rail',detail:'Right-side rail on the B-10 handguard.',nodes:[]},
    {id:'magazine',label:'Magazine',detail:'30-round 5.45×39 polymer magazine.',nodes:['ak74 30rnd mag (polymer)_6']},
    {id:'grip',label:'Pistol grip',detail:'Zenitco RK-9 pistol grip.',nodes:['rk9 pistol grip_13']},
    {id:'stock',label:'Stock',detail:'Zenitco PT-1 stock: base, butt pad and adjustable cheek rest.',nodes:['pt1 stock base_17','pt1 stock butt_18','pt1 cheek_19']}
@@ -46,11 +47,13 @@ export const MODELS={
    ['muzzle','Muzzle',[4.95,.18,0],[1,0,0]],
    ['optic','Optic rail',[.08,.69,0],[0,1,0]],
    ['foregrip','Under rail',[2.5,-.03,0],[0,-1,0]],
+   ['side','Side rail',[2.4,.25,.186],[0,0,1]],
    ['magazine','Mag well',[.7,-.2,0],[0,-1,0]],
    ['grip','Grip',[-.8,-.15,0],[0,-1,0]],
    ['stock','Stock',[-1.2,0,0],[-1,0,0]]
   ],
   slots:{
+   side:{rail:{min:-.08,max:.04,step:.01},factory:[{id:'none',label:'None',detail:'Bare side rail.'}],library:['light','laser','combo']},
    muzzle:{factory:[{id:'dtk1',grams:160,label:'DTK-1',original:true}],library:['ak74','comp','can','bare']},
    optic:{rail:{min:-.06,max:.04,step:.01},factory:[{id:'reddot',grams:210,sightHeight:.04,label:'Red dot',original:true}],library:['micro','holo','scope','none']},
    foregrip:{rail:{min:-.08,max:0,step:.01},factory:[{id:'rk1',grams:85,label:'RK-1',original:true}],library:['vertical','angled','stop','none']},
@@ -82,6 +85,7 @@ export const MODELS={
    {id:'muzzle',label:'Muzzle device',detail:'Factory brake, part of the barrel.',nodes:[]},
    {id:'optic',label:'Optic',detail:'Iron sights; the top rail takes an optic.',nodes:[]},
    {id:'foregrip',label:'Foregrip',detail:'Clean handguard.',nodes:[]},
+   {id:'side',label:'Side rail',detail:'Right-side rail on the handguard.',nodes:[]},
    {id:'magazine',label:'Magazine',detail:'30-round 7.62×39 polymer magazine.',nodes:['akm 30rnd mag (polymer)_14']},
    // The grip is a mesh inside the receiver node in this file.
    {id:'grip',label:'Pistol grip',detail:'AK-15 polymer pistol grip.',nodes:['Object_12']},
@@ -92,11 +96,13 @@ export const MODELS={
    // 5 mm below the rail top (y .616), like the AK-74M's, so mounts read as clamped on.
    ['optic','Optic rail',[.25,.566,0],[0,1,0]],
    ['foregrip','Under rail',[2.2,-.08,0],[0,-1,0]],
+   ['side','Side rail',[2.3,.15,.204],[0,0,1]],
    ['magazine','Mag well',[.7,-.2,0],[0,-1,0]],
    ['grip','Grip',[-.8,-.15,0],[0,-1,0]],
    ['stock','Stock',[-1.2,0,0],[-1,0,0]]
   ],
   slots:{
+   side:{rail:{min:-.08,max:.04,step:.01},factory:[{id:'none',label:'None',detail:'Bare side rail.'}],library:['light','laser','combo']},
    // The brake is modelled into the barrel, so the factory option leaves the slot empty and a
    // suppressor threads on in front of it.
    muzzle:{factory:[{id:'brake',grams:0,label:'Factory brake',detail:'Factory muzzle brake, modelled into the barrel.'}],library:['can']},

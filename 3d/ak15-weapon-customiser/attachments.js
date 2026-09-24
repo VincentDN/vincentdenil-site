@@ -104,6 +104,24 @@ export const SLOTS=[
    [profile([[-.016,0],[.02,0],[.02,-.016],[.008,-.021],[-.016,-.008]],.024,.002),materials.polymer])},
   {id:'none',label:'None',detail:'Clean handguard, no foregrip.'}
  ]},
+ {id:'side',camera:{direction:[.25,.2,1],distance:.42},label:'Side rail',library:[
+  // Mounted on the right-hand rail: +z points away from the rifle.
+  {id:'light',grams:110,label:'Weapon light',detail:'Compact weapon light on a rail clamp; its beam lights the scene.',build:({materials})=>{
+   const g=group(
+    [[box(.03,.012,.016,[0,0,.008]),tube(.013,-.045,.035,[0,.03],10),tube(.016,.035,.05,[0,.03],10,.013)],materials['h-190']],
+    [tube(.0145,.0505,.0515,[0,.03],10),new T.MeshStandardMaterial({color:'#fff6de',emissive:'#fff1c4',emissiveIntensity:2})]);
+   // Beam: a soft spotlight along the barrel.
+   const beam=new T.SpotLight(0xfff1d6,6,6,.28,.6,1.5);beam.position.set(.052,0,.03);beam.target.position.set(2,0,.03);g.add(beam,beam.target);
+   return g;}},
+  {id:'laser',grams:80,label:'Laser',detail:'Visible laser aiming module; the dot helps from the hip.',build:({materials})=>{
+   const g=group([[box(.03,.012,.016,[0,0,.008]),box(.06,.028,.026,[.005,.02,.025])],materials['h-190']],[box(.002,.008,.008,[.036,.02,.025]),materials.red_emission]);
+   const ray=new T.Mesh(new T.CylinderGeometry(.0006,.0006,1.4,4).rotateZ(-Math.PI/2).translate(.037+.7,.02,.025),new T.MeshBasicMaterial({color:'#ff2a2a',transparent:true,opacity:.55,depthWrite:false}));g.add(ray);return g;}},
+  {id:'combo',grams:190,label:'Light + laser',detail:'Combined light and laser unit.',build:({materials})=>{
+   const g=group([[box(.03,.012,.016,[0,0,.008]),box(.065,.028,.028,[0,.022,.026])],materials['h-190']],
+    [tube(.0105,.0325,.0335,[.026,.026],10),new T.MeshStandardMaterial({color:'#fff6de',emissive:'#fff1c4',emissiveIntensity:2})],[box(.002,.006,.006,[.0335,.012,.026]),materials.red_emission]);
+   const beam=new T.SpotLight(0xfff1d6,6,6,.28,.6,1.5);beam.position.set(.034,.026,.026);beam.target.position.set(2,.026,.026);g.add(beam,beam.target);return g;}},
+  {id:'none',label:'None',detail:'Bare side rail.'}
+ ]},
  {id:'magazine',camera:{direction:[.3,-.05,1],distance:.55,aim:[.03,-.1,0]},label:'Magazine',library:[
   // Stretched copies of the source magazine; the part inside the mag well keeps its shape.
   {id:'45',grams:310,label:'Extended',detail:'Extended RPK-style magazine: the 30-rounder lengthened by a third.',build:({original})=>reshape(original,v=>{if(v.y<0)v.y*=1.36;})},

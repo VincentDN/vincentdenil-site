@@ -24,6 +24,7 @@ export const MODIFIERS={
  foregrip:{
   rk1:{ergo:6,recoil:-4},vertical:{ergo:5,recoil:-5},angled:{ergo:7,recoil:-3,handling:2},stop:{ergo:3,handling:2},none:{}
  },
+ side:{light:{handling:-2,ergo:-1},laser:{ergo:3,handling:-1},combo:{ergo:2,handling:-4},none:{}},
  magazine:{
   '30':{rounds:30},'45':{rounds:45,handling:-3,ergo:-2},'60':{rounds:60,handling:-6,ergo:-4},
   drum:{rounds:95,handling:-12,ergo:-8},none:{rounds:0,handling:2}

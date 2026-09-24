@@ -6,7 +6,27 @@ Neither repository documents Partisan itself yet. The roadmap therefore assumes 
 
 ---
 
-## 1. What the demo should prove
+## Progress (live)
+
+| Roadmap item | Status | Where |
+|---|---|---|
+| Stats with hover deltas, compatibility rules | ✅ | `stats.js` |
+| More slots (side rail: light, laser, combo) | ✅ | `attachments.js`, `models.js` |
+| Presets (Partisan, Scout, Breacher, Marksman) | ✅ | `viewer.js` |
+| Camo on weapons and clothing (shared patterns) | ✅ | `operator.js` `camoFor`, triplanar shader in `viewer.js` |
+| Test-fire sound, flash and recoil | ✅ | `sfx.js` |
+| Character creator (body, head, clothing, gear, insignia) | ✅ procedural, original | `operator.js` |
+| Weapon on character: grip sockets and two-bone IK | ✅ | `field.js` |
+| Poses, breathing, sway, recoil in hands, reload | ✅ | `field.js` |
+| Photo mode, loadout card | ✅ | `viewer.js` |
+| Range drill | ✅ | `range.js` |
+| Loadout codes (weapon + operator + mode + pose) | ✅ | URL hash |
+| Smoke test, credits panel, reduced motion, first-run hint | ✅ | `model-source/smoke-test.mjs` |
+| More weapon platforms (LMG, DMR, pistol) | ⏳ needs models | |
+| Skinned, animated character (real rig, clips) | ⏳ needs art direction (§8) | |
+| Bundler, compression, LOD | ⏳ phase E | |
+
+
 
 A visitor should leave believing three things:
 
