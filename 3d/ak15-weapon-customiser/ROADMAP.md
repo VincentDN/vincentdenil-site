@@ -39,5 +39,13 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - Camera presets fit the current build's length.
 - Deferred: GLB export of the current build (the source model is CC BY, so an export needs to carry the credit).
 
-## Step 6 — Polish
-- Swap animations, part hover outline, more HDR environments, mobile bottom-sheet pickers.
+## Step 6 — Polish ✅
+- Swap animations: new parts slide in along their mount direction; poses (stock fold/collapse) and rail steps glide. The PT-1 swings out through the left side as it folds.
+- Hover lift on parts under the pointer, alongside the orange selection glow.
+- Third HDR: Poly Haven "Venice Sunset" (CC0).
+- Phones: the viewer stays pinned at the top while the pickers scroll underneath (a lighter take on a bottom sheet).
+
+## Ideas for later
+- GLB export of the current build, carrying the CC BY credit.
+- More attachments: drum magazine, side-folding stock variants, lasers/lights on the handguard side rails.
+- Side-rail slots on the B-10/B-19 handguard.

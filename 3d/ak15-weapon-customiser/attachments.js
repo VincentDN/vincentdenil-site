@@ -97,8 +97,8 @@ export const SLOTS=[
   {id:'extended',grams:430,label:'Extended',original:true},
   // The butt and cheek rest slide forward along the PT-1 base.
   {id:'collapsed',grams:430,label:'Collapsed',original:true,detail:'PT-1 butt slid fully forward on its base.',pose:{nodes:{'pt1 stock butt_18':[.06,0,0],'pt1 cheek_19':[.06,0,0]}}},
-  // Folds 180° to the left about a hinge 35 mm left of the mount point.
-  {id:'folded',grams:430,label:'Folded',original:true,detail:'PT-1 folded along the left side of the receiver.',pose:{rotationY:Math.PI,position:[0,0,-.07]}},
+  // Folds 180° to the left about a hinge 35 mm left of the mount point (negative: swings through the left side).
+  {id:'folded',grams:430,label:'Folded',original:true,detail:'PT-1 folded along the left side of the receiver.',pose:{rotationY:-Math.PI,position:[0,0,-.07]}},
   {id:'none',label:'Removed',detail:'Stock removed: bare trunnion.'}
  ]}
 ];
