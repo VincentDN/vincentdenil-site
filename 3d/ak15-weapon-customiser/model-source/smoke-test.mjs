@@ -42,6 +42,7 @@ for(const rifle of ['ak74m','ak15k']){
  if(!changed)problems.push(`${rifle}: stats never changed across all options`);
  const swatches=await page.locator('#finish .swatches button').count();
  for(let k=0;k<swatches;k++)await step(`${rifle} finish ${k}`,()=>page.locator('#finish .swatches button').nth(k).click({force:true}));
+ await step(`${rifle} wear`,async()=>{await page.$eval('#wear',i=>{i.value='70';i.dispatchEvent(new Event('input'));i.dispatchEvent(new Event('change'));});if(!/wear=70/.test(await page.evaluate(()=>location.hash)))throw new Error('wear not in hash');});
  await step(`${rifle} test fire`,async()=>{await click('[data-panel=armoury] .fire');await settle(700);});
 }
 await step('operator tab',async()=>{await click('[data-mode=operator]');await settle(1500);});

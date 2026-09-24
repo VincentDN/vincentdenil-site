@@ -13,7 +13,7 @@ Neither repository documents Partisan itself yet. The roadmap therefore assumes 
 | Stats with hover deltas, compatibility rules | ✅ | `stats.js` |
 | More slots (side rail: light, laser, combo) | ✅ | `attachments.js`, `models.js` |
 | Presets (Partisan, Scout, Breacher, Marksman) | ✅ | `viewer.js` |
-| Camo on weapons and clothing (shared patterns) | ✅ | `operator.js` `camoFor`, triplanar shader in `viewer.js` |
+| Camo on weapons and clothing (shared patterns), weapon wear | ✅ | `operator.js` `camoFor`, triplanar shader in `viewer.js` |
 | Test-fire sound, flash and recoil | ✅ | `sfx.js` |
 | Character creator (body, head, clothing, gear, insignia) | ✅ procedural, original | `operator.js` |
 | Weapon on character: grip sockets and two-bone IK | ✅ | `field.js` |

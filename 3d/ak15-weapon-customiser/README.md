@@ -98,3 +98,6 @@ A seventh slot on the right-hand handguard rail (both rifles) takes a weapon lig
 - Both rifle files are meshopt-compressed with quantized positions (`model-source/compress-models.mjs`, run after `strip-loose-parts.mjs`): AK-74M 2.2 → 0.6 MB, AK-15K 1.4 → 0.4 MB. The script checks node names are unchanged. The viewer loads them with `MeshoptDecoder`; `reshape()` expands quantized attributes to floats before stretching magazines.
 - Resolution adapts: every 2 s the pixel ratio drops a quarter step while frames average over 28 ms (down to 1) and rises again under 14 ms. Phones (≤ 780 px or coarse pointer) start at ≤ 1.5× with a 1024 shadow map.
 - Once idle, the page fetches the other rifle into the HTTP cache so switching is instant.
+
+## Wear
+The Wear slider under Finish (Factory new → Light → Field used → Battle worn, `wear=0–100` in the hash) adds two procedural layers in the rifle's shader, on the recolourable (black-finish and polymer) surfaces: lengthwise scuffs that expose bare steel (up to about a fifth of the surface) and soft dust that settles on upward faces. Both use 3D value noise in the rifle's own space, so they stay put when parts move and need no UVs.

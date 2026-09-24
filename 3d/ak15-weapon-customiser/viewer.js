@@ -237,20 +237,41 @@ function frame(id){
 // Camo on the rifle: it has no UVs, so recolourable materials get a triplanar projection in the
 // rifle's own space (fixed per part at load, so the pattern stays glued to each part).
 const CAMO_SCALE=4;// texture repeats per meter
+// Wear (0–1) is one shared uniform for the whole rifle: scuffs expose bare metal, low spots gather dust.
+const wearUniform={value:0};let wear=0;
 function installCamo(model){
  model.updateMatrixWorld(true);const inverse=model.matrixWorld.clone().invert();
  model.traverse(o=>{
   if(!o.isMesh||!RECOLOURED.has(o.material.name))return;
-  const uniforms={camoMap:{value:null},camoOn:{value:0},camoMatrix:{value:inverse.clone().multiply(o.matrixWorld)}};
+  const uniforms={camoMap:{value:null},camoOn:{value:0},camoMatrix:{value:inverse.clone().multiply(o.matrixWorld)},wear:wearUniform};
   o.material.userData.camo=uniforms;
   o.material.onBeforeCompile=shader=>{
    Object.assign(shader.uniforms,uniforms);
    shader.vertexShader='uniform mat4 camoMatrix;\nvarying vec3 vCamoPos;\nvarying vec3 vCamoNormal;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vCamoPos=(camoMatrix*vec4(position,1.)).xyz;vCamoNormal=normalize(mat3(camoMatrix)*normal);');
-   shader.fragmentShader='uniform sampler2D camoMap;\nuniform float camoOn;\nvarying vec3 vCamoPos;\nvarying vec3 vCamoNormal;\n'+shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+   shader.fragmentShader=`uniform sampler2D camoMap;
+uniform float camoOn;
+uniform float wear;
+varying vec3 vCamoPos;
+varying vec3 vCamoNormal;
+float wHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float wNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(mix(wHash(i),wHash(i+vec3(1,0,0)),f.x),mix(wHash(i+vec3(0,1,0)),wHash(i+vec3(1,1,0)),f.x),f.y),
+  mix(mix(wHash(i+vec3(0,0,1)),wHash(i+vec3(1,0,1)),f.x),mix(wHash(i+vec3(0,1,1)),wHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+`+shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
  if(camoOn>.5){vec3 n=pow(abs(normalize(vCamoNormal)),vec3(4.));n/=n.x+n.y+n.z;vec3 p=vCamoPos*${CAMO_SCALE.toFixed(1)};
-  diffuseColor.rgb=texture2D(camoMap,p.yz).rgb*n.x+texture2D(camoMap,p.xz).rgb*n.y+texture2D(camoMap,p.xy).rgb*n.z;}`);
+  diffuseColor.rgb=texture2D(camoMap,p.yz).rgb*n.x+texture2D(camoMap,p.xz).rgb*n.y+texture2D(camoMap,p.xy).rgb*n.z;}
+ if(wear>0.){
+  // Scuffs: fine, stretched noise along the rifle (handling marks run lengthwise).
+  float scuff=wNoise(vCamoPos*vec3(60.,320.,320.))*.65+wNoise(vCamoPos*vec3(18.,70.,70.))*.35;
+  // At full wear about a fifth of the paint is gone; colours are linear (bare steel ≈ #6d7074).
+  float bare=smoothstep(1.-wear*.2,1.-wear*.2+.04,scuff);
+  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.15,.16,.17),bare*.8);
+  // Dust: broad, soft patches that settle on upward faces.
+  float dust=smoothstep(.45,.9,wNoise(vCamoPos*14.))*wear*(.35+.65*max(vCamoNormal.y,0.));
+  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.33,.27,.19),dust*.4);
+ }`);
   };
-  o.material.customProgramCacheKey=()=>'rifle-camo-v1';o.material.needsUpdate=true;
+  o.material.customProgramCacheKey=()=>'rifle-camo-wear-v2';o.material.needsUpdate=true;
  });
 }
 // Finishes recolour only black-finish and polymer surfaces.
@@ -268,6 +289,10 @@ function applyFinish(targetId,finishId){
   if(m.userData.camo){m.userData.camo.camoOn.value=choice.pattern?1:0;m.userData.camo.camoMap.value=choice.pattern?camoFor(choice.pattern):null;}
  }
  renderFinish();writeHash();
+}
+function setWear(value){
+ wear=value;wearUniform.value=value;
+ const input=document.querySelector('#wear');if(input){input.value=String(Math.round(value*100));document.querySelector('#wear-level').textContent=value<.05?'Factory new':value<.35?'Light':value<.7?'Field used':'Battle worn';}
 }
 function renderFinish(){
  if(restoring)return;
@@ -324,6 +349,7 @@ function writeHash(){
  for(const k of OPERATOR_KEYS)if(opState[k]!==DEFAULT_OPERATOR[k])params.push('o.'+k+'='+opState[k]);
  for(const slot of Object.values(rifle.slots)){const id=slot.spec.id;if(rifle.build[id]!==defaultOption(slot)||slot.offset)params.push(id+'='+rifle.build[id]+(slot.offset?'@'+Math.round(slot.offset*1000):''));}
  for(const t of rifle.finishTargets)if(rifle.finish[t.id]!==defaultFinish(t))params.push(t.id+'-finish='+rifle.finish[t.id]);
+ if(wear)params.push('wear='+Math.round(wear*100));
  history.replaceState(null,'',params.length?'#'+params.join('&'):location.pathname+location.search);
 }
 
@@ -365,6 +391,7 @@ function restore(hash){
   for(const slot of Object.values(rifle.slots)){const id=slot.spec.id;if(blockedBy(rifle.build,id,rifle.build[id]))rifle.build[id]=[defaultOption(slot),...slot.options.map(o=>o.id)].find(o=>!blockedBy(rifle.build,id,o));}
   for(const sid of Object.keys(rifle.slots))applySlot(sid,rifle.build[sid],rifle.slots[sid].pendingOffset);
   for(const t of rifle.finishTargets)applyFinish(t.id,params.get(t.id+'-finish')??defaultFinish(t));
+  setWear(T.MathUtils.clamp(Number(params.get('wear'))||0,0,100)/100);
   opState=readOperator(params);pose=POSES.some(p=>p.id===params.get('pose'))?params.get('pose'):'aim';
   const nextMode=MODES.includes(params.get('mode'))?params.get('mode'):'armoury';
   restoring=false;renderBuild();renderFinish();renderStats();renderOperatorPanel();renderPoses();
@@ -711,6 +738,8 @@ try{
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#photo').onclick=savePhoto;
+ document.querySelector('#wear').oninput=e=>setWear(Number(e.target.value)/100);
+ document.querySelector('#wear').onchange=()=>writeHash();
  document.querySelector('#card').onclick=saveCard;
  document.querySelector('#reload').onclick=startReload;
  document.querySelector('#drill').onclick=startDrill;
