@@ -67,6 +67,9 @@ export function scheduleBar(g,index,t){
  for(let k=0;k<8;k++)if(k%2||!firstOfPair)drum(g,t+k*BEAT/2,'hat');
 }
 export const LOOP_SECONDS=BAR*BARS;
+// Background tabs throttle timers to about once a second, so the synth schedules 3 s ahead
+// and keeps playing while the tab is out of focus.
+const LOOKAHEAD=3;
 
 // Tracks: an audio file (looped) or the synthesised loop above. Both play through one master
 // gain, so volume and fades are shared. The file only downloads once music starts.
@@ -75,18 +78,13 @@ export const TRACKS=[
  {id:'ambient',label:'Ambient loop'}
 ];
 
-// Live player: one AudioContext, switchable tracks, pauses while the tab is hidden.
+// Live player: one AudioContext, switchable tracks; keeps playing in background tabs.
 export class Music{
- constructor(){this.volume=.18;this.playing=false;this.track=TRACKS[0].id;}
+ constructor(){this.volume=.4;this.playing=false;this.track=TRACKS[0].id;}
  setup(){
   if(this.ctx)return;
   this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=0;this.master.connect(this.ctx.destination);
   this.graph=createGraph(this.ctx,this.master);this.bar=0;this.next=this.ctx.currentTime+.1;
-  document.addEventListener('visibilitychange',()=>{
-   if(!this.playing)return;
-   if(document.hidden){this.ctx.suspend();this.audio?.pause();}
-   else{this.ctx.resume();if(this.file())this.audio.play().catch(()=>{});}
-  });
  }
  file(){return TRACKS.find(t=>t.id===this.track)?.src;}
  // Start the current track's source (the master gain is handled by start/stop).
@@ -98,7 +96,7 @@ export class Music{
    return this.audio.play().then(()=>true,()=>false);// false: blocked until a user gesture
   }else{
    if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;
-   this.timer??=setInterval(()=>{if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;while(this.next<this.ctx.currentTime+1.2){scheduleBar(this.graph,this.bar++,this.next);this.next+=BAR;}},200);
+   this.timer??=setInterval(()=>{if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;while(this.next<this.ctx.currentTime+LOOKAHEAD){scheduleBar(this.graph,this.bar++,this.next);this.next+=BAR;}},200);
    return Promise.resolve(true);
   }
  }

@@ -18,12 +18,14 @@ const HERO={azimuth:-.2,elevation:.1};
 // Camera presets are sized for a rifle this long (m); longer or shorter builds scale them.
 const FRAME_LENGTH=.943;
 
-// Background music: on by default at a low volume. It tries to start as the page opens, fading in
+// Background music: on by default at 40% volume. It tries to start as the page opens, fading in
 // slowly; where the browser blocks autoplay it starts on the first click or key press instead.
 // The choice, track and volume persist per browser.
 const music=new Music(),musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
-const musicPrefs=(()=>{const base={on:true,volume:.12,track:TRACKS[0].id};try{return {...base,...JSON.parse(localStorage.getItem('ak-customiser-music')||'{}')};}catch{return base;}})();
-function saveMusic(){try{localStorage.setItem('ak-customiser-music',JSON.stringify(musicPrefs));}catch{}}
+// v2: the default volume went up to 40%, so older saved settings are left behind.
+const MUSIC_KEY='ak-customiser-music-v2';
+const musicPrefs=(()=>{const base={on:true,volume:.4,track:TRACKS[0].id};try{return {...base,...JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}')};}catch{return base;}})();
+function saveMusic(){try{localStorage.setItem(MUSIC_KEY,JSON.stringify(musicPrefs));}catch{}}
 function showMusic(){musicButton.setAttribute('aria-pressed',String(musicPrefs.on));for(const b of document.querySelectorAll('[data-track]'))b.setAttribute('aria-pressed',String(b.dataset.track===musicPrefs.track));musicVolume.value=String(Math.round(musicPrefs.volume*100));document.querySelector('#music-level').textContent=Math.round(musicPrefs.volume*100)+'%';}
 if(!TRACKS.some(t=>t.id===musicPrefs.track))musicPrefs.track=TRACKS[0].id;
 music.setVolume(musicPrefs.volume);music.setTrack(musicPrefs.track);showMusic();
