@@ -85,13 +85,20 @@ function camoTexture(spec,seed){
  });
  const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(1.5,1.5);t.colorSpace=T.SRGBColorSpace;t.magFilter=T.NearestFilter;return t;
 }
+// Shared with the rifle finishes (viewer.js), so weapon and clothing camo match.
+const camoCache=new Map();
+export const CAMO_PATTERNS=Object.keys(FABRIC).filter(k=>typeof FABRIC[k]!=='string');
+export function camoFor(name){
+ if(!camoCache.has(name))camoCache.set(name,camoTexture(FABRIC[name],name.length*977+FABRIC[name].base.charCodeAt(1)));
+ return camoCache.get(name);
+}
 function mat(key,roughness=.85){
  if(materialCache.has(key))return materialCache.get(key);
  let m;
  if(key.startsWith('fabric:')){
   const spec=FABRIC[key.slice(7)];
   m=typeof spec==='string'?new T.MeshStandardMaterial({color:spec,roughness:.92,flatShading:true})
-   :new T.MeshStandardMaterial({map:camoTexture(spec,key.length*977+spec.base.charCodeAt(1)),roughness:.92,flatShading:true});
+   :new T.MeshStandardMaterial({map:camoFor(key.slice(7)),roughness:.92,flatShading:true});
  }else m=new T.MeshStandardMaterial({color:key,roughness,flatShading:true});
  m.userData.shared=true;materialCache.set(key,m);return m;
 }

@@ -6,7 +6,8 @@ import {Music,TRACKS} from './music.js';
 import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
-import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator} from './operator.js';
+import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator,camoFor} from './operator.js';
+import {shot} from './sfx.js';
 import {POSES,applyPose,rifleFrame} from './field.js';
 
 const accent=0xef8f39;
@@ -118,6 +119,7 @@ async function loadRifle(id){
   part.objects=[];container.traverse(m=>{if(m.isMesh)part.objects.push(m);});
   slots[spec.id]={spec,rail:slotConfig.rail,container,original,home,options,part,direction:socket.userData.direction.clone().transformDirection(socket.matrixWorld),base:container.position.clone(),offset:0,baseDetail:part.detail};
  }
+ installCamo(model);
  // A finish target covers a whole part (attachments included) or one option's object only.
  const finishTargets=FINISH_TARGETS.map(t=>({...t,part:parts.find(p=>p.id===(t.part||t.id)),finishes:t.finishes||FINISHES}))
   .filter(t=>t.part&&(t.part.objects.length||t.option)&&(!t.option||slots[t.part.id]?.options.some(o=>o.id===t.option)));
@@ -228,6 +230,25 @@ function frame(id){
  cameraMove={t:0,fromTarget:controls.target.clone(),fromPosition:camera.position.clone(),toTarget:target,toPosition:target.clone().addScaledVector(dir,distance)};
 }
 
+// Camo on the rifle: it has no UVs, so recolourable materials get a triplanar projection in the
+// rifle's own space (fixed per part at load, so the pattern stays glued to each part).
+const CAMO_SCALE=4;// texture repeats per meter
+function installCamo(model){
+ model.updateMatrixWorld(true);const inverse=model.matrixWorld.clone().invert();
+ model.traverse(o=>{
+  if(!o.isMesh||!RECOLOURED.has(o.material.name))return;
+  const uniforms={camoMap:{value:null},camoOn:{value:0},camoMatrix:{value:inverse.clone().multiply(o.matrixWorld)}};
+  o.material.userData.camo=uniforms;
+  o.material.onBeforeCompile=shader=>{
+   Object.assign(shader.uniforms,uniforms);
+   shader.vertexShader='uniform mat4 camoMatrix;\nvarying vec3 vCamoPos;\nvarying vec3 vCamoNormal;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vCamoPos=(camoMatrix*vec4(position,1.)).xyz;vCamoNormal=normalize(mat3(camoMatrix)*normal);');
+   shader.fragmentShader='uniform sampler2D camoMap;\nuniform float camoOn;\nvarying vec3 vCamoPos;\nvarying vec3 vCamoNormal;\n'+shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+ if(camoOn>.5){vec3 n=pow(abs(normalize(vCamoNormal)),vec3(4.));n/=n.x+n.y+n.z;vec3 p=vCamoPos*${CAMO_SCALE.toFixed(1)};
+  diffuseColor.rgb=texture2D(camoMap,p.yz).rgb*n.x+texture2D(camoMap,p.xz).rgb*n.y+texture2D(camoMap,p.xy).rgb*n.z;}`);
+  };
+  o.material.customProgramCacheKey=()=>'rifle-camo-v1';o.material.needsUpdate=true;
+ });
+}
 // Finishes recolour only black-finish and polymer surfaces.
 const RECOLOURED=new Set(['h-190','polymer']);
 function targetMeshes(target){
@@ -237,7 +258,11 @@ function targetMeshes(target){
 function applyFinish(targetId,finishId){
  const target=rifle.finishTargets.find(t=>t.id===targetId),choice=target.finishes.find(f=>f.id===finishId)||target.finishes[0];
  rifle.finish[targetId]=choice.id;
- for(const mesh of targetMeshes(target)){const m=mesh.material;if(!RECOLOURED.has(m.name))continue;m.userData.baseColor??=m.color.clone();m.color.copy(choice.color?new T.Color(choice.color):m.userData.baseColor);}
+ for(const mesh of targetMeshes(target)){
+  const m=mesh.material;if(!RECOLOURED.has(m.name))continue;m.userData.baseColor??=m.color.clone();
+  m.color.copy(choice.color?new T.Color(choice.color):m.userData.baseColor);
+  if(m.userData.camo){m.userData.camo.camoOn.value=choice.pattern?1:0;m.userData.camo.camoMap.value=choice.pattern?camoFor(choice.pattern):null;}
+ }
  renderFinish();writeHash();
 }
 function renderFinish(){
@@ -246,7 +271,7 @@ function renderFinish(){
   const label=target.label||target.part.label;
   const row=document.createElement('div');row.className='finish-row';row.textContent=label;
   const swatches=document.createElement('div');swatches.className='swatches';swatches.role='group';swatches.setAttribute('aria-label',label+' colour');
-  for(const f of target.finishes){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(rifle.finish[target.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';b.onclick=()=>applyFinish(target.id,f.id);swatches.append(b);}
+  for(const f of target.finishes){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(rifle.finish[target.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';if(f.pattern)b.classList.add('pattern');b.onclick=()=>applyFinish(target.id,f.id);swatches.append(b);}
   row.append(swatches);return row;
  }));
 }
@@ -391,6 +416,7 @@ function ensureOperator(){
 }
 // Show the right things for the mode and pose; the rifle moves between the scene and the operator's hands.
 function applyMode(){
+ if(kick){rifle.model.position.copy(kick.position);rifle.model.quaternion.copy(kick.quaternion);kick=null;}
  for(const b of document.querySelectorAll('[data-mode]'))b.setAttribute('aria-selected',String(b.dataset.mode===mode));
  for(const panel of document.querySelectorAll('[data-panel]'))panel.hidden=!panel.dataset.panel.split(' ').includes(mode);
  document.querySelector('#title').innerHTML=mode==='armoury'?`${rifle.config.title},<br>low-poly.`:mode==='operator'?'Operator,<br>low-poly.':'In the field.';
@@ -481,6 +507,45 @@ function randomOperator(){
  next.height=Math.round(next.height*100)/100;
  return next;
 }
+// Presets: whole loadouts (rifle build, finishes, operator, pose) as hash fragments; the current
+// screen is kept.
+const PRESETS=[
+ {id:'partisan',label:'Partisan',hash:''},
+ {id:'scout',label:'Scout',hash:'rifle=ak15k&foregrip=stop&handguard-finish=od&foregrip-finish=od&grip-finish=od&stock-finish=od&magazine-finish=od&suppressor-finish=od&pose=patrol&o.headgear=boonie&o.faceCover=shemagh&o.top=smock&o.topColor=flora&o.vest=rig&o.gearColor=olive&o.pack=radio&o.facial=none&o.armband=none'},
+ {id:'breacher',label:'Breacher',hash:'rifle=ak15k&muzzle=brake&optic=holo&magazine=60&stock=collapsed&handguard-finish=original&foregrip-finish=original&grip-finish=original&stock-finish=original&magazine-finish=original&pose=ready&o.headgear=helmet&o.faceCover=balaclava&o.eyewear=goggles&o.topColor=black&o.pantsColor=black&o.gloves=full&o.vest=plates&o.gearColor=black&o.facial=none&o.hair=buzz&o.armband=none&o.patch=shield'},
+ {id:'marksman',label:'Marksman',hash:'optic=scope&foregrip=angled&handguard-finish=desert&stock-finish=desert&foregrip-finish=desert&suppressor-finish=fde&o.headgear=boonie&o.top=smock&o.topColor=desert&o.pantsColor=desert&o.gearColor=tan&o.eyewear=glasses&o.facial=moustache&o.armband=none'}
+];
+function applyPreset(preset){restore('#'+[mode!=='armoury'?'mode='+mode:'',preset.hash].filter(Boolean).join('&')).then(()=>view('hero'));}
+
+// Test fire: an original synthesised shot shaped by the muzzle device, a muzzle flash (none when
+// suppressed) and a recoil kick sized by the Recoil stat.
+let kick=null;
+const flash=new T.Group(),flashLight=new T.PointLight(0xffb060,0,1.5,2);
+{const m=new T.MeshBasicMaterial({color:0xffc070,transparent:true,opacity:.9,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide});
+ const petal=new T.ConeGeometry(.018,.09,5).rotateZ(-Math.PI/2).translate(.045,0,0);
+ for(let i=0;i<3;i++){const p=new T.Mesh(petal,m);p.rotation.x=i*Math.PI/3;flash.add(p);}
+ flash.add(flashLight);flash.visible=false;}
+function testFire(){
+ const muzzle=rifle.build.muzzle,holder=rifle.model;
+ shot(muzzle);
+ if(!holder.visible)return;
+ if(muzzle!=='can'){
+  holder.add(flash);flash.position.set(buildBox.max.x,rifle.slots.muzzle?.container.position.y??0,0);
+  flash.scale.setScalar(.8+Math.random()*.5);flash.rotation.x=Math.random()*Math.PI;flash.visible=true;flashLight.intensity=3;
+  setTimeout(()=>{flash.visible=false;flashLight.intensity=0;},55);
+ }
+ if(kick){holder.position.copy(kick.position);holder.quaternion.copy(kick.quaternion);}
+ kick={t:0,position:holder.position.clone(),quaternion:holder.quaternion.clone(),strength:buildSummary(rifle.build).recoil/60};
+}
+function stepKick(dt){
+ if(!kick)return;
+ const holder=rifle.model;kick.t+=dt;
+ const f=kick.t<.035?kick.t/.035:Math.exp(-(kick.t-.035)*12);
+ holder.position.copy(kick.position).add(new T.Vector3(-1,0,0).applyQuaternion(kick.quaternion).multiplyScalar(.035*f*kick.strength));
+ holder.quaternion.copy(kick.quaternion).multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),.07*f*kick.strength));
+ if(kick.t>.6){holder.position.copy(kick.position);holder.quaternion.copy(kick.quaternion);kick=null;}
+}
+
 // Photo: render the current view and stamp a caption strip, then download a PNG.
 function savePhoto(){
  renderer.render(scene,camera);
@@ -550,6 +615,8 @@ try{
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#photo').onclick=savePhoto;
+ for(const b of document.querySelectorAll('.fire'))b.onclick=testFire;
+ document.querySelector('#presets').replaceChildren(...PRESETS.map(p=>{const b=document.createElement('button');b.textContent=p.label;b.onclick=()=>applyPreset(p);return b;}));
  // Reset returns the rifle build to its defaults; mode, pose and operator stay.
  document.querySelector('#reset').onclick=()=>{const keep=location.hash.replace(/^#/,'').split('&').filter(p=>/^(rifle|mode|pose|o\.)/.test(p));restore(keep.length?'#'+keep.join('&'):'').then(()=>view('hero'));};
  document.querySelector('#share').onclick=async e=>{const button=e.currentTarget;writeHash();try{await navigator.clipboard.writeText(location.href);button.textContent='Link copied';}catch{prompt('Copy this loadout link:',location.href);}setTimeout(()=>{button.textContent='Copy loadout link';},1600);};
@@ -572,7 +639,8 @@ try{
  const clock=new T.Clock();
  renderer.setAnimationLoop(()=>{
   const dt=Math.min(clock.getDelta(),1/30);// cap so slow frames or background tabs never skip an animation
-  if(spinning){if(mode==='armoury'){rifle.model.rotation.y+=dt*.5;socketMarkers.rotation.y=rifle.model.rotation.y;}else if(operator)operator.root.rotation.y+=dt*.5;}
+  stepKick(dt);
+  if(spinning&&!kick){if(mode==='armoury'){rifle.model.rotation.y+=dt*.5;socketMarkers.rotation.y=rifle.model.rotation.y;}else if(operator)operator.root.rotation.y+=dt*.5;}
   stepTweens(dt);
   if(cameraMove){cameraMove.t=Math.min(1,cameraMove.t+dt/.45);const e=1-(1-cameraMove.t)**4;controls.target.lerpVectors(cameraMove.fromTarget,cameraMove.toTarget,e);camera.position.lerpVectors(cameraMove.fromPosition,cameraMove.toPosition,e);if(cameraMove.t>=1)cameraMove=null;}
   key.target.position.set(0,mode==='armoury'?0:floor.position.y+.9,0);key.target.updateMatrixWorld();

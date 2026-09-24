@@ -110,7 +110,7 @@ Exit criteria: photo mode exporting images, loadout card, share codes round-trip
 
 1. ✅ **A-lite (2 days):** stats and deltas plus compatibility rules on the existing two rifles. This is the cheapest proof of "depth" and is demo-able immediately. *Done: `stats.js`.*
 2. ✅ **B-spike (2 days):** one rigged character in the scene holding the AK (crude IK). This de-risks phase C before investing in outfits. *Done, and went further: an original procedural low-poly operator (`operator.js`) with a full creator, and five IK poses (`field.js`), with no external character assets or licences.*
-3. **Rest of A**, then **B**, then **C**, then **D**, then **E**.
+3. **Rest of A**, then **B**, then **C**, then **D**, then **E**. *Progress: presets, rifle camo (triplanar) and test fire (synthesised per-muzzle sound, flash, stat-driven recoil) from A; photo mode and loadout codes from D.*
 
 The spike order matters. Weapon-on-character (C) is the riskiest technical piece, and character art (B) is the riskiest content piece. Touching both early avoids a late surprise.
 

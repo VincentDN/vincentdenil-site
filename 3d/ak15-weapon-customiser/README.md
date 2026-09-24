@@ -71,3 +71,8 @@ Save photo renders the current view to a PNG with a PARTISAN caption strip (rifl
 
 ## Loadout codes
 The hash covers the whole loadout: `mode`, `pose`, rifle build and finishes (as before) and operator choices as `o.<key>=value`, all only where they differ from the defaults, for example `#mode=field&pose=ready&muzzle=comp&o.headgear=helmet&o.topColor=desert`. Reset build resets the rifle only; Default operator resets the character.
+
+## Presets, camo and test fire
+- **Presets** (Partisan, Scout, Breacher, Marksman) are whole loadouts written as hash fragments in `viewer.js`: rifle, build, finishes, operator and pose. Applying one keeps the current screen.
+- **Rifle camo**: Woodland, Desert and Urban finishes reuse the operator's generated camo textures (`camoFor` in `operator.js`). The rifle files have no UVs, so recolourable materials get a triplanar projection in the rifle's own space, fixed per part at load so the pattern stays glued to each part when it moves.
+- **Test fire** (Armoury and Field) plays an original synthesised shot from `sfx.js`: a noise crack, a body thump and a filtered tail, shaped by the muzzle device (the suppressor cuts the crack and tail, brakes brighten and lengthen it). Unsuppressed shots show a short muzzle flash with a point light; every shot kicks the rifle back and up in proportion to the build's Recoil stat.

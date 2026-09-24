@@ -44,7 +44,11 @@ export const FINISHES=[
  {id:'original',label:'Original'},
  {id:'plum',label:'Plum',color:'#4a2427'},
  {id:'fde',label:'FDE',color:'#76603f'},
- {id:'od',label:'OD green',color:'#3c4332'}
+ {id:'od',label:'OD green',color:'#3c4332'},
+ // Camo finishes use the operator's generated patterns, projected triplanar (the rifles have no UVs).
+ {id:'woodland',label:'Woodland camo',color:'#5a6b3f',pattern:'woodland'},
+ {id:'desert',label:'Desert camo',color:'#b9a27a',pattern:'desert'},
+ {id:'urban',label:'Urban camo',color:'#8a8d90',pattern:'urban'}
 ];
 // Finish rows. A row with an option only shows (and only recolours) while that option is fitted.
 export const FINISH_TARGETS=[

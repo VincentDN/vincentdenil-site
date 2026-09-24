@@ -73,7 +73,8 @@ export function applyPose(op,pose,holder,frame){
  // Stance: bladed for shouldered poses, left foot forward.
  const shouldered=pose==='aim'||pose==='ready';
  if(shouldered){
-  J.hips.rotation.y=.32;J.chest.rotation.y=-.22;J.spine.rotation.x=.08;
+  // Right-handed: hips turn to the right (negative y) so the left shoulder leads; the chest turns partly back.
+  J.hips.rotation.y=-.38;J.chest.rotation.y=.2;J.spine.rotation.x=.08;
   J.upperLegL.rotation.x=-.28;J.lowerLegL.rotation.x=.22;J.footL.rotation.x=.06;
   J.upperLegR.rotation.x=.18;J.lowerLegR.rotation.x=.12;J.footR.rotation.x=-.3;J.upperLegR.rotation.z=-.08;
   J.neck.rotation.x=pose==='aim'?.2:.08;J.neck.rotation.z=pose==='aim'?.2:.05;J.neck.rotation.y=-.1;
