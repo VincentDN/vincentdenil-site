@@ -57,6 +57,8 @@ export const FINISH_TARGETS=[
   {id:'bronze',label:'Burnt bronze',color:'#4e3d2b'}
  ]}
 ];
+// Optics carry sightHeight: the sight line's height above the optic mount point (m), used by
+// field.js to put the operator's eye behind the sight.
 // Slot order is the Build panel order. Rails (10 mm steps) are set per rifle in models.js.
 export const SLOTS=[
  {id:'muzzle',camera:{direction:[.55,.22,.8],distance:.42},label:'Muzzle',library:[
@@ -72,22 +74,22 @@ export const SLOTS=[
   {id:'bare',grams:0,label:'Bare',detail:'Bare 24×1.5 mm threaded muzzle.'}
  ]},
  {id:'optic',camera:{direction:[-.45,.4,1],distance:.5},label:'Optic',library:[
-  {id:'micro',grams:180,label:'Micro dot',detail:'Compact tube red dot on a low mount.',build:({materials})=>{
+  {id:'micro',grams:180,sightHeight:.034,label:'Micro dot',detail:'Compact tube red dot on a low mount.',build:({materials})=>{
    const g=group(
     [[box(.042,.01,.03,[0,.005,0]),box(.03,.012,.018,[0,.016,0]),tube(.0155,-.024,.024,[.034,0],12),tube(.0175,.018,.026,[.034,0],12),tube(.0175,-.026,-.018,[.034,0],12),new T.CylinderGeometry(.006,.006,.012,8).translate(0,.054,0)],materials['h-190']],
     [tube(.0145,.0245,.0255,[.034,0],12),materials.glass]);
    const dot=new T.Mesh(new T.SphereGeometry(.001,6,4),materials.red_emission);dot.position.set(0,.034,0);g.add(dot);return g;}},
-  {id:'holo',grams:320,label:'Holographic',detail:'Box-hooded holographic sight with a wide window.',build:({materials})=>{
+  {id:'holo',grams:320,sightHeight:.04,label:'Holographic',detail:'Box-hooded holographic sight with a wide window.',build:({materials})=>{
    const g=group(
     [[box(.08,.012,.032,[0,.006,0]),box(.028,.026,.036,[-.02,.025,0]),box(.05,.004,.036,[.012,.058,0]),box(.05,.046,.004,[.012,.035,.017]),box(.05,.046,.004,[.012,.035,-.017]),box(.012,.012,.012,[-.02,.044,.02])],materials['h-190']],
     [box(.002,.034,.03,[.03,.037,0]),materials.glass]);
    const dot=new T.Mesh(new T.SphereGeometry(.0012,6,4),materials.red_emission);dot.position.set(.03,.04,0);g.add(dot);return g;}},
-  {id:'scope',grams:460,label:'4× scope',detail:'4× fixed-power scope in two rings, 280 mm long.',build:({materials})=>group(
+  {id:'scope',grams:460,sightHeight:.046,label:'4× scope',detail:'4× fixed-power scope in two rings, 280 mm long.',build:({materials})=>group(
    [[tube(.0127,-.07,.07,[.046,0],12),tube(.021,.07,.12,[.046,0],12,.0127),tube(.021,.12,.15,[.046,0],12),tube(.0127,-.12,-.07,[.046,0],12,.019),tube(.019,-.155,-.12,[.046,0],12),
      new T.CylinderGeometry(.009,.009,.018,8).translate(0,.066,0),new T.CylinderGeometry(.009,.009,.018,8).rotateX(Math.PI/2).translate(0,.046,.02),
      box(.016,.03,.028,[-.05,.021,0]),box(.016,.03,.028,[.05,.021,0]),box(.026,.008,.03,[-.05,.004,0]),box(.026,.008,.03,[.05,.004,0])],materials['h-190']],
    [[tube(.019,.1495,.151,[.046,0],12),tube(.0165,-.1555,-.1545,[.046,0],12)],materials.glass])},
-  {id:'none',label:'Irons',detail:'No optic: the rifle falls back to its iron sights.'}
+  {id:'none',sightHeight:.012,label:'Irons',detail:'No optic: the rifle falls back to its iron sights.'}
  ]},
  {id:'foregrip',camera:{direction:[.1,-.28,1],distance:.46,aim:[0,-.03,0]},label:'Foregrip',library:[
   {id:'vertical',grams:90,label:'Vertical',detail:'Plain vertical foregrip on a rail clamp.',build:({materials})=>group(

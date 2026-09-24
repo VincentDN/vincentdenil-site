@@ -52,7 +52,7 @@ export const MODELS={
   ],
   slots:{
    muzzle:{factory:[{id:'dtk1',grams:160,label:'DTK-1',original:true}],library:['ak74','comp','can','bare']},
-   optic:{rail:{min:-.06,max:.04,step:.01},factory:[{id:'reddot',grams:210,label:'Red dot',original:true}],library:['micro','holo','scope','none']},
+   optic:{rail:{min:-.06,max:.04,step:.01},factory:[{id:'reddot',grams:210,sightHeight:.04,label:'Red dot',original:true}],library:['micro','holo','scope','none']},
    foregrip:{rail:{min:-.08,max:0,step:.01},factory:[{id:'rk1',grams:85,label:'RK-1',original:true}],library:['vertical','angled','stop','none']},
    magazine:{factory:[{id:'30',grams:230,label:'30-rnd',original:true}],library:[{id:'45',label:'45-rnd RPK'},{id:'60',label:'60-rnd quad'},{id:'drum',label:'95-rnd drum'},'none']},
    grip:{factory:[{id:'rk9',grams:95,label:'RK-9',original:true}],library:['classic']},
@@ -100,7 +100,7 @@ export const MODELS={
    // The brake is modelled into the barrel, so the factory option leaves the slot empty and a
    // suppressor threads on in front of it.
    muzzle:{factory:[{id:'brake',grams:0,label:'Factory brake',detail:'Factory muzzle brake, modelled into the barrel.'}],library:['can']},
-   optic:{rail:{min:-.04,max:.06,step:.01},factory:[{id:'none',label:'Irons',detail:'Iron sights: rear notch on the receiver cover, post on the gas block.'}],library:['micro','holo','scope']},
+   optic:{rail:{min:-.04,max:.06,step:.01},factory:[{id:'none',sightHeight:.025,label:'Irons',detail:'Iron sights: rear notch on the receiver cover, post on the gas block.'}],library:['micro','holo','scope']},
    foregrip:{rail:{min:-.06,max:.02,step:.01},factory:[{id:'none',label:'None',detail:'Clean handguard, no foregrip.'}],library:['vertical','angled','stop']},
    magazine:{factory:[{id:'30',grams:250,label:'30-rnd',original:true}],library:[{id:'45',label:'40-rnd RPK',grams:330,rounds:40},{id:'60',label:'60-rnd quad',grams:480},{id:'drum',label:'75-rnd drum',grams:950,rounds:75},'none']},
    grip:{factory:[{id:'factory',grams:90,label:'AK-15',original:true}],library:['classic']},

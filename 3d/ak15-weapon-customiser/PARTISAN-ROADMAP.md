@@ -1,6 +1,6 @@
 # Partisan: interactive customisation demo, roadmap
 
-Status: proposal. This turns the AK weapon customiser (`/3d/ak15-weapon-customiser/`) into an interactive demo for the Partisan project that shows deep weapon and character customisation.
+Status: in progress. Done so far: A-lite (stats and rules), the Operator creator and the Field poses with IK, photo mode and loadout codes. See §5. This turns the AK weapon customiser (`/3d/ak15-weapon-customiser/`) into an interactive demo for the Partisan project that shows deep weapon and character customisation.
 
 Neither repository documents Partisan itself yet. The roadmap therefore assumes a character-driven game, since it asks for character customisation. It also assumes a low-poly art direction, which the current models and page share. The assumptions to confirm are listed at the end. Anything that depends on them is marked **(assumption)**.
 
@@ -109,7 +109,7 @@ Exit criteria: photo mode exporting images, loadout card, share codes round-trip
 ## 5. Suggested milestone order
 
 1. ✅ **A-lite (2 days):** stats and deltas plus compatibility rules on the existing two rifles. This is the cheapest proof of "depth" and is demo-able immediately. *Done: `stats.js`.*
-2. **B-spike (2 days):** one CC0 rigged character in the scene holding the AK (crude IK). This de-risks phase C before investing in outfits.
+2. ✅ **B-spike (2 days):** one rigged character in the scene holding the AK (crude IK). This de-risks phase C before investing in outfits. *Done, and went further: an original procedural low-poly operator (`operator.js`) with a full creator, and five IK poses (`field.js`), with no external character assets or licences.*
 3. **Rest of A**, then **B**, then **C**, then **D**, then **E**.
 
 The spike order matters. Weapon-on-character (C) is the riskiest technical piece, and character art (B) is the riskiest content piece. Touching both early avoids a late surprise.
