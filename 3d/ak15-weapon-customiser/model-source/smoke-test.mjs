@@ -55,6 +55,7 @@ const presets=await page.locator('#presets button').count();
 for(let k=0;k<presets;k++)await step(`preset ${k}`,async()=>{await page.locator('#presets button').nth(k).click({force:true});await settle(2500);});
 await step('field test fire',async()=>{await click('[data-panel=field] .fire');await settle(700);});
 await step('reload',async()=>{await click('#poses button >> nth=0');await click('#reload');await page.waitForFunction(()=>Number(document.body.dataset.reload)>.2,null,{timeout:60000});});
+await step('range drill',async()=>{await click('#drill');await page.waitForFunction(()=>/\//.test(document.querySelector('#drill-result').textContent),null,{timeout:120000});});
 await step('loadout card',async()=>{const [dl]=await Promise.all([page.waitForEvent('download'),click('#card')]);if(!/\.png$/.test(dl.suggestedFilename()))throw new Error('card is not a PNG');});
 await step('round-trip hash',async()=>{const hash=await page.evaluate(()=>location.hash);await page.goto('about:blank');await page.goto(base+'/3d/ak15-weapon-customiser/'+hash);await settle(6000);const again=await page.evaluate(()=>location.hash);if(again!==hash)throw new Error(`hash changed: ${hash} → ${again}`);});
 

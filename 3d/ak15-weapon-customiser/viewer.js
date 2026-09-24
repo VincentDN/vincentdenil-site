@@ -8,6 +8,7 @@ import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
 import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator,camoFor} from './operator.js';
 import {shot,magOut,magIn} from './sfx.js';
+import {DRILL,drillPlan,fireString,score,drawTarget} from './range.js';
 import {POSES,applyPose,rifleFrame} from './field.js';
 
 const accent=0xef8f39;
@@ -585,6 +586,29 @@ function stepReload(dt){
  if(r>=1){reload=null;delete document.body.dataset.reload;document.querySelector('#pose-detail').textContent=POSES.find(p=>p.id===pose).detail;}
 }
 
+// Range drill: switch to Aim, fire the string on the plan's timing (sound, flash, kick in the
+// hands) and plot each hit on the target card as it lands.
+let drill=null;
+function startDrill(){
+ if(mode!=='field'||drill)return;
+ if(rifle.build.magazine==='none'){document.querySelector('#drill-result').textContent='Fit a magazine first.';return;}
+ if(pose!=='aim'){pose='aim';renderPoses();applyMode();writeHash();}
+ const summary=buildSummary(rifle.build),plan=drillPlan(summary,summary.grams/1000),shots=fireString(plan);
+ drill={t:0,shots,next:0,result:score(shots)};
+ const canvas=document.querySelector('#target');drawTarget(canvas,shots,0);
+ document.querySelector('#drill-result').textContent=`Firing ${DRILL.rounds} rounds at ${DRILL.distance} m…`;
+}
+function stepDrill(dt){
+ if(!drill)return;
+ drill.t+=dt;
+ while(drill.next<drill.shots.length&&drill.t>=drill.shots[drill.next].t){testFire();drill.next++;drawTarget(document.querySelector('#target'),drill.shots,drill.next);}
+ if(drill.next>=drill.shots.length&&drill.t>drill.shots.at(-1).t+.4){
+  const r=drill.result;
+  document.querySelector('#drill-result').innerHTML=`<strong>${r.total}/${r.max}</strong> · group ${r.group.toFixed(1)} cm · ${r.time.toFixed(2)} s<br><span>${r.points.join(' · ')}</span>`;
+  drill=null;
+ }
+}
+
 // Loadout card: the current view on the left, stats, parts and the operator on the right.
 function saveCard(){
  renderer.render(scene,camera);
@@ -684,6 +708,8 @@ try{
  document.querySelector('#photo').onclick=savePhoto;
  document.querySelector('#card').onclick=saveCard;
  document.querySelector('#reload').onclick=startReload;
+ document.querySelector('#drill').onclick=startDrill;
+ drawTarget(document.querySelector('#target'),[],0);
  // First visit: a one-off hint, dismissed by its button or after 14 s; remembered per browser.
  {const hint=document.querySelector('#first-run');let seen=false;try{seen=!!localStorage.getItem('partisan-demo-seen');}catch{}
   if(!seen){hint.hidden=false;const close=()=>{hint.hidden=true;try{localStorage.setItem('partisan-demo-seen','1');}catch{}};hint.querySelector('button').onclick=close;setTimeout(close,14000);}}
@@ -711,7 +737,7 @@ try{
  const clock=new T.Clock();
  renderer.setAnimationLoop(()=>{
   const dt=Math.min(clock.getDelta(),1/30);// cap so slow frames or background tabs never skip an animation
-  stepKick(dt);stepReload(dt);
+  stepKick(dt);stepReload(dt);stepDrill(reduceMotion?1:dt);
   // The operator breathes and the Field pose re-solves every frame (sway, kick, reload).
   if(operator&&mode!=='armoury'){if(mode==='field'&&fieldFrame)applyPose(operator,pose,rifle.model,fieldFrame,fieldMotion());else applyPose(operator,'stand',null,null,{t:reduceMotion?0:(performance.now()-clockStart)/1000});}
   if(spinning&&!kick){if(mode==='armoury'){rifle.model.rotation.y+=dt*.5;socketMarkers.rotation.y=rifle.model.rotation.y;}else if(operator)operator.root.rotation.y+=dt*.5;}
