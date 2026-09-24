@@ -1,4 +1,4 @@
-# AK-74M weapon customiser — roadmap
+# AK weapon customiser — roadmap
 
 Built step by step. Each step ships as a working page at `/3d/ak15-weapon-customiser/`.
 
@@ -52,7 +52,7 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - ✅ Drum magazine: 95 rounds, a feed tower into a 136 mm drum, recolourable with the magazine.
 - ✅ Suppressor colours (Black, FDE, OD green, Tungsten grey, Burnt bronze), shown in Finish while the suppressor is fitted.
 - ✅ Background music: an original ambient loop synthesised in Web Audio (`music.js`, no audio files), 18% default volume, ♪ toggle on the stage and a volume slider; starts on the first click, pauses in hidden tabs, choice remembered.
-- ⏳ AK-15K as a second rifle with a switcher.
+- ✅ AK-15K as a second rifle with an in-place switcher (`models.js`); builds carry across where both rifles accept the option. Library gains a micro red dot and a vertical foregrip for the AK-15K's bare rails.
 
 ## Ideas for later
 - GLB export of the current build, carrying the CC BY credit.

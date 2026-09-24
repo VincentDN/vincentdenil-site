@@ -1,15 +1,20 @@
-# AK-74M weapon customiser
+# AK weapon customiser
 
-URL: `/3d/ak15-weapon-customiser/`. The URL keeps its original name; the model is an AK-74M. Listed in `/projects/3d/`, with `seo_hidden=true` and robots `noindex`. Serve the repository root over HTTP; there is no build step. Uses Three.js 0.169.0 (OrbitControls, GLTFLoader, RGBELoader; newer than the other 3D pages because environment rotation needs r162+) and the shared `/assets/viewer-loader.css`. The viewer structure is adapted from `/3d/lousiana-flag-mount-test-xxl/`.
+URL: `/3d/ak15-weapon-customiser/`. Two rifles: the AK-74M Zenitco (default) and the AK-15K, switchable in place. Listed in `/projects/3d/`, with `seo_hidden=true` and robots `noindex`. Serve the repository root over HTTP; there is no build step. Uses Three.js 0.169.0 (OrbitControls, GLTFLoader, RGBELoader; newer than the other 3D pages because environment rotation needs r162+) and the shared `/assets/viewer-loader.css`. The viewer structure is adapted from `/3d/lousiana-flag-mount-test-xxl/`.
 
-Plan: see `ROADMAP.md`. Current status: all six roadmap steps done; see "Ideas for later" in `ROADMAP.md`.
+Plan: see `ROADMAP.md`. Current status: step 7 (round two) in progress; see `ROADMAP.md`.
 
-## Model
-`model/ak-74m-zenitco.glb` is [low-poly AK-74M Zenitco](https://sketchfab.com/3d-models/low-poly-ak-74m-zenitco-35ad8e37a513453cbbbd04064fa5fb79) by [D_U](https://sketchfab.com/DU1701), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The page shows this credit.
+## Models
+Both rifles are by [D_U](https://sketchfab.com/DU1701) on Sketchfab, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the page credits whichever is shown.
 
-Change from the original: the loose cartridge (`54539_4`), spent case (`54539 case_5`) and spare empty magazine (`ak74 30rnd empty mag (polymer)_7`) displayed beside the rifle were removed, and unused data pruned (2.9 MB → 2.2 MB). The seated magazine is kept. `model-source/strip-loose-parts.mjs` reproduces this from the original download. Geometry and materials are otherwise unchanged.
+- `model/ak-74m-zenitco.glb`: [low-poly AK-74M Zenitco](https://sketchfab.com/3d-models/low-poly-ak-74m-zenitco-35ad8e37a513453cbbbd04064fa5fb79). Removed: loose cartridge `54539_4`, case `54539 case_5`, spare mag `ak74 30rnd empty mag (polymer)_7` (2.9 → 2.2 MB).
+- `model/ak-15k.glb`: [low-poly AK-15 K](https://sketchfab.com/3d-models/low-poly-ak-15-k-68725380dd654391bb6b751e888e2c44). Removed: loose cartridge `76239_11`, case `76239 case_12`, spare mag `akm 30rnd epmty mag (polymer)_13` (1.9 → 1.4 MB).
 
-`viewer.js` lays the long axis along +x and treats the slimmer end as the muzzle. It then scales the model to the AK-74M's published 943 mm overall length with the stock extended; with the Zenitco stock and DTK-1 this is approximate. `PARTS` groups source nodes into named, selectable parts. GLTFLoader sanitizes node names, so the lookup applies the same sanitizing. `SOCKETS` places the step 2 mount points in the source file's coordinates.
+The seated magazines are kept; geometry and materials are otherwise unchanged. `model-source/strip-loose-parts.mjs` reproduces both from the original downloads.
+
+`models.js` configures each rifle: `parts` (source nodes grouped into selectable parts; a node claimed by one part is excluded from the others, which is how the AK-15K's grip mesh `Object_12` is split out of its receiver), `sockets` (mount points in source coordinates), and per slot the factory options, accepted library options and rail limits. Both files share one frame and scale (0.943 m / 9.088 units, from the AK-74M's published 943 mm overall length), so the AK-15K comes out at 791 mm. The AK-15K's brake is modelled into its barrel, so its muzzle slot's factory option is empty and a suppressor threads on in front; it has no factory optic or foregrip, so those slots default to irons and none. Its optic socket sits 5 mm under the receiver-cover rail top, as on the AK-74M's B-13.
+
+On load, `viewer.js` lays the long axis along +x with the slimmer end as the muzzle, scales and centers the rifle. GLTFLoader sanitizes node names, so lookups apply the same sanitizing. Switching rifles (buttons or `#rifle=ak15k`) loads the other file, disposes the old one and re-applies whatever of the current build and finishes the new rifle accepts; camera, lighting and music carry on.
 
 ## Lighting
 Lighting is image-based: `scene.environment` is an HDR equirectangular map, rotated with `scene.environmentRotation` (and `backgroundRotation` when the backdrop is shown). A single directional light casts the floor shadow; it points at the HDR's brightest texel and turns with the environment, so the shadow always matches the reflections.
@@ -22,7 +27,7 @@ Controls: Studio/Outdoor/Sunset, the Light rotation slider, or alt-drag (or shif
 Launch look (`LAUNCH` in `viewer.js`): Sunset with the backdrop on and a 255° light offset, matched to a reference render from the hero view (`HERO`: azimuth −0.2 rad, elevation 0.1 rad). Every frame the environment, backdrop and shadow key are rotated by the camera's azimuth minus the hero azimuth plus the offset, so the lights follow the camera and the reference look holds from any angle. The turntable spins the rifle, not the camera, so it still shows the light moving across the rifle.
 
 ## Attachments
-`attachments.js` lists slots and options. A slot shares its id with a mount point in `SOCKETS` and a part in `PARTS`. On load, `viewer.js` creates a container at each mount point and moves that part's source nodes into it, keeping their world transforms. Options then:
+`attachments.js` lists the slots (Build order, snap camera) and a shared library of built options; each rifle in `models.js` adds its factory options and picks library options, optionally overriding labels and masses (the AK-15K's extended magazine is a 40-round RPK, its drum 75 rounds). A slot shares its id with a mount point and a part of the rifle. On load, `viewer.js` creates a container at each mount point and moves that part's source nodes into it, keeping their world transforms. Options then:
 
 - `original: true` show the source part, optionally with a `pose` (a rotation and offset for the whole part, or per-node offsets in meters). The PT-1 collapsed and folded positions work this way. The fold hinges 35 mm left of the stock mount point.
 - `build(ctx)` return new geometry in the slot's frame (meters, +x muzzle, origin at the mount point). It gets the source part (`ctx.original`) and the model's materials (`ctx.materials`).
@@ -34,7 +39,7 @@ Slots with `rail` get a stepper that moves the container along x in 10 mm steps 
 
 ## Finish, stats and sharing
 - `FINISHES` and `FINISH_TARGETS` in `attachments.js` define the colours. A target with `option` (the suppressor) has its own palette and only appears, and only recolours, while that option is fitted. Recolouring touches only materials named `h-190` or `polymer` in that part (including its attachments); Original restores each material's source colour.
-- Length is the x-extent of visible meshes, measured with the turntable angle zeroed. Weight is `BASE_GRAMS` plus each chosen option's `grams`; both masses are illustrative and exclude ammunition.
+- Length is the x-extent of visible meshes, measured with the turntable angle zeroed. Weight is the rifle's `baseGrams` plus each chosen option's `grams`; both masses are illustrative and exclude ammunition.
 - The URL hash holds every non-default choice: `slot=option@offsetmm` and `part-finish=colour`. Loading a hash (or changing it) restores the build; Reset clears it. Copy build link uses the clipboard, falling back to a prompt.
 
 ## Motion and mobile
