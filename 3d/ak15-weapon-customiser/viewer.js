@@ -2,7 +2,7 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {SLOTS,BASE_GRAMS,FINISHES,FINISH_PARTS} from './attachments.js';
+import {SLOTS,BASE_GRAMS,FINISHES,FINISH_TARGETS} from './attachments.js';
 
 // "low-poly AK-74M Zenitco" by D_U, CC BY 4.0. The loose cartridge, case and spare
 // magazine lying beside the rifle in the source file were removed (see README).
@@ -177,7 +177,7 @@ try{
   slot.part.detail=option.detail||slot.baseDetail;
   slot.part.entry?.querySelector('span')&&(slot.part.entry.querySelector('span').textContent=option.label);
   if(selected===id)detail.textContent=slot.part.detail;
-  renderBuild();updateStats();writeHash();
+  renderBuild();renderFinish();updateStats();writeHash();
   if(!animate)return;
   // Stats above used the final pose; now rewind to the old one and glide there.
   const shown=option.original?slot.original:option.object,slide=slot.direction.clone().multiplyScalar(.05);
@@ -245,18 +245,25 @@ try{
 
  // Finishes recolour only black-finish and polymer surfaces of a part, including its attachments.
  const RECOLOURED=new Set(['h-190','polymer']);
- function applyFinish(partId,finishId){
-  const part=parts.find(p=>p.id===partId),choice=FINISHES.find(f=>f.id===finishId)||FINISHES[0];
-  finish[partId]=choice.id;
-  for(const mesh of part.objects){const m=mesh.material;if(!RECOLOURED.has(m.name))continue;m.userData.baseColor??=m.color.clone();m.color.copy(choice.color?new T.Color(choice.color):m.userData.baseColor);}
+ // A target either covers a whole part (attachments included) or one option's object only.
+ const finishTargets=FINISH_TARGETS.map(t=>({...t,part:parts.find(p=>p.id===(t.part||t.id)),finishes:t.finishes||FINISHES})).filter(t=>t.part&&(!t.option||slots[t.part.id]?.options.some(o=>o.id===t.option)));
+ function targetMeshes(target){
+  if(!target.option)return target.part.objects;
+  const meshes=[];slots[target.part.id].options.find(o=>o.id===target.option).object.traverse(m=>{if(m.isMesh)meshes.push(m);});return meshes;
+ }
+ function applyFinish(targetId,finishId){
+  const target=finishTargets.find(t=>t.id===targetId),choice=target.finishes.find(f=>f.id===finishId)||target.finishes[0];
+  finish[targetId]=choice.id;
+  for(const mesh of targetMeshes(target)){const m=mesh.material;if(!RECOLOURED.has(m.name))continue;m.userData.baseColor??=m.color.clone();m.color.copy(choice.color?new T.Color(choice.color):m.userData.baseColor);}
   renderFinish();writeHash();
  }
  const finishPanel=document.querySelector('#finish');
  function renderFinish(){
-  finishPanel.replaceChildren(...FINISH_PARTS.map(id=>parts.find(p=>p.id===id)).filter(Boolean).map(part=>{
-   const row=document.createElement('div');row.className='finish-row';row.textContent=part.label;
-   const swatches=document.createElement('div');swatches.className='swatches';swatches.role='group';swatches.setAttribute('aria-label',part.label+' colour');
-   for(const f of FINISHES){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(finish[part.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';b.onclick=()=>applyFinish(part.id,f.id);swatches.append(b);}
+  finishPanel.replaceChildren(...finishTargets.filter(t=>!t.option||build[t.part.id]===t.option).map(target=>{
+   const label=target.label||target.part.label;
+   const row=document.createElement('div');row.className='finish-row';row.textContent=label;
+   const swatches=document.createElement('div');swatches.className='swatches';swatches.role='group';swatches.setAttribute('aria-label',label+' colour');
+   for(const f of target.finishes){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(finish[target.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';b.onclick=()=>applyFinish(target.id,f.id);swatches.append(b);}
    row.append(swatches);return row;
   }));
  }
@@ -276,14 +283,14 @@ try{
   // Ids and offsets are URL-safe, so the hash is joined by hand to keep '@' readable.
   const params=[];
   for(const slot of Object.values(slots)){const id=slot.spec.id;if(build[id]!==slot.options[0].id||slot.offset)params.push(id+'='+build[id]+(slot.offset?'@'+Math.round(slot.offset*1000):''));}
-  for(const [id,f] of Object.entries(finish))if(f!==FINISHES[0].id)params.push(id+'-finish='+f);
+  for(const [id,f] of Object.entries(finish))if(f!=='original')params.push(id+'-finish='+f);
   history.replaceState(null,'',params.length?'#'+params.join('&'):location.pathname+location.search);
  }
  function restore(hash){
   restoring=true;tweens=[];const params=new URLSearchParams(hash.replace(/^#/,''));
   for(const slot of Object.values(slots)){const [option,mm]=(params.get(slot.spec.id)||'').split('@');slot.offset=0;build[slot.spec.id]=slot.options.some(o=>o.id===option)?option:slot.options[0].id;slot.pendingOffset=Number(mm)/1000||0;}
   for(const id of Object.keys(slots))applySlot(id,build[id],slots[id].pendingOffset);
-  for(const id of FINISH_PARTS)if(parts.some(p=>p.id===id))applyFinish(id,params.get(id+'-finish'));
+  for(const t of finishTargets)applyFinish(t.id,params.get(t.id+'-finish'));
   restoring=false;writeHash();
  }
  document.querySelector('#reset').onclick=()=>{restore('');view('hero');};

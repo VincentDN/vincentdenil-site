@@ -47,7 +47,17 @@ export const FINISHES=[
  {id:'fde',label:'FDE',color:'#76603f'},
  {id:'od',label:'OD green',color:'#3c4332'}
 ];
-export const FINISH_PARTS=['handguard','foregrip','grip','stock','magazine'];
+// Finish rows. A row with an option only shows (and only recolours) while that option is fitted.
+export const FINISH_TARGETS=[
+ {id:'handguard'},{id:'foregrip'},{id:'grip'},{id:'stock'},{id:'magazine'},
+ {id:'suppressor',label:'Suppressor',part:'muzzle',option:'can',finishes:[
+  {id:'original',label:'Black'},
+  {id:'fde',label:'FDE',color:'#76603f'},
+  {id:'od',label:'OD green',color:'#3c4332'},
+  {id:'tungsten',label:'Tungsten grey',color:'#5b5f63'},
+  {id:'bronze',label:'Burnt bronze',color:'#4e3d2b'}
+ ]}
+];
 export const SLOTS=[
  {id:'muzzle',camera:{direction:[.55,.22,.8],distance:.42},label:'Muzzle',options:[
   {id:'dtk1',grams:160,label:'DTK-1',original:true},
@@ -89,6 +99,13 @@ export const SLOTS=[
   // Stretched copies of the source magazine; the part inside the mag well keeps its shape.
   {id:'45',grams:310,label:'45-rnd RPK',detail:'45-round RPK-74 magazine: the 30-rounder lengthened by a third.',build:({original})=>reshape(original,v=>{if(v.y<0)v.y*=1.36;})},
   {id:'60',grams:450,label:'60-rnd quad',detail:'60-round quad-stack: single-stack at the feed lips, twice as wide below the mag well.',build:({original})=>reshape(original,v=>{if(v.y<0)v.y*=1.18;v.z*=1+.85*smoothstep(.02,.06,-v.y);})},
+  // Drum: a short feed tower out of the mag well into a 136 mm drum, axis across the rifle.
+  {id:'drum',grams:900,label:'95-rnd drum',detail:'95-round drum: a short feed tower into a 136 mm drum with a winding key on the right face.',build:({materials})=>group(
+   [[profile([[-.062,.03],[.014,.03],[.02,-.02],[.03,-.07],[-.042,-.07],[-.056,-.02]],.026,.002),
+     new T.CylinderGeometry(.068,.068,.05,16).rotateX(Math.PI/2).translate(-.008,-.118,0)],materials.polymer],
+   [[new T.CylinderGeometry(.064,.064,.058,16).rotateX(Math.PI/2).translate(-.008,-.118,0),
+     new T.CylinderGeometry(.018,.018,.066,10).rotateX(Math.PI/2).translate(-.008,-.118,0),
+     box(.03,.006,.006,[-.008,-.118,.035])],materials['h-190']])},
   {id:'none',label:'None',detail:'Magazine removed.'}
  ]},
  {id:'grip',camera:{direction:[-.35,.05,1],distance:.42,aim:[-.02,-.05,0]},label:'Pistol grip',options:[

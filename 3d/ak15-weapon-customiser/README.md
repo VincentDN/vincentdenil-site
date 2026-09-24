@@ -33,7 +33,7 @@ Built attachments are illustrative low-poly shapes using the source materials (`
 Slots with `rail` get a stepper that moves the container along x in 10 mm steps within the rail limits. Rail limits are fitted by eye to this model.
 
 ## Finish, stats and sharing
-- `FINISHES` and `FINISH_PARTS` in `attachments.js` define the furniture colours. Recolouring touches only materials named `h-190` or `polymer` in that part (including its attachments); Original restores each material's source colour.
+- `FINISHES` and `FINISH_TARGETS` in `attachments.js` define the colours. A target with `option` (the suppressor) has its own palette and only appears, and only recolours, while that option is fitted. Recolouring touches only materials named `h-190` or `polymer` in that part (including its attachments); Original restores each material's source colour.
 - Length is the x-extent of visible meshes, measured with the turntable angle zeroed. Weight is `BASE_GRAMS` plus each chosen option's `grams`; both masses are illustrative and exclude ammunition.
 - The URL hash holds every non-default choice: `slot=option@offsetmm` and `part-finish=colour`. Loading a hash (or changing it) restores the build; Reset clears it. Copy build link uses the clipboard, falling back to a prompt.
 

@@ -49,8 +49,8 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - ✅ Launch lighting from the reference render: Sunset HDR with the blurred backdrop, light offset 255°, hero camera just behind the right side. The lights follow the camera (environment, backdrop and shadow key turn with the camera's azimuth), so the look holds from every angle.
 - ✅ Alt-drag turns the lights (shift-drag still works).
 - ✅ Snappy per-slot camera angles when a Build option changes (0.45 s, ease-out quart).
-- ⏳ Drum magazine.
-- ⏳ Suppressor colour options.
+- ✅ Drum magazine: 95 rounds, a feed tower into a 136 mm drum, recolourable with the magazine.
+- ✅ Suppressor colours (Black, FDE, OD green, Tungsten grey, Burnt bronze), shown in Finish while the suppressor is fitted.
 - ⏳ Background music player, low default volume.
 - ⏳ AK-15K as a second rifle with a switcher.
 
