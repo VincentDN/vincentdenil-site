@@ -7,7 +7,7 @@ import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
 import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator,camoFor} from './operator.js';
-import {shot} from './sfx.js';
+import {shot,magOut,magIn} from './sfx.js';
 import {POSES,applyPose,rifleFrame} from './field.js';
 
 const accent=0xef8f39;
@@ -394,7 +394,7 @@ function view(name){
 
 // ---------- Operator and Field ----------
 // mode: armoury (rifle on its own), operator (character creator) or field (operator holding the build).
-let mode='armoury',pose='aim',opState={...DEFAULT_OPERATOR},operator=null,anchor=null,lastOpKey='';
+let mode='armoury',pose='aim',opState={...DEFAULT_OPERATOR},operator=null,anchor=null,lastOpKey='',fieldFrame=null,reload=null;
 function readOperator(params){
  const next={...DEFAULT_OPERATOR};
  for(const section of OPERATOR_SECTIONS)for(const c of section.controls){
@@ -419,10 +419,13 @@ function ensureOperator(){
 // Show the right things for the mode and pose; the rifle moves between the scene and the operator's hands.
 function applyMode(){
  if(kick){rifle.model.position.copy(kick.position);rifle.model.quaternion.copy(kick.quaternion);kick=null;}
+ // A reload in progress is abandoned; the magazine goes back in the well.
+ reload=null;const magSlot=rifle.slots.magazine;if(magSlot){magSlot.container.position.copy(magSlot.base);magSlot.container.visible=true;}
  for(const b of document.querySelectorAll('[data-mode]'))b.setAttribute('aria-selected',String(b.dataset.mode===mode));
  for(const panel of document.querySelectorAll('[data-panel]'))panel.hidden=!panel.dataset.panel.split(' ').includes(mode);
  document.querySelector('#title').innerHTML=mode==='armoury'?`${rifle.config.title},<br>low-poly.`:mode==='operator'?'Operator,<br>low-poly.':'In the field.';
  if(mode==='armoury'){
+  fieldFrame=null;
   if(operator)operator.root.visible=false;
   if(rifle.model.parent!==scene)scene.add(rifle.model);
   rifle.model.position.set(0,0,0);rifle.model.quaternion.identity();rifle.model.visible=true;
@@ -431,10 +434,11 @@ function applyMode(){
  ensureOperator();operator.root.visible=true;
  socketMarkers.visible=false;document.querySelector('#sockets').setAttribute('aria-pressed','false');
  if(selected)select(selected);
- if(mode==='operator'){if(rifle.model.parent!==scene)scene.add(rifle.model);rifle.model.visible=false;applyPose(operator,'stand');return;}
+ if(mode==='operator'){if(rifle.model.parent!==scene)scene.add(rifle.model);rifle.model.visible=false;fieldFrame=null;applyPose(operator,'stand');return;}
  if(rifle.model.parent!==anchor)anchor.add(rifle.model);
  rifle.model.visible=true;
- applyPose(operator,pose,rifle.model,rifleFrame(rifle,buildBox));
+ fieldFrame=rifleFrame(rifle,buildBox);
+ applyPose(operator,pose,rifle.model,fieldFrame,fieldMotion());
  document.querySelector('#pose-detail').textContent=POSES.find(p=>p.id===pose).detail;
 }
 function setMode(next){if(next===mode)return;mode=next;tweens=[];applyMode();writeHash();view('hero');}
@@ -539,13 +543,74 @@ function testFire(){
  if(kick){holder.position.copy(kick.position);holder.quaternion.copy(kick.quaternion);}
  kick={t:0,position:holder.position.clone(),quaternion:holder.quaternion.clone(),strength:buildSummary(rifle.build).recoil/60};
 }
+// Kick curve: a sharp push back and up, then an exponential settle.
+function kickOffset(){
+ if(!kick)return null;
+ const f=kick.t<.035?kick.t/.035:Math.exp(-(kick.t-.035)*12);
+ return {back:.035*f*kick.strength,climb:.07*f*kick.strength};
+}
 function stepKick(dt){
  if(!kick)return;
- const holder=rifle.model;kick.t+=dt;
- const f=kick.t<.035?kick.t/.035:Math.exp(-(kick.t-.035)*12);
- holder.position.copy(kick.position).add(new T.Vector3(-1,0,0).applyQuaternion(kick.quaternion).multiplyScalar(.035*f*kick.strength));
- holder.quaternion.copy(kick.quaternion).multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),.07*f*kick.strength));
- if(kick.t>.6){holder.position.copy(kick.position);holder.quaternion.copy(kick.quaternion);kick=null;}
+ kick.t+=dt;const holder=rifle.model;
+ // In the Field the pose applies the kick every frame; in the Armoury it moves the rifle directly.
+ if(mode==='armoury'){
+  const k=kickOffset();
+  holder.position.copy(kick.position).add(new T.Vector3(-1,0,0).applyQuaternion(kick.quaternion).multiplyScalar(k.back));
+  holder.quaternion.copy(kick.quaternion).multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),k.climb));
+ }
+ if(kick.t>.6){if(mode==='armoury'){holder.position.copy(kick.position);holder.quaternion.copy(kick.quaternion);}kick=null;}
+}
+// Per-frame Field motion: breathing and sway (bigger for heavy, awkward builds), kick and reload.
+const clockStart=performance.now();
+function fieldMotion(){
+ const summary=buildSummary(rifle.build),kg=summary.grams/1000;
+ const motion={t:reduceMotion?0:(performance.now()-clockStart)/1000,sway:reduceMotion?0:.002+kg*.0009+(100-summary.ergo)*.00005,kick:kickOffset()};
+ if(reload)motion.reload=Math.min(1,reload.t/reload.duration);
+ return motion;
+}
+// Reload: duration from Handling, longer for big magazines; sounds at the drop and the seat.
+function startReload(){
+ if(mode!=='field'||pose==='stand'||reload||rifle.build.magazine==='none')return;
+ const summary=buildSummary(rifle.build),mag=rifle.build.magazine;
+ const duration=T.MathUtils.clamp(2.2*(1+(60-summary.handling)/120)*(mag==='drum'?1.35:mag==='60'?1.15:1),1.4,3.6);
+ reload={t:0,duration,cues:new Set()};
+ document.querySelector('#pose-detail').textContent=`Reloading: ${duration.toFixed(1)} s with this build (Handling ${summary.handling}${mag==='drum'?', drum':''}).`;
+}
+function stepReload(dt){
+ if(!reload)return;
+ // body[data-reload] exposes progress (0–1) for tests.
+ reload.t+=dt;document.body.dataset.reload=(reload.t/reload.duration).toFixed(2);const r=reload.t/reload.duration;
+ if(r>.18&&!reload.cues.has('out')){reload.cues.add('out');magOut();}
+ if(r>.66&&!reload.cues.has('in')){reload.cues.add('in');magIn();}
+ if(r>=1){reload=null;delete document.body.dataset.reload;document.querySelector('#pose-detail').textContent=POSES.find(p=>p.id===pose).detail;}
+}
+
+// Loadout card: the current view on the left, stats, parts and the operator on the right.
+function saveCard(){
+ renderer.render(scene,camera);
+ const W=1600,H=900,panel=560,out=document.createElement('canvas');out.width=W;out.height=H;const g=out.getContext('2d');
+ const grad=g.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#3a454b');grad.addColorStop(1,'#1b2226');g.fillStyle=grad;g.fillRect(0,0,W-panel,H);
+ // Cover-fit the render into the picture area.
+ const src=renderer.domElement,area=W-panel,scale=Math.max(area/src.width,H/src.height),sw=area/scale,sh=H/scale;
+ g.drawImage(src,(src.width-sw)/2,(src.height-sh)/2,sw,sh,0,0,area,H);
+ g.fillStyle='#161d21';g.fillRect(area,0,panel,H);g.fillStyle='#ef8f39';g.fillRect(area,0,4,H);
+ const x=area+44;let y=70;
+ const text=(t,size,color='#eceeea',weight=400,font='system-ui,sans-serif')=>{g.fillStyle=color;g.font=`${weight} ${size}px ${font}`;g.fillText(t,x,y);};
+ text('PARTISAN · LOADOUT',16,'#ef8f39',600,'ui-monospace,monospace');y+=48;
+ text(rifle.config.title,34,'#eceeea',650);y+=34;
+ const summary=buildSummary(rifle.build);
+ text(`${Math.round((buildBox.max.x-buildBox.min.x)*1000)} mm · ${(summary.grams/1000).toFixed(2)} kg · ${summary.rounds} rds`,17,'#9aa9b0');y+=36;
+ for(const st of STATS){
+  text(st.label,15,'#9aa9b0');g.fillStyle='#eceeea';g.font='600 15px ui-monospace,monospace';g.fillText(String(summary[st.id]),x+panel-110,y);y+=10;
+  g.fillStyle='#ffffff18';g.fillRect(x,y,panel-88,6);g.fillStyle='#c9cfd2';g.fillRect(x,y,(panel-88)*summary[st.id]/100,6);y+=26;
+ }
+ y+=8;text('BUILD',13,'#9aa9b0',600,'ui-monospace,monospace');y+=26;
+ for(const slot of Object.values(rifle.slots)){const o=slot.options.find(o=>o.id===rifle.build[slot.spec.id]);text(`${slot.spec.label}: ${o.label}${slot.offset?` (${slot.offset>0?'+':''}${Math.round(slot.offset*1000)} mm)`:''}`,16);y+=25;}
+ y+=12;text('OPERATOR',13,'#9aa9b0',600,'ui-monospace,monospace');y+=26;
+ const label=(id)=>{for(const sec of OPERATOR_SECTIONS)for(const c of sec.controls)if(c.id===id)return c.options?.find(o=>o.id===opState[id])?.label??opState[id];};
+ for(const line of [`${label('frame')}, ${opState.height.toFixed(2)} m · ${label('headgear')}`,`${label('top')} (${label('topColor')}) · ${label('pants')} (${label('pantsColor')})`,`${label('vest')} · ${label('pack')} · armband ${label('armband')}`]){text(line,16);y+=25;}
+ y=H-40;text(location.href.replace(/^https?:\/\//,'').slice(0,64),12,'#6f7f86',400,'ui-monospace,monospace');
+ const a=document.createElement('a');a.download=`partisan-loadout-${rifle.id}.png`;a.href=out.toDataURL('image/png');a.click();
 }
 
 // Photo: render the current view and stamp a caption strip, then download a PNG.
@@ -617,6 +682,8 @@ try{
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#photo').onclick=savePhoto;
+ document.querySelector('#card').onclick=saveCard;
+ document.querySelector('#reload').onclick=startReload;
  // First visit: a one-off hint, dismissed by its button or after 14 s; remembered per browser.
  {const hint=document.querySelector('#first-run');let seen=false;try{seen=!!localStorage.getItem('partisan-demo-seen');}catch{}
   if(!seen){hint.hidden=false;const close=()=>{hint.hidden=true;try{localStorage.setItem('partisan-demo-seen','1');}catch{}};hint.querySelector('button').onclick=close;setTimeout(close,14000);}}
@@ -644,7 +711,9 @@ try{
  const clock=new T.Clock();
  renderer.setAnimationLoop(()=>{
   const dt=Math.min(clock.getDelta(),1/30);// cap so slow frames or background tabs never skip an animation
-  stepKick(dt);
+  stepKick(dt);stepReload(dt);
+  // The operator breathes and the Field pose re-solves every frame (sway, kick, reload).
+  if(operator&&mode!=='armoury'){if(mode==='field'&&fieldFrame)applyPose(operator,pose,rifle.model,fieldFrame,fieldMotion());else applyPose(operator,'stand',null,null,{t:reduceMotion?0:(performance.now()-clockStart)/1000});}
   if(spinning&&!kick){if(mode==='armoury'){rifle.model.rotation.y+=dt*.5;socketMarkers.rotation.y=rifle.model.rotation.y;}else if(operator)operator.root.rotation.y+=dt*.5;}
   stepTweens(dt);
   if(cameraMove){cameraMove.t=reduceMotion?1:Math.min(1,cameraMove.t+dt/.45);const e=1-(1-cameraMove.t)**4;controls.target.lerpVectors(cameraMove.fromTarget,cameraMove.toTarget,e);camera.position.lerpVectors(cameraMove.fromPosition,cameraMove.toPosition,e);if(cameraMove.t>=1)cameraMove=null;}

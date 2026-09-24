@@ -82,3 +82,8 @@ The hash covers the whole loadout: `mode`, `pose`, rifle build and finishes (as 
 - A Credits & licences panel at the foot of the sidebar lists every asset and licence and notes that stats are illustrative.
 - `prefers-reduced-motion` makes camera moves and part swaps jump to their end state.
 - First visit shows a dismissible hint (remembered in `localStorage` as `partisan-demo-seen`).
+
+## Field motion, reload and loadout card
+- The Field re-solves the pose every frame: the operator breathes, and the rifle sways in a slow figure of eight whose size grows with weight and poor Ergonomics. Test fire kicks the rifle inside the pose, so both hands ride the recoil.
+- **Reload** (Field) animates the support hand to the magazine, drops the old one, fetches a fresh one from the chest and seats it, with synthesised release and seating clicks (`sfx.js`). Its duration follows Handling (1.4–3.6 s), longer for the quad-stack and drum. `body[data-reload]` exposes progress for tests.
+- **Save loadout card** writes a 1600 × 900 PNG: the current view beside the rifle's stats, build, operator summary and the loadout link.

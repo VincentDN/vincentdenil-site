@@ -32,3 +32,7 @@ export function shot(muzzle){
  // Mechanical clack of the action, the same for every muzzle device.
  burst(t+.045,{gain:.12,type:'highpass',freq:2500,decay:.03});
 }
+
+// Magazine handling: a dull release clack and a sharper seating click.
+export function magOut(){setup();ctx.resume();const t=ctx.currentTime+.005;burst(t,{gain:.25,type:'bandpass',freq:1800,q:2,decay:.05});burst(t+.03,{gain:.12,type:'lowpass',freq:600,decay:.08});}
+export function magIn(){setup();ctx.resume();const t=ctx.currentTime+.005;burst(t,{gain:.3,type:'highpass',freq:2200,decay:.035});burst(t+.06,{gain:.22,type:'bandpass',freq:1400,q:3,decay:.04});}

@@ -54,13 +54,17 @@ export function rifleFrame(rifle,box){
   grip:pos('grip').add(new T.Vector3(-.025,-.05,0)),
   // Support hand wraps the foregrip, or cups the handguard just behind the rail point.
   support:gripHeld?fg.clone().add(new T.Vector3(0,-.045,0)):fg.clone().add(new T.Vector3(-.03,.015,0)),
-  length:box.max.x-box.min.x
+  length:box.max.x-box.min.x,
+  // Magazine: its slot container (moved during a reload) and rest position.
+  mag:slot('magazine')?.container,magBase:slot('magazine')?.base.clone()
  };
 }
 
 // Apply `pose` to operator `op`; `holder` is the rifle holder (a child of `anchor` in op space).
-export function applyPose(op,pose,holder,frame){
+// motion (per frame, all optional): t (seconds), sway (m), kick {back, climb}, reload (0–1 phase).
+export function applyPose(op,pose,holder,frame,motion={}){
  resetJoints(op);
+ const t=motion.t||0,breath=Math.sin(t*1.7);
  const s=op.height/1.78,J=op.joints;
  const armed=pose!=='stand'&&holder&&frame;
  if(holder)holder.visible=!!armed;
@@ -68,6 +72,7 @@ export function applyPose(op,pose,holder,frame){
  if(!armed){
   J.upperArmR.rotation.z=-.12;J.upperArmL.rotation.z=.12;J.foreArmR.rotation.x=J.foreArmL.rotation.x=-.25;
   J.upperLegR.rotation.z=-.03;J.upperLegL.rotation.z=.03;
+  J.chest.rotation.x=breath*.012;J.neck.rotation.x=-breath*.008;
   return;
  }
  // Stance: bladed for shouldered poses, left foot forward.
@@ -83,6 +88,7 @@ export function applyPose(op,pose,holder,frame){
   J.upperLegR.rotation.z=-.04;J.upperLegL.rotation.z=.04;
   J.neck.rotation.x=pose==='inspect'?.25:.06;
  }
+ J.chest.rotation.x+=breath*.01;
  op.root.updateMatrixWorld(true);
 
  // Rifle placement in operator space. Aim: sight line through the right eye, pointing +z.
@@ -109,6 +115,15 @@ export function applyPose(op,pose,holder,frame){
   const gripAt=new T.Vector3(-.16*s,1.2*s,.36*s);
   position=gripAt.sub(frame.grip.clone().applyQuaternion(q));
  }
+ // Idle sway: a slow figure of eight, bigger for heavy, awkward builds.
+ const sway=motion.sway||0;
+ position.add(new T.Vector3(Math.sin(t*.9)*sway,Math.sin(t*1.8)*sway*.6+breath*sway*.3,0));
+ q.multiply(new T.Quaternion().setFromEuler(new T.Euler(0,Math.sin(t*.7)*sway*.6,Math.cos(t*.9)*sway*.5)));
+ // Reload: the rifle cants toward the support hand mid-reload.
+ const r=motion.reload;const cant=r!==undefined?Math.sin(Math.min(1,r/.9)*Math.PI)*.35:0;
+ if(cant)q.multiply(new T.Quaternion().setFromAxisAngle(X,-cant));
+ // Recoil kick in the rifle's own frame: back along -x, muzzle up.
+ if(motion.kick){position.add(new T.Vector3(-motion.kick.back,0,0).applyQuaternion(q));q.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),motion.kick.climb));}
  holder.quaternion.copy(q);holder.position.copy(position);holder.updateMatrixWorld(true);
 
  // Arms onto the rifle. Poles keep the elbows down and slightly out.
@@ -116,7 +131,29 @@ export function applyPose(op,pose,holder,frame){
  const rootQ=op.root.getWorldQuaternion(new T.Quaternion());
  const pole=(x,y,z)=>new T.Vector3(x,y,z).applyQuaternion(rootQ).normalize();
  solveArm(op,'R',world(frame.grip),pole(-1,-.9,-.3));
- solveArm(op,'L',world(frame.support),pole(pose==='inspect'?.6:.35,-1,0));
+ let support=world(frame.support);
+ if(r!==undefined&&frame.mag)support=reloadHand(op,r,frame,world,support);
+ else if(frame.mag){frame.mag.position.copy(frame.magBase);frame.mag.visible=true;}
+ solveArm(op,'L',support,pole(pose==='inspect'?.6:.35,-1,0));
  // Hands follow the forearms, tipped a little toward the grip.
  J.handR.rotation.set(-.35,0,0);J.handL.rotation.set(-.2,0,.3);
+}
+
+// Reload timeline for the support hand and the magazine (phase 0–1):
+// reach to the mag, drop it, fetch a fresh one from the chest, seat it, return to the grip.
+function reloadHand(op,r,frame,world,support){
+ const lerp=(a,b,k)=>a.clone().lerp(b,T.MathUtils.smoothstep(k,0,1));
+ const well=world(frame.magBase.clone().add(new T.Vector3(0,-.06,0)));
+ const pouch=op.joints.chest.localToWorld(new T.Vector3(.08,0,.2));
+ const mag=frame.mag,holder=mag.parent;
+ const setMag=worldPoint=>{mag.visible=true;mag.position.copy(holder.worldToLocal(worldPoint.clone())).add(frame.magBase).sub(holder.worldToLocal(well.clone()));};
+ if(r<.15)return lerp(support,well,r/.15);
+ if(r<.35){// the old magazine drops away while the hand leaves for the pouch
+  const k=(r-.15)/.2;mag.visible=k<.8;mag.position.copy(frame.magBase).add(new T.Vector3(0,-.35*k*k,0));
+  return lerp(well,pouch,k);
+ }
+ if(r<.55){const k=(r-.35)/.2,hand=lerp(pouch,well,k);setMag(hand);return hand;}
+ if(r<.75){const k=(r-.55)/.2;mag.visible=true;mag.position.copy(frame.magBase).add(new T.Vector3(0,-.03*(1-k),0));return well;}
+ mag.visible=true;mag.position.copy(frame.magBase);
+ return lerp(well,support,(r-.75)/.25);
 }
