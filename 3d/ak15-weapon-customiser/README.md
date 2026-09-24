@@ -39,3 +39,8 @@ Slots with `rail` get a stepper that moves the container along x in 10 mm steps 
 
 ## Motion and mobile
 Chip and stepper changes animate over 0.4 s (ease-out) and cut the camera to the slot's own angle (`camera` in each slot: direction, distance and an aim offset toward the part's middle) in 0.45 s. `applySlot` applies the final state first, so stats and the URL reflect it, then rewinds the changed objects and tweens them back: new parts slide 50 mm in along their mount direction, while poses and rail offsets interpolate. Frame time is capped at 1/30 s so slow frames never skip an animation. Reset and URL restores apply instantly. On screens under 780 px the viewer is sticky at the top of the page while the sidebar scrolls beneath it.
+
+## Music
+`music.js` synthesises an original 8-bar ambient loop (86 BPM; Am9, Fmaj7, Cmaj7, Em7, two bars each): detuned saw pad, sine bass, a triangle arpeggio through a dotted-8th delay, soft kick/rim/hats, and a generated reverb impulse, into a gentle compressor. There are no audio files or third-party samples. `scheduleBar()` only schedules notes, so the same score renders in an `OfflineAudioContext` for previews (peak about −2 dBFS before the master volume).
+
+The player defaults to on at 18% volume. Browsers block audio until a user gesture, so it starts on the first click or key press anywhere on the page. The ♪ button on the stage toggles it and the Music slider sets the volume; both are saved in `localStorage` (`ak-customiser-music`) and the page works without it. Audio suspends while the tab is hidden.

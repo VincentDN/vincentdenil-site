@@ -2,6 +2,7 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
+import {Music} from './music.js';
 import {SLOTS,BASE_GRAMS,FINISHES,FINISH_TARGETS} from './attachments.js';
 
 // "low-poly AK-74M Zenitco" by D_U, CC BY 4.0. The loose cartridge, case and spare
@@ -42,6 +43,22 @@ const ENVIRONMENTS={studio:'./lighting/studio.hdr',outdoor:'./lighting/quarry_01
 const LAUNCH={environment:'sunset',backdrop:true,lightOffset:255};
 // The hero view the launch lighting was set up from: azimuth and elevation in radians.
 const HERO={azimuth:-.2,elevation:.1};
+
+// Background music: on by default at a low volume, started by the first click or key press
+// (browsers block audio before that). The choice and volume persist per browser.
+const music=new Music(),musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
+const musicPrefs=(()=>{try{return {on:true,volume:.18,...JSON.parse(localStorage.getItem('ak-customiser-music')||'{}')};}catch{return {on:true,volume:.18};}})();
+function saveMusic(){try{localStorage.setItem('ak-customiser-music',JSON.stringify(musicPrefs));}catch{}}
+function showMusic(){musicButton.setAttribute('aria-pressed',String(musicPrefs.on));musicVolume.value=String(Math.round(musicPrefs.volume*100));document.querySelector('#music-level').textContent=Math.round(musicPrefs.volume*100)+'%';}
+music.setVolume(musicPrefs.volume);showMusic();
+function firstGesture(e){
+ if(e.target===musicButton)return;
+ removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);
+ if(musicPrefs.on)music.start();
+}
+addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
+musicButton.onclick=()=>{musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);saveMusic();showMusic();};
+musicVolume.oninput=()=>{musicPrefs.volume=Number(musicVolume.value)/100;music.setVolume(musicPrefs.volume);saveMusic();showMusic();};
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),detail=document.querySelector('#detail');
 const scene=new T.Scene();

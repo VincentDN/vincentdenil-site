@@ -51,7 +51,7 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - ✅ Snappy per-slot camera angles when a Build option changes (0.45 s, ease-out quart).
 - ✅ Drum magazine: 95 rounds, a feed tower into a 136 mm drum, recolourable with the magazine.
 - ✅ Suppressor colours (Black, FDE, OD green, Tungsten grey, Burnt bronze), shown in Finish while the suppressor is fitted.
-- ⏳ Background music player, low default volume.
+- ✅ Background music: an original ambient loop synthesised in Web Audio (`music.js`, no audio files), 18% default volume, ♪ toggle on the stage and a volume slider; starts on the first click, pauses in hidden tabs, choice remembered.
 - ⏳ AK-15K as a second rifle with a switcher.
 
 ## Ideas for later
