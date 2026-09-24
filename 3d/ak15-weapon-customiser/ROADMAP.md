@@ -45,6 +45,15 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - Third HDR: Poly Haven "Venice Sunset" (CC0).
 - Phones: the viewer stays pinned at the top while the pickers scroll underneath (a lighter take on a bottom sheet).
 
+## Step 7 — Round two
+- ✅ Launch lighting from the reference render: Sunset HDR with the blurred backdrop, light offset 255°, hero camera just behind the right side. The lights follow the camera (environment, backdrop and shadow key turn with the camera's azimuth), so the look holds from every angle.
+- ✅ Alt-drag turns the lights (shift-drag still works).
+- ✅ Snappy per-slot camera angles when a Build option changes (0.45 s, ease-out quart).
+- ⏳ Drum magazine.
+- ⏳ Suppressor colour options.
+- ⏳ Background music player, low default volume.
+- ⏳ AK-15K as a second rifle with a switcher.
+
 ## Ideas for later
 - GLB export of the current build, carrying the CC BY credit.
 - More attachments: drum magazine, side-folding stock variants, lasers/lights on the handguard side rails.

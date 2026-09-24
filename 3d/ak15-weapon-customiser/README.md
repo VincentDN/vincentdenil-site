@@ -17,7 +17,9 @@ Lighting is image-based: `scene.environment` is an HDR equirectangular map, rota
 - `lighting/studio.hdr` is original: four soft-edged softboxes (key, rim, fill, overhead) on a dim gradient, 1024 × 512 RLE Radiance, 66 KB, peak ≈ 26. Regenerate with `python3 model-source/generate-studio-hdr.py` (NumPy).
 - `lighting/quarry_01_1k.hdr` is [Quarry 01](https://polyhaven.com/a/quarry_01) and `lighting/venice_sunset_1k.hdr` is [Venice Sunset](https://polyhaven.com/a/venice_sunset), both from Poly Haven, CC0, copied unchanged from the three.js r160 examples.
 
-Controls: Studio/Outdoor/Sunset, the Light rotation slider, or shift-drag on the stage; Backdrop shows the blurred HDR behind the rifle.
+Controls: Studio/Outdoor/Sunset, the Light rotation slider, or alt-drag (or shift-drag) on the stage; Backdrop shows the blurred HDR behind the rifle.
+
+Launch look (`LAUNCH` in `viewer.js`): Sunset with the backdrop on and a 255° light offset, matched to a reference render from the hero view (`HERO`: azimuth −0.2 rad, elevation 0.1 rad). Every frame the environment, backdrop and shadow key are rotated by the camera's azimuth minus the hero azimuth plus the offset, so the lights follow the camera and the reference look holds from any angle. The turntable spins the rifle, not the camera, so it still shows the light moving across the rifle.
 
 ## Attachments
 `attachments.js` lists slots and options. A slot shares its id with a mount point in `SOCKETS` and a part in `PARTS`. On load, `viewer.js` creates a container at each mount point and moves that part's source nodes into it, keeping their world transforms. Options then:
@@ -36,4 +38,4 @@ Slots with `rail` get a stepper that moves the container along x in 10 mm steps 
 - The URL hash holds every non-default choice: `slot=option@offsetmm` and `part-finish=colour`. Loading a hash (or changing it) restores the build; Reset clears it. Copy build link uses the clipboard, falling back to a prompt.
 
 ## Motion and mobile
-Chip and stepper changes animate over 0.4 s (ease-out). `applySlot` applies the final state first, so stats and the URL reflect it, then rewinds the changed objects and tweens them back: new parts slide 50 mm in along their mount direction, while poses and rail offsets interpolate. Frame time is capped at 1/30 s so slow frames never skip an animation. Reset and URL restores apply instantly. On screens under 780 px the viewer is sticky at the top of the page while the sidebar scrolls beneath it.
+Chip and stepper changes animate over 0.4 s (ease-out) and cut the camera to the slot's own angle (`camera` in each slot: direction, distance and an aim offset toward the part's middle) in 0.45 s. `applySlot` applies the final state first, so stats and the URL reflect it, then rewinds the changed objects and tweens them back: new parts slide 50 mm in along their mount direction, while poses and rail offsets interpolate. Frame time is capped at 1/30 s so slow frames never skip an animation. Reset and URL restores apply instantly. On screens under 780 px the viewer is sticky at the top of the page while the sidebar scrolls beneath it.

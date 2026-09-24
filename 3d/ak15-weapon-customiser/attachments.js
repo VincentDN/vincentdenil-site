@@ -7,6 +7,9 @@
 //  - build(ctx): returns an Object3D that replaces the source part. ctx.original is the
 //    source part's group (for clones) and ctx.materials holds the model's materials by name.
 //  - neither: the slot is left empty.
+// Each slot's camera is the snappy angle the viewer cuts to when that slot changes: the
+// direction from the part to the camera (model space), the distance in meters, and an
+// optional aim offset from the mount point toward the part's middle.
 // Built attachments are illustrative low-poly shapes, not measured replicas.
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
@@ -46,7 +49,7 @@ export const FINISHES=[
 ];
 export const FINISH_PARTS=['handguard','foregrip','grip','stock','magazine'];
 export const SLOTS=[
- {id:'muzzle',label:'Muzzle',options:[
+ {id:'muzzle',camera:{direction:[.55,.22,.8],distance:.42},label:'Muzzle',options:[
   {id:'dtk1',grams:160,label:'DTK-1',original:true},
   {id:'ak74',grams:70,label:'AK-74 brake',detail:'Classic two-chamber AK-74 brake with its wide front port.',build:({materials})=>group(
    [[tube(.0105,-.004,.03,[0,0],10),tube(.012,.03,.07,[0,0],10),tube(.0105,.07,.082,[0,0],10)],materials['h-190']],
@@ -59,7 +62,7 @@ export const SLOTS=[
    [[tube(.0195,.024,.19,[0,0],12),tube(.017,.19,.198,[0,0],12,.0195)],materials['h-190']])},
   {id:'bare',grams:0,label:'Bare',detail:'Bare 24×1.5 mm threaded muzzle.'}
  ]},
- {id:'optic',label:'Optic',rail:{min:-.06,max:.04,step:.01},options:[
+ {id:'optic',camera:{direction:[-.45,.4,1],distance:.5},label:'Optic',rail:{min:-.06,max:.04,step:.01},options:[
   {id:'reddot',grams:210,label:'Red dot',original:true},
   {id:'holo',grams:320,label:'Holographic',detail:'Box-hooded holographic sight with a wide window.',build:({materials})=>{
    const g=group(
@@ -73,7 +76,7 @@ export const SLOTS=[
    [[tube(.019,.1495,.151,[.046,0],12),tube(.0165,-.1555,-.1545,[.046,0],12)],materials.glass])},
   {id:'none',label:'Irons',detail:'No optic: the rifle falls back to its iron sights.'}
  ]},
- {id:'foregrip',label:'Foregrip',rail:{min:-.08,max:0,step:.01},options:[
+ {id:'foregrip',camera:{direction:[.1,-.28,1],distance:.46,aim:[0,-.03,0]},label:'Foregrip',rail:{min:-.08,max:0,step:.01},options:[
   {id:'rk1',grams:85,label:'RK-1',original:true},
   {id:'angled',grams:60,label:'Angled',detail:'Angled foregrip: a thumb ramp for a high, straight-arm hold.',build:({materials})=>group(
    [profile([[-.048,0],[.042,0],[.038,-.012],[-.028,-.046],[-.046,-.042]],.028,.003),materials.polymer])},
@@ -81,19 +84,19 @@ export const SLOTS=[
    [profile([[-.016,0],[.02,0],[.02,-.016],[.008,-.021],[-.016,-.008]],.024,.002),materials.polymer])},
   {id:'none',label:'None',detail:'Clean handguard, no foregrip.'}
  ]},
- {id:'magazine',label:'Magazine',options:[
+ {id:'magazine',camera:{direction:[.3,-.05,1],distance:.55,aim:[.03,-.1,0]},label:'Magazine',options:[
   {id:'30',grams:230,label:'30-rnd',original:true},
   // Stretched copies of the source magazine; the part inside the mag well keeps its shape.
   {id:'45',grams:310,label:'45-rnd RPK',detail:'45-round RPK-74 magazine: the 30-rounder lengthened by a third.',build:({original})=>reshape(original,v=>{if(v.y<0)v.y*=1.36;})},
   {id:'60',grams:450,label:'60-rnd quad',detail:'60-round quad-stack: single-stack at the feed lips, twice as wide below the mag well.',build:({original})=>reshape(original,v=>{if(v.y<0)v.y*=1.18;v.z*=1+.85*smoothstep(.02,.06,-v.y);})},
   {id:'none',label:'None',detail:'Magazine removed.'}
  ]},
- {id:'grip',label:'Pistol grip',options:[
+ {id:'grip',camera:{direction:[-.35,.05,1],distance:.42,aim:[-.02,-.05,0]},label:'Pistol grip',options:[
   {id:'rk9',grams:95,label:'RK-9',original:true},
   {id:'classic',grams:70,label:'Classic plum',detail:'Classic AK-74M-era plum polymer grip, slimmer and more steeply raked.',build:()=>group(
    [profile([[.016,.004],[-.02,.004],[-.062,-.112],[-.058,-.122],[-.03,-.124],[-.004,-.07],[.012,-.03]],.028,.003),plum])}
  ]},
- {id:'stock',label:'Stock',options:[
+ {id:'stock',camera:{direction:[-.7,.25,.7],distance:.55},label:'Stock',options:[
   {id:'extended',grams:430,label:'Extended',original:true},
   // The butt and cheek rest slide forward along the PT-1 base.
   {id:'collapsed',grams:430,label:'Collapsed',original:true,detail:'PT-1 butt slid fully forward on its base.',pose:{nodes:{'pt1 stock butt_18':[.06,0,0],'pt1 cheek_19':[.06,0,0]}}},
