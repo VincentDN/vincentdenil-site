@@ -26,6 +26,8 @@ export const MODELS={
   specs:[['Overall length (stock extended)','943 mm'],['Barrel','415 mm'],['Cartridge','5.45×39 mm']],
   // Everything outside the slots: receiver, bolt group, barrel, B-10/B-19 handguard, B-13 mount.
   baseGrams:2550,
+  // Handling baseline before slot modifiers (stats.js); illustrative 0–100 values.
+  stats:{ergo:38,recoil:58,handling:52,loud:88,sighting:35},
   // Black receiver, tan furniture and magazine, suppressor.
   defaults:{build:{muzzle:'can'},finish:{handguard:'fde',foregrip:'fde',grip:'fde',stock:'fde',magazine:'fde'}},
   parts:[
@@ -68,6 +70,8 @@ export const MODELS={
   source:{title:'low-poly AK-15 K',url:'https://sketchfab.com/3d-models/low-poly-ak-15-k-68725380dd654391bb6b751e888e2c44'},
   specs:[['Type','Short carbine'],['Cartridge','7.62×39 mm']],
   baseGrams:2350,
+  // Short 7.62 carbine: livelier recoil and blast, quicker handling.
+  stats:{ergo:42,recoil:64,handling:62,loud:94,sighting:35},
   // Same look as the AK-74M: its bare rails get the micro dot and a vertical grip.
   defaults:{build:{muzzle:'can',optic:'micro',foregrip:'vertical'},finish:{handguard:'fde',foregrip:'fde',grip:'fde',stock:'fde',magazine:'fde'}},
   parts:[
@@ -98,7 +102,7 @@ export const MODELS={
    muzzle:{factory:[{id:'brake',grams:0,label:'Factory brake',detail:'Factory muzzle brake, modelled into the barrel.'}],library:['can']},
    optic:{rail:{min:-.04,max:.06,step:.01},factory:[{id:'none',label:'Irons',detail:'Iron sights: rear notch on the receiver cover, post on the gas block.'}],library:['micro','holo','scope']},
    foregrip:{rail:{min:-.06,max:.02,step:.01},factory:[{id:'none',label:'None',detail:'Clean handguard, no foregrip.'}],library:['vertical','angled','stop']},
-   magazine:{factory:[{id:'30',grams:250,label:'30-rnd',original:true}],library:[{id:'45',label:'40-rnd RPK',grams:330},{id:'60',label:'60-rnd quad',grams:480},{id:'drum',label:'75-rnd drum',grams:950},'none']},
+   magazine:{factory:[{id:'30',grams:250,label:'30-rnd',original:true}],library:[{id:'45',label:'40-rnd RPK',grams:330,rounds:40},{id:'60',label:'60-rnd quad',grams:480},{id:'drum',label:'75-rnd drum',grams:950,rounds:75},'none']},
    grip:{factory:[{id:'factory',grams:90,label:'AK-15',original:true}],library:['classic']},
    stock:{factory:[
     {id:'extended',grams:520,label:'Extended',original:true},

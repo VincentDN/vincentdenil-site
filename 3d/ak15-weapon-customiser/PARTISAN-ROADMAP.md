@@ -108,7 +108,7 @@ Exit criteria: photo mode exporting images, loadout card, share codes round-trip
 
 ## 5. Suggested milestone order
 
-1. **A-lite (2 days):** stats and deltas plus compatibility rules on the existing two rifles. This is the cheapest proof of "depth" and is demo-able immediately.
+1. ✅ **A-lite (2 days):** stats and deltas plus compatibility rules on the existing two rifles. This is the cheapest proof of "depth" and is demo-able immediately. *Done: `stats.js`.*
 2. **B-spike (2 days):** one CC0 rigged character in the scene holding the AK (crude IK). This de-risks phase C before investing in outfits.
 3. **Rest of A**, then **B**, then **C**, then **D**, then **E**.
 
