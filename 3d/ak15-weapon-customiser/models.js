@@ -7,6 +7,9 @@
 //          is excluded from the others, so a mesh inside a group can be its own part.
 // sockets: mount points in source coordinates (muzzle along +x): position and the direction an
 //          attachment extends from it.
+// defaults: the launch build (slot option ids) and finishes; anything unlisted uses the slot's
+//          first option and the original colour. Reset returns here, and the URL hash only
+//          records choices that differ from it.
 // slots:   per slot, the rifle's factory options (listed first; the first is the default), which
 //          library options from attachments.js it accepts (string, or {id,...overrides}), and
 //          an optional rail for 10 mm position steps.
@@ -23,6 +26,8 @@ export const MODELS={
   specs:[['Overall length (stock extended)','943 mm'],['Barrel','415 mm'],['Cartridge','5.45×39 mm']],
   // Everything outside the slots: receiver, bolt group, barrel, B-10/B-19 handguard, B-13 mount.
   baseGrams:2550,
+  // Black receiver, tan furniture and magazine, suppressor.
+  defaults:{build:{muzzle:'can'},finish:{handguard:'fde',foregrip:'fde',grip:'fde',stock:'fde',magazine:'fde'}},
   parts:[
    {id:'receiver',label:'Receiver & bolt group',detail:'AK-74M receiver, dust cover, bolt carrier, recoil spring, trigger, selector and magazine release.',nodes:['ak74m receiver_8','ak74m dust cover_11','ak74m bolt carrier_10','ak74m recoil spring.001_21','ak74m trigga_0','ak74m selector_1','ak74m mag release_2']},
    {id:'rail',label:'B-13 rail mount',detail:'Zenitco B-13 side-mount bracket with a top rail. It carries the optic.',nodes:['b13 bracket_14']},
@@ -63,6 +68,8 @@ export const MODELS={
   source:{title:'low-poly AK-15 K',url:'https://sketchfab.com/3d-models/low-poly-ak-15-k-68725380dd654391bb6b751e888e2c44'},
   specs:[['Type','Short carbine'],['Cartridge','7.62×39 mm']],
   baseGrams:2350,
+  // Same look as the AK-74M: its bare rails get the micro dot and a vertical grip.
+  defaults:{build:{muzzle:'can',optic:'micro',foregrip:'vertical'},finish:{handguard:'fde',foregrip:'fde',grip:'fde',stock:'fde',magazine:'fde'}},
   parts:[
    {id:'receiver',label:'Receiver & bolt group',detail:'AK-15K receiver, bolt, recoil spring, trigger, selector and magazine release.',nodes:['ak15k receiver_4','ak15k bolt_6','ak15k recoil spring.001_15','ak15k trigga_0','ak15k selector_1','ak15k mag release_2']},
    {id:'rail',label:'Receiver cover & rail',detail:'Hinged receiver cover with an integral top rail and rear sight.',nodes:['ak15k receiver cover_7']},

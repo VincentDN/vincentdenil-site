@@ -240,13 +240,16 @@ function updateStats(){
  statsPanel.innerHTML=`<div>Overall length<strong>${Math.round((box.max.x-box.min.x)*1000)} mm</strong></div><div>Weight, empty (illustrative)<strong>${(grams/1000).toFixed(2)} kg</strong></div>`;
 }
 
+// The rifle's launch build and colours (models.js `defaults`).
+const defaultOption=slot=>{const id=rifle.config.defaults?.build?.[slot.spec.id];return slot.options.some(o=>o.id===id)?id:slot.options[0].id;};
+const defaultFinish=target=>rifle.config.defaults?.finish?.[target.id]??'original';
 // Build codes live in the URL hash, e.g. #rifle=ak15k&muzzle=can&optic=scope@-20&stock-finish=fde
 function writeHash(){
  if(restoring)return;
  // Ids and offsets are URL-safe, so the hash is joined by hand to keep '@' readable.
  const params=rifle.id===DEFAULT_MODEL?[]:['rifle='+rifle.id];
- for(const slot of Object.values(rifle.slots)){const id=slot.spec.id;if(rifle.build[id]!==slot.options[0].id||slot.offset)params.push(id+'='+rifle.build[id]+(slot.offset?'@'+Math.round(slot.offset*1000):''));}
- for(const [id,f] of Object.entries(rifle.finish))if(f!=='original')params.push(id+'-finish='+f);
+ for(const slot of Object.values(rifle.slots)){const id=slot.spec.id;if(rifle.build[id]!==defaultOption(slot)||slot.offset)params.push(id+'='+rifle.build[id]+(slot.offset?'@'+Math.round(slot.offset*1000):''));}
+ for(const t of rifle.finishTargets)if(rifle.finish[t.id]!==defaultFinish(t))params.push(t.id+'-finish='+rifle.finish[t.id]);
  history.replaceState(null,'',params.length?'#'+params.join('&'):location.pathname+location.search);
 }
 
@@ -284,9 +287,9 @@ function restore(hash){
   const switching=rifle?.id!==id;
   await mount(id);
   restoring=true;tweens=[];
-  for(const slot of Object.values(rifle.slots)){const [option,mm]=(params.get(slot.spec.id)||'').split('@');slot.offset=0;rifle.build[slot.spec.id]=slot.options.some(o=>o.id===option)?option:slot.options[0].id;slot.pendingOffset=Number(mm)/1000||0;}
+  for(const slot of Object.values(rifle.slots)){const [option,mm]=(params.get(slot.spec.id)||'').split('@');slot.offset=0;rifle.build[slot.spec.id]=slot.options.some(o=>o.id===option)?option:defaultOption(slot);slot.pendingOffset=Number(mm)/1000||0;}
   for(const sid of Object.keys(rifle.slots))applySlot(sid,rifle.build[sid],rifle.slots[sid].pendingOffset);
-  for(const t of rifle.finishTargets)applyFinish(t.id,params.get(t.id+'-finish'));
+  for(const t of rifle.finishTargets)applyFinish(t.id,params.get(t.id+'-finish')??defaultFinish(t));
   restoring=false;renderBuild();renderFinish();writeHash();
   if(switching&&camera)view('hero');
  }).catch(err=>{console.error(err);status.hidden=false;status.textContent='The rifle could not load. Reload to try again.';});
