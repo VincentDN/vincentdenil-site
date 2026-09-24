@@ -23,6 +23,8 @@ const HERO={azimuth:-.2,elevation:.1};
 // front-right; the field shot from the operator's right, where the rifle's right side faces.
 const MODE_HERO={armoury:HERO,operator:{azimuth:-.45,elevation:.08},field:{azimuth:-1.05,elevation:.1}};
 const MODES=['armoury','operator','field'];
+// Reduced motion: camera moves and part swaps jump straight to their end state.
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Camera presets are sized for a rifle this long (m); longer or shorter builds scale them.
 const FRAME_LENGTH=.943;
 
@@ -182,7 +184,7 @@ function tween(object,property,from,to){
 }
 function stepTweens(dt){
  for(const t of tweens){
-  t.t=Math.min(1,t.t+dt/.4);const e=1-(1-t.t)**3;
+  t.t=reduceMotion?1:Math.min(1,t.t+dt/.4);const e=1-(1-t.t)**3;
   if(t.property==='rotationY')t.object.rotation.y=t.from+(t.to-t.from)*e;else t.object.position.lerpVectors(t.from,t.to,e);
  }
  tweens=tweens.filter(t=>t.t<1);
@@ -615,6 +617,9 @@ try{
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#photo').onclick=savePhoto;
+ // First visit: a one-off hint, dismissed by its button or after 14 s; remembered per browser.
+ {const hint=document.querySelector('#first-run');let seen=false;try{seen=!!localStorage.getItem('partisan-demo-seen');}catch{}
+  if(!seen){hint.hidden=false;const close=()=>{hint.hidden=true;try{localStorage.setItem('partisan-demo-seen','1');}catch{}};hint.querySelector('button').onclick=close;setTimeout(close,14000);}}
  for(const b of document.querySelectorAll('.fire'))b.onclick=testFire;
  document.querySelector('#presets').replaceChildren(...PRESETS.map(p=>{const b=document.createElement('button');b.textContent=p.label;b.onclick=()=>applyPreset(p);return b;}));
  // Reset returns the rifle build to its defaults; mode, pose and operator stay.
@@ -642,7 +647,7 @@ try{
   stepKick(dt);
   if(spinning&&!kick){if(mode==='armoury'){rifle.model.rotation.y+=dt*.5;socketMarkers.rotation.y=rifle.model.rotation.y;}else if(operator)operator.root.rotation.y+=dt*.5;}
   stepTweens(dt);
-  if(cameraMove){cameraMove.t=Math.min(1,cameraMove.t+dt/.45);const e=1-(1-cameraMove.t)**4;controls.target.lerpVectors(cameraMove.fromTarget,cameraMove.toTarget,e);camera.position.lerpVectors(cameraMove.fromPosition,cameraMove.toPosition,e);if(cameraMove.t>=1)cameraMove=null;}
+  if(cameraMove){cameraMove.t=reduceMotion?1:Math.min(1,cameraMove.t+dt/.45);const e=1-(1-cameraMove.t)**4;controls.target.lerpVectors(cameraMove.fromTarget,cameraMove.toTarget,e);camera.position.lerpVectors(cameraMove.fromPosition,cameraMove.toPosition,e);if(cameraMove.t>=1)cameraMove=null;}
   key.target.position.set(0,mode==='armoury'?0:floor.position.y+.9,0);key.target.updateMatrixWorld();
   controls.update();orientLights();
   for(const {socket,el} of rifle.socketLabels){const p=socket.getWorldPosition(new T.Vector3()).project(camera);el.hidden=!socketMarkers.visible||p.z>1;el.style.left=(p.x*.5+.5)*stage.clientWidth+'px';el.style.top=(-p.y*.5+.5)*stage.clientHeight-18+'px';}

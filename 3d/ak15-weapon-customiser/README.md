@@ -76,3 +76,9 @@ The hash covers the whole loadout: `mode`, `pose`, rifle build and finishes (as 
 - **Presets** (Partisan, Scout, Breacher, Marksman) are whole loadouts written as hash fragments in `viewer.js`: rifle, build, finishes, operator and pose. Applying one keeps the current screen.
 - **Rifle camo**: Woodland, Desert and Urban finishes reuse the operator's generated camo textures (`camoFor` in `operator.js`). The rifle files have no UVs, so recolourable materials get a triplanar projection in the rifle's own space, fixed per part at load so the pattern stays glued to each part when it moves.
 - **Test fire** (Armoury and Field) plays an original synthesised shot from `sfx.js`: a noise crack, a body thump and a filtered tail, shaped by the muzzle device (the suppressor cuts the crack and tail, brakes brighten and lengthen it). Unsuppressed shots show a short muzzle flash with a point light; every shot kicks the rifle back and up in proportion to the build's Recoil stat.
+
+## Quality and accessibility
+- `model-source/smoke-test.mjs` walks every screen, both rifles, every Build option and finish, every Operator control, all poses and presets, test fire and a hash round-trip in headless Chromium, and fails on any page or console error or if the stats never change (227 checks at the time of writing). Run it before pushing; usage is in the file header (`--three=` serves Three.js from a local npm copy for offline runs).
+- A Credits & licences panel at the foot of the sidebar lists every asset and licence and notes that stats are illustrative.
+- `prefers-reduced-motion` makes camera moves and part swaps jump to their end state.
+- First visit shows a dismissible hint (remembered in `localStorage` as `partisan-demo-seen`).
