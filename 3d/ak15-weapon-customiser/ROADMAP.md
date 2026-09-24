@@ -23,11 +23,14 @@ Built step by step. Each step ships as a working page at `/3d/ak15-weapon-custom
 - Optic (B-13 rail, −60 to +40 mm) and foregrip (lower handguard rail, −80 to 0 mm) move in 10 mm rail-slot steps.
 - First options from the source model: DTK-1 on/off, red dot or irons, RK-1 on/off, magazine in/out, PT-1 extended / collapsed (butt forward 60 mm) / folded (to the left side).
 
-## Step 4 — First attachment set (low-poly, code-built or CC0)
-- Muzzle: stock brake, compensator, suppressor.
-- Optic: red dot, holographic, 4× scope.
-- Under rail: vertical grip, angled grip.
-- Magazine: 30-round, 60-round quad, drum.
+## Step 4 — First attachment set ✅
+Low-poly, code-built in `attachments.js` using the model's own materials. Illustrative shapes, not measured replicas.
+- Muzzle: DTK-1, AK-74 brake, compensator, suppressor, bare.
+- Optic: red dot, holographic, 4× scope, irons.
+- Foregrip: RK-1, angled, hand stop, none.
+- Magazine: 30-rnd, 45-rnd RPK and 60-rnd quad (warped copies of the source magazine), none.
+- Pistol grip: RK-9, classic plum.
+- Stock: extended, collapsed, folded, removed.
 
 ## Step 5 — Finish and share
 - Colourways per part (black / plum / FDE / OD).
