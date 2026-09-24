@@ -2,7 +2,7 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {Music} from './music.js';
+import {Music,TRACKS} from './music.js';
 import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 
@@ -21,17 +21,20 @@ const FRAME_LENGTH=.943;
 // Background music: on by default at a low volume, started by the first click or key press
 // (browsers block audio before that). The choice and volume persist per browser.
 const music=new Music(),musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
-const musicPrefs=(()=>{try{return {on:true,volume:.18,...JSON.parse(localStorage.getItem('ak-customiser-music')||'{}')};}catch{return {on:true,volume:.18};}})();
+const musicPrefs=(()=>{const base={on:true,volume:.18,track:TRACKS[0].id};try{return {...base,...JSON.parse(localStorage.getItem('ak-customiser-music')||'{}')};}catch{return base;}})();
 function saveMusic(){try{localStorage.setItem('ak-customiser-music',JSON.stringify(musicPrefs));}catch{}}
-function showMusic(){musicButton.setAttribute('aria-pressed',String(musicPrefs.on));musicVolume.value=String(Math.round(musicPrefs.volume*100));document.querySelector('#music-level').textContent=Math.round(musicPrefs.volume*100)+'%';}
-music.setVolume(musicPrefs.volume);showMusic();
+function showMusic(){musicButton.setAttribute('aria-pressed',String(musicPrefs.on));for(const b of document.querySelectorAll('[data-track]'))b.setAttribute('aria-pressed',String(b.dataset.track===musicPrefs.track));musicVolume.value=String(Math.round(musicPrefs.volume*100));document.querySelector('#music-level').textContent=Math.round(musicPrefs.volume*100)+'%';}
+if(!TRACKS.some(t=>t.id===musicPrefs.track))musicPrefs.track=TRACKS[0].id;
+music.setVolume(musicPrefs.volume);music.setTrack(musicPrefs.track);showMusic();
 function firstGesture(e){
- if(e.target===musicButton)return;
+ if(e.target===musicButton||e.target.closest?.('[data-track]'))return;
  removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);
  if(musicPrefs.on)music.start();
 }
 addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
 musicButton.onclick=()=>{musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);saveMusic();showMusic();};
+// Picking a track also turns music on.
+for(const b of document.querySelectorAll('[data-track]'))b.onclick=()=>{musicPrefs.track=b.dataset.track;music.setTrack(musicPrefs.track);if(!musicPrefs.on){musicPrefs.on=true;music.start();}saveMusic();showMusic();};
 musicVolume.oninput=()=>{musicPrefs.volume=Number(musicVolume.value)/100;music.setVolume(musicPrefs.volume);saveMusic();showMusic();};
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),detail=document.querySelector('#detail');

@@ -1,4 +1,4 @@
-// Original ambient background loop, synthesised live with Web Audio (no audio files).
+// Background music player. The "Ambient loop" track is original, synthesised live with Web Audio.
 // 86 BPM, 8 bars: Am9 | Am9 | Fmaj7 | Fmaj7 | Cmaj7 | Cmaj7 | Em7 | Em7, then repeat.
 // Layers: detuned saw pad, sine bass, delayed triangle arpeggio, soft kick/hat/rim, shared reverb.
 // scheduleBar() is pure scheduling, so the same score renders offline for previews.
@@ -68,25 +68,57 @@ export function scheduleBar(g,index,t){
 }
 export const LOOP_SECONDS=BAR*BARS;
 
-// Live player: schedules a bar ahead, pauses while the tab is hidden.
+// Tracks: an audio file (looped) or the synthesised loop above. Both play through one master
+// gain, so volume and fades are shared. The file only downloads once music starts.
+export const TRACKS=[
+ {id:'albulena',label:'Albulena',src:'./audio/albulena.mp3'},
+ {id:'ambient',label:'Ambient loop'}
+];
+
+// Live player: one AudioContext, switchable tracks, pauses while the tab is hidden.
 export class Music{
- constructor(){this.volume=.18;this.playing=false;}
- start(){
-  if(!this.ctx){
-   this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=0;this.master.connect(this.ctx.destination);
-   this.graph=createGraph(this.ctx,this.master);this.bar=0;this.next=this.ctx.currentTime+.1;
-   document.addEventListener('visibilitychange',()=>{if(!this.playing)return;document.hidden?this.ctx.suspend():this.ctx.resume();});
+ constructor(){this.volume=.18;this.playing=false;this.track=TRACKS[0].id;}
+ setup(){
+  if(this.ctx)return;
+  this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=0;this.master.connect(this.ctx.destination);
+  this.graph=createGraph(this.ctx,this.master);this.bar=0;this.next=this.ctx.currentTime+.1;
+  document.addEventListener('visibilitychange',()=>{
+   if(!this.playing)return;
+   if(document.hidden){this.ctx.suspend();this.audio?.pause();}
+   else{this.ctx.resume();if(this.file())this.audio.play().catch(()=>{});}
+  });
+ }
+ file(){return TRACKS.find(t=>t.id===this.track)?.src;}
+ // Start the current track's source (the master gain is handled by start/stop).
+ play(){
+  const src=this.file();
+  if(src){
+   if(!this.audio){this.audio=new Audio();this.audio.loop=true;this.audio.preload='none';this.ctx.createMediaElementSource(this.audio).connect(this.master);}
+   if(!this.audio.src.endsWith(src.replace('./','')))this.audio.src=src;
+   this.audio.play().catch(err=>console.warn('Music could not play',err));
+  }else{
+   if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;
+   this.timer??=setInterval(()=>{if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;while(this.next<this.ctx.currentTime+1.2){scheduleBar(this.graph,this.bar++,this.next);this.next+=BAR;}},200);
   }
-  this.ctx.resume();this.playing=true;
+ }
+ halt(){this.audio?.pause();clearInterval(this.timer);this.timer=null;}
+ start(){
+  this.setup();this.ctx.resume();this.playing=true;
   this.master.gain.cancelScheduledValues(this.ctx.currentTime);this.master.gain.setTargetAtTime(this.volume,this.ctx.currentTime,.4);
-  this.timer??=setInterval(()=>{if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;while(this.next<this.ctx.currentTime+1.2){scheduleBar(this.graph,this.bar++,this.next);this.next+=BAR;}},200);
+  this.play();
  }
  stop(){
   if(!this.ctx)return;this.playing=false;const now=this.ctx.currentTime;
   this.master.gain.cancelScheduledValues(now);this.master.gain.setTargetAtTime(0,now,.25);
-  clearInterval(this.timer);this.timer=null;
-  // Let the fade finish, then suspend; restart resumes on a fresh bar.
-  setTimeout(()=>{if(!this.playing){this.ctx.suspend();this.next=this.ctx.currentTime+.1;}},900);
+  // Let the fade finish, then pause the source and suspend.
+  setTimeout(()=>{if(!this.playing){this.halt();this.ctx.suspend();}},900);
+ }
+ setTrack(id){
+  if(!TRACKS.some(t=>t.id===id)||id===this.track)return;
+  this.track=id;if(!this.playing)return;
+  // Quick crossfade through silence: dip, swap sources, come back up.
+  const now=this.ctx.currentTime;this.master.gain.cancelScheduledValues(now);this.master.gain.setTargetAtTime(0,now,.12);
+  setTimeout(()=>{if(!this.playing)return;this.halt();this.play();this.master.gain.setTargetAtTime(this.volume,this.ctx.currentTime,.3);},450);
  }
  setVolume(v){this.volume=v;if(this.playing)this.master.gain.setTargetAtTime(v,this.ctx.currentTime,.1);}
 }
