@@ -2,7 +2,7 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {SLOTS} from './attachments.js';
+import {SLOTS,BASE_GRAMS,FINISHES,FINISH_PARTS} from './attachments.js';
 
 // "low-poly AK-74M Zenitco" by D_U, CC BY 4.0. The loose cartridge, case and spare
 // magazine lying beside the rifle in the source file were removed (see README).
@@ -39,8 +39,8 @@ const ENVIRONMENTS={studio:'./lighting/studio.hdr',outdoor:'./lighting/quarry_01
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),detail=document.querySelector('#detail');
 const scene=new T.Scene();
-let renderer,camera,controls,model,parts=[],sockets=[],selected=null,spinning=false,cameraMove=null;
-const build={},slots={};
+let renderer,camera,controls,model,parts=[],sockets=[],selected=null,spinning=false,cameraMove=null,buildBox=new T.Box3();
+const build={},slots={},finish={};
 
 // Sources differ in orientation; lay the longest axis along x, then center on the origin.
 function normalize(root){
@@ -159,7 +159,7 @@ try{
   slot.part.detail=option.detail||slot.baseDetail;
   slot.part.entry?.querySelector('span')&&(slot.part.entry.querySelector('span').textContent=option.label);
   if(selected===id)detail.textContent=slot.part.detail;
-  renderBuild();
+  renderBuild();updateStats();writeHash();
  }
  document.querySelector('#source').innerHTML=`Model: <a href="${SOURCE_URL}">low-poly AK-74M Zenitco</a> by <a href="${AUTHOR_URL}">D_U</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Loose rounds and spare magazine removed. Scaled to ${OVERALL_LENGTH*1000} mm.`;
 
@@ -200,8 +200,55 @@ try{
   const distance=Math.min(camera.position.distanceTo(controls.target),.75);
   cameraMove={t:0,fromTarget:controls.target.clone(),fromPosition:camera.position.clone(),toTarget:target,toPosition:target.clone().addScaledVector(dir,distance)};
  }
+
+ // Finishes recolour only black-finish and polymer surfaces of a part, including its attachments.
+ const RECOLOURED=new Set(['h-190','polymer']);
+ function applyFinish(partId,finishId){
+  const part=parts.find(p=>p.id===partId),choice=FINISHES.find(f=>f.id===finishId)||FINISHES[0];
+  finish[partId]=choice.id;
+  for(const mesh of part.objects){const m=mesh.material;if(!RECOLOURED.has(m.name))continue;m.userData.baseColor??=m.color.clone();m.color.copy(choice.color?new T.Color(choice.color):m.userData.baseColor);}
+  renderFinish();writeHash();
+ }
+ const finishPanel=document.querySelector('#finish');
+ function renderFinish(){
+  finishPanel.replaceChildren(...FINISH_PARTS.map(id=>parts.find(p=>p.id===id)).filter(Boolean).map(part=>{
+   const row=document.createElement('div');row.className='finish-row';row.textContent=part.label;
+   const swatches=document.createElement('div');swatches.className='swatches';swatches.role='group';swatches.setAttribute('aria-label',part.label+' colour');
+   for(const f of FINISHES){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(finish[part.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';b.onclick=()=>applyFinish(part.id,f.id);swatches.append(b);}
+   row.append(swatches);return row;
+  }));
+ }
+ // Live stats: length from the visible geometry (turntable angle ignored), mass from the registry.
+ const statsPanel=document.querySelector('#stats');
+ function updateStats(){
+  const turned=model.rotation.y;model.rotation.y=0;model.updateMatrixWorld(true);
+  const box=new T.Box3();model.traverseVisible(o=>{if(o.isMesh)box.expandByObject(o);});
+  model.rotation.y=turned;model.updateMatrixWorld(true);buildBox=box;
+  const grams=BASE_GRAMS+Object.values(slots).reduce((sum,slot)=>sum+(slot.options.find(o=>o.id===build[slot.spec.id])?.grams||0),0);
+  statsPanel.innerHTML=`<div>Overall length<strong>${Math.round((box.max.x-box.min.x)*1000)} mm</strong></div><div>Weight, empty (illustrative)<strong>${(grams/1000).toFixed(2)} kg</strong></div>`;
+ }
+ // Build codes live in the URL hash, e.g. #muzzle=can&optic=scope@-20&stock-finish=fde
+ let restoring=true;
+ function writeHash(){
+  if(restoring)return;
+  // Ids and offsets are URL-safe, so the hash is joined by hand to keep '@' readable.
+  const params=[];
+  for(const slot of Object.values(slots)){const id=slot.spec.id;if(build[id]!==slot.options[0].id||slot.offset)params.push(id+'='+build[id]+(slot.offset?'@'+Math.round(slot.offset*1000):''));}
+  for(const [id,f] of Object.entries(finish))if(f!==FINISHES[0].id)params.push(id+'-finish='+f);
+  history.replaceState(null,'',params.length?'#'+params.join('&'):location.pathname+location.search);
+ }
+ function restore(hash){
+  restoring=true;const params=new URLSearchParams(hash.replace(/^#/,''));
+  for(const slot of Object.values(slots)){const [option,mm]=(params.get(slot.spec.id)||'').split('@');slot.offset=0;build[slot.spec.id]=slot.options.some(o=>o.id===option)?option:slot.options[0].id;slot.pendingOffset=Number(mm)/1000||0;}
+  for(const id of Object.keys(slots))applySlot(id,build[id],slots[id].pendingOffset);
+  for(const id of FINISH_PARTS)if(parts.some(p=>p.id===id))applyFinish(id,params.get(id+'-finish'));
+  restoring=false;writeHash();
+ }
+ document.querySelector('#reset').onclick=()=>{restore('');view('three');};
+ document.querySelector('#share').onclick=async e=>{const button=e.currentTarget;writeHash();try{await navigator.clipboard.writeText(location.href);button.textContent='Link copied';}catch{prompt('Copy this build link:',location.href);}setTimeout(()=>{button.textContent='Copy build link';},1600);};
+ addEventListener('hashchange',()=>restore(location.hash));
  for(const id of Object.keys(slots))build[id]=slots[id].options[0].id;
- for(const id of Object.keys(slots))applySlot(id,slots[id].options[0].id);
+ restore(location.hash);
 
  const socketLabels=sockets.map(s=>{const el=document.createElement('div');el.className='socket';el.textContent=s.userData.label;el.hidden=true;stage.append(el);return {socket:s,el};});
  const socketMarkers=new T.Group();socketMarkers.visible=false;scene.add(socketMarkers);
@@ -220,11 +267,13 @@ try{
 
  function view(name){
   cameraMove=null;
-  const aspect=stage.clientWidth/stage.clientHeight,d=Math.max(1.3,1.6/aspect);
-  controls.target.set(0,0,0);
-  const at={three:[d*.55,d*.32,d*.8],left:[0,.02,-d],right:[0,.02,d],top:[0,d,.001],muzzle:[d*.9,.06,d*.28]}[name];
-  if(name==='muzzle')controls.target.set(.33,0,0);
-  camera.position.set(...at);controls.update();
+  // Fit the current build: long muzzle devices or a folded stock change the length.
+  const center=buildBox.getCenter(new T.Vector3()),fit=(buildBox.max.x-buildBox.min.x)/OVERALL_LENGTH||1;
+  const aspect=stage.clientWidth/stage.clientHeight,d=Math.max(1.3,1.6/aspect)*fit;
+  controls.target.set(center.x,0,0);
+  const at={three:[d*.55,d*.32,d*.8],left:[0,.02,-d],right:[0,.02,d],top:[0,d,.001],muzzle:[d*.65,.06,d*.28]}[name];
+  if(name==='muzzle')controls.target.set(buildBox.max.x-.14,0,0);
+  camera.position.set(...at).add(controls.target);controls.update();
  }
  const resize=()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);};
  new ResizeObserver(resize).observe(stage);resize();view('three');

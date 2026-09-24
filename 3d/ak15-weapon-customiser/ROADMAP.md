@@ -32,11 +32,12 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - Pistol grip: RK-9, classic plum.
 - Stock: extended, collapsed, folded, removed.
 
-## Step 5 — Finish and share
-- Colourways per part (black / plum / FDE / OD).
-- Stats panel (length, illustrative weight) that updates with the build.
-- Build codes in the URL hash so builds can be shared; reset button.
-- Optional GLB export of the current build.
+## Step 5 — Finish and share ✅
+- Finish colours (Original / Plum / FDE / OD green) for the handguard, foregrip, pistol grip, stock and magazine. Only polymer and black-finish surfaces change; steel stays steel.
+- Live stats: overall length measured from the visible geometry, and an illustrative empty weight from per-option masses.
+- Build codes in the URL hash (e.g. `#muzzle=can&optic=scope@-20&stock-finish=fde`), a Copy build link button and Reset.
+- Camera presets fit the current build's length.
+- Deferred: GLB export of the current build (the source model is CC BY, so an export needs to carry the credit).
 
 ## Step 6 — Polish
 - Swap animations, part hover outline, more HDR environments, mobile bottom-sheet pickers.
