@@ -2,6 +2,7 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {Music,TRACKS} from './music.js';
 import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
@@ -85,7 +86,7 @@ function normalize(root,scale){
 const nodeName=name=>T.PropertyBinding.sanitizeNodeName(name);
 // Load a rifle and build its parts, slots (with library options) and finish targets.
 async function loadRifle(id){
- const config=MODELS[id],root=(await new GLTFLoader().loadAsync(config.url)).scene;
+ const config=MODELS[id],root=(await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(config.url)).scene;
  root.traverse(o=>{if(o.isMesh)o.castShadow=o.receiveShadow=true;});
  const sockets=config.sockets.map(([sid,label,p,d])=>{const o=new T.Object3D();o.name='socket:'+sid;o.position.set(...p);o.userData={id:sid,label,direction:new T.Vector3(...d)};root.add(o);return o;});
  const model=normalize(root,config.scale);
@@ -653,12 +654,14 @@ function savePhoto(){
 }
 
 try{
- renderer=new T.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;stage.prepend(renderer.domElement);
+ // Phones get a lower resolution cap and a smaller shadow map; everyone gets adaptive resolution.
+ const small=matchMedia('(max-width: 780px), (pointer: coarse)').matches;
+ renderer=new T.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,small?1.5:2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;stage.prepend(renderer.domElement);
  camera=new T.PerspectiveCamera(35,1,.01,20);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=.15;controls.maxDistance=3.5;controls.enablePan=true;
 
  // Image-based lighting from an HDR environment. The directional key only casts the shadow;
  // it is aimed at the HDR's brightest texel and turns with the environment.
- const key=new T.DirectionalLight(0xffffff,1.6);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-1.3,right:1.3,top:1.3,bottom:-1.3,near:.5,far:8});key.shadow.normalBias=.01;key.shadow.radius=4;scene.add(key);
+ const key=new T.DirectionalLight(0xffffff,1.6);key.castShadow=true;key.shadow.mapSize.setScalar(small?1024:2048);Object.assign(key.shadow.camera,{left:-1.3,right:1.3,top:1.3,bottom:-1.3,near:.5,far:8});key.shadow.normalBias=.01;key.shadow.radius=4;scene.add(key);
  const hdrLoader=new RGBELoader().setDataType(T.FloatType),environments={};
  let envName=LAUNCH.environment,lightAngle=LAUNCH.lightOffset;
  function brightestDirection(texture){
@@ -702,6 +705,8 @@ try{
  if(!rifle)throw new Error('No rifle loaded');
  view('hero');
  for(const b of document.querySelectorAll('[data-rifle]'))b.onclick=()=>switchRifle(b.dataset.rifle);
+ // Warm the HTTP cache with the other rifles once the page is idle, so switching is instant.
+ (window.requestIdleCallback||setTimeout)(()=>{for(const [id,m] of Object.entries(MODELS))if(id!==rifle.id)fetch(m.url).catch(()=>{});},{timeout:4000});
  for(const b of document.querySelectorAll('[data-mode]'))b.onclick=()=>setMode(b.dataset.mode);
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
@@ -747,5 +752,17 @@ try{
   controls.update();orientLights();
   for(const {socket,el} of rifle.socketLabels){const p=socket.getWorldPosition(new T.Vector3()).project(camera);el.hidden=!socketMarkers.visible||p.z>1;el.style.left=(p.x*.5+.5)*stage.clientWidth+'px';el.style.top=(-p.y*.5+.5)*stage.clientHeight-18+'px';}
   renderer.render(scene,camera);
+  adaptResolution();
  });
+ // Adaptive resolution: every 2 s, drop the pixel ratio a step while frames average over 28 ms
+ // (under ~35 fps), down to 1; raise it again when there is plenty of headroom.
+ // Real wall-clock time: the animation dt is capped, which would hide slow frames.
+ let frames=0,windowStart=performance.now();const maxRatio=renderer.getPixelRatio();
+ function adaptResolution(){
+  frames++;const now=performance.now(),elapsed=(now-windowStart)/1000;if(elapsed<2)return;
+  const avg=elapsed/frames,ratio=renderer.getPixelRatio();frames=0;windowStart=now;
+  if(document.hidden)return;
+  const next=avg>.028?Math.max(1,ratio-.25):avg<.014?Math.min(maxRatio,ratio+.25):ratio;
+  if(next!==ratio){renderer.setPixelRatio(next);resize();}
+ }
 }catch(err){console.error(err);status.hidden=false;status.textContent='The viewer could not load. Reload in a browser with WebGL enabled.';}

@@ -24,7 +24,8 @@ Neither repository documents Partisan itself yet. The roadmap therefore assumes 
 | Smoke test, credits panel, reduced motion, first-run hint | ✅ | `model-source/smoke-test.mjs` |
 | More weapon platforms (LMG, DMR, pistol) | ⏳ needs models | |
 | Skinned, animated character (real rig, clips) | ⏳ needs art direction (§8) | |
-| Bundler, compression, LOD | ⏳ phase E | |
+| Model compression (meshopt), adaptive resolution, mobile shadows, idle preload | ✅ | `model-source/compress-models.mjs`, `viewer.js` |
+| Bundler, LOD | ⏳ phase E | |
 
 
 

@@ -30,7 +30,11 @@ function reshape(original,warp){
  const g=new T.Group(),inverse=original.matrixWorld.clone().invert(),v=new T.Vector3();
  original.traverse(o=>{
   if(!o.isMesh)return;
-  const geometry=o.geometry.clone().applyMatrix4(inverse.clone().multiply(o.matrixWorld)),p=geometry.attributes.position;
+  // The model files store quantized (normalized Int16) positions: expand to floats before
+  // transforming and stretching, or values outside [-1, 1] would clamp.
+  const geometry=o.geometry.clone();
+  for(const name of ['position','normal']){const at=geometry.attributes[name];if(at&&!(at.array instanceof Float32Array)){const f=new Float32Array(at.count*3);for(let i=0;i<at.count;i++){f[i*3]=at.getX(i);f[i*3+1]=at.getY(i);f[i*3+2]=at.getZ(i);}geometry.setAttribute(name,new T.BufferAttribute(f,3));}}
+  geometry.applyMatrix4(inverse.clone().multiply(o.matrixWorld));const p=geometry.attributes.position;
   for(let i=0;i<p.count;i++){warp(v.fromBufferAttribute(p,i));p.setXYZ(i,v.x,v.y,v.z);}
   g.add(new T.Mesh(geometry,o.material));// applyMatrix4 carried the source normals; the warps are gentle enough to keep them.
  });

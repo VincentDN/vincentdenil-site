@@ -93,3 +93,8 @@ The hash covers the whole loadout: `mode`, `pose`, rifle build and finishes (as 
 
 ## Side rail
 A seventh slot on the right-hand handguard rail (both rifles) takes a weapon light, a laser or a combined unit, and slides in 10 mm steps. The light carries a real `SpotLight` that lights the scene and shows in photos; the laser draws a faint beam. They trade Handling and Ergonomics (`stats.js`).
+
+## Performance
+- Both rifle files are meshopt-compressed with quantized positions (`model-source/compress-models.mjs`, run after `strip-loose-parts.mjs`): AK-74M 2.2 → 0.6 MB, AK-15K 1.4 → 0.4 MB. The script checks node names are unchanged. The viewer loads them with `MeshoptDecoder`; `reshape()` expands quantized attributes to floats before stretching magazines.
+- Resolution adapts: every 2 s the pixel ratio drops a quarter step while frames average over 28 ms (down to 1) and rises again under 14 ms. Phones (≤ 780 px or coarse pointer) start at ≤ 1.5× with a 1024 shadow map.
+- Once idle, the page fetches the other rifle into the HTTP cache so switching is instant.
