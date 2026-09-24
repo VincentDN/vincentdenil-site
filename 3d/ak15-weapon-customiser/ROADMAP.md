@@ -56,6 +56,9 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 - ✅ "Abdulena" (supplied MP3) as the default music track, alongside the ambient loop; autoplays on open at 40% with a slow fade-in where the browser allows, and keeps playing in background tabs.
 - ✅ AK-15K as a second rifle with an in-place switcher (`models.js`); builds carry across where both rifles accept the option. Library gains a micro red dot and a vertical foregrip for the AK-15K's bare rails.
 
+## Next: Partisan demo
+The plan for turning this into an interactive Partisan demo (deep weapon and character customisation) is in `PARTISAN-ROADMAP.md`.
+
 ## Ideas for later
 - GLB export of the current build, carrying the CC BY credit.
 - More attachments: drum magazine, side-folding stock variants, lasers/lights on the handguard side rails.
