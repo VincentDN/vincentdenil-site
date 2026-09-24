@@ -546,8 +546,8 @@ function randomOperator(){
 // screen is kept.
 const PRESETS=[
  {id:'partisan',label:'Partisan',hash:''},
- {id:'scout',label:'Scout',hash:'rifle=ak15k&foregrip=stop&handguard-finish=od&foregrip-finish=od&grip-finish=od&stock-finish=od&magazine-finish=od&suppressor-finish=od&pose=patrol&o.headgear=boonie&o.faceCover=shemagh&o.top=smock&o.topColor=flora&o.vest=rig&o.gearColor=olive&o.pack=radio&o.facial=none&o.armband=none'},
- {id:'breacher',label:'Breacher',hash:'rifle=ak15k&muzzle=brake&optic=holo&magazine=60&stock=collapsed&handguard-finish=original&foregrip-finish=original&grip-finish=original&stock-finish=original&magazine-finish=original&pose=ready&o.headgear=helmet&o.faceCover=balaclava&o.eyewear=goggles&o.topColor=black&o.pantsColor=black&o.gloves=full&o.vest=plates&o.gearColor=black&o.facial=none&o.hair=buzz&o.armband=none&o.patch=shield'},
+ {id:'scout',label:'Scout',hash:'rifle=ak15k&foregrip=stop&handguard-finish=od&foregrip-finish=od&grip-finish=od&stock-finish=od&magazine-finish=od&suppressor-finish=od&pose=patrol&o.headgear=boonie&o.faceCover=shemagh&o.top=smock&o.topColor=flora&o.vest=rig&o.gearColor=olive&o.pack=radio&o.sidearm=hip&o.facial=none&o.armband=none'},
+ {id:'breacher',label:'Breacher',hash:'rifle=ak15k&muzzle=brake&optic=holo&magazine=60&stock=collapsed&handguard-finish=original&foregrip-finish=original&grip-finish=original&stock-finish=original&magazine-finish=original&pose=ready&o.headgear=helmet&o.faceCover=balaclava&o.eyewear=goggles&o.topColor=black&o.pantsColor=black&o.gloves=full&o.vest=plates&o.sidearm=thigh&o.gearColor=black&o.facial=none&o.hair=buzz&o.armband=none&o.patch=shield'},
  {id:'marksman',label:'Marksman',hash:'optic=scope&foregrip=angled&handguard-finish=desert&stock-finish=desert&foregrip-finish=desert&suppressor-finish=fde&o.headgear=boonie&o.top=smock&o.topColor=desert&o.pantsColor=desert&o.gearColor=tan&o.eyewear=glasses&o.facial=moustache&o.armband=none'}
 ];
 function applyPreset(preset){restore('#'+[mode!=='armoury'?'mode='+mode:'',preset.hash].filter(Boolean).join('&')).then(()=>view('hero'));}

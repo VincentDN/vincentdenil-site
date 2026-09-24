@@ -47,6 +47,7 @@ export const OPERATOR_SECTIONS=[
  {id:'gear',label:'Gear',camera:'torso',controls:[
   {id:'vest',label:'Vest',type:'choice',options:[choice('none','None'),choice('rig','Chest rig'),choice('plates','Plate carrier')]},
   {id:'pack',label:'Pack',type:'choice',options:[choice('none','None'),choice('assault','Assault pack'),choice('radio','Radio')]},
+  {id:'sidearm',label:'Sidearm',type:'choice',options:[choice('none','None'),choice('thigh','Thigh holster'),choice('hip','Hip holster')]},
   {id:'gearColor',label:'Gear colour',type:'swatch',options:swatch(FABRIC)}
  ]},
  {id:'insignia',label:'Insignia',camera:'arm',controls:[
@@ -60,7 +61,7 @@ export const DEFAULT_OPERATOR={
  frame:'male',height:1.78,build:.5,skin:'s2',
  hair:'short',hairColor:'brown',facial:'beard',headgear:'beanie',faceCover:'none',eyewear:'none',
  top:'jacket',topColor:'woodland',pants:'cargo',pantsColor:'olive',boots:'boots',gloves:'fingerless',
- vest:'rig',pack:'none',gearColor:'khaki',
+ vest:'rig',pack:'none',sidearm:'none',gearColor:'khaki',
  armband:'red',patch:'star'
 };
 export const OPERATOR_KEYS=OPERATOR_SECTIONS.flatMap(s=>s.controls.map(c=>c.id));
@@ -256,6 +257,22 @@ export function buildOperator(state){
   add('chest',gear,box(.2*thick,.26*s,.1,[.02,.06*s,-.18*thick]));
   add('chest',metal,box(.14,.12*s,.03,[.02,.1*s,-.235*thick]));
   add('chest',dark,limb(.005,.004,.55*s,5).translate(.08,.72*s,-.2*thick));// antenna
+ }
+
+ // Sidearm: a compact pistol in a holster on the right (−x) thigh or hip, grip up and slightly back.
+ if(o.sidearm!=='none'){
+  const thigh=o.sidearm==='thigh',joint=thigh?'upperLegR':'hips';
+  const out=thigh?-(.09*thick*hip+.035):-(.33*thick*hip/2+.03);
+  const at=thigh?[out,-.14*s,.01]:[out,-.03*s,-.02];
+  const place=g=>g.rotateX(-.12).translate(...at);
+  add(joint,gear,place(box(.05,.16,.1,[0,-.02,0])));// holster body
+  if(thigh){for(const y of [.02,-.1])add(joint,gear,limb(.09*thick*hip+.012,.085*thick*hip+.012,.025,8,y).translate(0,0,0).translate(0,-.14*s+.04,0));// leg straps
+   add(joint,gear,box(.03,.16*s,.03,[out+.012,-.02*s,.01]));}// drop strap to the belt
+  else add(joint,gear,box(.06,.03,.05,[out+.015,.05*s,-.02]));// belt loop
+  const pistol=mat('#1e2023',.5);
+  add(joint,pistol,place(box(.036,.07,.03,[-.002,.09,.03])));// grip, above the holster
+  add(joint,pistol,place(box(.04,.022,.12,[-.002,.07,0])));// slide top peeking out
+  add(joint,pistol,place(box(.02,.012,.02,[-.002,.112,.04])));// beavertail
  }
 
  // Headgear, face covers and eyewear.
