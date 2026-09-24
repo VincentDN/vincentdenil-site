@@ -16,18 +16,18 @@ Built step by step. Each step ships as a working page at `/3d/ak15-weapon-custom
 - Light rotation slider, plus shift-drag on the model. The HDR environment and the shadow-casting key light turn together; the key is aimed at each HDR's brightest point automatically.
 - Optional blurred HDR backdrop. The page moves to Three.js 0.169.0 for `scene.environmentRotation`.
 
-## Step 3 — Attachment system
-- Fine-tune mount points and add rail lengths (B-13 top rail, handguard rails).
-- Attachment registry (`attachments.js`): id, slot, label, geometry/GLB, offset, what it hides (e.g. a muzzle device replaces the stock brake).
-- Sidebar slot pickers: a "stock / none / option" list per slot. Swaps are instant; the camera frames the changed slot.
-- Rail slots snap along the 10 mm slot pitch (drag or ± buttons).
+## Step 3 — Attachment system ✅
+- `attachments.js` registry: slots on the six mount points, options that either pose the source part, replace it with built geometry, or leave the slot empty.
+- Each slot's source nodes are regrouped under a container at its mount point, so swaps, poses and rail offsets act on one object; attachments stay clickable and highlightable as part of their slot.
+- Build panel with a chip row per slot. The camera glides toward the changed slot.
+- Optic (B-13 rail, −60 to +40 mm) and foregrip (lower handguard rail, −80 to 0 mm) move in 10 mm rail-slot steps.
+- First options from the source model: DTK-1 on/off, red dot or irons, RK-1 on/off, magazine in/out, PT-1 extended / collapsed (butt forward 60 mm) / folded (to the left side).
 
 ## Step 4 — First attachment set (low-poly, code-built or CC0)
 - Muzzle: stock brake, compensator, suppressor.
 - Optic: red dot, holographic, 4× scope.
 - Under rail: vertical grip, angled grip.
 - Magazine: 30-round, 60-round quad, drum.
-- Stock: extended, collapsed, folded.
 
 ## Step 5 — Finish and share
 - Colourways per part (black / plum / FDE / OD).

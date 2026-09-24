@@ -2,7 +2,7 @@
 
 URL: `/3d/ak15-weapon-customiser/`. The URL keeps its original name; the model is an AK-74M. Listed in `/projects/3d/`, with `seo_hidden=true` and robots `noindex`. Serve the repository root over HTTP; there is no build step. Uses Three.js 0.169.0 (OrbitControls, GLTFLoader, RGBELoader; newer than the other 3D pages because environment rotation needs r162+) and the shared `/assets/viewer-loader.css`. The viewer structure is adapted from `/3d/lousiana-flag-mount-test-xxl/`.
 
-Plan: see `ROADMAP.md`. Current status: step 2 (rotatable HDR lighting) done.
+Plan: see `ROADMAP.md`. Current status: step 3 (attachment system) done.
 
 ## Model
 `model/ak-74m-zenitco.glb` is [low-poly AK-74M Zenitco](https://sketchfab.com/3d-models/low-poly-ak-74m-zenitco-35ad8e37a513453cbbbd04064fa5fb79) by [D_U](https://sketchfab.com/DU1701), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The page shows this credit.
@@ -18,3 +18,12 @@ Lighting is image-based: `scene.environment` is an HDR equirectangular map, rota
 - `lighting/quarry_01_1k.hdr` is [Quarry 01 from Poly Haven](https://polyhaven.com/a/quarry_01), CC0, copied unchanged from the three.js r160 examples.
 
 Controls: Studio/Outdoor, the Light rotation slider, or shift-drag on the stage; Backdrop shows the blurred HDR behind the rifle.
+
+## Attachments
+`attachments.js` lists slots and options. A slot shares its id with a mount point in `SOCKETS` and a part in `PARTS`. On load, `viewer.js` creates a container at each mount point and moves that part's source nodes into it, keeping their world transforms. Options then:
+
+- `original: true` show the source part, optionally with a `pose` (a rotation and offset for the whole part, or per-node offsets in meters). The PT-1 collapsed and folded positions work this way. The fold hinges 35 mm left of the stock mount point.
+- `build(ctx)` return new geometry in the slot's frame (meters, +x muzzle, origin at the mount point). It gets the source part (`ctx.original`) and the model's materials (`ctx.materials`).
+- anything else leaves the slot empty.
+
+Slots with `rail` get a stepper that moves the container along x in 10 mm steps within the rail limits. Rail limits are fitted by eye to this model.

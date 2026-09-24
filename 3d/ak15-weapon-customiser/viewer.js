@@ -2,6 +2,7 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
+import {SLOTS} from './attachments.js';
 
 // "low-poly AK-74M Zenitco" by D_U, CC BY 4.0. The loose cartridge, case and spare
 // magazine lying beside the rifle in the source file were removed (see README).
@@ -38,7 +39,8 @@ const ENVIRONMENTS={studio:'./lighting/studio.hdr',outdoor:'./lighting/quarry_01
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),detail=document.querySelector('#detail');
 const scene=new T.Scene();
-let renderer,camera,controls,model,parts=[],sockets=[],selected=null,spinning=false;
+let renderer,camera,controls,model,parts=[],sockets=[],selected=null,spinning=false,cameraMove=null;
+const build={},slots={};
 
 // Sources differ in orientation; lay the longest axis along x, then center on the origin.
 function normalize(root){
@@ -122,14 +124,84 @@ try{
  const box=new T.Box3().setFromObject(model);
  const floor=new T.Mesh(new T.PlaneGeometry(4,4),new T.ShadowMaterial({opacity:.28}));floor.rotation.x=-Math.PI/2;floor.position.y=box.min.y-.002;floor.receiveShadow=true;scene.add(floor);
 
+
+ // Slots: each gets a container at its mount point (model space, meters). The source part moves
+ // into the container's "original" group so poses, rail offsets and swaps act on one object.
+ const materials={};model.traverse(o=>{if(o.isMesh&&!materials[o.material.name])materials[o.material.name]=o.material;});
+ for(const spec of SLOTS){
+  const socket=sockets.find(s=>s.userData.id===spec.id),part=parts.find(p=>p.id===spec.id);
+  if(!socket||!part)continue;
+  const container=new T.Group();container.name='slot:'+spec.id;model.add(container);
+  container.position.copy(model.worldToLocal(socket.getWorldPosition(new T.Vector3())));
+  const original=new T.Group();container.add(original);
+  const nodes=part.nodes.map(n=>model.getObjectByName(T.PropertyBinding.sanitizeNodeName(n))).filter(Boolean);
+  for(const node of nodes)original.attach(node);
+  const home=new Map(nodes.map(n=>[n,n.position.clone()]));
+  const options=spec.options.map(o=>{
+   let object=null;
+   if(o.build){object=o.build({original,materials,T});object.traverse(m=>{if(m.isMesh){m.castShadow=m.receiveShadow=true;m.material=m.material.clone();}});object.visible=false;container.add(object);}
+   return {...o,object};
+  });
+  // Every mesh the slot can show belongs to its part, so clicks and highlights cover attachments too.
+  part.objects=[];container.traverse(m=>{if(m.isMesh)part.objects.push(m);});
+  slots[spec.id]={spec,container,original,home,options,part,base:container.position.clone(),offset:0,baseDetail:part.detail};
+ }
+ function applySlot(id,optionId,offset){
+  const slot=slots[id],option=slot.options.find(o=>o.id===optionId)||slot.options[0];
+  build[id]=option.id;
+  slot.original.visible=!!option.original;
+  slot.original.rotation.set(0,option.pose?.rotationY||0,0);
+  slot.original.position.set(...(option.pose?.position||[0,0,0]));
+  for(const [node,p] of slot.home){node.position.copy(p);const d=option.pose?.nodes?.[Object.keys(option.pose.nodes).find(n=>T.PropertyBinding.sanitizeNodeName(n)===node.name)];if(d)node.position.add(new T.Vector3(...d));}
+  for(const o of slot.options)if(o.object)o.object.visible=o===option;
+  if(slot.spec.rail&&offset!==undefined){const {min,max,step}=slot.spec.rail;slot.offset=Math.round(T.MathUtils.clamp(offset,min,max)/step)*step;}
+  slot.container.position.copy(slot.base).x+=slot.offset;
+  slot.part.detail=option.detail||slot.baseDetail;
+  slot.part.entry?.querySelector('span')&&(slot.part.entry.querySelector('span').textContent=option.label);
+  if(selected===id)detail.textContent=slot.part.detail;
+  renderBuild();
+ }
  document.querySelector('#source').innerHTML=`Model: <a href="${SOURCE_URL}">low-poly AK-74M Zenitco</a> by <a href="${AUTHOR_URL}">D_U</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Loose rounds and spare magazine removed. Scaled to ${OVERALL_LENGTH*1000} mm.`;
 
  for(const part of parts){
   const entry=document.createElement('button');entry.className='part';entry.setAttribute('aria-pressed','false');
   entry.innerHTML='<strong></strong><span></span>';entry.querySelector('strong').textContent=part.label;
-  entry.querySelector('span').textContent=sockets.some(s=>s.userData.id===part.id)?'swappable':'';
+  entry.querySelector('span').textContent=slots[part.id]?slots[part.id].options.find(o=>o.id===build[part.id])?.label||'':'';
   entry.onclick=()=>select(part.id);document.querySelector('#parts').append(entry);part.entry=entry;
  }
+
+
+ // Build panel: one chip row per slot, plus rail position steppers.
+ const buildPanel=document.querySelector('#build');
+ function renderBuild(){
+  buildPanel.replaceChildren(...Object.values(slots).map(slot=>{
+   const row=document.createElement('div');row.className='slot';
+   const head=document.createElement('div');head.className='slot-head';head.innerHTML='<span></span>';head.firstChild.textContent=slot.spec.label;
+   const current=slot.options.find(o=>o.id===build[slot.spec.id]);
+   if(slot.spec.rail&&(current.original||current.build)){
+    const {min,max,step}=slot.spec.rail,stepper=document.createElement('span');stepper.className='stepper';
+    const mm=Math.round(slot.offset*1000);
+    for(const [text,delta,label] of [['−',-step,'rearward'],[`${mm>0?'+':''}${mm} mm`,0],['+',step,'forward']]){
+     if(!delta){const out=document.createElement('output');out.textContent=text;stepper.append(out);continue;}
+     const b=document.createElement('button');b.textContent=text;b.setAttribute('aria-label',`Move ${slot.spec.label.toLowerCase()} ${label} one rail slot`);
+     b.disabled=delta<0?slot.offset<=min+1e-6:slot.offset>=max-1e-6;b.onclick=()=>{applySlot(slot.spec.id,build[slot.spec.id],slot.offset+delta);frame(slot.spec.id);};stepper.append(b);
+    }
+    head.append(stepper);
+   }
+   const chips=document.createElement('div');chips.className='chips';chips.role='group';chips.setAttribute('aria-label',slot.spec.label);
+   for(const o of slot.options){const b=document.createElement('button');b.textContent=o.label;b.setAttribute('aria-pressed',String(build[slot.spec.id]===o.id));b.onclick=()=>{applySlot(slot.spec.id,o.id);frame(slot.spec.id);};chips.append(b);}
+   row.append(head,chips);return row;
+  }));
+ }
+ // Glide the camera toward a changed slot, keeping the current viewing direction.
+ function frame(id){
+  const target=slots[id].container.getWorldPosition(new T.Vector3());
+  const dir=camera.position.clone().sub(controls.target).normalize();
+  const distance=Math.min(camera.position.distanceTo(controls.target),.75);
+  cameraMove={t:0,fromTarget:controls.target.clone(),fromPosition:camera.position.clone(),toTarget:target,toPosition:target.clone().addScaledVector(dir,distance)};
+ }
+ for(const id of Object.keys(slots))build[id]=slots[id].options[0].id;
+ for(const id of Object.keys(slots))applySlot(id,slots[id].options[0].id);
 
  const socketLabels=sockets.map(s=>{const el=document.createElement('div');el.className='socket';el.textContent=s.userData.label;el.hidden=true;stage.append(el);return {socket:s,el};});
  const socketMarkers=new T.Group();socketMarkers.visible=false;scene.add(socketMarkers);
@@ -142,11 +214,12 @@ try{
 
  const ray=new T.Raycaster(),pointer=new T.Vector2();let down=null;
  function partAt(e){const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);const hit=ray.intersectObject(model,true)[0];return hit&&parts.find(p=>p.objects.includes(hit.object));}
- renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
+ renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];cameraMove=null;});
  renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down[0],e.clientY-down[1])<5){const p=partAt(e);if(p)select(p.id);else if(selected)select(selected);}down=null;});
  renderer.domElement.addEventListener('pointermove',e=>{if(!down)renderer.domElement.style.cursor=partAt(e)?'pointer':'';});
 
  function view(name){
+  cameraMove=null;
   const aspect=stage.clientWidth/stage.clientHeight,d=Math.max(1.3,1.6/aspect);
   controls.target.set(0,0,0);
   const at={three:[d*.55,d*.32,d*.8],left:[0,.02,-d],right:[0,.02,d],top:[0,d,.001],muzzle:[d*.9,.06,d*.28]}[name];
@@ -163,6 +236,7 @@ try{
  renderer.setAnimationLoop(()=>{
   const dt=clock.getDelta();
   if(spinning){model.rotation.y+=dt*.5;socketMarkers.rotation.y=model.rotation.y;}
+  if(cameraMove){cameraMove.t=Math.min(1,cameraMove.t+dt/.6);const e=1-(1-cameraMove.t)**3;controls.target.lerpVectors(cameraMove.fromTarget,cameraMove.toTarget,e);camera.position.lerpVectors(cameraMove.fromPosition,cameraMove.toPosition,e);if(cameraMove.t>=1)cameraMove=null;}
   controls.update();
   for(const {socket,el} of socketLabels){const p=socket.getWorldPosition(new T.Vector3()).project(camera);el.hidden=!socketMarkers.visible||p.z>1;el.style.left=(p.x*.5+.5)*stage.clientWidth+'px';el.style.top=(-p.y*.5+.5)*stage.clientHeight-18+'px';}
   renderer.render(scene,camera);
