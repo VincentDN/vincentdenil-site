@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Episode 21: Title Links, Snippets, Site Names, Sitelinks, and Favicons</title>
+<style>
+:root{
+  --flat:#002b43; --panel:#061f30; --panel-2:#0a3a5c; --panel-3:#0f4a70;
+  --line:rgba(122,170,205,.22); --line-strong:rgba(122,170,205,.4);
+  --text:#f2f7fb; --text-dim:#7ab0d6; --text-dimmer:#5f8fae;
+  --accent:#7ab0d6; --accent-strong:#a7cbe8;
+  --font-display:Georgia,"Iowan Old Style","Times New Roman",Times,serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,"JetBrains Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --topbar-h:56px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--flat);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--panel-3);color:var(--text)}
+
+/* ---- top bar ---- */
+header.top{position:sticky;top:0;z-index:20;background:var(--flat);border-bottom:1px solid var(--line);height:var(--topbar-h)}
+header.top .row{max-width:1320px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;gap:14px}
+.wordmark{display:flex;align-items:center;gap:10px;font-family:var(--font-sans);text-decoration:none}
+.wordmark .mark{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--accent);color:var(--accent);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.02em}
+.wordmark .name{font-weight:600;font-size:14.5px;color:var(--text);letter-spacing:.01em;white-space:nowrap}
+.wordmark:hover .name{color:var(--accent-strong)}
+.section-badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--line-strong);padding:3px 8px;white-space:nowrap}
+.top-spacer{flex:1}
+.top-back{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);text-decoration:none;white-space:nowrap}
+.top-back:hover{color:var(--accent)}
+.top-back::before{content:"\2190 ";opacity:.7}
+
+/* ---- shell: sidebar + content ---- */
+.shell{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:264px minmax(0,1fr);align-items:start}
+nav.side{position:sticky;top:var(--topbar-h);align-self:start;max-height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:28px 18px 40px 20px;border-right:1px solid var(--line)}
+nav.side::-webkit-scrollbar{width:8px}
+nav.side::-webkit-scrollbar-thumb{background:var(--line-strong)}
+.side-group{margin:0 0 22px}
+.side-group h2{font-family:var(--font-sans);font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dimmer);margin:0 0 8px;padding:0 10px}
+.side-group ul{list-style:none;margin:0;padding:0}
+.side-group li{margin:1px 0}
+.side-group a{display:block;padding:7px 10px;font-size:14px;color:var(--text-dim);border-left:2px solid transparent}
+.side-group a:hover{color:var(--text);background:rgba(122,170,205,.06)}
+.side-group a.active{color:var(--text);background:var(--panel-2);border-left-color:var(--accent);font-weight:600}
+.side-num{font-family:var(--font-mono);font-size:11px;color:var(--text-dimmer);margin-right:7px}
+details.side-toggle{display:none}
+
+main.content{min-width:0;padding:40px 40px 80px}
+.eyebrow-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.eyebrow{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0}
+.copy-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-sans);font-size:12.5px;font-weight:600;color:var(--text-dim);background:var(--panel);border:1px solid var(--line-strong);padding:7px 12px;cursor:pointer}
+.copy-btn:hover{color:var(--text);border-color:var(--accent)}
+.copy-btn svg{width:13px;height:13px}
+
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,38px);line-height:1.2;color:var(--text);margin:0 0 26px;max-width:22ch}
+article p{margin:0 0 20px;max-width:68ch;color:var(--text)}
+article p.attribution{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--font-sans);font-size:13.5px;color:var(--text-dimmer)}
+.callout{font-family:var(--font-sans);font-size:14px;line-height:1.65;background:rgba(122,170,205,.08);border-left:3px solid var(--accent);padding:14px 18px;color:var(--text-dim);max-width:62ch;margin:0 0 30px}
+.callout b{color:var(--text)}
+.callout a{color:var(--accent-strong);text-decoration:underline;text-underline-offset:2px}
+.callout a:hover{color:var(--text)}
+
+nav.episode-nav{display:flex;justify-content:space-between;gap:16px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--font-sans);font-size:13.5px}
+nav.episode-nav .side-nav{flex:1;min-width:0}
+nav.episode-nav .side-nav.next{text-align:right}
+nav.episode-nav .lbl{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dimmer);margin-bottom:5px}
+nav.episode-nav a{color:var(--text-dim);font-weight:600}
+nav.episode-nav a:hover{color:var(--accent-strong);text-decoration:underline}
+
+footer.site{border-top:1px solid var(--line);color:var(--text-dimmer);font-family:var(--font-sans);font-size:12.5px;line-height:1.7}
+footer.site .row{max-width:1320px;margin:0 auto;padding:22px 40px 40px}
+footer.site a{color:var(--text-dim);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.lede{font-size:18px;color:var(--text-dim);max-width:64ch;margin:0 0 26px}
+.index-parts{margin-top:8px}
+.index-part{margin:0 0 30px}
+.index-part h2{font-family:var(--font-sans);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:9px;margin:0 0 4px}
+.index-ep-list{list-style:none;margin:0;padding:0}
+.index-ep-list li{padding:11px 0;border-bottom:1px dashed var(--line);display:flex;gap:14px;align-items:baseline}
+.index-ep-list li:last-child{border-bottom:none}
+.index-ep-list .n{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);flex-shrink:0;width:2.2em}
+.index-ep-list a{font-family:var(--font-sans);font-weight:600;font-size:15px;color:var(--text)}
+.index-ep-list a:hover{color:var(--accent-strong);text-decoration:underline}
+
+@media (max-width:480px){
+  header.top .row{gap:8px}
+  .wordmark .name{font-size:13px}
+  .section-badge{display:none}
+}
+@media (max-width:860px){
+  .shell{display:block}
+  nav.side{display:none}
+  details.side-toggle{display:block;margin:18px 20px 0;border:1px solid var(--line-strong);background:var(--panel)}
+  details.side-toggle summary{cursor:pointer;padding:12px 16px;font-family:var(--font-sans);font-size:13.5px;font-weight:600;color:var(--text-dim);list-style:none}
+  details.side-toggle summary::-webkit-details-marker{display:none}
+  details.side-toggle summary::after{content:"\25BE";float:right;color:var(--text-dimmer)}
+  details.side-toggle[open] summary::after{content:"\25B4"}
+  details.side-toggle .side-group{padding:0 16px}
+  details.side-toggle .side-group:first-child{padding-top:14px}
+  details.side-toggle .side-group:last-child{padding-bottom:14px}
+  main.content{padding:28px 20px 56px}
+  footer.site .row{padding:20px 20px 32px}
+}
+</style></head>
+<body>
+<header class="top"><div class="row">
+  <a class="wordmark" href="../index.html"><span class="mark">AVDN</span><span class="name">Atelier Vincent De Nil</span></a>
+  <span class="section-badge">SEO Study</span>
+  <span class="top-spacer"></span>
+  <a class="top-back" href="index.html">Index</a>
+</div></header>
+<div class="shell">
+  <nav class="side"><div class="side-group"><h2>Part One</h2><ul><li><a class="" href="search-essentials-01.html"><span class="side-num">01</span>Search Essentials, and the Three Technical Requirements</a></li><li><a class="" href="spam-policies-02.html"><span class="side-num">02</span>The Spam Policies, One by One</a></li><li><a class="" href="how-search-works-03.html"><span class="side-num">03</span>How Google Search Actually Works</a></li><li><a class="" href="starter-guide-part-1-04.html"><span class="side-num">04</span>The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></li><li><a class="" href="starter-guide-part-2-05.html"><span class="side-num">05</span>The SEO Starter Guide, Part Two: Appearance, Images, Promotion, and What to Ignore</a></li><li><a class="" href="people-first-content-06.html"><span class="side-num">06</span>People-First Content, and Understanding E-E-A-T</a></li><li><a class="" href="generative-ai-search-07.html"><span class="side-num">07</span>Optimizing for Generative AI Search</a></li><li><a class="" href="hiring-seo-third-party-08.html"><span class="side-num">08</span>Do You Need an SEO? And Judging Third-Party Advice</a></li></ul></div><div class="side-group"><h2>Part Two</h2><ul><li><a class="" href="file-types-urls-links-09.html"><span class="side-num">09</span>File Types, URL Structure, and Crawlable Links</a></li><li><a class="" href="sitemaps-10.html"><span class="side-num">10</span>Sitemaps, Sitemap Index Files, and Extensions</a></li><li><a class="" href="googlebot-robots-txt-11.html"><span class="side-num">11</span>Googlebot, Crawl Management, and the Basics of robots.txt</a></li><li><a class="" href="canonicalization-12.html"><span class="side-num">12</span>Canonicalization: Duplicate Content and How to Manage It</a></li><li><a class="" href="mobile-first-amp-13.html"><span class="side-num">13</span>Mobile-First Indexing, and What&#x27;s Left of AMP</a></li><li><a class="" href="javascript-seo-14.html"><span class="side-num">14</span>JavaScript SEO: How Rendering Actually Works</a></li><li><a class="" href="lazy-loading-dynamic-rendering-15.html"><span class="side-num">15</span>Fixing Lazy-Loaded Content, and Dynamic Rendering as a Last Resort</a></li><li><a class="" href="robots-meta-tag-16.html"><span class="side-num">16</span>The Robots Meta Tag, X-Robots-Tag, and data-nosnippet</a></li><li><a class="" href="removals-redacted-info-17.html"><span class="side-num">17</span>Removals: Controlling What Google Shares, and Redacted Information</a></li><li><a class="" href="redirects-site-moves-18.html"><span class="side-num">18</span>Redirects, Site Moves, A/B Testing, and Pausing a Business</a></li></ul></div><div class="side-group"><h2>Part Three</h2><ul><li><a class="" href="ranking-systems-core-updates-19.html"><span class="side-num">19</span>Ranking Systems, Core Updates, Spam Updates, and the Reviews System</a></li><li><a class="" href="page-experience-cwv-20.html"><span class="side-num">20</span>Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></li><li><a class=" active" href="title-links-snippets-sitelinks-21.html"><span class="side-num">21</span>Title Links, Snippets, Site Names, Sitelinks, and Favicons</a></li><li><a class="" href="images-video-22.html"><span class="side-num">22</span>Images and Videos in Search</a></li><li><a class="" href="structured-data-foundations-23.html"><span class="side-num">23</span>Structured Data Foundations</a></li><li><a class="" href="structured-data-gallery-faq-24.html"><span class="side-num">24</span>A Tour of the Structured Data Gallery, and the FAQ Rich Result&#x27;s Retirement</a></li><li><a class="" href="shopping-structured-data-25.html"><span class="side-num">25</span>Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty</a></li></ul></div><div class="side-group"><h2>Part Four</h2><ul><li><a class="" href="discover-business-details-webstories-26.html"><span class="side-num">26</span>Discover, Establishing Your Business Details, Preferred Sources, and Web Stories</a></li><li><a class="" href="ecommerce-guide-27.html"><span class="side-num">27</span>The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews</a></li><li><a class="" href="international-multilingual-28.html"><span class="side-num">28</span>International and Multilingual Sites</a></li></ul></div><div class="side-group"><h2>Part Five</h2><ul><li><a class="" href="search-console-debugging-29.html"><span class="side-num">29</span>Search Console, Debugging Traffic Drops, and Search Operators</a></li><li><a class="" href="trends-security-wrapup-30.html"><span class="side-num">30</span>Google Trends, Preventing Abuse, and Series Wrap-Up</a></li><li><a class="" href="supplementary-update-31.html"><span class="side-num">31</span>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</a></li></ul></div></nav>
+  <details class="side-toggle"><summary>Browse episodes</summary><div class="side-group"><h2>Part One</h2><ul><li><a class="" href="search-essentials-01.html"><span class="side-num">01</span>Search Essentials, and the Three Technical Requirements</a></li><li><a class="" href="spam-policies-02.html"><span class="side-num">02</span>The Spam Policies, One by One</a></li><li><a class="" href="how-search-works-03.html"><span class="side-num">03</span>How Google Search Actually Works</a></li><li><a class="" href="starter-guide-part-1-04.html"><span class="side-num">04</span>The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></li><li><a class="" href="starter-guide-part-2-05.html"><span class="side-num">05</span>The SEO Starter Guide, Part Two: Appearance, Images, Promotion, and What to Ignore</a></li><li><a class="" href="people-first-content-06.html"><span class="side-num">06</span>People-First Content, and Understanding E-E-A-T</a></li><li><a class="" href="generative-ai-search-07.html"><span class="side-num">07</span>Optimizing for Generative AI Search</a></li><li><a class="" href="hiring-seo-third-party-08.html"><span class="side-num">08</span>Do You Need an SEO? And Judging Third-Party Advice</a></li></ul></div><div class="side-group"><h2>Part Two</h2><ul><li><a class="" href="file-types-urls-links-09.html"><span class="side-num">09</span>File Types, URL Structure, and Crawlable Links</a></li><li><a class="" href="sitemaps-10.html"><span class="side-num">10</span>Sitemaps, Sitemap Index Files, and Extensions</a></li><li><a class="" href="googlebot-robots-txt-11.html"><span class="side-num">11</span>Googlebot, Crawl Management, and the Basics of robots.txt</a></li><li><a class="" href="canonicalization-12.html"><span class="side-num">12</span>Canonicalization: Duplicate Content and How to Manage It</a></li><li><a class="" href="mobile-first-amp-13.html"><span class="side-num">13</span>Mobile-First Indexing, and What&#x27;s Left of AMP</a></li><li><a class="" href="javascript-seo-14.html"><span class="side-num">14</span>JavaScript SEO: How Rendering Actually Works</a></li><li><a class="" href="lazy-loading-dynamic-rendering-15.html"><span class="side-num">15</span>Fixing Lazy-Loaded Content, and Dynamic Rendering as a Last Resort</a></li><li><a class="" href="robots-meta-tag-16.html"><span class="side-num">16</span>The Robots Meta Tag, X-Robots-Tag, and data-nosnippet</a></li><li><a class="" href="removals-redacted-info-17.html"><span class="side-num">17</span>Removals: Controlling What Google Shares, and Redacted Information</a></li><li><a class="" href="redirects-site-moves-18.html"><span class="side-num">18</span>Redirects, Site Moves, A/B Testing, and Pausing a Business</a></li></ul></div><div class="side-group"><h2>Part Three</h2><ul><li><a class="" href="ranking-systems-core-updates-19.html"><span class="side-num">19</span>Ranking Systems, Core Updates, Spam Updates, and the Reviews System</a></li><li><a class="" href="page-experience-cwv-20.html"><span class="side-num">20</span>Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></li><li><a class=" active" href="title-links-snippets-sitelinks-21.html"><span class="side-num">21</span>Title Links, Snippets, Site Names, Sitelinks, and Favicons</a></li><li><a class="" href="images-video-22.html"><span class="side-num">22</span>Images and Videos in Search</a></li><li><a class="" href="structured-data-foundations-23.html"><span class="side-num">23</span>Structured Data Foundations</a></li><li><a class="" href="structured-data-gallery-faq-24.html"><span class="side-num">24</span>A Tour of the Structured Data Gallery, and the FAQ Rich Result&#x27;s Retirement</a></li><li><a class="" href="shopping-structured-data-25.html"><span class="side-num">25</span>Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty</a></li></ul></div><div class="side-group"><h2>Part Four</h2><ul><li><a class="" href="discover-business-details-webstories-26.html"><span class="side-num">26</span>Discover, Establishing Your Business Details, Preferred Sources, and Web Stories</a></li><li><a class="" href="ecommerce-guide-27.html"><span class="side-num">27</span>The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews</a></li><li><a class="" href="international-multilingual-28.html"><span class="side-num">28</span>International and Multilingual Sites</a></li></ul></div><div class="side-group"><h2>Part Five</h2><ul><li><a class="" href="search-console-debugging-29.html"><span class="side-num">29</span>Search Console, Debugging Traffic Drops, and Search Operators</a></li><li><a class="" href="trends-security-wrapup-30.html"><span class="side-num">30</span>Google Trends, Preventing Abuse, and Series Wrap-Up</a></li><li><a class="" href="supplementary-update-31.html"><span class="side-num">31</span>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</a></li></ul></div></details>
+  <main class="content">
+    <article>
+      <div class="eyebrow-row">
+        <p class="eyebrow">Part Three: Ranking and Appearance &middot; Episode 21 of 31</p>
+        <button class="copy-btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1"/><path d="M10.5 5.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6.5a1 1 0 0 0 1 1h2.5"/></svg><span class="lbl">Copy page</span></button>
+      </div>
+      <h1>Title Links, Snippets, Site Names, Sitelinks, and Favicons</h1>
+      
+      <p>Welcome back. This episode is a close-up on the actual anatomy of a Google search result: every visual piece a searcher sees before they ever click through, and what you can genuinely influence about each one.</p><p>The title link.</p><p>This is Google's own coined term for the clickable, headline part of a result. Google draws on several different sources to generate it automatically, chiefly your page's title element, but also other headings on the page and, sometimes, other contextual signals, and you indicate your own preference by following the descriptive-title guidance we already covered back in episode five. Worth restating precisely here: because Google draws on multiple sources rather than simply echoing your title tag verbatim, it can and does rewrite what's shown, specifically when it judges your actual title tag doesn't accurately describe the page, runs too long, looks keyword-stuffed, or doesn't line up well with what a searcher actually typed. The practical way to minimise unwanted rewrites: keep titles reasonably concise, genuinely descriptive of that specific page, and free of repetitive boilerplate text stuffed onto every single page across your site.</p><p>The snippet.</p><p>This is Google's own term for the descriptive text beneath the title link, the short summary helping a searcher judge whether to click. Google draws on a number of sources to build this too, commonly the meta description tag you write directly for that page, but it may also pull from content elsewhere on the page itself, or build what's called a rich result from structured data and page content together, which we'll get into properly starting in episode twenty-three.</p><p>A good meta description, per Google's own guidance, is short, unique to that one specific page, and covers the page's most relevant points concisely. And here's the direct link back to episode sixteen: if there's a specific piece of visible content you want to exist on the page but never want pulled into a snippet, that's exactly the narrower job data-nosnippet is built for, rather than trying to solve it purely through description-writing.</p><p>Site names.</p><p>This is a comparatively newer element, introduced specifically to make it easier for a searcher to identify which website a given result actually belongs to, showing a readable site name prominently rather than forcing someone to parse a raw URL to figure out where a result leads. Google draws on a variety of sources to determine this automatically. But you can directly indicate your own preferred site name using structured data placed specifically on your homepage, a dedicated site-name markup covered in its own reference documentation, which naturally overlaps with the broader structured data material starting in episode twenty-three.</p><p>Sitelinks.</p><p>These are the additional links Google sometimes shows beneath a main result, pointing to other important, relevant sections of that same site, things like a shipping policy page, an about page, or a specific popular category, depending on the search and the site. These are generated algorithmically by Google based on your site's own structure and internal linking, rather than something you configure directly yourself, which loops back to the internal-linking guidance from episode nine: the clearer and more sensible your own site's internal link structure, the better material Google has to work with when it decides whether, and which, sitelinks to actually surface for you.</p><p>Favicons.</p><p>The small icon shown alongside your result, in the browser tab, and now prominently next to your site name and URL directly within the search result snippet itself. Google's specific technical guidance here: provide an icon at least 48 by 48 pixels, ideally as a clean multiple of that size, 96 by 96 or 144 by 144 and so on, so it renders crisply at whatever size Google actually needs. The icon should be square, since Google renders it inside a circular frame in the result itself, and it needs to be genuinely crawlable, meaning not accidentally blocked by a robots.txt rule the way we discussed back in episode eleven, or it simply won't be picked up at all. A generic, unmodified default icon left over from whatever platform or theme you're using undercuts the actual point of this element, which is instant, confident brand recognition right there in the results page itself, before anyone has even clicked through.</p><p>Byline dates.</p><p>A more specific element, relevant particularly to content that's genuinely time-sensitive, articles, blog posts, guides. This is the publish or update date Google may show directly alongside a result. Getting this genuinely accurate matters more than it might first appear, and it connects directly back to a specific warning from episode six: artificially changing a page's displayed date to make it look freshly updated, without the underlying content having actually, substantively changed, is precisely the kind of manipulation Google's own people-first-content guidance explicitly warns against, and it can actively work against you rather than helping, since it's the kind of pattern Google's systems are specifically built to notice.</p><p>Let's bring all five of these together, since a searcher genuinely takes in the whole cluster of them at once, not each one in isolation. Picture a specific flag-store product result: the favicon establishes an instant, recognisable visual anchor before anything else is even read. The site name confirms which business this result actually belongs to. The title link, ideally something concrete and specific like "Texas Flag, 3x5 ft, Heavy-Duty Nylon" rather than a generic, repeated template applied identically across every product, tells the searcher precisely what this particular page offers. The snippet beneath it, written specifically and distinctly for that one product rather than copy-pasted boilerplate repeated with only the product name swapped out, adds the genuinely persuading detail. And sitelinks, if Google's algorithm judges them warranted for a branded search specifically, might surface a shipping policy or a returns page directly beneath the main result, guiding a hesitant searcher toward the exact reassurance they need before they'll actually commit to clicking through.</p><p>Every one of these elements rewards the same underlying discipline we've returned to throughout this whole series: specificity per page, genuine accuracy, and resisting the temptation toward templated, repeated, one-size-fits-all boilerplate copied identically across thousands of otherwise-distinct pages.</p><p>Let's recap.</p><p>The title link is Google's headline, drawn primarily from your title element but rewritten when Google judges it inaccurate, oversized, or keyword-stuffed. The snippet is the descriptive text beneath it, generally sourced from your meta description or page content, with data-nosnippet available for excluding one specific piece of visible content from consideration. Site names, made controllable through dedicated homepage structured data, help a searcher instantly identify which business a result belongs to. Sitelinks are algorithmically generated from your own site structure and internal linking, not something set directly. Favicons need to be square, at least 48 by 48 pixels, and genuinely crawlable, not blocked in robots.txt. And byline dates should reflect genuine update activity, never be artificially manipulated to appear falsely fresh.</p><p>Next episode, we move into images and videos specifically: how Google indexes and displays them in Search, and the concrete best practices for making sure yours are found, understood, and shown at their best. See you there.</p><p class="attribution">This episode is adapted from "Title links," "Snippets," "Site names," "Sitelinks," and "Favicons in Search" on Google Search Central, licensed under Creative Commons Attribution 4.0.</p>
+      <nav class="episode-nav"><div class="side-nav prev"><span class="lbl">Previous</span><a href="page-experience-cwv-20.html">Episode 20: Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></div><div class="side-nav next"><span class="lbl">Next</span><a href="images-video-22.html">Episode 22: Images and Videos in Search</a></div></nav>
+    </article>
+  </main>
+</div>
+<footer class="site"><div class="row">
+  Source: <a href="https://developers.google.com/search/docs" target="_blank" rel="noopener">developers.google.com/search/docs</a>,
+  licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Creative Commons Attribution 4.0</a>.
+  Written as scripts for a text-to-speech or human narration pass &mdash; no audio has been recorded yet.
+  &middot; <a href="walking-through-google-search-full-text.md">Full continuous text (.md)</a> for text-to-speech tools.
+</div></footer>
+<script>
+(function(){
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = document.querySelector('article').innerText;
+      var done = function(){ var l = btn.querySelector('.lbl'); var was = l.textContent; l.textContent = 'Copied'; setTimeout(function(){ l.textContent = was; }, 1400); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, done);
+      } else { done(); }
+    });
+  });
+})();
+</script>
+</body></html>

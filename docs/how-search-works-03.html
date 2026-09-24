@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Episode 3: How Google Search Actually Works</title>
+<style>
+:root{
+  --flat:#002b43; --panel:#061f30; --panel-2:#0a3a5c; --panel-3:#0f4a70;
+  --line:rgba(122,170,205,.22); --line-strong:rgba(122,170,205,.4);
+  --text:#f2f7fb; --text-dim:#7ab0d6; --text-dimmer:#5f8fae;
+  --accent:#7ab0d6; --accent-strong:#a7cbe8;
+  --font-display:Georgia,"Iowan Old Style","Times New Roman",Times,serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,"JetBrains Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --topbar-h:56px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--flat);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--panel-3);color:var(--text)}
+
+/* ---- top bar ---- */
+header.top{position:sticky;top:0;z-index:20;background:var(--flat);border-bottom:1px solid var(--line);height:var(--topbar-h)}
+header.top .row{max-width:1320px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;gap:14px}
+.wordmark{display:flex;align-items:center;gap:10px;font-family:var(--font-sans);text-decoration:none}
+.wordmark .mark{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--accent);color:var(--accent);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.02em}
+.wordmark .name{font-weight:600;font-size:14.5px;color:var(--text);letter-spacing:.01em;white-space:nowrap}
+.wordmark:hover .name{color:var(--accent-strong)}
+.section-badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--line-strong);padding:3px 8px;white-space:nowrap}
+.top-spacer{flex:1}
+.top-back{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);text-decoration:none;white-space:nowrap}
+.top-back:hover{color:var(--accent)}
+.top-back::before{content:"\2190 ";opacity:.7}
+
+/* ---- shell: sidebar + content ---- */
+.shell{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:264px minmax(0,1fr);align-items:start}
+nav.side{position:sticky;top:var(--topbar-h);align-self:start;max-height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:28px 18px 40px 20px;border-right:1px solid var(--line)}
+nav.side::-webkit-scrollbar{width:8px}
+nav.side::-webkit-scrollbar-thumb{background:var(--line-strong)}
+.side-group{margin:0 0 22px}
+.side-group h2{font-family:var(--font-sans);font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dimmer);margin:0 0 8px;padding:0 10px}
+.side-group ul{list-style:none;margin:0;padding:0}
+.side-group li{margin:1px 0}
+.side-group a{display:block;padding:7px 10px;font-size:14px;color:var(--text-dim);border-left:2px solid transparent}
+.side-group a:hover{color:var(--text);background:rgba(122,170,205,.06)}
+.side-group a.active{color:var(--text);background:var(--panel-2);border-left-color:var(--accent);font-weight:600}
+.side-num{font-family:var(--font-mono);font-size:11px;color:var(--text-dimmer);margin-right:7px}
+details.side-toggle{display:none}
+
+main.content{min-width:0;padding:40px 40px 80px}
+.eyebrow-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.eyebrow{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0}
+.copy-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-sans);font-size:12.5px;font-weight:600;color:var(--text-dim);background:var(--panel);border:1px solid var(--line-strong);padding:7px 12px;cursor:pointer}
+.copy-btn:hover{color:var(--text);border-color:var(--accent)}
+.copy-btn svg{width:13px;height:13px}
+
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,38px);line-height:1.2;color:var(--text);margin:0 0 26px;max-width:22ch}
+article p{margin:0 0 20px;max-width:68ch;color:var(--text)}
+article p.attribution{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--font-sans);font-size:13.5px;color:var(--text-dimmer)}
+.callout{font-family:var(--font-sans);font-size:14px;line-height:1.65;background:rgba(122,170,205,.08);border-left:3px solid var(--accent);padding:14px 18px;color:var(--text-dim);max-width:62ch;margin:0 0 30px}
+.callout b{color:var(--text)}
+.callout a{color:var(--accent-strong);text-decoration:underline;text-underline-offset:2px}
+.callout a:hover{color:var(--text)}
+
+nav.episode-nav{display:flex;justify-content:space-between;gap:16px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--font-sans);font-size:13.5px}
+nav.episode-nav .side-nav{flex:1;min-width:0}
+nav.episode-nav .side-nav.next{text-align:right}
+nav.episode-nav .lbl{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dimmer);margin-bottom:5px}
+nav.episode-nav a{color:var(--text-dim);font-weight:600}
+nav.episode-nav a:hover{color:var(--accent-strong);text-decoration:underline}
+
+footer.site{border-top:1px solid var(--line);color:var(--text-dimmer);font-family:var(--font-sans);font-size:12.5px;line-height:1.7}
+footer.site .row{max-width:1320px;margin:0 auto;padding:22px 40px 40px}
+footer.site a{color:var(--text-dim);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.lede{font-size:18px;color:var(--text-dim);max-width:64ch;margin:0 0 26px}
+.index-parts{margin-top:8px}
+.index-part{margin:0 0 30px}
+.index-part h2{font-family:var(--font-sans);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:9px;margin:0 0 4px}
+.index-ep-list{list-style:none;margin:0;padding:0}
+.index-ep-list li{padding:11px 0;border-bottom:1px dashed var(--line);display:flex;gap:14px;align-items:baseline}
+.index-ep-list li:last-child{border-bottom:none}
+.index-ep-list .n{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);flex-shrink:0;width:2.2em}
+.index-ep-list a{font-family:var(--font-sans);font-weight:600;font-size:15px;color:var(--text)}
+.index-ep-list a:hover{color:var(--accent-strong);text-decoration:underline}
+
+@media (max-width:480px){
+  header.top .row{gap:8px}
+  .wordmark .name{font-size:13px}
+  .section-badge{display:none}
+}
+@media (max-width:860px){
+  .shell{display:block}
+  nav.side{display:none}
+  details.side-toggle{display:block;margin:18px 20px 0;border:1px solid var(--line-strong);background:var(--panel)}
+  details.side-toggle summary{cursor:pointer;padding:12px 16px;font-family:var(--font-sans);font-size:13.5px;font-weight:600;color:var(--text-dim);list-style:none}
+  details.side-toggle summary::-webkit-details-marker{display:none}
+  details.side-toggle summary::after{content:"\25BE";float:right;color:var(--text-dimmer)}
+  details.side-toggle[open] summary::after{content:"\25B4"}
+  details.side-toggle .side-group{padding:0 16px}
+  details.side-toggle .side-group:first-child{padding-top:14px}
+  details.side-toggle .side-group:last-child{padding-bottom:14px}
+  main.content{padding:28px 20px 56px}
+  footer.site .row{padding:20px 20px 32px}
+}
+</style></head>
+<body>
+<header class="top"><div class="row">
+  <a class="wordmark" href="../index.html"><span class="mark">AVDN</span><span class="name">Atelier Vincent De Nil</span></a>
+  <span class="section-badge">SEO Study</span>
+  <span class="top-spacer"></span>
+  <a class="top-back" href="index.html">Index</a>
+</div></header>
+<div class="shell">
+  <nav class="side"><div class="side-group"><h2>Part One</h2><ul><li><a class="" href="search-essentials-01.html"><span class="side-num">01</span>Search Essentials, and the Three Technical Requirements</a></li><li><a class="" href="spam-policies-02.html"><span class="side-num">02</span>The Spam Policies, One by One</a></li><li><a class=" active" href="how-search-works-03.html"><span class="side-num">03</span>How Google Search Actually Works</a></li><li><a class="" href="starter-guide-part-1-04.html"><span class="side-num">04</span>The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></li><li><a class="" href="starter-guide-part-2-05.html"><span class="side-num">05</span>The SEO Starter Guide, Part Two: Appearance, Images, Promotion, and What to Ignore</a></li><li><a class="" href="people-first-content-06.html"><span class="side-num">06</span>People-First Content, and Understanding E-E-A-T</a></li><li><a class="" href="generative-ai-search-07.html"><span class="side-num">07</span>Optimizing for Generative AI Search</a></li><li><a class="" href="hiring-seo-third-party-08.html"><span class="side-num">08</span>Do You Need an SEO? And Judging Third-Party Advice</a></li></ul></div><div class="side-group"><h2>Part Two</h2><ul><li><a class="" href="file-types-urls-links-09.html"><span class="side-num">09</span>File Types, URL Structure, and Crawlable Links</a></li><li><a class="" href="sitemaps-10.html"><span class="side-num">10</span>Sitemaps, Sitemap Index Files, and Extensions</a></li><li><a class="" href="googlebot-robots-txt-11.html"><span class="side-num">11</span>Googlebot, Crawl Management, and the Basics of robots.txt</a></li><li><a class="" href="canonicalization-12.html"><span class="side-num">12</span>Canonicalization: Duplicate Content and How to Manage It</a></li><li><a class="" href="mobile-first-amp-13.html"><span class="side-num">13</span>Mobile-First Indexing, and What&#x27;s Left of AMP</a></li><li><a class="" href="javascript-seo-14.html"><span class="side-num">14</span>JavaScript SEO: How Rendering Actually Works</a></li><li><a class="" href="lazy-loading-dynamic-rendering-15.html"><span class="side-num">15</span>Fixing Lazy-Loaded Content, and Dynamic Rendering as a Last Resort</a></li><li><a class="" href="robots-meta-tag-16.html"><span class="side-num">16</span>The Robots Meta Tag, X-Robots-Tag, and data-nosnippet</a></li><li><a class="" href="removals-redacted-info-17.html"><span class="side-num">17</span>Removals: Controlling What Google Shares, and Redacted Information</a></li><li><a class="" href="redirects-site-moves-18.html"><span class="side-num">18</span>Redirects, Site Moves, A/B Testing, and Pausing a Business</a></li></ul></div><div class="side-group"><h2>Part Three</h2><ul><li><a class="" href="ranking-systems-core-updates-19.html"><span class="side-num">19</span>Ranking Systems, Core Updates, Spam Updates, and the Reviews System</a></li><li><a class="" href="page-experience-cwv-20.html"><span class="side-num">20</span>Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></li><li><a class="" href="title-links-snippets-sitelinks-21.html"><span class="side-num">21</span>Title Links, Snippets, Site Names, Sitelinks, and Favicons</a></li><li><a class="" href="images-video-22.html"><span class="side-num">22</span>Images and Videos in Search</a></li><li><a class="" href="structured-data-foundations-23.html"><span class="side-num">23</span>Structured Data Foundations</a></li><li><a class="" href="structured-data-gallery-faq-24.html"><span class="side-num">24</span>A Tour of the Structured Data Gallery, and the FAQ Rich Result&#x27;s Retirement</a></li><li><a class="" href="shopping-structured-data-25.html"><span class="side-num">25</span>Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty</a></li></ul></div><div class="side-group"><h2>Part Four</h2><ul><li><a class="" href="discover-business-details-webstories-26.html"><span class="side-num">26</span>Discover, Establishing Your Business Details, Preferred Sources, and Web Stories</a></li><li><a class="" href="ecommerce-guide-27.html"><span class="side-num">27</span>The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews</a></li><li><a class="" href="international-multilingual-28.html"><span class="side-num">28</span>International and Multilingual Sites</a></li></ul></div><div class="side-group"><h2>Part Five</h2><ul><li><a class="" href="search-console-debugging-29.html"><span class="side-num">29</span>Search Console, Debugging Traffic Drops, and Search Operators</a></li><li><a class="" href="trends-security-wrapup-30.html"><span class="side-num">30</span>Google Trends, Preventing Abuse, and Series Wrap-Up</a></li><li><a class="" href="supplementary-update-31.html"><span class="side-num">31</span>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</a></li></ul></div></nav>
+  <details class="side-toggle"><summary>Browse episodes</summary><div class="side-group"><h2>Part One</h2><ul><li><a class="" href="search-essentials-01.html"><span class="side-num">01</span>Search Essentials, and the Three Technical Requirements</a></li><li><a class="" href="spam-policies-02.html"><span class="side-num">02</span>The Spam Policies, One by One</a></li><li><a class=" active" href="how-search-works-03.html"><span class="side-num">03</span>How Google Search Actually Works</a></li><li><a class="" href="starter-guide-part-1-04.html"><span class="side-num">04</span>The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></li><li><a class="" href="starter-guide-part-2-05.html"><span class="side-num">05</span>The SEO Starter Guide, Part Two: Appearance, Images, Promotion, and What to Ignore</a></li><li><a class="" href="people-first-content-06.html"><span class="side-num">06</span>People-First Content, and Understanding E-E-A-T</a></li><li><a class="" href="generative-ai-search-07.html"><span class="side-num">07</span>Optimizing for Generative AI Search</a></li><li><a class="" href="hiring-seo-third-party-08.html"><span class="side-num">08</span>Do You Need an SEO? And Judging Third-Party Advice</a></li></ul></div><div class="side-group"><h2>Part Two</h2><ul><li><a class="" href="file-types-urls-links-09.html"><span class="side-num">09</span>File Types, URL Structure, and Crawlable Links</a></li><li><a class="" href="sitemaps-10.html"><span class="side-num">10</span>Sitemaps, Sitemap Index Files, and Extensions</a></li><li><a class="" href="googlebot-robots-txt-11.html"><span class="side-num">11</span>Googlebot, Crawl Management, and the Basics of robots.txt</a></li><li><a class="" href="canonicalization-12.html"><span class="side-num">12</span>Canonicalization: Duplicate Content and How to Manage It</a></li><li><a class="" href="mobile-first-amp-13.html"><span class="side-num">13</span>Mobile-First Indexing, and What&#x27;s Left of AMP</a></li><li><a class="" href="javascript-seo-14.html"><span class="side-num">14</span>JavaScript SEO: How Rendering Actually Works</a></li><li><a class="" href="lazy-loading-dynamic-rendering-15.html"><span class="side-num">15</span>Fixing Lazy-Loaded Content, and Dynamic Rendering as a Last Resort</a></li><li><a class="" href="robots-meta-tag-16.html"><span class="side-num">16</span>The Robots Meta Tag, X-Robots-Tag, and data-nosnippet</a></li><li><a class="" href="removals-redacted-info-17.html"><span class="side-num">17</span>Removals: Controlling What Google Shares, and Redacted Information</a></li><li><a class="" href="redirects-site-moves-18.html"><span class="side-num">18</span>Redirects, Site Moves, A/B Testing, and Pausing a Business</a></li></ul></div><div class="side-group"><h2>Part Three</h2><ul><li><a class="" href="ranking-systems-core-updates-19.html"><span class="side-num">19</span>Ranking Systems, Core Updates, Spam Updates, and the Reviews System</a></li><li><a class="" href="page-experience-cwv-20.html"><span class="side-num">20</span>Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></li><li><a class="" href="title-links-snippets-sitelinks-21.html"><span class="side-num">21</span>Title Links, Snippets, Site Names, Sitelinks, and Favicons</a></li><li><a class="" href="images-video-22.html"><span class="side-num">22</span>Images and Videos in Search</a></li><li><a class="" href="structured-data-foundations-23.html"><span class="side-num">23</span>Structured Data Foundations</a></li><li><a class="" href="structured-data-gallery-faq-24.html"><span class="side-num">24</span>A Tour of the Structured Data Gallery, and the FAQ Rich Result&#x27;s Retirement</a></li><li><a class="" href="shopping-structured-data-25.html"><span class="side-num">25</span>Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty</a></li></ul></div><div class="side-group"><h2>Part Four</h2><ul><li><a class="" href="discover-business-details-webstories-26.html"><span class="side-num">26</span>Discover, Establishing Your Business Details, Preferred Sources, and Web Stories</a></li><li><a class="" href="ecommerce-guide-27.html"><span class="side-num">27</span>The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews</a></li><li><a class="" href="international-multilingual-28.html"><span class="side-num">28</span>International and Multilingual Sites</a></li></ul></div><div class="side-group"><h2>Part Five</h2><ul><li><a class="" href="search-console-debugging-29.html"><span class="side-num">29</span>Search Console, Debugging Traffic Drops, and Search Operators</a></li><li><a class="" href="trends-security-wrapup-30.html"><span class="side-num">30</span>Google Trends, Preventing Abuse, and Series Wrap-Up</a></li><li><a class="" href="supplementary-update-31.html"><span class="side-num">31</span>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</a></li></ul></div></details>
+  <main class="content">
+    <article>
+      <div class="eyebrow-row">
+        <p class="eyebrow">Part One: The Rules of the Road &middot; Episode 3 of 31</p>
+        <button class="copy-btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1"/><path d="M10.5 5.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6.5a1 1 0 0 0 1 1h2.5"/></svg><span class="lbl">Copy page</span></button>
+      </div>
+      <h1>How Google Search Actually Works</h1>
+      
+      <p>Welcome back. In the first two episodes we covered the rules: what's required, and what's forbidden. Today we zoom out and look at the machine those rules apply to. How does a page on the internet actually end up as a result on someone's screen? Google breaks this into three stages, and not every page makes it through all three. The stages are crawling, indexing, and serving.</p><p>Before we get into them, Google repeats a point we've now heard several times, which tells you how often people get it wrong. Google does not accept payment to crawl a site more often, or to rank it higher. Any claim otherwise is false. And even a page that follows every guideline in this series isn't guaranteed to be crawled, indexed, or shown. There's no contract here, only eligibility.</p><p>Stage one. Crawling.</p><p>The first job is simply finding out what pages exist. There's no master list of every page on the internet, so Google has to continuously search for new and updated pages and add them to a list of known pages. This process is called URL discovery.</p><p>There are two main ways Google discovers a new page. The first is by following links. When Google revisits a page it already knows, it reads the links on that page, and any link pointing somewhere new becomes a newly discovered page. Google gives a nice example: hub pages, like category pages, often link out to new blog posts, which is exactly how a new post gets found. The second way is when you submit a list of pages directly, in the form of a sitemap, which we'll cover in full in episode ten.</p><p>Once Google knows a URL exists, it may visit, or "crawl", that page to see what's on it. This is done by a program called Googlebot, sometimes just called "the crawler" or "the spider". Googlebot uses an algorithm to decide which sites to crawl, how often, and how many pages to fetch from each one. And here's a detail worth remembering: the crawlers are deliberately programmed not to overwhelm a site with requests. This is adjusted based on how the site responds. For instance, if a site starts returning server errors, Googlebot reads that as a signal to slow down.</p><p>But finding a URL doesn't guarantee Googlebot will crawl it. Some pages are deliberately blocked from crawling by the site owner, and others sit behind a login wall that Googlebot can't get through.</p><p>Here's something that trips a lot of site owners up, so let's spend a moment on it. When Google crawls a page, it renders it using a current version of Chrome and runs any JavaScript it finds, much the same way your own browser would when you visit a page. This step is called rendering, and Google stresses why it matters: many sites rely on JavaScript to bring content onto the page after the initial load, and without rendering, Google might never see that content at all. We'll spend a whole episode on JavaScript SEO later, because for certain kinds of storefronts, especially ones built with heavier front-end frameworks, this is where content quietly goes missing from search.</p><p>Google lists the common reasons crawling fails: a problem on the server while it's handling the request, a network issue, or robots.txt rules blocking Googlebot from the page.</p><p>Stage two. Indexing.</p><p>Once a page has been crawled, Google tries to understand what it's about. This stage involves processing and analysing the text content, along with key content tags and attributes, things like the title element, the alt attribute on images, and the content of images and videos themselves.</p><p>During indexing, Google also works out whether the page duplicates other pages elsewhere on the internet, or whether it's what's called the canonical page. The canonical page is the one that's eligible to appear in search results. Here's how Google decides which one that is: first, it groups together pages found on the internet that look similar to each other, a process it calls clustering, and then it selects the most representative page from that cluster as canonical. The other pages in that group aren't discarded, though. They can still be served as alternate versions in different situations, for example to a mobile searcher, or to someone specifically looking for that particular version. We'll go deep on canonicalization in episode twelve, and for a store with a lot of near-identical product variants, this is one of the more important episodes in the whole series.</p><p>Google also gathers signals about the canonical page and its cluster that get used in the next stage, serving. Examples of these signals include the language of the page, the country the content is meant for, and how usable the page is.</p><p>All of this information, gathered about canonical pages and their clusters, may then be stored in what's called the Google index, a large database hosted across thousands of machines. And Google is explicit here: there's no guarantee a page will be indexed. Not every page Google processes makes it in.</p><p>What determines whether a page gets indexed? It comes down to the content and the metadata. Google names three common causes of indexing problems: low quality page content, a robots meta rule that disallows indexing, and site design that makes indexing difficult, which loops us back to that JavaScript point again.</p><p>Stage three. Serving.</p><p>The final stage is what happens when someone actually searches. Google reiterates, once more, that it doesn't accept payment to rank a page higher, that ranking happens programmatically.</p><p>When a person types a query, Google's systems search the index for matching pages and return what they judge to be the most relevant, high-quality results. Relevance is decided by hundreds of factors, and Google names a few: the user's location, their language, and their device, whether that's a desktop or a phone. Google's own example is a search for "bike repair shop": the results shown to someone in Paris and someone in Hong Kong will differ, for the obvious reason that they need different shops.</p><p>The search features shown on the results page also change depending on the query. Google contrasts two searches: "bike repair shop" is likely to trigger local results but not an image carousel, while "modern bicycle" is more likely to show images but no local results. There's a full gallery of these visual elements, which we'll tour in a later episode.</p><p>Now here's a situation you may run into if you use Search Console, so it's worth having the explanation ready. Search Console can tell you a page is indexed, and yet you don't see it in the actual search results when you look. Google gives three reasons this happens. The content might not be relevant to the query someone typed. The content might be judged low quality. Or a robots meta rule might be blocking that content from being served, even though the page itself was indexed.</p><p>Let's bring this together with a concrete walk through the stages, using a hypothetical new product page on a flag store.</p><p>You publish a new page for, say, a historical regimental flag. First, crawling: Google needs to discover the URL. That happens fastest if the page is linked from a category page Google already knows, or if it's listed in your sitemap. Then Googlebot fetches the page and renders it, running any JavaScript your Shopify theme or apps inject, so that the full content, not just the bare HTML skeleton, is visible.</p><p>Second, indexing: Google reads the title tag, the image alt text, the body copy, and works out whether this page is meaningfully different from your other flag pages, or whether it's a near-duplicate that should be merged into a canonical group with, say, different size variants of the same design. It also picks up signals like the page's language and country targeting.</p><p>Third, serving: someone in Texas searches "Texas flag three by five feet". If your page is judged the most relevant canonical match for that query, in that region, on that device, it can appear, possibly alongside the shopping-specific visual features we'll cover when we get to structured data.</p><p>At every step in that chain, something can go wrong, and now you have the vocabulary to name where. Not discovered, is a crawling problem. Discovered but not understood, is an indexing problem. Understood but not shown, is a serving problem. That distinction alone will save you time whenever a page isn't performing the way you expect, because it tells you which part of the documentation to go back to.</p><p>Let's recap.</p><p>Three stages: crawling, where Google finds and fetches a page, rendering it like a browser would. Indexing, where Google reads the content, decides on a canonical version among duplicates, and stores what it learned. And serving, where a search query is matched against the index and the most relevant result is returned, shaped by location, language, device, and hundreds of other factors.</p><p>Nothing in this process is paid. And nothing in this process is guaranteed, at any stage.</p><p>Next episode, we start the SEO Starter Guide itself, Google's own beginner's guide, and the first half covers exactly the sort of groundwork that makes crawling and indexing go smoothly. See you there.</p><p class="attribution">This episode is adapted from the "How Google Search Works" deep-dive on Google Search Central, licensed under Creative Commons Attribution 4.0.</p>
+      <nav class="episode-nav"><div class="side-nav prev"><span class="lbl">Previous</span><a href="spam-policies-02.html">Episode 2: The Spam Policies, One by One</a></div><div class="side-nav next"><span class="lbl">Next</span><a href="starter-guide-part-1-04.html">Episode 4: The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></div></nav>
+    </article>
+  </main>
+</div>
+<footer class="site"><div class="row">
+  Source: <a href="https://developers.google.com/search/docs" target="_blank" rel="noopener">developers.google.com/search/docs</a>,
+  licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Creative Commons Attribution 4.0</a>.
+  Written as scripts for a text-to-speech or human narration pass &mdash; no audio has been recorded yet.
+  &middot; <a href="walking-through-google-search-full-text.md">Full continuous text (.md)</a> for text-to-speech tools.
+</div></footer>
+<script>
+(function(){
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = document.querySelector('article').innerText;
+      var done = function(){ var l = btn.querySelector('.lbl'); var was = l.textContent; l.textContent = 'Copied'; setTimeout(function(){ l.textContent = was; }, 1400); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, done);
+      } else { done(); }
+    });
+  });
+})();
+</script>
+</body></html>

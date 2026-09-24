@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Episode 31: Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</title>
+<style>
+:root{
+  --flat:#002b43; --panel:#061f30; --panel-2:#0a3a5c; --panel-3:#0f4a70;
+  --line:rgba(122,170,205,.22); --line-strong:rgba(122,170,205,.4);
+  --text:#f2f7fb; --text-dim:#7ab0d6; --text-dimmer:#5f8fae;
+  --accent:#7ab0d6; --accent-strong:#a7cbe8;
+  --font-display:Georgia,"Iowan Old Style","Times New Roman",Times,serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,"JetBrains Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --topbar-h:56px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--flat);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--panel-3);color:var(--text)}
+
+/* ---- top bar ---- */
+header.top{position:sticky;top:0;z-index:20;background:var(--flat);border-bottom:1px solid var(--line);height:var(--topbar-h)}
+header.top .row{max-width:1320px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;gap:14px}
+.wordmark{display:flex;align-items:center;gap:10px;font-family:var(--font-sans);text-decoration:none}
+.wordmark .mark{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--accent);color:var(--accent);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.02em}
+.wordmark .name{font-weight:600;font-size:14.5px;color:var(--text);letter-spacing:.01em;white-space:nowrap}
+.wordmark:hover .name{color:var(--accent-strong)}
+.section-badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--line-strong);padding:3px 8px;white-space:nowrap}
+.top-spacer{flex:1}
+.top-back{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);text-decoration:none;white-space:nowrap}
+.top-back:hover{color:var(--accent)}
+.top-back::before{content:"\2190 ";opacity:.7}
+
+/* ---- shell: sidebar + content ---- */
+.shell{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:264px minmax(0,1fr);align-items:start}
+nav.side{position:sticky;top:var(--topbar-h);align-self:start;max-height:calc(100vh - var(--topbar-h));overflow-y:auto;padding:28px 18px 40px 20px;border-right:1px solid var(--line)}
+nav.side::-webkit-scrollbar{width:8px}
+nav.side::-webkit-scrollbar-thumb{background:var(--line-strong)}
+.side-group{margin:0 0 22px}
+.side-group h2{font-family:var(--font-sans);font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dimmer);margin:0 0 8px;padding:0 10px}
+.side-group ul{list-style:none;margin:0;padding:0}
+.side-group li{margin:1px 0}
+.side-group a{display:block;padding:7px 10px;font-size:14px;color:var(--text-dim);border-left:2px solid transparent}
+.side-group a:hover{color:var(--text);background:rgba(122,170,205,.06)}
+.side-group a.active{color:var(--text);background:var(--panel-2);border-left-color:var(--accent);font-weight:600}
+.side-num{font-family:var(--font-mono);font-size:11px;color:var(--text-dimmer);margin-right:7px}
+details.side-toggle{display:none}
+
+main.content{min-width:0;padding:40px 40px 80px}
+.eyebrow-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.eyebrow{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0}
+.copy-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-sans);font-size:12.5px;font-weight:600;color:var(--text-dim);background:var(--panel);border:1px solid var(--line-strong);padding:7px 12px;cursor:pointer}
+.copy-btn:hover{color:var(--text);border-color:var(--accent)}
+.copy-btn svg{width:13px;height:13px}
+
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,38px);line-height:1.2;color:var(--text);margin:0 0 26px;max-width:22ch}
+article p{margin:0 0 20px;max-width:68ch;color:var(--text)}
+article p.attribution{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--font-sans);font-size:13.5px;color:var(--text-dimmer)}
+.callout{font-family:var(--font-sans);font-size:14px;line-height:1.65;background:rgba(122,170,205,.08);border-left:3px solid var(--accent);padding:14px 18px;color:var(--text-dim);max-width:62ch;margin:0 0 30px}
+.callout b{color:var(--text)}
+.callout a{color:var(--accent-strong);text-decoration:underline;text-underline-offset:2px}
+.callout a:hover{color:var(--text)}
+
+nav.episode-nav{display:flex;justify-content:space-between;gap:16px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--font-sans);font-size:13.5px}
+nav.episode-nav .side-nav{flex:1;min-width:0}
+nav.episode-nav .side-nav.next{text-align:right}
+nav.episode-nav .lbl{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dimmer);margin-bottom:5px}
+nav.episode-nav a{color:var(--text-dim);font-weight:600}
+nav.episode-nav a:hover{color:var(--accent-strong);text-decoration:underline}
+
+footer.site{border-top:1px solid var(--line);color:var(--text-dimmer);font-family:var(--font-sans);font-size:12.5px;line-height:1.7}
+footer.site .row{max-width:1320px;margin:0 auto;padding:22px 40px 40px}
+footer.site a{color:var(--text-dim);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.lede{font-size:18px;color:var(--text-dim);max-width:64ch;margin:0 0 26px}
+.index-parts{margin-top:8px}
+.index-part{margin:0 0 30px}
+.index-part h2{font-family:var(--font-sans);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:9px;margin:0 0 4px}
+.index-ep-list{list-style:none;margin:0;padding:0}
+.index-ep-list li{padding:11px 0;border-bottom:1px dashed var(--line);display:flex;gap:14px;align-items:baseline}
+.index-ep-list li:last-child{border-bottom:none}
+.index-ep-list .n{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);flex-shrink:0;width:2.2em}
+.index-ep-list a{font-family:var(--font-sans);font-weight:600;font-size:15px;color:var(--text)}
+.index-ep-list a:hover{color:var(--accent-strong);text-decoration:underline}
+
+@media (max-width:480px){
+  header.top .row{gap:8px}
+  .wordmark .name{font-size:13px}
+  .section-badge{display:none}
+}
+@media (max-width:860px){
+  .shell{display:block}
+  nav.side{display:none}
+  details.side-toggle{display:block;margin:18px 20px 0;border:1px solid var(--line-strong);background:var(--panel)}
+  details.side-toggle summary{cursor:pointer;padding:12px 16px;font-family:var(--font-sans);font-size:13.5px;font-weight:600;color:var(--text-dim);list-style:none}
+  details.side-toggle summary::-webkit-details-marker{display:none}
+  details.side-toggle summary::after{content:"\25BE";float:right;color:var(--text-dimmer)}
+  details.side-toggle[open] summary::after{content:"\25B4"}
+  details.side-toggle .side-group{padding:0 16px}
+  details.side-toggle .side-group:first-child{padding-top:14px}
+  details.side-toggle .side-group:last-child{padding-bottom:14px}
+  main.content{padding:28px 20px 56px}
+  footer.site .row{padding:20px 20px 32px}
+}
+</style></head>
+<body>
+<header class="top"><div class="row">
+  <a class="wordmark" href="../index.html"><span class="mark">AVDN</span><span class="name">Atelier Vincent De Nil</span></a>
+  <span class="section-badge">SEO Study</span>
+  <span class="top-spacer"></span>
+  <a class="top-back" href="index.html">Index</a>
+</div></header>
+<div class="shell">
+  <nav class="side"><div class="side-group"><h2>Part One</h2><ul><li><a class="" href="search-essentials-01.html"><span class="side-num">01</span>Search Essentials, and the Three Technical Requirements</a></li><li><a class="" href="spam-policies-02.html"><span class="side-num">02</span>The Spam Policies, One by One</a></li><li><a class="" href="how-search-works-03.html"><span class="side-num">03</span>How Google Search Actually Works</a></li><li><a class="" href="starter-guide-part-1-04.html"><span class="side-num">04</span>The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></li><li><a class="" href="starter-guide-part-2-05.html"><span class="side-num">05</span>The SEO Starter Guide, Part Two: Appearance, Images, Promotion, and What to Ignore</a></li><li><a class="" href="people-first-content-06.html"><span class="side-num">06</span>People-First Content, and Understanding E-E-A-T</a></li><li><a class="" href="generative-ai-search-07.html"><span class="side-num">07</span>Optimizing for Generative AI Search</a></li><li><a class="" href="hiring-seo-third-party-08.html"><span class="side-num">08</span>Do You Need an SEO? And Judging Third-Party Advice</a></li></ul></div><div class="side-group"><h2>Part Two</h2><ul><li><a class="" href="file-types-urls-links-09.html"><span class="side-num">09</span>File Types, URL Structure, and Crawlable Links</a></li><li><a class="" href="sitemaps-10.html"><span class="side-num">10</span>Sitemaps, Sitemap Index Files, and Extensions</a></li><li><a class="" href="googlebot-robots-txt-11.html"><span class="side-num">11</span>Googlebot, Crawl Management, and the Basics of robots.txt</a></li><li><a class="" href="canonicalization-12.html"><span class="side-num">12</span>Canonicalization: Duplicate Content and How to Manage It</a></li><li><a class="" href="mobile-first-amp-13.html"><span class="side-num">13</span>Mobile-First Indexing, and What&#x27;s Left of AMP</a></li><li><a class="" href="javascript-seo-14.html"><span class="side-num">14</span>JavaScript SEO: How Rendering Actually Works</a></li><li><a class="" href="lazy-loading-dynamic-rendering-15.html"><span class="side-num">15</span>Fixing Lazy-Loaded Content, and Dynamic Rendering as a Last Resort</a></li><li><a class="" href="robots-meta-tag-16.html"><span class="side-num">16</span>The Robots Meta Tag, X-Robots-Tag, and data-nosnippet</a></li><li><a class="" href="removals-redacted-info-17.html"><span class="side-num">17</span>Removals: Controlling What Google Shares, and Redacted Information</a></li><li><a class="" href="redirects-site-moves-18.html"><span class="side-num">18</span>Redirects, Site Moves, A/B Testing, and Pausing a Business</a></li></ul></div><div class="side-group"><h2>Part Three</h2><ul><li><a class="" href="ranking-systems-core-updates-19.html"><span class="side-num">19</span>Ranking Systems, Core Updates, Spam Updates, and the Reviews System</a></li><li><a class="" href="page-experience-cwv-20.html"><span class="side-num">20</span>Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></li><li><a class="" href="title-links-snippets-sitelinks-21.html"><span class="side-num">21</span>Title Links, Snippets, Site Names, Sitelinks, and Favicons</a></li><li><a class="" href="images-video-22.html"><span class="side-num">22</span>Images and Videos in Search</a></li><li><a class="" href="structured-data-foundations-23.html"><span class="side-num">23</span>Structured Data Foundations</a></li><li><a class="" href="structured-data-gallery-faq-24.html"><span class="side-num">24</span>A Tour of the Structured Data Gallery, and the FAQ Rich Result&#x27;s Retirement</a></li><li><a class="" href="shopping-structured-data-25.html"><span class="side-num">25</span>Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty</a></li></ul></div><div class="side-group"><h2>Part Four</h2><ul><li><a class="" href="discover-business-details-webstories-26.html"><span class="side-num">26</span>Discover, Establishing Your Business Details, Preferred Sources, and Web Stories</a></li><li><a class="" href="ecommerce-guide-27.html"><span class="side-num">27</span>The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews</a></li><li><a class="" href="international-multilingual-28.html"><span class="side-num">28</span>International and Multilingual Sites</a></li></ul></div><div class="side-group"><h2>Part Five</h2><ul><li><a class="" href="search-console-debugging-29.html"><span class="side-num">29</span>Search Console, Debugging Traffic Drops, and Search Operators</a></li><li><a class="" href="trends-security-wrapup-30.html"><span class="side-num">30</span>Google Trends, Preventing Abuse, and Series Wrap-Up</a></li><li><a class=" active" href="supplementary-update-31.html"><span class="side-num">31</span>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</a></li></ul></div></nav>
+  <details class="side-toggle"><summary>Browse episodes</summary><div class="side-group"><h2>Part One</h2><ul><li><a class="" href="search-essentials-01.html"><span class="side-num">01</span>Search Essentials, and the Three Technical Requirements</a></li><li><a class="" href="spam-policies-02.html"><span class="side-num">02</span>The Spam Policies, One by One</a></li><li><a class="" href="how-search-works-03.html"><span class="side-num">03</span>How Google Search Actually Works</a></li><li><a class="" href="starter-guide-part-1-04.html"><span class="side-num">04</span>The SEO Starter Guide, Part One: Getting Found and Getting Organized</a></li><li><a class="" href="starter-guide-part-2-05.html"><span class="side-num">05</span>The SEO Starter Guide, Part Two: Appearance, Images, Promotion, and What to Ignore</a></li><li><a class="" href="people-first-content-06.html"><span class="side-num">06</span>People-First Content, and Understanding E-E-A-T</a></li><li><a class="" href="generative-ai-search-07.html"><span class="side-num">07</span>Optimizing for Generative AI Search</a></li><li><a class="" href="hiring-seo-third-party-08.html"><span class="side-num">08</span>Do You Need an SEO? And Judging Third-Party Advice</a></li></ul></div><div class="side-group"><h2>Part Two</h2><ul><li><a class="" href="file-types-urls-links-09.html"><span class="side-num">09</span>File Types, URL Structure, and Crawlable Links</a></li><li><a class="" href="sitemaps-10.html"><span class="side-num">10</span>Sitemaps, Sitemap Index Files, and Extensions</a></li><li><a class="" href="googlebot-robots-txt-11.html"><span class="side-num">11</span>Googlebot, Crawl Management, and the Basics of robots.txt</a></li><li><a class="" href="canonicalization-12.html"><span class="side-num">12</span>Canonicalization: Duplicate Content and How to Manage It</a></li><li><a class="" href="mobile-first-amp-13.html"><span class="side-num">13</span>Mobile-First Indexing, and What&#x27;s Left of AMP</a></li><li><a class="" href="javascript-seo-14.html"><span class="side-num">14</span>JavaScript SEO: How Rendering Actually Works</a></li><li><a class="" href="lazy-loading-dynamic-rendering-15.html"><span class="side-num">15</span>Fixing Lazy-Loaded Content, and Dynamic Rendering as a Last Resort</a></li><li><a class="" href="robots-meta-tag-16.html"><span class="side-num">16</span>The Robots Meta Tag, X-Robots-Tag, and data-nosnippet</a></li><li><a class="" href="removals-redacted-info-17.html"><span class="side-num">17</span>Removals: Controlling What Google Shares, and Redacted Information</a></li><li><a class="" href="redirects-site-moves-18.html"><span class="side-num">18</span>Redirects, Site Moves, A/B Testing, and Pausing a Business</a></li></ul></div><div class="side-group"><h2>Part Three</h2><ul><li><a class="" href="ranking-systems-core-updates-19.html"><span class="side-num">19</span>Ranking Systems, Core Updates, Spam Updates, and the Reviews System</a></li><li><a class="" href="page-experience-cwv-20.html"><span class="side-num">20</span>Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials</a></li><li><a class="" href="title-links-snippets-sitelinks-21.html"><span class="side-num">21</span>Title Links, Snippets, Site Names, Sitelinks, and Favicons</a></li><li><a class="" href="images-video-22.html"><span class="side-num">22</span>Images and Videos in Search</a></li><li><a class="" href="structured-data-foundations-23.html"><span class="side-num">23</span>Structured Data Foundations</a></li><li><a class="" href="structured-data-gallery-faq-24.html"><span class="side-num">24</span>A Tour of the Structured Data Gallery, and the FAQ Rich Result&#x27;s Retirement</a></li><li><a class="" href="shopping-structured-data-25.html"><span class="side-num">25</span>Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty</a></li></ul></div><div class="side-group"><h2>Part Four</h2><ul><li><a class="" href="discover-business-details-webstories-26.html"><span class="side-num">26</span>Discover, Establishing Your Business Details, Preferred Sources, and Web Stories</a></li><li><a class="" href="ecommerce-guide-27.html"><span class="side-num">27</span>The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews</a></li><li><a class="" href="international-multilingual-28.html"><span class="side-num">28</span>International and Multilingual Sites</a></li></ul></div><div class="side-group"><h2>Part Five</h2><ul><li><a class="" href="search-console-debugging-29.html"><span class="side-num">29</span>Search Console, Debugging Traffic Drops, and Search Operators</a></li><li><a class="" href="trends-security-wrapup-30.html"><span class="side-num">30</span>Google Trends, Preventing Abuse, and Series Wrap-Up</a></li><li><a class=" active" href="supplementary-update-31.html"><span class="side-num">31</span>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</a></li></ul></div></details>
+  <main class="content">
+    <article>
+      <div class="eyebrow-row">
+        <p class="eyebrow">Part Five: Monitoring and Debugging &middot; Episode 31 of 31</p>
+        <button class="copy-btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1"/><path d="M10.5 5.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6.5a1 1 0 0 0 1 1h2.5"/></svg><span class="lbl">Copy page</span></button>
+      </div>
+      <h1>Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews</h1>
+      <p class="callout"><b>Note:</b> Supplementary episode covering documentation published after the main 30-episode series was researched. Checked against Google's official changelog through 2026-09-18.</p>
+      <p>Welcome to a supplementary episode. The rest of this series was researched and written across September 2026, but Google Search Central kept publishing during that same window. This episode covers four genuinely new pieces of documentation that landed after the relevant main episodes were finished: Search profile badges, regional differences in Search experience, a new Search Console guide for social and video content, and a real tightening of the review-snippet rules around fake and incentivized reviews.</p><p>Search profile badges.</p><p>This is new documentation, published mid-September 2026, explaining how to add a Search profile badge to your own website. A Search profile is a way for an entity, a business, a creator, an author, to have a dedicated presence Google can point searchers toward directly. The badge itself is something you embed on your own site, functioning similarly in spirit to the Preferred Sources button from episode twenty-six: a direct, site-owner-controlled way to point your own audience toward your official Search profile, rather than leaving Google to piece one together purely from scattered signals. If a personal-brand or authority-building project is actively cultivating a recognisable public presence, this is worth pairing directly with the knowledge panel and Business Profile guidance from episode twenty-six.</p><p>Regional differences in Search experience.</p><p>New documentation, published in two parts in early-to-mid September 2026, covering something worth knowing conceptually even if it may not immediately apply everywhere: certain countries get distinct Search features unavailable elsewhere. Google specifically names aggregator units and supplier units as examples. An aggregator unit is a distinct visual treatment for sites that aggregate listings from many underlying suppliers, think a marketplace or a comparison site; a supplier unit is the counterpart treatment for the individual businesses actually being aggregated within that experience. As of the most recent update, these units now also support local business queries specifically, on top of whatever query types they originally launched with.</p><p>The practical relevance: these features carry their own specific eligibility criteria and their own regional availability, so a site genuinely operating in, or targeting, a market where these features exist has a real, concrete reason to check the current eligibility requirements directly, since regional feature rollouts like this one tend to expand gradually over time, exactly the pattern we saw repeatedly with Preferred Sources across episode twenty-six's own changelog history, and could plausibly extend further since this documentation entry itself.</p><p>Analyzing social and video platform content.</p><p>This is a genuinely new Search Console guide, published in late July 2026, and it fills a real gap that episode twenty-nine's coverage of Search Console didn't have available to draw on at the time. It explains how to analyse the performance of your social media and video platform content specifically within Search Console's own reporting, intended directly for content creators, social media managers, and SEO professionals who want to understand how that specific kind of content performs within Google Search itself, not merely within the native platform it was posted to.</p><p>Here's why this genuinely matters, tying back to episode twenty-two's video coverage: content posted to platforms like YouTube, or to other video and social platforms, can itself surface directly within Google Search results, and this new guide is specifically about measuring that cross-platform visibility properly, inside the same Search Console interface already covered in episode twenty-nine, rather than needing to piece that picture together from each platform's own separate, siloed native analytics.</p><p>And now, the update that carries the most direct, practical weight of all four: a new review snippet guideline addressing fake and undisclosed incentivized reviews.</p><p>This landed in late July 2026, as a direct addition to the review snippet documentation we referenced back in episode twenty-five's shopping structured data material, and it deserves to be understood precisely, since it sharpens something episode twenty-seven already covered from a different angle.</p><p>Recall from episode twenty-seven: Google's guidance on writing genuinely high-quality reviews already emphasised real, original testing and honest, evidence-backed pros and cons. This new guideline adds a more explicit, more pointed layer specifically targeting reviews that are fake outright, or that were incentivized, meaning the reviewer received some form of compensation or benefit in exchange for writing it, without that incentive being genuinely, clearly disclosed to the reader. Google's stated purpose, worth remembering precisely: to improve user review transparency specifically.</p><p>Why this matters directly for a store collecting its own product reviews: if a business ever runs a review-incentive programme, offering a discount, a small gift, or any other benefit in exchange for a customer leaving a review, that relationship now needs to be clearly, genuinely disclosed within the review content itself, not quietly omitted. An undisclosed incentivized review sits in essentially the same category Google is now actively targeting as a fake one, at least for the purposes of review-snippet structured data eligibility. This connects directly back to episode sixteen's data-nosnippet material and episode twenty-three's structured data quality guidelines too: Google has been consistently tightening what counts as legitimate, trustworthy review content across this entire series, and this is simply the newest, most explicit instance of that same underlying pressure.</p><p>The practical takeaway, stated plainly: if a store solicits reviews with any kind of incentive attached, disclose that incentive directly and visibly within the review itself, and audit any existing review collection process now, before this newer, more explicit guideline gets tested against actual review content already live on the site.</p><p>Let's recap this supplementary episode.</p><p>Search profile badges give a site owner a direct, embeddable way to point their own audience toward an official Search profile, in the same spirit as episode twenty-six's Preferred Sources button. Regional Search experiences, aggregator and supplier units specifically, now support local business queries too, and remain a feature worth checking directly against current eligibility criteria for any site with real regional ambitions. The new social and video platform content guide fills a genuine gap in episode twenty-nine's Search Console coverage, letting cross-platform video and social performance be measured directly inside the same reporting interface. And the fake and undisclosed incentivized reviews guideline meaningfully sharpens episode twenty-seven's review-quality material: any incentive offered in exchange for a review now needs clear, direct disclosure within that review, not quiet omission.</p><p>This closes the series, genuinely this time, current through Google Search Central's own published changelog as of September 18, 2026.</p><p class="attribution">This episode is adapted from Google Search Central's documentation changelog, covering "Add a Search profile badge to your website," "Regional differences in Search experience," "Analyze social and video platform content," and the review snippet guidelines, licensed under Creative Commons Attribution 4.0.</p>
+      <nav class="episode-nav"><div class="side-nav prev"><span class="lbl">Previous</span><a href="trends-security-wrapup-30.html">Episode 30: Google Trends, Preventing Abuse, and Series Wrap-Up</a></div><div class="side-nav next"></div></nav>
+    </article>
+  </main>
+</div>
+<footer class="site"><div class="row">
+  Source: <a href="https://developers.google.com/search/docs" target="_blank" rel="noopener">developers.google.com/search/docs</a>,
+  licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Creative Commons Attribution 4.0</a>.
+  Written as scripts for a text-to-speech or human narration pass &mdash; no audio has been recorded yet.
+  &middot; <a href="walking-through-google-search-full-text.md">Full continuous text (.md)</a> for text-to-speech tools.
+</div></footer>
+<script>
+(function(){
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = document.querySelector('article').innerText;
+      var done = function(){ var l = btn.querySelector('.lbl'); var was = l.textContent; l.textContent = 'Copied'; setTimeout(function(){ l.textContent = was; }, 1400); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, done);
+      } else { done(); }
+    });
+  });
+})();
+</script>
+</body></html>
