@@ -1,22 +1,18 @@
-# AK-15 weapon customiser — roadmap
+# AK-74M weapon customiser — roadmap
 
 Built step by step. Each step ships as a working page at `/3d/ak15-weapon-customiser/`.
 
-## Step 1 — Base viewer ✅ (this commit)
+## Step 1 — Base viewer ✅
 - Viewer adapted from the Louisiana XXL page: Three.js 0.160.0, OrbitControls, the shared loader and the same sidebar layout.
-- Loads the Sketchfab model from `model/` (`ak-15.glb` or an unzipped `scene.gltf`). Until that file is added, it shows a code-built low-poly stand-in (`stand-in.js`).
-- Any source model is auto-normalised: its long axis is laid along +x, the muzzle is found as the slimmer end, and it is scaled to the real 940 mm overall length.
 - Camera presets (3/4, left, right, top, muzzle), turntable, wireframe, keyboard orbit/zoom.
-- Click-to-inspect parts (named nodes from the GLB, or stand-in parts).
-- Mount points preview: muzzle, optic rail, under rail, mag well, grip, stock (stand-in only for now).
+- Click-to-inspect parts; mount points preview (muzzle, optic rail, under rail, mag well, grip, stock).
 
-## Step 1b — Swap in the Sketchfab model ⏳ blocked on the file
-- Download "Low Poly AK-15" from Sketchfab (needs a Sketchfab login). Commit it to `model/`. The build container cannot reach sketchfab.com.
-- Record the licence and author credit in README and on the page (CC BY requires credit).
-- Check the part names it exposes. If the author used one merged mesh, split the swappable parts (muzzle, mag, grip, stock) in Blender.
+## Step 1b — Real model ✅
+- Sketchfab "low-poly AK-74M Zenitco" by D_U (CC BY 4.0) replaces the code-built stand-in. The AK-15 link wasn't downloadable from the container.
+- Loose rounds and spare magazine removed; parts grouped and named (Zenitco B-13, B-10/B-19, RK-1, RK-9, PT-1, DTK-1); mount points placed on the real geometry.
 
 ## Step 2 — Attachment system
-- Calibrate mount points on the real model (a `sockets.json` per model: position, direction, rail length).
+- Fine-tune mount points and add rail lengths (B-13 top rail, handguard rails).
 - Attachment registry (`attachments.js`): id, slot, label, geometry/GLB, offset, what it hides (e.g. a muzzle device replaces the stock brake).
 - Sidebar slot pickers: a "stock / none / option" list per slot. Swaps are instant; the camera frames the changed slot.
 - Rail slots snap along the 10 mm slot pitch (drag or ± buttons).

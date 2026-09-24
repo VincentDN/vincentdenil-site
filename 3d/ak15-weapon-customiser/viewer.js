@@ -1,14 +1,36 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {buildStandIn} from './stand-in.js';
 
-// Sketchfab "Low Poly AK-15" by its author (see README for licence/attribution).
-// Drop the GLB download here, or unzip the glTF download into ./model/ as-is.
-const MODEL_URLS=['./model/ak-15.glb','./model/scene.gltf'];
-const SOURCE_URL='https://sketchfab.com/3d-models/low-poly-ak-15-k-68725380dd654391bb6b751e888e2c44';
-// Downloaded models are rescaled to the real rifle's overall length (stock extended).
-const OVERALL_LENGTH=.94;
+// "low-poly AK-74M Zenitco" by D_U, CC BY 4.0. The loose cartridge, case and spare
+// magazine lying beside the rifle in the source file were removed (see README).
+const MODEL_URL='./model/ak-74m-zenitco.glb';
+const SOURCE_URL='https://sketchfab.com/3d-models/low-poly-ak-74m-zenitco-35ad8e37a513453cbbbd04064fa5fb79';
+const AUTHOR_URL='https://sketchfab.com/DU1701';
+// The model is rescaled to the AK-74M's published overall length (stock extended).
+const OVERALL_LENGTH=.943;
+// Source node names grouped into selectable parts. Ids that match a socket are swappable.
+const PARTS=[
+ {id:'receiver',label:'Receiver & bolt group',detail:'AK-74M receiver, dust cover, bolt carrier, recoil spring, trigger, selector and magazine release.',nodes:['ak74m receiver_8','ak74m dust cover_11','ak74m bolt carrier_10','ak74m recoil spring.001_21','ak74m trigga_0','ak74m selector_1','ak74m mag release_2']},
+ {id:'rail',label:'B-13 rail mount',detail:'Zenitco B-13 side-mount bracket with a top rail. It carries the optic.',nodes:['b13 bracket_14']},
+ {id:'optic',label:'Red dot sight',detail:'Compact red dot on the B-13 rail. It becomes a swappable optic in step 2.',nodes:['vzor1 red dot_20']},
+ {id:'handguard',label:'B-10 / B-19 handguard',detail:'Zenitco railed handguard with a lower rail that holds the foregrip.',nodes:['b10+b19 handguard_15']},
+ {id:'barrel',label:'Barrel & gas block',detail:'415 mm barrel with front sight and gas block.',nodes:['ak74m barrel_9']},
+ {id:'muzzle',label:'DTK-1 muzzle brake',detail:'Zenitco DTK-1 muzzle brake on the threaded muzzle. It becomes swappable in step 2.',nodes:['dtk1 compensator_12']},
+ {id:'foregrip',label:'RK-1 foregrip',detail:'Zenitco RK-1 vertical foregrip on the lower handguard rail.',nodes:['rk1 front grip_16']},
+ {id:'magazine',label:'Magazine',detail:'30-round 5.45×39 polymer magazine.',nodes:['ak74 30rnd mag (polymer)_6']},
+ {id:'grip',label:'RK-9 pistol grip',detail:'Zenitco RK-9 pistol grip.',nodes:['rk9 pistol grip_13']},
+ {id:'stock',label:'PT-1 stock',detail:'Zenitco PT-1 stock: base, butt pad and adjustable cheek rest.',nodes:['pt1 stock base_17','pt1 stock butt_18','pt1 cheek_19']}
+];
+// Mount points in the source file's coordinates (muzzle along +x): position and the direction an attachment extends.
+const SOCKETS=[
+ ['muzzle','Muzzle',[4.95,.18,0],[1,0,0]],
+ ['optic','Optic rail',[.08,.69,0],[0,1,0]],
+ ['foregrip','Under rail',[2.5,-.03,0],[0,-1,0]],
+ ['magazine','Mag well',[.7,-.2,0],[0,-1,0]],
+ ['grip','Grip',[-.8,-.15,0],[0,-1,0]],
+ ['stock','Stock',[-1.2,0,0],[-1,0,0]]
+];
 const accent=0xef8f39;
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),detail=document.querySelector('#detail');
@@ -34,24 +56,13 @@ function normalize(root){
  const holder=new T.Group();holder.add(root);root.position.sub(center);return holder;
 }
 
-async function loadSource(){
- for(const url of MODEL_URLS){
-  const head=await fetch(url,{method:'HEAD'}).catch(()=>null);
-  if(!head?.ok)continue;
-  const gltf=await new GLTFLoader().loadAsync(url);
-  const root=gltf.scene;
-  // Each named top-level node becomes a selectable part; attachment sockets are calibrated in step 2.
-  const found=[];
-  root.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;}});
-  // Skip exporter wrapper nodes (Sketchfab nests several single-child roots).
-  let top=root;while(top.children.length===1&&top.children[0].children.length)top=top.children[0];
-  for(const node of top.children){
-   const objects=[];node.traverse(o=>{if(o.isMesh)objects.push(o);});
-   if(objects.length)found.push({id:node.uuid,label:node.name?node.name.replace(/_+/g,' '):`Part ${found.length+1}`,detail:'Part from the source model.',objects});
-  }
-  return {root,parts:found,sockets:[],source:'model'};
- }
- return {...buildStandIn(),source:'stand-in'};
+async function loadModel(){
+ const root=(await new GLTFLoader().loadAsync(MODEL_URL)).scene;
+ // GLTFLoader sanitizes node names (spaces to _, dots dropped), so PARTS keeps the source spelling.
+ root.traverse(o=>{if(o.isMesh)o.castShadow=o.receiveShadow=true;});
+ const parts=PARTS.map(p=>{const objects=[];for(const name of p.nodes)root.getObjectByName(T.PropertyBinding.sanitizeNodeName(name))?.traverse(o=>{if(o.isMesh)objects.push(o);});return {...p,objects};}).filter(p=>p.objects.length);
+ const sockets=SOCKETS.map(([id,label,p,d])=>{const o=new T.Object3D();o.name='socket:'+id;o.position.set(...p);o.userData={id,label,direction:new T.Vector3(...d)};root.add(o);return o;});
+ return {root,parts,sockets};
 }
 
 function select(id){
@@ -70,16 +81,14 @@ try{
  const key=new T.DirectionalLight(0xfff1df,3.2);key.position.set(.8,2,1.4);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-.7,right:.7,top:.7,bottom:-.7,near:.5,far:5});key.shadow.normalBias=.01;scene.add(key);
  const rim=new T.DirectionalLight(0x9fc4ff,1.4);rim.position.set(-1.5,.8,-1.2);scene.add(rim);
 
- const source=await loadSource();
+ const source=await loadModel();
  model=normalize(source.root);parts=source.parts;sockets=source.sockets;scene.add(model);
  // Clone materials so highlighting and wireframe only touch this model's meshes.
  model.traverse(o=>{if(o.isMesh)o.material=o.material.clone();});
  const box=new T.Box3().setFromObject(model);
  const floor=new T.Mesh(new T.PlaneGeometry(4,4),new T.ShadowMaterial({opacity:.28}));floor.rotation.x=-Math.PI/2;floor.position.y=box.min.y-.002;floor.receiveShadow=true;scene.add(floor);
 
- document.querySelector('#source').innerHTML=source.source==='model'
-  ?`Model: <a href="${SOURCE_URL}">Low Poly AK-15 on Sketchfab</a>, scaled to ${OVERALL_LENGTH*1000} mm.`
-  :`Showing a code-built stand-in at ${OVERALL_LENGTH*1000} mm. The <a href="${SOURCE_URL}">Sketchfab model</a> replaces it once added to <code>model/</code>.`;
+ document.querySelector('#source').innerHTML=`Model: <a href="${SOURCE_URL}">low-poly AK-74M Zenitco</a> by <a href="${AUTHOR_URL}">D_U</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Loose rounds and spare magazine removed. Scaled to ${OVERALL_LENGTH*1000} mm.`;
 
  for(const part of parts){
   const entry=document.createElement('button');entry.className='part';entry.setAttribute('aria-pressed','false');

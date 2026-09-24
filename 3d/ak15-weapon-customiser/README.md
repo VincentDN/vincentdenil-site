@@ -1,12 +1,12 @@
-# AK-15 weapon customiser
+# AK-74M weapon customiser
 
-URL: `/3d/ak15-weapon-customiser/`. Listed in `/projects/3d/`, with `seo_hidden=true` and robots `noindex`. Serve the repository root over HTTP; there is no build step. Uses Three.js 0.160.0 (OrbitControls, GLTFLoader) and the shared `/assets/viewer-loader.css`. The viewer structure is adapted from `/3d/lousiana-flag-mount-test-xxl/`.
+URL: `/3d/ak15-weapon-customiser/`. The URL keeps its original name; the model is an AK-74M. Listed in `/projects/3d/`, with `seo_hidden=true` and robots `noindex`. Serve the repository root over HTTP; there is no build step. Uses Three.js 0.160.0 (OrbitControls, GLTFLoader) and the shared `/assets/viewer-loader.css`. The viewer structure is adapted from `/3d/lousiana-flag-mount-test-xxl/`.
 
-Plan: see `ROADMAP.md`. Current status: step 1 (base viewer).
+Plan: see `ROADMAP.md`. Current status: step 1 (base viewer) on the real model.
 
 ## Model
-Source: [Low Poly AK-15 on Sketchfab](https://sketchfab.com/3d-models/low-poly-ak-15-k-68725380dd654391bb6b751e888e2c44). Download it while logged in, then put it in `model/` as `ak-15.glb`, or unzip the glTF download so that `model/scene.gltf` exists. Add the author's credit and licence here when committing it.
+`model/ak-74m-zenitco.glb` is [low-poly AK-74M Zenitco](https://sketchfab.com/3d-models/low-poly-ak-74m-zenitco-35ad8e37a513453cbbbd04064fa5fb79) by [D_U](https://sketchfab.com/DU1701), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The page shows this credit.
 
-Until the file is added, `viewer.js` falls back to `stand-in.js`, a code-built low-poly rifle. It has named parts and mount points for step 2. It uses meters, points the muzzle along +x, and puts the right side at +z. It follows the published 940 mm overall and 415 mm barrel lengths; other proportions are illustrative.
+Change from the original: the loose cartridge (`54539_4`), spent case (`54539 case_5`) and spare empty magazine (`ak74 30rnd empty mag (polymer)_7`) displayed beside the rifle were removed, and unused data pruned (2.9 MB → 2.2 MB). The seated magazine is kept. `model-source/strip-loose-parts.mjs` reproduces this from the original download. Geometry and materials are otherwise unchanged.
 
-Loaded models are normalised automatically. The long axis goes to +x, the slimmer end is treated as the muzzle, and the model is scaled to 940 mm. Each named node below the exporter's wrapper nodes becomes a selectable part.
+`viewer.js` lays the long axis along +x and treats the slimmer end as the muzzle. It then scales the model to the AK-74M's published 943 mm overall length with the stock extended; with the Zenitco stock and DTK-1 this is approximate. `PARTS` groups source nodes into named, selectable parts. GLTFLoader sanitizes node names, so the lookup applies the same sanitizing. `SOCKETS` places the step 2 mount points in the source file's coordinates.
