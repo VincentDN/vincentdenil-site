@@ -71,7 +71,7 @@ export const LOOP_SECONDS=BAR*BARS;
 // Tracks: an audio file (looped) or the synthesised loop above. Both play through one master
 // gain, so volume and fades are shared. The file only downloads once music starts.
 export const TRACKS=[
- {id:'albulena',label:'Albulena',src:'./audio/albulena.mp3'},
+ {id:'abdulena',label:'Abdulena',src:'./audio/abdulena.mp3'},
  {id:'ambient',label:'Ambient loop'}
 ];
 
@@ -95,17 +95,21 @@ export class Music{
   if(src){
    if(!this.audio){this.audio=new Audio();this.audio.loop=true;this.audio.preload='none';this.ctx.createMediaElementSource(this.audio).connect(this.master);}
    if(!this.audio.src.endsWith(src.replace('./','')))this.audio.src=src;
-   this.audio.play().catch(err=>console.warn('Music could not play',err));
+   return this.audio.play().then(()=>true,()=>false);// false: blocked until a user gesture
   }else{
    if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;
    this.timer??=setInterval(()=>{if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;while(this.next<this.ctx.currentTime+1.2){scheduleBar(this.graph,this.bar++,this.next);this.next+=BAR;}},200);
+   return Promise.resolve(true);
   }
  }
  halt(){this.audio?.pause();clearInterval(this.timer);this.timer=null;}
- start(){
-  this.setup();this.ctx.resume();this.playing=true;
-  this.master.gain.cancelScheduledValues(this.ctx.currentTime);this.master.gain.setTargetAtTime(this.volume,this.ctx.currentTime,.4);
-  this.play();
+ // Resolves true once sound is actually running; false if the browser is still blocking autoplay.
+ // `fade` is the fade-in time constant in seconds (about 3× that to reach full volume).
+ async start(fade=.4){
+  this.setup();this.playing=true;
+  this.master.gain.cancelScheduledValues(this.ctx.currentTime);this.master.gain.setValueAtTime(this.master.gain.value,this.ctx.currentTime);this.master.gain.setTargetAtTime(this.volume,this.ctx.currentTime,fade);
+  const [,source]=await Promise.all([this.ctx.resume().catch(()=>{}),this.play()]);
+  return this.ctx.state==='running'&&source;
  }
  stop(){
   if(!this.ctx)return;this.playing=false;const now=this.ctx.currentTime;
@@ -120,5 +124,7 @@ export class Music{
   const now=this.ctx.currentTime;this.master.gain.cancelScheduledValues(now);this.master.gain.setTargetAtTime(0,now,.12);
   setTimeout(()=>{if(!this.playing)return;this.halt();this.play();this.master.gain.setTargetAtTime(this.volume,this.ctx.currentTime,.3);},450);
  }
+ // True when sound is actually coming out (not just switched on but blocked by autoplay rules).
+ audible(){return this.playing&&this.ctx?.state==='running'&&(!this.file()||!!this.audio&&!this.audio.paused);}
  setVolume(v){this.volume=v;if(this.playing)this.master.gain.setTargetAtTime(v,this.ctx.currentTime,.1);}
 }

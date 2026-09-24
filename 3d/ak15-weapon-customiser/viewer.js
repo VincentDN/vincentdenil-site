@@ -18,21 +18,27 @@ const HERO={azimuth:-.2,elevation:.1};
 // Camera presets are sized for a rifle this long (m); longer or shorter builds scale them.
 const FRAME_LENGTH=.943;
 
-// Background music: on by default at a low volume, started by the first click or key press
-// (browsers block audio before that). The choice and volume persist per browser.
+// Background music: on by default at a low volume. It tries to start as the page opens, fading in
+// slowly; where the browser blocks autoplay it starts on the first click or key press instead.
+// The choice, track and volume persist per browser.
 const music=new Music(),musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
-const musicPrefs=(()=>{const base={on:true,volume:.18,track:TRACKS[0].id};try{return {...base,...JSON.parse(localStorage.getItem('ak-customiser-music')||'{}')};}catch{return base;}})();
+const musicPrefs=(()=>{const base={on:true,volume:.12,track:TRACKS[0].id};try{return {...base,...JSON.parse(localStorage.getItem('ak-customiser-music')||'{}')};}catch{return base;}})();
 function saveMusic(){try{localStorage.setItem('ak-customiser-music',JSON.stringify(musicPrefs));}catch{}}
 function showMusic(){musicButton.setAttribute('aria-pressed',String(musicPrefs.on));for(const b of document.querySelectorAll('[data-track]'))b.setAttribute('aria-pressed',String(b.dataset.track===musicPrefs.track));musicVolume.value=String(Math.round(musicPrefs.volume*100));document.querySelector('#music-level').textContent=Math.round(musicPrefs.volume*100)+'%';}
 if(!TRACKS.some(t=>t.id===musicPrefs.track))musicPrefs.track=TRACKS[0].id;
 music.setVolume(musicPrefs.volume);music.setTrack(musicPrefs.track);showMusic();
+const AUTOPLAY_FADE=1.5;
+function stopWaiting(){removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);}
 function firstGesture(e){
  if(e.target===musicButton||e.target.closest?.('[data-track]'))return;
- removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);
- if(musicPrefs.on)music.start();
+ stopWaiting();
+ if(musicPrefs.on)music.start(AUTOPLAY_FADE);
 }
 addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
-musicButton.onclick=()=>{musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);saveMusic();showMusic();};
+// Where autoplay is blocked, resume() stays pending until a gesture, so the listeners stay armed.
+if(musicPrefs.on)music.start(AUTOPLAY_FADE).then(playing=>{if(playing)stopWaiting();});
+// If music is on but the browser has not let it sound yet, ♪ starts it rather than switching it off.
+musicButton.onclick=()=>{if(musicPrefs.on&&!music.audible()){stopWaiting();music.start(AUTOPLAY_FADE);return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();stopWaiting();saveMusic();showMusic();};
 // Picking a track also turns music on.
 for(const b of document.querySelectorAll('[data-track]'))b.onclick=()=>{musicPrefs.track=b.dataset.track;music.setTrack(musicPrefs.track);if(!musicPrefs.on){musicPrefs.on=true;music.start();}saveMusic();showMusic();};
 musicVolume.oninput=()=>{musicPrefs.volume=Number(musicVolume.value)/100;music.setVolume(musicPrefs.volume);saveMusic();showMusic();};
