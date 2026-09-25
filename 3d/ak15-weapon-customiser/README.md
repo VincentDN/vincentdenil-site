@@ -4,6 +4,8 @@ URL: `/3d/ak15-weapon-customiser/`. Three screens: **Armoury** (two rifles, the 
 
 Plan: see `ROADMAP.md`. Current status: step 7 (round two) in progress; see `ROADMAP.md`.
 
+Opening screen experiment: `/3d/ak15-workbench-intro/` is a TLOU II-style workbench intro that pushes in and fades to this viewer (see its README).
+
 ## Models
 Both rifles are by [D_U](https://sketchfab.com/DU1701) on Sketchfab, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the page credits whichever is shown.
 
