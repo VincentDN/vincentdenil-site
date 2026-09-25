@@ -203,7 +203,8 @@ export function buildOperator(state){
   if(full){add('foreArm'+side,top,limb(.043*thick*shell+.004,.037*thick*shell+.004,L.foreArm*.9));add('foreArm'+side,top,sphere(.05*thick,6,4));}
  };
  add('spine',top,taper(.3*thick*shell,.31*thick*shoulder*shell,.2*s,torsoD*shell).translate(0,.08*s,0));
- add('chest',top,taper(.31*thick*shoulder*shell,.4*thick*shoulder*shell,.27*s,.23*thick*shell,.2*thick*shell).translate(0,.11*s,0));
+ // 1 cm taller, raised 5 mm: its top face (the shoulders) clears the skin's instead of z-fighting with it.
+ add('chest',top,taper(.31*thick*shoulder*shell,.4*thick*shoulder*shell,.27*s+.01,.23*thick*shell,.2*thick*shell).translate(0,.11*s+.005,0));
  for(const side of ['R','L'])sleeve(side,o.top!=='tshirt');
  if(o.top!=='tshirt'){
   add('chest',top,limb(.075,.08,.05*s,8,-.26*s));// collar

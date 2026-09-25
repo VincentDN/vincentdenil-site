@@ -24,7 +24,7 @@ const renderer=new T.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
 renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;stage.append(renderer.domElement);
 const scene=new T.Scene();scene.background=new T.Color(0x07090a);scene.fog=new T.Fog(0x07090a,2.2,5);
-const camera=new T.PerspectiveCamera(42,1,.02,20);camera.position.copy(SHOT.position);camera.lookAt(SHOT.target);
+const camera=new T.PerspectiveCamera(42,1,.05,20);camera.position.copy(SHOT.position);camera.lookAt(SHOT.target);
 
 // ---------- Lighting: one warm work lamp, a cold fill, a dim HDR for the metal ----------
 scene.add(new T.HemisphereLight(0x4a5a66,0x120d08,.35));
