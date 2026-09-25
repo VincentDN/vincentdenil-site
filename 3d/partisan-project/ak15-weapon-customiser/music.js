@@ -72,11 +72,20 @@ export const LOOP_SECONDS=BAR*BARS;
 const LOOKAHEAD=3;
 
 // Tracks: an audio file (looped) or the synthesised loop above. Both play through one master
-// gain, so volume and fades are shared. The file only downloads once music starts.
+// gain, so volume and fades are shared. The file only downloads once music starts. File paths
+// resolve from this module, so other pages (the workbench intro) can play them too.
 export const TRACKS=[
- {id:'abdulena',label:'Abdulena',src:'./audio/abdulena.mp3'},
+ {id:'abdulena',label:'Abdulena',src:new URL('./audio/abdulena.mp3',import.meta.url).href},
  {id:'ambient',label:'Ambient loop'}
 ];
+
+// Handoff between pages: the workbench intro saves where the file track is before it navigates
+// to the customiser, which picks up from there if it starts within a few seconds.
+const HANDOFF_KEY='ak-music-handoff';
+function resumeFrom(audio,track){
+ let saved=null;try{saved=JSON.parse(sessionStorage.getItem(HANDOFF_KEY)||'null');sessionStorage.removeItem(HANDOFF_KEY);}catch{}
+ if(saved?.track===track&&Date.now()-saved.saved<15000)audio.currentTime=saved.at;
+}
 
 // Live player: one AudioContext, switchable tracks; keeps playing in background tabs.
 export class Music{
@@ -92,7 +101,7 @@ export class Music{
   const src=this.file();
   if(src){
    if(!this.audio){this.audio=new Audio();this.audio.loop=true;this.audio.preload='none';this.ctx.createMediaElementSource(this.audio).connect(this.master);}
-   if(!this.audio.src.endsWith(src.replace('./','')))this.audio.src=src;
+   if(this.audio.src!==src){this.audio.src=src;resumeFrom(this.audio,this.track);}
    return this.audio.play().then(()=>true,()=>false);// false: blocked until a user gesture
   }else{
    if(this.next<this.ctx.currentTime)this.next=this.ctx.currentTime+.05;
@@ -124,5 +133,6 @@ export class Music{
  }
  // True when sound is actually coming out (not just switched on but blocked by autoplay rules).
  audible(){return this.playing&&this.ctx?.state==='running'&&(!this.file()||!!this.audio&&!this.audio.paused);}
+ handoff(){if(this.audio&&!this.audio.paused)try{sessionStorage.setItem(HANDOFF_KEY,JSON.stringify({track:this.track,at:this.audio.currentTime,saved:Date.now()}));}catch{}}
  setVolume(v){this.volume=v;if(this.playing)this.master.gain.setTargetAtTime(v,this.ctx.currentTime,.1);}
 }

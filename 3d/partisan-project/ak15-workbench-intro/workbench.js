@@ -1,7 +1,7 @@
 // Workbench intro: an over-the-shoulder opening shot in the style of The Last of Us Part II's
 // workbench. The operator from the AK customiser leans over a table with the rifle lying flat,
 // hands on it. "Start customising" pushes the camera in on the rifle, fades to black and hands
-// over to the normal 3D viewer at /3d/ak15-weapon-customiser/.
+// over to the normal 3D viewer at /3d/partisan-project/ak15-weapon-customiser/.
 // Scene space: operator's feet on y=0 facing +z, right side -x (see operator.js); meters.
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -10,6 +10,7 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {MODELS,DEFAULT_MODEL} from '../ak15-weapon-customiser/models.js';
 import {DEFAULT_OPERATOR,buildOperator} from '../ak15-weapon-customiser/operator.js';
 import {solveArm} from '../ak15-weapon-customiser/field.js';
+import {Music} from '../ak15-weapon-customiser/music.js';
 
 const CUSTOMISER='../ak15-weapon-customiser/';
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
@@ -18,6 +19,22 @@ const RIFLE_AT=new T.Vector3(.04,0,.47);// x/z on the table; y comes from the ri
 const SHOT={position:new T.Vector3(-.52,1.84,.06),target:new T.Vector3(.04,.88,.47)};
 const PUSH_IN={duration:1.9,fadeAt:.75};// seconds; the fade starts at this fraction of the push
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- Music: Abdulena, sharing the customiser's on/off and volume setting ----------
+// Always Abdulena here, whatever track the customiser last played; it carries on playing
+// into the customiser (music.js hands the position over) when that track is selected there.
+const MUSIC_KEY='ak-customiser-music-v2';
+const musicPrefs=(()=>{const base={on:true,volume:.4};try{return {...base,...JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}')};}catch{return base;}})();
+const music=new Music(),musicButton=document.querySelector('#music-toggle');
+music.setVolume(musicPrefs.volume);music.setTrack('abdulena');
+function saveMusic(){try{const saved=JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}');localStorage.setItem(MUSIC_KEY,JSON.stringify({...saved,on:musicPrefs.on}));}catch{}}
+const showMusic=()=>musicButton.setAttribute('aria-pressed',String(musicPrefs.on));showMusic();
+// Browsers block sound until a gesture, so the first click or key press starts it.
+function firstGesture(e){if(e.target===musicButton)return;stopWaiting();if(musicPrefs.on)music.start(1.5);}
+function stopWaiting(){removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);}
+addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
+if(musicPrefs.on)music.start(1.5).then(playing=>{if(playing)stopWaiting();});
+musicButton.onclick=()=>{stopWaiting();if(musicPrefs.on&&!music.audible()){music.start(1.5);return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();saveMusic();showMusic();};
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),start=document.querySelector('#start'),fade=document.querySelector('#fade');
 const renderer=new T.WebGLRenderer({antialias:true});
@@ -133,7 +150,7 @@ function begin(){
 start.addEventListener('click',begin);
 addEventListener('keydown',e=>{if(e.key==='e'||e.key==='E'||(e.key==='Enter'&&document.activeElement!==start))begin();});
 // Coming back with the browser's back button restores this page from cache: reset the shot.
-addEventListener('pageshow',e=>{if(e.persisted){push=null;start.disabled=false;document.body.classList.remove('leaving');fade.classList.add('clear');}});
+addEventListener('pageshow',e=>{if(e.persisted){push=null;start.disabled=false;document.body.classList.remove('leaving');fade.classList.add('clear');clock.getDelta();requestAnimationFrame(frame);}});
 
 const currentTarget=SHOT.target.clone();
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -152,7 +169,8 @@ function frame(){
   const t=performance.now()/1000-push.start,u=Math.min(t/PUSH_IN.duration,1),e=ease(u);
   camera.position.lerpVectors(push.from,push.to,e);currentTarget.lerpVectors(push.fromTarget,push.toTarget,e);
   if(u>=PUSH_IN.fadeAt&&!push.faded){push.faded=true;fade.classList.remove('clear');}
-  if(t>=PUSH_IN.duration+.5&&!push.left){push.left=true;location.href=CUSTOMISER;}
+  // Fully black: stop rendering so the main thread is free for the navigation.
+  if(t>=PUSH_IN.duration+.5){music.handoff();location.href=CUSTOMISER;return;}
  }else{
   const sway=reduceMotion?0:Math.sin(time*.6)*.006;
   camera.position.set(SHOT.position.x+look.x*.05,SHOT.position.y-look.y*.03+sway,SHOT.position.z);

@@ -1,8 +1,7 @@
-// Directory-listing size auto-fill: file rows start out showing the static
-// "1 KB" placeholder in their markup. If the row's link points at a real
-// file (not the shared stub.html placeholder page) this does a HEAD request
-// and swaps in the file's actual size once uploaded, so nobody has to
-// hand-edit the listing after dropping a real file into /projects/.
+// Directory-listing size auto-fill: for each file row this does a HEAD
+// request on the row's link and swaps the file's actual size into the Size
+// column, so nobody has to hand-edit the listing after dropping a real file
+// into /projects/.
 (function(){
   function formatBytes(bytes){
     if(bytes < 1024) return bytes + ' B';
@@ -22,7 +21,7 @@
     if(!link || !sizeCell) return;
 
     var href = link.getAttribute('href');
-    if(!href || href.indexOf('/projects/stub.html') !== -1) return; // still a placeholder, not a real file
+    if(!href) return;
 
     fetch(href, { method: 'HEAD' }).then(function(res){
       if(!res.ok) return;

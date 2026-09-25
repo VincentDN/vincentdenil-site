@@ -1,6 +1,6 @@
 # Partisan: interactive customisation demo, roadmap
 
-Status: in progress. Done so far: A-lite (stats and rules), the Operator creator and the Field poses with IK, photo mode and loadout codes. See §5. This turns the AK weapon customiser (`/3d/ak15-weapon-customiser/`) into an interactive demo for the Partisan project that shows deep weapon and character customisation.
+Status: in progress. Done so far: A-lite (stats and rules), the Operator creator and the Field poses with IK, photo mode and loadout codes. See §5. This turns the AK weapon customiser (`/3d/partisan-project/ak15-weapon-customiser/`) into an interactive demo for the Partisan project that shows deep weapon and character customisation.
 
 Neither repository documents Partisan itself yet. The roadmap therefore assumes a character-driven game, since it asks for character customisation. It also assumes a low-poly art direction, which the current models and page share. The assumptions to confirm are listed at the end. Anything that depends on them is marked **(assumption)**.
 

@@ -1,6 +1,6 @@
 # AK weapon customiser — roadmap
 
-Built step by step. Each step ships as a working page at `/3d/ak15-weapon-customiser/`.
+Built step by step. Each step ships as a working page at `/3d/partisan-project/ak15-weapon-customiser/`.
 
 ## Step 1 — Base viewer ✅
 - Viewer adapted from the Louisiana XXL page: Three.js 0.160.0, OrbitControls, the shared loader and the same sidebar layout.
