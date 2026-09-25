@@ -1,3 +1,7 @@
+# Fact-check review edition — 24 September 2026
+
+The original narration is retained. ChatGPT fact-check comments follow contested paragraphs and are included in this continuous text for editorial review. Do not treat this as a corrected recording script. Source paragraph/list-item/table-row references are counted within the named section in the retrieved edition; see fact-check-source-locators.md.
+
 # Walking Through Google Search
 
 *Adapted from Google Search Central's documentation (developers.google.com/search/docs), licensed under Creative Commons Attribution 4.0.*
@@ -49,6 +53,14 @@ Requirement two. The page works.
 Google only indexes pages that come back with what's called an HTTP two hundred status code. Two hundred simply means success: the server received the request and returned the page. If instead the server returns an error, say a four hundred series code like the familiar four oh four "not found", or a five hundred series code meaning the server itself had a problem, Google won't index it.
 
 That sounds obvious, but there's a subtle trap in it. Some sites show an error message to visitors, something like "sorry, this product is no longer available", while the server still reports two hundred, success. That's called a soft four oh four, and it confuses things, because the page says one thing and the server says another. We'll come back to that in a later episode. For now, the principle is simple: Google trusts the status code, so make sure the status code tells the truth.
+
+> ChatGPT fact check - this paragraph claims "Some sites show an error message to visitors, something like "sorry, this product is no longer available", while the server still reports two hundred, success.", but the counterargument is: The soft-404 explanation ends by saying Google trusts the status code. Google can recognize error or empty content despite a 200 response and classify it as a soft 404. Return a status code that matches the page. Google also examines the content and may treat an error page served with a success code as a soft 404.
+>
+> Sources: Avoid soft 404 errors in single-page apps; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics#avoid-soft-404s.
+>
+> A005 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Once again, the URL Inspection tool will tell you what status code Google received for any given page.
 
@@ -132,6 +144,14 @@ These policies are about faking the signals Google uses to judge relevance and a
 
 First, keyword stuffing. Filling a page with keywords or numbers in an attempt to manipulate rankings, often as unnatural lists or out of context. Google's examples include blocks of text listing every city and region a page wants to rank for, and repeating the same phrase so often it sounds robotic. The test for this one is wonderfully simple, and it works perfectly for audio: read it out loud. If it sounds like a malfunctioning radio advert, it's stuffed.
 
+> ChatGPT fact check - this paragraph claims "Filling a page with keywords or numbers in an attempt to manipulate rankings, often as unnatural lists or out of context.", but the counterargument is: Reading awkwardly is not Google's definitive keyword-stuffing test. Similarly, the assertion that a template with a variable swapped in adds no value is stronger than the policy. Purpose, usefulness, and the content as a whole matter; product templates are not inherently spam. Keep Google's definitions: keyword stuffing attempts to manipulate rankings with unnatural repetition; scaled content abuse creates many low-value pages primarily to manipulate ranking. Mark any read-aloud test as an editorial heuristic.
+>
+> Sources: Keyword stuffing; paragraph 1: https://developers.google.com/search/docs/essentials/spam-policies#keyword-stuffing; Scaled content abuse; paragraph 1: https://developers.google.com/search/docs/essentials/spam-policies#scaled-content.
+>
+> A006 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Second, hidden text and links. Putting content on a page purely for search engines, where people can't easily see it. Classic examples are white text on a white background, text hidden behind an image, text positioned off the screen with styling, font size or opacity set to zero, or a link hidden on a single tiny character like a hyphen in the middle of a paragraph.
 
 And here's the reassuring part. Modern design elements that show and hide content are fine. Accordions, tabs, sliders, tooltips, and text meant only for screen readers to improve accessibility. None of those violate the policy. So a product page with collapsible sections for "size guide", "materials", and "care instructions" is perfectly fine. The difference is intent: hidden to help the user, fine. Hidden to fool the crawler, spam.
@@ -144,6 +164,14 @@ Other examples of link spam: excessive "you link to me, I'll link to you" arrang
 
 Now, the important nuance. Google says outright that buying and selling links is a normal part of the web's economy for advertising and sponsorship. It's not a violation to have those links, as long as they're labelled with a rel attribute value of either nofollow or sponsored. Those labels tell Google, "this link exists because of a commercial arrangement, don't count it as an endorsement". So gifted products, sponsorships, affiliate links, paid placements: label them, and you're fine. We'll dig into those rel attributes in episode fifteen.
 
+> ChatGPT fact check - this paragraph claims "It's not a violation to have those links, as long as they're labelled with a rel attribute value of either nofollow or sponsored.", but the counterargument is: The narration promises rel-attribute coverage in Episode 15, which covers lazy loading and dynamic rendering. Episode 9 is the links chapter, but it also lacks a proper explanation of sponsored, ugc, and nofollow. Add a short section based on Qualify your outbound links to Episode 9, then change this reference to Episode 9.
+>
+> Sources: Qualify your outbound links to Google; table row 2: https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links#qualify-your-outbound-links-to-google; Qualify your outbound links to Google; table row 4: https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links#qualify-your-outbound-links-to-google; Qualify your outbound links to Google; paragraph 4: https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links#qualify-your-outbound-links-to-google.
+>
+> A007 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 Fourth, machine-generated traffic. Sending automated queries to Google, such as scraping search results to check your rankings, without Google's express permission. That violates both the spam policies and Google's terms of service.
 
 Family three. Low-value content at scale.
@@ -155,6 +183,14 @@ First, scaled content abuse. This is when many pages are generated primarily to 
 The examples are worth hearing in full. Using generative AI or similar tools to create many pages without adding value. Scraping feeds or search results to generate pages, including by automated rewriting, synonym-swapping, or translating. Stitching content together from different pages without adding value. Creating multiple sites to hide how scaled the content is. And creating pages that make little sense to a reader but contain search keywords.
 
 Now, why should a store with fourteen thousand products care about this? Having many pages is not the problem. A store with fourteen thousand genuinely different flags has fourteen thousand genuinely different products. The risk arises if the pages are thin and interchangeable: the same boilerplate description with only the name swapped, or auto-generated text that says nothing specific about the item. The question Google is asking is whether each page adds value for a person. Historical context, accurate specifications, genuine differences between versions: that's value. A template with a variable swapped in isn't.
+
+> ChatGPT fact check - this paragraph claims "A template with a variable swapped in isn't.", but the counterargument is: Reading awkwardly is not Google's definitive keyword-stuffing test. Similarly, the assertion that a template with a variable swapped in adds no value is stronger than the policy. Purpose, usefulness, and the content as a whole matter; product templates are not inherently spam. Keep Google's definitions: keyword stuffing attempts to manipulate rankings with unnatural repetition; scaled content abuse creates many low-value pages primarily to manipulate ranking. Mark any read-aloud test as an editorial heuristic.
+>
+> Sources: Keyword stuffing; paragraph 1: https://developers.google.com/search/docs/essentials/spam-policies#keyword-stuffing; Scaled content abuse; paragraph 1: https://developers.google.com/search/docs/essentials/spam-policies#scaled-content.
+>
+> A006 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 And Google offers a practical escape hatch: if you're hosting content like this, exclude it from search. In other words, you can keep low-value pages for your own reasons, but noindex them.
 
@@ -252,6 +288,14 @@ Third, serving: someone in Texas searches "Texas flag three by five feet". If yo
 
 At every step in that chain, something can go wrong, and now you have the vocabulary to name where. Not discovered, is a crawling problem. Discovered but not understood, is an indexing problem. Understood but not shown, is a serving problem. That distinction alone will save you time whenever a page isn't performing the way you expect, because it tells you which part of the documentation to go back to.
 
+> ChatGPT fact check - this paragraph claims "Discovered but not understood, is an indexing problem.", but the counterargument is: The three diagnostic labels collapse too much: a discovered page may still not be crawled; a crawled page may not be indexed for several reasons. 'Discovered but not understood' is not an adequate definition of an indexing problem. Distinguish discovery, successful fetching/rendering, indexing, and serving. Diagnose each with Search Console rather than inferring the stage from visibility alone.
+>
+> Sources: Introducing the three stages of Google Search; list item 1: https://developers.google.com/search/docs/fundamentals/how-search-works#introducing-the-three-stages-of-google-search; Introducing the three stages of Google Search; list item 2: https://developers.google.com/search/docs/fundamentals/how-search-works#introducing-the-three-stages-of-google-search; Introducing the three stages of Google Search; list item 3: https://developers.google.com/search/docs/fundamentals/how-search-works#introducing-the-three-stages-of-google-search; Crawling; paragraph 1: https://developers.google.com/search/docs/fundamentals/how-search-works#crawling; Crawling; paragraph 2: https://developers.google.com/search/docs/fundamentals/how-search-works#crawling.
+>
+> A008 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap.
 
 Three stages: crawling, where Google finds and fetches a page, rendering it like a browser would. Indexing, where Google reads the content, decides on a canonical version among duplicates, and stores what it learned. And serving, where a search query is matched against the index and the most relevant result is returned, shaped by location, language, device, and hundreds of other factors.
@@ -330,6 +374,14 @@ Avoid distracting advertisements.
 
 Ads are a normal part of the web, but they shouldn't overwhelm the content or block people from reading it. Google specifically names interstitial pages, the pop-up-style pages shown before or after your actual content, as something that can make a site hard to use if overdone. There's a dedicated episode on this later, episode nineteen, under page experience.
 
+> ChatGPT fact check - this paragraph claims "Google specifically names interstitial pages, the pop-up-style pages shown before or after your actual content, as something that can make a site hard to use if overdone.", but the counterargument is: The interstitial discussion points to Episode 19. Page experience and interstitials are in Episode 20. Change the spoken reference to Episode 20.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/page-experience.
+>
+> A009 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 Link to relevant resources.
 
 Links connect visitors and search engines to other parts of your site, and to relevant pages elsewhere. Google repeats a striking fact here: the vast majority of new pages Google finds every day, it finds through links. That makes links a crucial part of how your own new pages get discovered in the first place.
@@ -360,6 +412,14 @@ If you use a content management system like Shopify, you likely don't need to to
 
 Below the title sits the snippet, the short description that helps someone decide whether to click. The snippet is drawn from the actual content of the page it's linking to, which means you have real control over the words that can end up there, simply by writing your page content well. Occasionally the snippet instead comes from your meta description tag, a short, page-specific summary you write directly for this purpose. A good meta description is short, unique to that one page, and covers the most relevant points. We'll dig deeper into both of these in episode twenty.
 
+> ChatGPT fact check - this paragraph claims "Occasionally the snippet instead comes from your meta description tag, a short, page-specific summary you write directly for this purpose.", but the counterargument is: Titles/snippets are assigned to Episode 20 instead of 21; video to 21 instead of 22; site moves to 17 instead of 18. Use Episode 21 for titles/snippets, Episode 22 for images/video, and Episode 18 for site moves.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+>
+> A010 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 Adding and optimizing images.
 
 Many people search visually. Google's example: someone with a recipe blog might be found by people searching "fruit tart recipes" and then browsing through the photos. Images can be a first point of discovery, not just decoration.
@@ -371,6 +431,14 @@ Add descriptive alt text. Alt text is a short but meaningful description of what
 Optimizing videos.
 
 If parts of your site are primarily about individual videos, people can discover you through video results too, and many of the same practices from images and text apply directly. Create genuinely high-quality video content, and embed it on a standalone page, near text relevant to that video. Write descriptive titles and descriptions for the video itself, and remember that a video's title follows the same good-title principles as a page title. If video is a meaningful part of your business, there's a full dedicated guide, which we'll cover in episode twenty-one.
+
+> ChatGPT fact check - this paragraph claims "If parts of your site are primarily about individual videos, people can discover you through video results too, and many of the same practices from images and text apply directly.", but the counterargument is: Titles/snippets are assigned to Episode 20 instead of 21; video to 21 instead of 22; site moves to 17 instead of 18. Use Episode 21 for titles/snippets, Episode 22 for images/video, and Episode 18 for site moves.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+>
+> A010 | Editorial | Low priority | Checked 24 September 2026
+
+
 
 Promoting your website.
 
@@ -406,6 +474,14 @@ And finally, thinking E-E-A-T is a ranking factor. Google's answer, verbatim in 
 
 Let's close with Google's own suggested next steps, because they map neatly onto where this series goes from here. Set up Search Console to monitor your performance, which we'll walk through in episode twenty-nine. Learn to maintain your SEO over the long term, including scenarios like site moves, which we'll touch in episode seventeen. And add valid structured data, which makes your pages eligible for extra visual features in search results, review stars, carousels, and more, which is the whole back half of Part Three of this series.
 
+> ChatGPT fact check - this paragraph claims "Learn to maintain your SEO over the long term, including scenarios like site moves, which we'll touch in episode seventeen.", but the counterargument is: Titles/snippets are assigned to Episode 20 instead of 21; video to 21 instead of 22; site moves to 17 instead of 18. Use Episode 21 for titles/snippets, Episode 22 for images/video, and Episode 18 for site moves.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+>
+> A010 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 Let's recap both parts of the Starter Guide together, since they form one whole document.
 
 Help Google find you: check with a site colon search, understand that links do most of the discovery work, and make sure Google can render your page the way a real visitor sees it. Organize sensibly, with descriptive URLs and topic folders, without overhauling a working site. Write content that's genuinely useful, unique, current, and people-first, because that outweighs every technical suggestion in the guide. Write clear titles and meta descriptions, since those directly shape your listing's appearance. Use quality images with real alt text, placed near relevant text. Promote your site through real channels, and remember word of mouth is still one of the strongest forces there is. And finally, let go of the myths: meta keywords, exact keyword domains, magic word counts, heading order, and E-E-A-T as a literal ranking score. None of them do what people think they do.
@@ -417,6 +493,14 @@ This episode is adapted from the SEO Starter Guide on Google Search Central, lic
 ### Episode 6: People-First Content, and Understanding E-E-A-T
 
 Welcome back. Two episodes ago, we closed the Starter Guide with a small bombshell: Google saying flatly that E-E-A-T is not a ranking factor. That probably raised more questions than it answered, since E-E-A-T is one of the most talked-about acronyms in the entire SEO world. Today we go straight to Google's own document on the subject, and by the end you'll understand exactly what that acronym means, why it isn't a ranking factor, and why it matters anyway.
+
+> ChatGPT fact check - this paragraph claims "Two episodes ago, we closed the Starter Guide with a small bombshell: Google saying flatly that E-E-A-T is not a ranking factor.", but the counterargument is: The Starter Guide ended in the immediately preceding episode, not two episodes ago. Page experience is Episode 20, not Episode 19. Say 'Last episode' in the opening and 'Episode 20' for page experience.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
+>
+> A011 | Editorial | Low priority | Checked 24 September 2026
+
+
 
 Google opens with the same sentence that's become a refrain across this series: its automated ranking systems are designed to prioritize helpful, reliable information created to benefit people, not content created to manipulate rankings.
 
@@ -437,6 +521,14 @@ On expertise, Google asks whether the content is presented in a way that earns t
 Providing a great page experience.
 
 Google's core ranking systems reward a good overall page experience, and the guidance here is explicit about not fixating on just one or two aspects of that. Check whether you're delivering a genuinely good experience across many dimensions at once, not optimising one metric while neglecting the rest. We'll dedicate a full episode to page experience and Core Web Vitals later on, episode nineteen.
+
+> ChatGPT fact check - this paragraph claims "Google's core ranking systems reward a good overall page experience, and the guidance here is explicit about not fixating on just one or two aspects of that.", but the counterargument is: The Starter Guide ended in the immediately preceding episode, not two episodes ago. Page experience is Episode 20, not Episode 19. Say 'Last episode' in the opening and 'Episode 20' for page experience.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
+>
+> A011 | Editorial | Low priority | Checked 24 September 2026
+
+
 
 Focus on people-first content.
 
@@ -463,6 +555,14 @@ Google's automated systems use many different factors to identify and rank conte
 Here's the part that resolves the apparent contradiction from episode five. Of the four, trust is the most important, and the other three exist to build trust. Content doesn't need to demonstrate all four to be considered helpful. Some content earns trust mainly through the experience it demonstrates. Other content earns it mainly through expertise. And here is Google's own sentence on the central puzzle: while E-E-A-T itself isn't a specific ranking factor, using a mix of factors that can identify content with good E-E-A-T is useful. In other words, there's no single "E-E-A-T score" sitting in the algorithm that a page either passes or fails. E-E-A-T is a framework for describing the qualities that Google's actual, separate ranking signals are trying to detect. It's the theory behind the exam, not a subject on the exam itself.
 
 And here's where it becomes more consequential for certain kinds of content. Google's systems give extra weight to strong E-E-A-T specifically for what they call Your Money or Your Life topics, YMYL for short: topics that could meaningfully affect someone's health, financial stability, safety, or the wellbeing of society more broadly. Medical advice, financial guidance, legal information, that territory. A flag store's product pages generally sit well outside YMYL. But if this brand ever expands into, say, detailed guidance about flag display etiquette tied to funerals, military honours, or civic ceremonies, that content edges toward territory where trust signals start to matter more heavily, and it's worth knowing that boundary exists.
+
+> ChatGPT fact check - this paragraph claims "Google's systems give extra weight to strong E-E-A-T specifically for what they call Your Money or Your Life topics, YMYL for short: topics that could meaningfully affect someone's health, financial stability, safety, or the wellbeing of society more broadly.", but the counterargument is: The speculation that funeral, military-honour, or civic flag etiquette enters a higher-weight YMYL category is not a classification made by the cited source. Remove the flag-etiquette example. Explain YMYL using the source's categories: potential significant effects on health, financial stability, safety, or societal welfare.
+>
+> Sources: Get to know E-E-A-T and the quality rater guidelines; paragraph 3: https://developers.google.com/search/docs/fundamentals/creating-helpful-content#eat.
+>
+> A012 | Unsupported | Medium priority | Checked 24 September 2026
+
+
 
 So where does the quality rater guidelines document fit in? Google employs search quality raters, people who evaluate whether the algorithms seem to be producing good results, essentially a feedback mechanism to confirm changes are working as intended. Raters are specifically trained to judge whether content demonstrates strong E-E-A-T, following a detailed public document called the Search Quality Rater Guidelines. And Google is explicit on a point people frequently get wrong: raters have no control over how any individual page ranks, and their ratings are never fed directly into the ranking algorithms. Google's own analogy is a restaurant collecting feedback cards from diners: it tells the kitchen whether the food is landing, without any single diner deciding tonight's menu. Reading the guidelines, Google suggests, can still help you self-assess your own content's E-E-A-T and understand, conceptually, what the automated signals are trying to pick up on.
 
@@ -520,6 +620,14 @@ Focus on what your users want, and avoid overdoing it. Here's a direct warning a
 
 And if you're using generative AI tools yourself to help draft content, Google points directly to a companion guide, on using generative AI responsibly, which is exactly where we're headed after this episode.
 
+> ChatGPT fact check - this paragraph claims "And if you're using generative AI tools yourself to help draft content, Google points directly to a companion guide, on using generative AI responsibly, which is exactly where we're headed after this episode.", but the counterargument is: Episode 8 does not cover the promised AI-content production guide, ongoing SEO maintenance, or developer guide. The structured-data reference also starts at Episode 22 rather than 23. Add separate source-faithful sections for the promised guides, or remove those promises. Correct the structured-data reference to Episode 23.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
+>
+> A015 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Google then offers what it calls a simplifying principle for all of this: focus on what your visitors would enjoy, find helpful, and feel satisfied by. If you're ever unsure about a decision, ask yourself one question: is this content my visitors would find satisfying? If yes, you're on the right track.
 
 Building and maintaining a clear technical structure.
@@ -527,6 +635,14 @@ Building and maintaining a clear technical structure.
 Google restates something important here, almost as a warning against complacency: technical clarity is still the core of how AI systems access your data, and every existing technical practice from this series remains worthwhile. There's no separate AI-specific technical checklist.
 
 One genuinely new detail worth flagging precisely: to be eligible for generative AI features specifically, a page must be indexed and eligible for a normal snippet, meeting the same technical requirements from episode one. But beyond that, a site also needs to be specifically included for generative AI features inside Search Console. That's an actual setting, not automatic, and worth checking directly if you want to track this.
+
+> ChatGPT fact check - this paragraph claims "But beyond that, a site also needs to be specifically included for generative AI features inside Search Console.", but the counterargument is: The script says Search Console AI inclusion is 'not automatic' and implies a separate opt-in is required. The control exists, but Google's help page says inclusion is the default; child properties can inherit a parent's setting. Sites are included in Search generative AI features by default, subject to eligibility. Check the Search Console control if a property or its parent has been excluded.
+>
+> Sources: Change your control; list item 1: https://support.google.com/webmasters/answer/16908024?hl=en.
+>
+> A013 | Error | High priority | Checked 24 September 2026
+
+
 
 Google also repeats, once more, the now-familiar caveat: meeting every requirement doesn't guarantee crawling, indexing, or serving. Still true here.
 
@@ -552,9 +668,25 @@ Seeking inauthentic mentions. Google's generative features can surface what's ge
 
 Overfocusing on structured data. Structured data isn't required for generative AI search specifically, and there's no special new schema.org markup invented just for it. It's still worth using as part of your broader SEO strategy, because it remains the path to eligibility for rich results in ordinary Search, which we'll cover fully starting in episode twenty-two. But treating it as some kind of AI-specific requirement is a misconception.
 
+> ChatGPT fact check - this paragraph claims "It's still worth using as part of your broader SEO strategy, because it remains the path to eligibility for rich results in ordinary Search, which we'll cover fully starting in episode twenty-two.", but the counterargument is: Episode 8 does not cover the promised AI-content production guide, ongoing SEO maintenance, or developer guide. The structured-data reference also starts at Episode 22 rather than 23. Add separate source-faithful sections for the promised guides, or remove those promises. Correct the structured-data reference to Episode 23.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
+>
+> A015 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Measuring visibility.
 
 Google points to a specific tool: the Generative AI Performance report inside Search Console, which shows how people are discovering your content specifically through these AI features on both Search and Discover. And there's a pointed warning attached: be wary of third-party tools promising ranking success or claiming access to "internal" Google metrics. No third-party tool has access to Google's actual internal ranking or AI systems. Use such tools if they genuinely help your workflow, but always weigh their advice against Google's own official guidance, which is exactly the subject of episode eight, coming up next.
+
+> ChatGPT fact check - this paragraph claims "Google points to a specific tool: the Generative AI Performance report inside Search Console, which shows how people are discovering your content specifically through these AI features on both Search and Discover.", but the counterargument is: The broad description of a single AI report for Search and Discover omits that the detailed reporting is split. The Search report currently describes impressions, not a complete attribution or conversion measure. Explain the separate Search and Discover generative AI reports and identify what metrics each provides. Do not imply full click, conversion, or citation attribution from an impressions report.
+>
+> Sources: Generative AI performance report (Search); paragraph 1: https://support.google.com/webmasters/answer/16984139?hl=en; What's included; paragraph 2: https://support.google.com/webmasters/answer/16984139?hl=en.
+>
+> A014 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 A brief word on agentic experiences.
 
@@ -564,7 +696,23 @@ Let's recap.
 
 Optimizing for generative AI search is, in Google's own words, still SEO, not a separate discipline. The underlying mechanisms are retrieval-augmented generation, grounding responses in real, current pages with visible sources, and query fan-out, silently expanding a single question into several related searches. The single sharpest concept in this whole guide is non-commodity content: writing from real, specific, first-hand experience that no generic summary could replicate, rather than restating common knowledge everyone already has. The technical requirements are unchanged from earlier episodes, though generative AI features do need separate inclusion in Search Console. And the mythbusting list is worth genuinely believing: skip the LLMS.txt files, skip chunking your content into fragments, skip rewriting for imagined AI phrasing, skip chasing inauthentic mentions, and don't treat structured data as some new AI-only requirement.
 
+> ChatGPT fact check - this paragraph claims "The technical requirements are unchanged from earlier episodes, though generative AI features do need separate inclusion in Search Console.", but the counterargument is: The script says Search Console AI inclusion is 'not automatic' and implies a separate opt-in is required. The control exists, but Google's help page says inclusion is the default; child properties can inherit a parent's setting. Sites are included in Search generative AI features by default, subject to eligibility. Check the Search Console control if a property or its parent has been excluded.
+>
+> Sources: Change your control; list item 1: https://support.google.com/webmasters/answer/16908024?hl=en.
+>
+> A013 | Error | High priority | Checked 24 September 2026
+
+
+
 Next episode, we look at the flip side of everything we just discussed: Google's specific guidance on using generative AI tools to actually produce your content, plus a look at maintaining your SEO over time, the developer's guide to Search, the question of whether you need to hire an SEO at all, and how to judge third-party SEO advice, including the AEO and GEO consultants this episode already warned you about. See you there.
+
+> ChatGPT fact check - this paragraph claims "Next episode, we look at the flip side of everything we just discussed: Google's specific guidance on using generative AI tools to actually produce your content, plus a look at maintaining your SEO over time, the developer's guide to Search, the question of whether you need to hire an SEO at all, and how to judge third-party SEO advice, including the AEO and GEO consultants this episode already warned you about.", but the counterargument is: Episode 8 does not cover the promised AI-content production guide, ongoing SEO maintenance, or developer guide. The structured-data reference also starts at Episode 22 rather than 23. Add separate source-faithful sections for the promised guides, or remove those promises. Correct the structured-data reference to Episode 23.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
+>
+> A015 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 This episode is adapted from "Optimizing your website for generative AI features on Google Search" on Google Search Central, licensed under Creative Commons Attribution 4.0.
 
@@ -622,9 +770,33 @@ Some of these, Google says plainly, may genuinely help your work. Others may cla
 
 There's a subtler point worth flagging clearly, since it addresses something people genuinely get confused about. Some third-party tools present data that users mistakenly assume comes directly from Google. It doesn't. These tools cannot access Google's actual internal ranking data, full stop, no matter how their dashboard is presented. Any prediction a third-party tool makes is that tool's own opinion, and like any prediction, it won't always turn out to be right.
 
+> ChatGPT fact check - this paragraph claims "These tools cannot access Google's actual internal ranking data, full stop, no matter how their dashboard is presented.", but the counterargument is: The wording 'It doesn't' and 'no such tool has real access to Google's internal data' can imply every third-party dashboard lacks any Google-sourced data. Google's warning concerns internal ranking data, not authorized Search Console API data. Third-party tools cannot access Google's internal ranking systems. Some can display data obtained through authorized Google APIs; distinguish those data from a tool's own estimates and predictions.
+>
+> Sources: Think critically about using third-party SEO tools and services; paragraph 3: https://developers.google.com/search/docs/fundamentals/third-party-seo#think-critically-about-using-third-party-seo-tools-and-services.
+>
+> A016 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Google's own recommendation, regardless of whether you use third-party tools alongside it: use Search Console. It's the one source that gives you information and data coming directly from Google Search itself, rather than an external party's interpretation of it.
 
+> ChatGPT fact check - this paragraph claims "Google's own recommendation, regardless of whether you use third-party tools alongside it: use Search Console.", but the counterargument is: The wording 'It doesn't' and 'no such tool has real access to Google's internal data' can imply every third-party dashboard lacks any Google-sourced data. Google's warning concerns internal ranking data, not authorized Search Console API data. Third-party tools cannot access Google's internal ranking systems. Some can display data obtained through authorized Google APIs; distinguish those data from a tool's own estimates and predictions.
+>
+> Sources: Think critically about using third-party SEO tools and services; paragraph 3: https://developers.google.com/search/docs/fundamentals/third-party-seo#think-critically-about-using-third-party-seo-tools-and-services.
+>
+> A016 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap, and tie this to something concrete: for a business weighing whether to bring someone onto the FMP SEO work alongside Rushikesh and Supriya, or evaluating an outside consultant's pitch, this episode is essentially the vetting checklist. Read the Starter Guide yourself first, so you can recognise good advice from bad. If you do hire, interview thoroughly, check references, grant read-only Search Console access before write access, and never accept a guaranteed ranking. Treat unsolicited pitches with real skepticism. And for any third-party tool, dashboard, or piece of AEO or GEO advice: check it against Google's own documentation, remember that no such tool has real access to Google's internal data, and let Search Console, not a third-party score, be your actual source of truth.
+
+> ChatGPT fact check - this paragraph claims "And for any third-party tool, dashboard, or piece of AEO or GEO advice: check it against Google's own documentation, remember that no such tool has real access to Google's internal data, and let Search Console, not a third-party score, be your actual source of truth.", but the counterargument is: The wording 'It doesn't' and 'no such tool has real access to Google's internal data' can imply every third-party dashboard lacks any Google-sourced data. Google's warning concerns internal ranking data, not authorized Search Console API data. Third-party tools cannot access Google's internal ranking systems. Some can display data obtained through authorized Google APIs; distinguish those data from a tool's own estimates and predictions.
+>
+> Sources: Think critically about using third-party SEO tools and services; paragraph 3: https://developers.google.com/search/docs/fundamentals/third-party-seo#think-critically-about-using-third-party-seo-tools-and-services.
+>
+> A016 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 That closes out Part One of this series: the rules, the mechanics, the Starter Guide, content quality, generative AI, and now the question of getting outside help. Next episode, we move into Part Two, crawling and indexing in depth, starting with the crawling overview, the full list of file types Google can index, URL structure best practices in detail, and how links actually need to be built to be crawlable in the first place. See you there.
 
@@ -635,6 +807,14 @@ This episode is adapted from "Do you need an SEO?" and "Google Search's guidance
 ### Episode 9: File Types, URL Structure, and Crawlable Links
 
 Welcome to Part Two of the series, and to a new stretch of episodes on crawling and indexing in real technical depth. Today covers three foundational documents: the full list of file types Google can actually index, the precise best practices for structuring your URLs, and exactly what makes a link crawlable in the first place. This is dense, practical material, well suited to being absorbed on a walk rather than skimmed on a screen.
+
+> ChatGPT fact check - this paragraph claims "Welcome to Part Two of the series, and to a new stretch of episodes on crawling and indexing in real technical depth.", but the counterargument is: The introduction says it gives the full indexable-file list, but the video list is explicitly shortened with 'among others'. This is a completeness issue rather than a wrong example. Either read the full supported-format list in a clearly labeled reference section, or describe this as a selection and provide the complete accessible companion list.
+>
+> Sources: Supported flat file types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/indexable-file-types#flat-file-types; Supported encoded file types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/indexable-file-types#encoded-file-types.
+>
+> A018 | Omission | Low priority | Checked 24 September 2026
+
+
 
 Let's start with file types Google can index.
 
@@ -647,6 +827,14 @@ Flat file types are files where the content sits in plain, unencoded text, even 
 Encoded file types are binary files or more complex containers that need a specific parser to pull out the readable text. This group includes Adobe's Portable Document Format, PDF; Adobe PostScript; the Electronic Publication format, EPUB; Hancom Hanword, a Korean word processor format; Microsoft Excel, PowerPoint, and Word, in both their older and newer extensions; the OpenOffice presentation, spreadsheet, and text formats; and Rich Text Format.
 
 And Google can also index media formats directly. For images: BMP, GIF, JPEG, PNG, WebP, SVG, and AVIF. For video: a long list including 3GP, ASF, AVI, M4V, MKV, MOV, MP4, MPEG, WebM, and WMV, among others.
+
+> ChatGPT fact check - this paragraph claims "For video: a long list including 3GP, ASF, AVI, M4V, MKV, MOV, MP4, MPEG, WebM, and WMV, among others.", but the counterargument is: The introduction says it gives the full indexable-file list, but the video list is explicitly shortened with 'among others'. This is a completeness issue rather than a wrong example. Either read the full supported-format list in a clearly labeled reference section, or describe this as a selection and provide the complete accessible companion list.
+>
+> Sources: Supported flat file types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/indexable-file-types#flat-file-types; Supported encoded file types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/indexable-file-types#encoded-file-types.
+>
+> A018 | Omission | Low priority | Checked 24 September 2026
+
+
 
 There's a small, genuinely useful trick buried in here: you can use the filetype colon operator directly in a Google search to limit results to a specific format. Google's own example is "filetype:rtf galway", which searches specifically for RTF files and URLs ending in dot-r-t-f whose content contains the word galway. Worth knowing if you ever want to check what kind of files Google has indexed from your own site, or a competitor's, say size guide PDFs or spec sheet downloads.
 
@@ -694,6 +882,14 @@ Google uses links both as a relevance signal and, critically, as the primary way
 
 Making your links crawlable. Here's the core technical rule, stated plainly: Google can generally only crawl a link if it's built as a proper HTML anchor element, an "a" tag, with an href attribute. Most other formats simply won't be parsed and extracted by Google's crawlers. Google specifically can't reliably extract a URL from an anchor element missing its href attribute, or from other elements dressed up to behave like links purely through JavaScript click handlers.
 
+> ChatGPT fact check - this paragraph claims "Google specifically can't reliably extract a URL from an anchor element missing its href attribute, or from other elements dressed up to behave like links purely through JavaScript click handlers.", but the counterargument is: The body correctly says Google generally crawls anchor links with href attributes, but the recap says those are necessary 'to be crawled at all'. The source warns that other forms are not reliably extractable, rather than guaranteeing total impossibility. For reliable discovery, use an anchor element with a resolvable href. Google cannot reliably extract links from many JavaScript-only patterns.
+>
+> Sources: Make your links crawlable; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/links-crawlable#crawlable-links.
+>
+> A017 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Google gives clear side-by-side examples. What it can parse: a straightforward href pointing to a full URL, a relative path like "/products/category/shoes", or a relative path with a dot notation like "./products/category/shoes", even with an onclick handler or a class attached, as long as a real href is still present. What it generally cannot reliably parse: a router-based link attribute used by some JavaScript frameworks instead of href, a span element dressed up with an href attribute even though span isn't a link element at all, or an anchor that relies purely on an onclick handler with no real href to fall back on.
 
 There's a second layer to this too: the URL inside that href needs to actually resolve to a real address Google's crawlers can request, something that looks like a genuine URI. A javascript colon pseudo-link, like "javascript:goTo('products')", isn't something Google can reliably resolve into an actual page request, even if it happens to work fine for a person clicking with a mouse.
@@ -705,6 +901,14 @@ And there's a specific point about internal linking worth carrying with you: peo
 Let's recap.
 
 Google indexes a wide range of file types, plain text formats, encoded document formats like PDF and Word, and common image and video formats, with the file type determined mainly by the server's Content-Type header. URL structure has three hard technical requirements, standard encoding, no content-changing fragments, and consistent parameter formatting, plus a set of best practices: descriptive words over IDs, your audience's own language, percent encoding for non-ASCII characters, hyphens rather than underscores, minimal parameters, and awareness that URLs are case sensitive. Watch specifically for combinatorial filter explosions, irrelevant tracking parameters, infinite calendars, and broken relative links, all of which a robots.txt file can help contain. And links need a genuine anchor tag with a working href to be crawled at all, with descriptive anchor text mattering just as much for your own internal links as for anything pointing elsewhere.
+
+> ChatGPT fact check - this paragraph claims "And links need a genuine anchor tag with a working href to be crawled at all, with descriptive anchor text mattering just as much for your own internal links as for anything pointing elsewhere.", but the counterargument is: The body correctly says Google generally crawls anchor links with href attributes, but the recap says those are necessary 'to be crawled at all'. The source warns that other forms are not reliably extractable, rather than guaranteeing total impossibility. For reliable discovery, use an anchor element with a resolvable href. Google cannot reliably extract links from many JavaScript-only patterns.
+>
+> Sources: Make your links crawlable; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/links-crawlable#crawlable-links.
+>
+> A017 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we go deep on sitemaps: what they're actually for, how to build and submit one, managing sitemap index files for larger sites, and the specialised extensions for images, news, and video. See you there.
 
@@ -740,6 +944,14 @@ The XML sitemap is the most versatile. It's extensible, meaning it can carry tha
 
 RSS, mRSS, and Atom 1.0 feeds are structurally similar to XML sitemaps, and are often the easiest to provide simply because content management systems tend to generate these feeds automatically anyway. They can also be used specifically to give Google information about your videos.
 
+> ChatGPT fact check - this paragraph claims "RSS, mRSS, and Atom 1.0 feeds are structurally similar to XML sitemaps, and are often the easiest to provide simply because content management systems tend to generate these feeds automatically anyway.", but the counterargument is: RSS/Atom generally contain only recent URLs; sitemap index location rules have supported cross-site submission exceptions. The promised extension treatment never gives practical image/video/news requirements, including news's two-day window and 1,000-news-entry limit. Add those qualifications and short source-based extension sections. Preserve required tags and numeric limits in a companion reference, with their meaning explained aloud.
+>
+> Sources: RSS, mRSS, and Atom 1.0; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#rss; How to cross-submit sitemaps for multiple sites; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#cross-submit.
+>
+> A020 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 The text sitemap is the simplest format of all: a plain list of URLs, limited to HTML and other indexable text pages. Its strength is exactly that simplicity, easy to create and maintain, especially at scale. Its weakness is that it can't carry any of the richer, type-specific information the XML format can.
 
 Sitemap best practices and limits.
@@ -747,6 +959,14 @@ Sitemap best practices and limits.
 These come directly from the underlying sitemaps protocol, and the most commonly overlooked ones concern size limits, file location, and which URLs actually belong in a sitemap.
 
 The size limit: every format caps a single sitemap file at 50 megabytes uncompressed, or 50,000 URLs, whichever comes first. If you have more content than that, and a store this size likely does once you count every product, variant, and collection page, you need to split it into multiple sitemap files. That's exactly what a sitemap index file is for, and we'll get to that next.
+
+> ChatGPT fact check - this paragraph claims "The size limit: every format caps a single sitemap file at 50 megabytes uncompressed, or 50,000 URLs, whichever comes first.", but the counterargument is: A 14,000-SKU catalogue does not establish that 50,000 canonical URLs will be exceeded. Google says it ignores changefreq and priority; the script says 'largely' ignores them and invents an explanation about gaming. lastmod should reflect a significant change. Split sitemaps when the actual URL or uncompressed-size limit is reached. Google ignores changefreq and priority. Supply lastmod only when it accurately reflects a significant update.
+>
+> Sources: Sitemap best practices; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#general-guidelines; Additional notes about XML sitemaps; list item 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps; Additional notes about XML sitemaps; list item 3: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps.
+>
+> A019 | Error | Medium priority | Checked 24 September 2026
+
+
 
 File encoding and location: your sitemap file needs to be UTF-8 encoded. On location, there's a subtlety worth knowing precisely: you can host a sitemap anywhere on your site, but unless you submit it directly through Search Console, a sitemap only affects URLs beneath its own parent directory. In practice, that means a sitemap sitting at your site's root can cover the whole domain, but one placed in a subfolder is limited to URLs within that subfolder or below it, unless you tell Search Console about it explicitly.
 
@@ -756,15 +976,47 @@ Once your site outgrows a single sitemap's limits, the sitemap index file is the
 
 There's a location rule specific to index files: every sitemap referenced inside a sitemap index file must live in the same directory as the index file itself, or somewhere deeper in that same directory hierarchy. For example, an index file at "example.com/public/sitemap_index.xml" can only reference sitemaps in that same "public" folder or further inside it, like "public/shared/". You can submit up to 500 sitemap index files per site within your Search Console account.
 
+> ChatGPT fact check - this paragraph claims "There's a location rule specific to index files: every sitemap referenced inside a sitemap index file must live in the same directory as the index file itself, or somewhere deeper in that same directory hierarchy.", but the counterargument is: RSS/Atom generally contain only recent URLs; sitemap index location rules have supported cross-site submission exceptions. The promised extension treatment never gives practical image/video/news requirements, including news's two-day window and 1,000-news-entry limit. Add those qualifications and short source-based extension sections. Preserve required tags and numeric limits in a companion reference, with their meaning explained aloud.
+>
+> Sources: RSS, mRSS, and Atom 1.0; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#rss; How to cross-submit sitemaps for multiple sites; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#cross-submit.
+>
+> A020 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 The structure itself uses the same underlying namespace as an ordinary sitemap. The required tags are: "sitemapindex", the root tag containing everything else; "sitemap", the parent tag for each individual sitemap listed inside the file, and the only direct child the sitemapindex tag has; and "loc", nested inside each sitemap tag, giving that sitemap's own URL location. A single index file can list up to 50,000 loc tags. There's also an optional tag worth using: "lastmod", which can mark when a given referenced sitemap was last modified, in the standard web date-time format, and this can help Google schedule its crawling of your sitemaps more intelligently.
 
 A quick, practical note on the underlying tags inside an ordinary sitemap itself, since this comes up constantly in real implementations. Each individual URL entry uses a "loc" tag for the page's full, canonical address, and can optionally carry a "lastmod" tag showing when that specific page last changed. Two older tags, "changefreq" and "priority", still exist in the protocol, but are worth a word of caution: Google has said for years that it largely ignores both of these, since predicted change frequency and self-declared priority are easy to get wrong or game, and don't meaningfully influence crawling. If you're configuring a sitemap generator, "loc" is essential, an accurate "lastmod" is genuinely useful, and "changefreq" and "priority" are largely decorative from Google's side.
 
+> ChatGPT fact check - this paragraph claims "Two older tags, "changefreq" and "priority", still exist in the protocol, but are worth a word of caution: Google has said for years that it largely ignores both of these, since predicted change frequency and self-declared priority are easy to get wrong or game, and don't meaningfully influence crawling.", but the counterargument is: A 14,000-SKU catalogue does not establish that 50,000 canonical URLs will be exceeded. Google says it ignores changefreq and priority; the script says 'largely' ignores them and invents an explanation about gaming. lastmod should reflect a significant change. Split sitemaps when the actual URL or uncompressed-size limit is reached. Google ignores changefreq and priority. Supply lastmod only when it accurately reflects a significant update.
+>
+> Sources: Sitemap best practices; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#general-guidelines; Additional notes about XML sitemaps; list item 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps; Additional notes about XML sitemaps; list item 3: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps.
+>
+> A019 | Error | Medium priority | Checked 24 September 2026
+
+
+
 The specialised extensions, briefly, since each gets fuller treatment as this series continues into ecommerce and appearance episodes later on. Image sitemaps let you specify exactly which images live on a given page, helping Google discover images it might otherwise miss, particularly ones loaded in through JavaScript. Video sitemaps carry the richer metadata we mentioned earlier: running time, content rating, age-appropriateness, and more, all of which can influence how a video is represented in search results. News sitemaps are specifically for sites participating in Google News, carrying article titles and publication dates. And these extensions aren't mutually exclusive; Google's documentation covers how to combine several extensions within a single sitemap file, useful for a page that includes both meaningful images and video.
+
+> ChatGPT fact check - this paragraph claims "And these extensions aren't mutually exclusive; Google's documentation covers how to combine several extensions within a single sitemap file, useful for a page that includes both meaningful images and video.", but the counterargument is: RSS/Atom generally contain only recent URLs; sitemap index location rules have supported cross-site submission exceptions. The promised extension treatment never gives practical image/video/news requirements, including news's two-day window and 1,000-news-entry limit. Add those qualifications and short source-based extension sections. Preserve required tags and numeric limits in a companion reference, with their meaning explained aloud.
+>
+> Sources: RSS, mRSS, and Atom 1.0; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#rss; How to cross-submit sitemaps for multiple sites; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#cross-submit.
+>
+> A020 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Let's recap.
 
 A sitemap is a structured file telling Google which pages you consider important, plus extra type-specific detail for images, video, and news. You likely need one once your site is large, new with few inbound links, or rich in specialised media, and a fourteen-thousand-SKU store clears that bar easily, though your platform likely handles the basics automatically. Choose XML for versatility, RSS or Atom if your CMS already produces it, or plain text for simplicity at scale, since Google has no format preference. Respect the hard limits: 50 megabytes or 50,000 URLs per file, UTF-8 encoding, and location rules that matter unless you submit directly through Search Console. Once you exceed those limits, a sitemap index file, itself capped at 50,000 referenced sitemaps, ties everything together under one submission. And within any sitemap, "loc" and "lastmod" carry real weight; "changefreq" and "priority" largely don't.
+
+> ChatGPT fact check - this paragraph claims "And within any sitemap, "loc" and "lastmod" carry real weight; "changefreq" and "priority" largely don't.", but the counterargument is: A 14,000-SKU catalogue does not establish that 50,000 canonical URLs will be exceeded. Google says it ignores changefreq and priority; the script says 'largely' ignores them and invents an explanation about gaming. lastmod should reflect a significant change. Split sitemaps when the actual URL or uncompressed-size limit is reached. Google ignores changefreq and priority. Supply lastmod only when it accurately reflects a significant update.
+>
+> Sources: Sitemap best practices; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#general-guidelines; Additional notes about XML sitemaps; list item 2: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps; Additional notes about XML sitemaps; list item 3: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps.
+>
+> A019 | Error | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we cover Googlebot itself in detail, the full list of Google's crawlers, how to verify a bot claiming to be Googlebot is genuine, how to manage and reduce crawl rate, and the fundamentals of robots.txt, the file that actually controls what any of these crawlers are allowed to touch. See you there.
 
@@ -773,6 +1025,14 @@ This episode is adapted from "Learn about sitemaps" and "Manage sitemaps with si
 ### Episode 11: Googlebot, Crawl Management, and the Basics of robots.txt
 
 Welcome back. Today we get properly acquainted with Googlebot itself, cover how to manage its crawl behaviour, and open the door on robots.txt, the file that actually governs where any of Google's crawlers are permitted to go. We'll do a full episode on the robots.txt specification later; today is the introduction.
+
+> ChatGPT fact check - this paragraph claims "Today we get properly acquainted with Googlebot itself, cover how to manage its crawl behaviour, and open the door on robots.txt, the file that actually governs where any of Google's crawlers are permitted to go.", but the counterargument is: The opening says robots.txt governs any Google crawler, but not all Google fetchers obey it. The promised later specification episode does not exist. Wildcards, end anchors, equal-specificity Allow precedence, scope by host/protocol/port, limits, and error-handling details are missing. Distinguish common crawlers, special-case crawlers, and user-triggered fetchers. Add the robots.txt reference chapter or remove the promise and label this chapter introductory.
+>
+> Sources: Overview of Google crawlers and fetchers (user agents); table row 1: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 2: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 3: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents.
+>
+> A023 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 What Googlebot actually is.
 
@@ -800,7 +1060,23 @@ Verifying Googlebot is genuinely Googlebot.
 
 Before you ever decide to block something claiming to be Googlebot, Google issues a direct warning: the Googlebot user-agent string is frequently spoofed by other, unrelated crawlers, some with far less benign intentions. So if you're looking at server logs and trying to decide whether a problematic burst of traffic genuinely came from Google, don't trust the user-agent string alone. The reliable way to verify it is either a reverse DNS lookup on the source IP address of the request, or matching that source IP against Google's published list of Googlebot IP ranges. Both methods are documented in Google's verification guide, and either is worth running before you take any action against traffic you suspect might actually be Google.
 
+> ChatGPT fact check - this paragraph claims "The reliable way to verify it is either a reverse DNS lookup on the source IP address of the request, or matching that source IP against Google's published list of Googlebot IP ranges.", but the counterargument is: The narration presents a reverse lookup as sufficient verification. Google's detailed procedure also checks the returned hostname's domain and performs a forward lookup to confirm it resolves back to the original IP. This qualification also affects Episode 22's reliance on the earlier procedure. Verify the hostname returned by reverse DNS, then resolve that hostname forward and confirm the original IP. Alternatively, match the request against the appropriate published Google IP ranges.
+>
+> Sources: Use command line tools; list item 3: https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests#manual; Use command line tools; list item 4: https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests#manual.
+>
+> A021 | Omission | High priority | Checked 24 September 2026
+
+
+
 Now, a word on the wider crawler family, since Googlebot is just one member of it. Google operates several other named crawlers for specific purposes, things like Googlebot Image, Googlebot Video, Googlebot News, and Google's AdSense-related crawler, sometimes called Mediabot, which behaves quite differently from the others: rather than discovering pages by following links, it specifically only visits URLs that already contain AdSense code. Each of these specialised crawlers can, in principle, be addressed separately in robots.txt using its own distinct user-agent token, unlike the Googlebot Smartphone and Desktop pairing we discussed earlier, which always share one token.
+
+> ChatGPT fact check - this paragraph claims "Google operates several other named crawlers for specific purposes, things like Googlebot Image, Googlebot Video, Googlebot News, and Google's AdSense-related crawler, sometimes called Mediabot, which behaves quite differently from the others: rather than discovering pages by following links, it specifically only visits URLs that already contain AdSense code.", but the counterargument is: The opening says robots.txt governs any Google crawler, but not all Google fetchers obey it. The promised later specification episode does not exist. Wildcards, end anchors, equal-specificity Allow precedence, scope by host/protocol/port, limits, and error-handling details are missing. Distinguish common crawlers, special-case crawlers, and user-triggered fetchers. Add the robots.txt reference chapter or remove the promise and label this chapter introductory.
+>
+> Sources: Overview of Google crawlers and fetchers (user agents); table row 1: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 2: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 3: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents.
+>
+> A023 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Now, the introduction to robots.txt itself.
 
@@ -812,11 +1088,43 @@ Here's a simple, complete example, close to one Google itself uses to illustrate
 
 A handful of practical rules worth carrying with you, since they come up constantly in real implementations, even though we're saving the full specification for a later episode. Paths are case sensitive, so a rule disallowing "/Private/" does nothing at all to block "/private/". When a URL happens to match both an Allow rule and a Disallow rule at once, the more specific, longer matching path wins. And the file's HTTP status matters more than people expect: a robots.txt file returning a 404 is treated by Google as though no restrictions exist at all, essentially an all-clear, while a server error in the 500 range can cause Google to pause crawling entirely for a while, since it genuinely can't tell whether your rules are simply temporarily unavailable or deliberately, urgently restrictive.
 
+> ChatGPT fact check - this paragraph claims "And the file's HTTP status matters more than people expect: a robots.txt file returning a 404 is treated by Google as though no restrictions exist at all, essentially an all-clear, while a server error in the 500 range can cause Google to pause crawling entirely for a while, since it genuinely can't tell whether your rules are simply temporarily unavailable or deliberately, urgently restrictive.", but the counterargument is: The opening says robots.txt governs any Google crawler, but not all Google fetchers obey it. The promised later specification episode does not exist. Wildcards, end anchors, equal-specificity Allow precedence, scope by host/protocol/port, limits, and error-handling details are missing. Distinguish common crawlers, special-case crawlers, and user-triggered fetchers. Add the robots.txt reference chapter or remove the promise and label this chapter introductory.
+>
+> Sources: Overview of Google crawlers and fetchers (user agents); table row 1: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 2: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 3: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents.
+>
+> A023 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 One more small thing worth flagging precisely, since it's a common point of confusion: there's an older, informal directive called "Crawl-delay", meant to specify a pause between requests. Googlebot ignores it entirely. If your server genuinely needs Google to slow down, the correct route is the documented crawl-rate reduction process in Search Console, not this directive.
+
+> ChatGPT fact check - this paragraph claims "If your server genuinely needs Google to slow down, the correct route is the documented crawl-rate reduction process in Search Console, not this directive.", but the counterargument is: The source currently documents temporary error responses in emergencies and an exceptional request route, not the retired Search Console crawl-rate limiter. Calling the solution 'the ... process in Search Console' is ambiguous and unhelpful. Google ignores Crawl-delay. Refer to the current Reduce crawl rate guide: short-term server responses in genuine overload emergencies, or an exceptional request when those responses are infeasible. Explain the short duration and indexing risks.
+>
+> Sources: Urgently reduce crawler traffic (for emergencies); paragraph 1: https://developers.google.com/crawling/docs/crawlers-fetchers/reduce-crawl-rate#urgently-reduce-crawler-traffic-for-emergencies; Exceptional requests to reduce crawl rate; paragraph 1: https://developers.google.com/crawling/docs/crawlers-fetchers/reduce-crawl-rate#exceptional-requests-to-reduce-crawl-rate.
+>
+> A022 | Outdated | Medium priority | Checked 24 September 2026
+
+
 
 Let's recap.
 
 Googlebot is really two crawlers sharing one name and one robots.txt token, mobile and desktop, with mobile now doing the large majority of the actual crawling. It respects roughly one request every few seconds per site, caps individual file fetches at 2 megabytes, or 64 for a PDF, and runs on Pacific Time when crawling from US addresses. You can't truly keep a page secret just by not linking to it. Robots.txt controls crawling, noindex controls indexing, and password protection is the only real way to block both crawlers and people at once. Always verify a suspicious "Googlebot" request through reverse DNS or Google's published IP ranges before trusting the user-agent string alone. And a robots.txt file lives only at your domain's root, is built from User-agent, Disallow, Allow, and an optional Sitemap line, is case sensitive, resolves conflicts by matching the most specific path, and is read very differently depending on whether it returns a 404 or a 500 error.
+
+> ChatGPT fact check - this paragraph claims "Always verify a suspicious "Googlebot" request through reverse DNS or Google's published IP ranges before trusting the user-agent string alone.", but the counterargument is: The narration presents a reverse lookup as sufficient verification. Google's detailed procedure also checks the returned hostname's domain and performs a forward lookup to confirm it resolves back to the original IP. This qualification also affects Episode 22's reliance on the earlier procedure. Verify the hostname returned by reverse DNS, then resolve that hostname forward and confirm the original IP. Alternatively, match the request against the appropriate published Google IP ranges.
+>
+> Sources: Use command line tools; list item 3: https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests#manual; Use command line tools; list item 4: https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests#manual.
+>
+> A021 | Omission | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "And a robots.txt file lives only at your domain's root, is built from User-agent, Disallow, Allow, and an optional Sitemap line, is case sensitive, resolves conflicts by matching the most specific path, and is read very differently depending on whether it returns a 404 or a 500 error.", but the counterargument is: The opening says robots.txt governs any Google crawler, but not all Google fetchers obey it. The promised later specification episode does not exist. Wildcards, end anchors, equal-specificity Allow precedence, scope by host/protocol/port, limits, and error-handling details are missing. Distinguish common crawlers, special-case crawlers, and user-triggered fetchers. Add the robots.txt reference chapter or remove the promise and label this chapter introductory.
+>
+> Sources: Overview of Google crawlers and fetchers (user agents); table row 1: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 2: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents; Overview of Google crawlers and fetchers (user agents); table row 3: https://developers.google.com/crawling/docs/crawlers-fetchers/overview-google-crawlers#overview-of-google-crawlers-and-fetchers-user-agents.
+>
+> A023 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we go deep on canonicalization: what counts as duplicate content in Google's eyes, exactly how to specify a canonical URL using rel canonical and the other methods available, and how to diagnose and fix canonicalization problems when Google picks a different canonical page than the one you intended. See you there.
 
@@ -852,6 +1160,14 @@ Google lists three methods, ranked here in order of how strongly each one can ac
 
 Redirects are the strongest signal of all. A redirect tells Googlebot directly that the destination of the redirect should become canonical, essentially eliminating the source URL from consideration entirely. This is the right tool specifically when you're retiring a duplicate page altogether, not when you still want both versions to remain separately accessible.
 
+> ChatGPT fact check - this paragraph claims "A redirect tells Googlebot directly that the destination of the redirect should become canonical, essentially eliminating the source URL from consideration entirely.", but the counterargument is: The chapter first correctly explains hints, then says redirects eliminate a source from consideration and self-canonicals remove ambiguity. Those statements overpromise and also do not distinguish temporary redirects. Permanent redirects and consistent canonical annotations are strong signals, not guarantees. Use redirects for genuine moves; evaluate variants separately rather than applying a blanket rule to every product URL.
+>
+> Sources: How to specify a canonical URL with rel="canonical" and other methods; list item 1: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods; How to specify a canonical URL with rel="canonical" and other methods; list item 2: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods; How to specify a canonical URL with rel="canonical" and other methods; list item 3: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods.
+>
+> A024 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Rel canonical link annotations are also a strong signal. This is the classic method: a link element, with a rel attribute set to "canonical", placed in a page's head section, pointing to whichever URL you consider the preferred version. Unlike a redirect, this lets the duplicate page keep existing and remain separately accessible, while still asking Google to consolidate its signals onto the URL you named.
 
 Sitemap inclusion is the weakest of the three signals. Simply including a URL in your sitemap is a comparatively gentle hint that helps that URL become the canonical one, but it carries far less weight on its own than the other two methods.
@@ -864,17 +1180,65 @@ Why would you actually bother specifying a canonical, then, given that reassuran
 
 Best practices, and these are worth remembering precisely, because they're exactly the kind of mistake that's easy to make with good intentions.
 
+> ChatGPT fact check - this paragraph claims "Best practices, and these are worth remembering precisely, because they're exactly the kind of mistake that's easy to make with good intentions.", but the counterargument is: There is no explanation of HTTP-header canonicals for non-HTML files, same-language canonical guidance with hreflang, the warning against noindex for choosing canonicals, or the promised troubleshooting process. Add these sections, including URL Inspection checks for Google's selected canonical and common conflicting or injected canonical signals.
+>
+> Sources: Best practices; list item 6: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#best-practices.
+>
+> A025 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Don't use robots.txt for canonicalization purposes. Robots.txt blocks crawling entirely; it doesn't tell Google which of several pages is preferred, and blocking a duplicate outright can actually prevent Google from ever seeing the canonical signals on that page in the first place.
+
+> ChatGPT fact check - this paragraph claims "Robots.txt blocks crawling entirely; it doesn't tell Google which of several pages is preferred, and blocking a duplicate outright can actually prevent Google from ever seeing the canonical signals on that page in the first place.", but the counterargument is: There is no explanation of HTTP-header canonicals for non-HTML files, same-language canonical guidance with hreflang, the warning against noindex for choosing canonicals, or the promised troubleshooting process. Add these sections, including URL Inspection checks for Google's selected canonical and common conflicting or injected canonical signals.
+>
+> Sources: Best practices; list item 6: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#best-practices.
+>
+> A025 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Don't use the URL removal tool for canonicalization either. That tool is built to hide every version of a URL from search entirely, which is a much blunter, more drastic action than simply expressing a preference between duplicates.
 
+> ChatGPT fact check - this paragraph claims "Don't use the URL removal tool for canonicalization either.", but the counterargument is: There is no explanation of HTTP-header canonicals for non-HTML files, same-language canonical guidance with hreflang, the warning against noindex for choosing canonicals, or the promised troubleshooting process. Add these sections, including URL Inspection checks for Google's selected canonical and common conflicting or injected canonical signals.
+>
+> Sources: Best practices; list item 6: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#best-practices.
+>
+> A025 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 And critically: don't specify different, conflicting canonical URLs for the same page using different techniques. Don't name one URL as canonical in your sitemap while a completely different URL is named through your rel canonical tag for that same page. Mixed, contradictory signals like this genuinely confuse Google's clustering process, and can lead to it making a choice you didn't actually want at all, in either direction.
 
+> ChatGPT fact check - this paragraph claims "And critically: don't specify different, conflicting canonical URLs for the same page using different techniques.", but the counterargument is: There is no explanation of HTTP-header canonicals for non-HTML files, same-language canonical guidance with hreflang, the warning against noindex for choosing canonicals, or the promised troubleshooting process. Add these sections, including URL Inspection checks for Google's selected canonical and common conflicting or injected canonical signals.
+>
+> Sources: Best practices; list item 6: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#best-practices.
+>
+> A025 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Let's ground all of this directly in a fourteen-thousand-SKU catalogue, since this episode is arguably one of the most operationally relevant in the whole series for a store this size. Product variant pages, the same flag design in different sizes or materials, filtered and sorted category views, and any staging or preview environment that's accidentally left crawlable are all textbook cases of the "site functions" and "accidental variants" categories Google names at the top of this episode. The practical playbook: use a self-referencing rel canonical tag on every real product page, so the page names itself as canonical, removing any ambiguity for tracking-parameter or session-based variants of its own URL. For genuinely retired or merged product pages, use a redirect rather than a canonical tag, since you're not trying to keep both versions alive. And make sure your sitemap only lists the URLs you actually want treated as canonical, so that signal agrees with, rather than contradicts, whatever your canonical tags are already saying.
+
+> ChatGPT fact check - this paragraph claims "The practical playbook: use a self-referencing rel canonical tag on every real product page, so the page names itself as canonical, removing any ambiguity for tracking-parameter or session-based variants of its own URL.", but the counterargument is: The chapter first correctly explains hints, then says redirects eliminate a source from consideration and self-canonicals remove ambiguity. Those statements overpromise and also do not distinguish temporary redirects. Permanent redirects and consistent canonical annotations are strong signals, not guarantees. Use redirects for genuine moves; evaluate variants separately rather than applying a blanket rule to every product URL.
+>
+> Sources: How to specify a canonical URL with rel="canonical" and other methods; list item 1: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods; How to specify a canonical URL with rel="canonical" and other methods; list item 2: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods; How to specify a canonical URL with rel="canonical" and other methods; list item 3: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods.
+>
+> A024 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Let's recap.
 
 Canonicalization is Google's process for picking one representative URL from a cluster of duplicate or near-duplicate pages. Duplicate content is normal, not a spam violation, but it can confuse users and fragment your own performance tracking. Google's canonical choice is driven by HTTP versus HTTPS, redirects, sitemap presence, and rel canonical annotations, but your preference through any of these is always a hint Google can override, never a binding rule. Redirects are the strongest signal, rel canonical is also strong, and sitemap inclusion is comparatively weak, though combining them stacks their effectiveness. And whatever you do, never let robots.txt or the URL removal tool stand in for genuine canonicalization, and never send contradictory signals about the same page across different methods.
+
+> ChatGPT fact check - this paragraph claims "Google's canonical choice is driven by HTTP versus HTTPS, redirects, sitemap presence, and rel canonical annotations, but your preference through any of these is always a hint Google can override, never a binding rule.", but the counterargument is: The chapter first correctly explains hints, then says redirects eliminate a source from consideration and self-canonicals remove ambiguity. Those statements overpromise and also do not distinguish temporary redirects. Permanent redirects and consistent canonical annotations are strong signals, not guarantees. Use redirects for genuine moves; evaluate variants separately rather than applying a blanket rule to every product URL.
+>
+> Sources: How to specify a canonical URL with rel="canonical" and other methods; list item 1: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods; How to specify a canonical URL with rel="canonical" and other methods; list item 2: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods; How to specify a canonical URL with rel="canonical" and other methods; list item 3: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#how-to-specify-a-canonical-url-with-rel=canonical-and-other-methods.
+>
+> A024 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we move into mobile-first indexing and AMP: why Google primarily indexes the mobile version of your content today, what that actually requires of your site, and the current, narrower place AMP still occupies in the ecosystem. See you there.
 
@@ -934,13 +1298,45 @@ Now, AMP, and this section is genuinely current, reflecting a real change from m
 
 AMP, Accelerated Mobile Pages, launched back in 2015 as a stripped-down HTML framework built purely for mobile loading speed. For years, it carried real, visible advantages in Search: a distinctive lightning-bolt icon next to results, and a near-requirement for appearing in the Top Stories carousel. Both of those special advantages are long gone. The lightning-bolt badge was removed back in 2021, the same year Google dropped AMP as a requirement for Top Stories eligibility, replacing it with ordinary Core Web Vitals thresholds that any well-built page, AMP or not, can meet.
 
+> ChatGPT fact check - this paragraph claims "The lightning-bolt badge was removed back in 2021, the same year Google dropped AMP as a requirement for Top Stories eligibility, replacing it with ordinary Core Web Vitals thresholds that any well-built page, AMP or not, can meet.", but the counterargument is: The script says the former AMP requirement was replaced by Core Web Vitals thresholds. Page experience can affect ranking; passing those thresholds is not a universal entry requirement for Top Stories. AMP ceased to be required for Top Stories. Pages still need to meet the relevant content policies; do not describe a Core Web Vitals pass as the replacement eligibility requirement.
+>
+> Sources: Page experience and the mobile Top Stories feature; paragraph 2: https://developers.google.com/search/blog/2020/05/evaluating-page-experience#page-experience-and-the-mobile-top-stories-feature.
+>
+> A026 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "AMP, Accelerated Mobile Pages, launched back in 2015 as a stripped-down HTML framework built purely for mobile loading speed.", but the counterargument is: The recap calls AMP a former ranking advantage and says it requires a second stripped-down page. AMP itself is not a direct ranking factor, and standalone AMP pages need not have a separate non-AMP version. The Shopify 'offers essentially nothing' verdict is the adapter's opinion. Explain the distinction between historical feature eligibility and ranking. State Google's current technology-neutral treatment and retain only source-supported AMP implementation guidance.
+>
+> Sources: How does AMP look on desktop?; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/amp#how-does-amp-look-on-desktop.
+>
+> A027 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 And there's a further, genuinely recent change. As of July 2026, Google altered how AMP pages are actually served from search results. Previously, clicking an AMP result could route you through Google's own AMP Cache, a kind of pre-loaded proxy version of the page. As of this update, Google now sends searchers directly to the AMP page as hosted by the publisher's own domain, ending that cache-serving layer. Google is explicit that this is not a ranking change of any kind: AMP content continues to rank exactly like any other page, under exactly the same standards. Google's own current framing states it outright: Search indexes AMP pages just like other web pages, and applies the same standard to every page, regardless of the technology used to build it.
 
 So where does that leave AMP practically, in 2026? It's no longer a technology carrying any special ranking advantage, and it hasn't been for years. If you already have AMP pages in place, there's no urgent reason to rip them out; they'll continue functioning and ranking normally under standard Search quality criteria. But if you're weighing whether to build new AMP pages specifically for a perceived SEO edge, that edge simply doesn't exist anymore. The decision now comes down purely to whether AMP's genuinely restrictive framework, and the burden of maintaining a second, stripped-down version of every page, still serves your site's actual publishing or performance goals on its own merits, entirely separate from any SEO consideration. For a Shopify storefront with a well-optimised, responsive theme already meeting Core Web Vitals, AMP offers essentially nothing your existing setup doesn't already deliver.
 
+> ChatGPT fact check - this paragraph claims "The decision now comes down purely to whether AMP's genuinely restrictive framework, and the burden of maintaining a second, stripped-down version of every page, still serves your site's actual publishing or performance goals on its own merits, entirely separate from any SEO consideration.", but the counterargument is: The recap calls AMP a former ranking advantage and says it requires a second stripped-down page. AMP itself is not a direct ranking factor, and standalone AMP pages need not have a separate non-AMP version. The Shopify 'offers essentially nothing' verdict is the adapter's opinion. Explain the distinction between historical feature eligibility and ranking. State Google's current technology-neutral treatment and retain only source-supported AMP implementation guidance.
+>
+> Sources: How does AMP look on desktop?; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/amp#how-does-amp-look-on-desktop.
+>
+> A027 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap.
 
 Mobile-first indexing means Google indexes and ranks based on what the mobile crawler sees, not the desktop crawler, for the large majority of sites today. Responsive design is Google's own recommended approach, and it sidesteps nearly all of the parity concerns this episode covers by construction. If you're on a dynamic-serving or separate-URL setup instead, mobile and desktop content, structured data, metadata, images, and video all need genuine parity, or you risk real traffic loss, and a specific set of extra rules governs canonical tags, hreflang, and error handling between the two versions. And AMP, once a meaningful ranking advantage, is now functionally just another web technology: no special badge, no Top Stories requirement, and as of July 2026, no special cache-serving path either, just an ordinary page held to ordinary Search quality standards.
+
+> ChatGPT fact check - this paragraph claims "And AMP, once a meaningful ranking advantage, is now functionally just another web technology: no special badge, no Top Stories requirement, and as of July 2026, no special cache-serving path either, just an ordinary page held to ordinary Search quality standards.", but the counterargument is: The recap calls AMP a former ranking advantage and says it requires a second stripped-down page. AMP itself is not a direct ranking factor, and standalone AMP pages need not have a separate non-AMP version. The Shopify 'offers essentially nothing' verdict is the adapter's opinion. Explain the distinction between historical feature eligibility and ranking. State Google's current technology-neutral treatment and retain only source-supported AMP implementation guidance.
+>
+> Sources: How does AMP look on desktop?; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/amp#how-does-amp-look-on-desktop.
+>
+> A027 | Unsupported | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we tackle JavaScript SEO properly: how Googlebot actually processes JavaScript during rendering, the most common ways JavaScript-heavy sites break in search, fixing lazy-loaded content specifically, and dynamic rendering as a fallback workaround. See you there.
 
@@ -959,6 +1355,14 @@ Here's the flow in detail. Googlebot pulls a URL from its crawl queue, crawls it
 A genuinely important detail: pages sit in both the crawl queue and the rendering queue, and there's no direct, visible way to know how long any given page is waiting in either one. When Googlebot pulls a URL from the crawl queue and prepares to send an HTTP request, it first checks whether crawling is actually allowed, by reading robots.txt. If the URL is marked disallowed there, Googlebot skips the HTTP request entirely and moves on. And a specific consequence follows directly from that: Google Search will not render JavaScript from a blocked file or a blocked page, because it never even fetches it in the first place.
 
 Once a response comes back, Googlebot parses it for other URLs referenced inside href attributes on HTML links, adding whatever it finds to the crawl queue. If you don't want a particular link discovered this way, use the nofollow mechanism from episode nine. And you genuinely can inject links into the page's DOM using JavaScript, as long as those injected links still follow the crawlable-link best practices from that same episode, meaning a real anchor tag with a real href.
+
+> ChatGPT fact check - this paragraph claims "If you don't want a particular link discovered this way, use the nofollow mechanism from episode nine.", but the counterargument is: The advice 'if you don't want a particular link discovered this way, use nofollow' is too strong without Google's qualification that linked URLs can still be found and crawled by other routes. Nofollow qualifies a link; it does not keep its destination secret or guarantee it will stay out of the index. Use the appropriate crawl, index, or access control for that goal.
+>
+> Sources: Qualify your outbound links to Google; paragraph 4: https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links#qualify-your-outbound-links-to-google.
+>
+> A028 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Now, why does rendering matter at all? Crawling the URL and parsing the raw HTML response works perfectly well for classic websites or server-rendered pages, where the HTML in the initial HTTP response already contains everything. But some JavaScript-based sites use something called the App Shell model, where the initial HTML that comes back contains essentially none of the real content, and Google genuinely has to execute the page's JavaScript before it can see the actual content that JavaScript generates.
 
@@ -990,6 +1394,14 @@ Using long-term caching properly. Googlebot actively caches content to reduce ne
 
 Using structured data with JavaScript. You can generate the JSON-LD structured data format dynamically with JavaScript and inject it into the page, which we'll cover fully starting in episode twenty-two. Google's specific advice here: always test your implementation directly, since dynamically generated structured data is genuinely easy to get subtly wrong.
 
+> ChatGPT fact check - this paragraph claims "Using structured data with JavaScript.", but the counterargument is: The structured-data sequence starts at Episode 23, not 22. The next-episode promise also drifts into metadata content not actually provided in Episode 15. Point structured data to Episode 23 and limit the next-episode preview to lazy loading and dynamic rendering.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
+>
+> A029 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 Following web component best practices. Google supports web components, and when it renders a page, it flattens both the shadow DOM and light DOM content together. In plain terms, this means Google can only see whatever ends up visible in the final rendered HTML. To make sure content inside a web component's shadow DOM actually shows up properly alongside any light DOM content projected into it, use a slot element, a specific web-component pattern for combining the two. Google gives a worked example: a custom element that creates shadow DOM content and includes a slot tag, so that light DOM content placed inside the custom element in the original markup gets projected into that slot and appears in the final rendered output together with the shadow content. If content genuinely isn't present in the rendered HTML, Google cannot index it, full stop. Use the Rich Results Test or the URL Inspection tool to directly check exactly what rendered HTML Google actually sees for a given page.
 
 And finally, a pointer rather than a full repeat: fixing images and lazy-loaded content gets its own dedicated guide, since images carry real bandwidth and performance costs, and lazy-loading, only loading an image once a user is about to see it, is a legitimate strategy when implemented in a genuinely search-friendly way. We'll cover that properly, with full detail, in episode fifteen.
@@ -999,6 +1411,14 @@ Let's recap.
 Google processes JavaScript in three stages: crawling, rendering, and indexing, with pages sitting in both a crawl queue and a separate rendering queue before headless Chromium actually executes the JavaScript and hands back rendered HTML for indexing. Server-side rendering or pre-rendering remains genuinely worthwhile even though Google can render JavaScript, for speed and for compatibility with bots that can't. Set titles, descriptions, and canonicals in HTML wherever you can, and if you must use JavaScript for a canonical, never let it drift from what the original HTML specified. For single-page apps, solve soft 404s with either a JavaScript redirect to a genuine 404 URL or an injected noindex tag, and always use the History API rather than URL fragments for client-side routing. A noindex tag present in the original HTML may stop Google from even running your JavaScript at all, so never rely on a script to remove one. Use content-fingerprinted filenames to defeat stale caching. And always verify what Google actually sees using the Rich Results Test or URL Inspection tool, since rendered HTML, not your original source, is the only thing that ultimately gets indexed.
 
 Next episode, we finish this stretch of technical crawling and indexing episodes with lazy-loaded content specifically, dynamic rendering as a workaround, and then move into page and content metadata: the full set of meta tags and HTML attributes Google actually supports. See you there.
+
+> ChatGPT fact check - this paragraph claims "Next episode, we finish this stretch of technical crawling and indexing episodes with lazy-loaded content specifically, dynamic rendering as a workaround, and then move into page and content metadata: the full set of meta tags and HTML attributes Google actually supports.", but the counterargument is: The structured-data sequence starts at Episode 23, not 22. The next-episode promise also drifts into metadata content not actually provided in Episode 15. Point structured data to Episode 23 and limit the next-episode preview to lazy loading and dynamic rendering.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
+>
+> A029 | Editorial | Low priority | Checked 24 September 2026
+
+
 
 This episode is adapted from "Understand the JavaScript SEO basics" on Google Search Central, licensed under Creative Commons Attribution 4.0.
 
@@ -1044,11 +1464,27 @@ One question this setup naturally raises, given everything we covered about cloa
 
 So where does this leave a practical decision today? Given Google's own current framing, dynamic rendering is best understood as a legacy pattern: something you might recognise if you inherit an older, JavaScript-heavy site that already has it configured, rather than something to newly build today. For a modern Shopify storefront specifically, this entire question is almost certainly moot, since Shopify's own rendering approach doesn't generally create the kind of rendering gap dynamic rendering was built to patch over in the first place. But it's genuinely useful vocabulary to have, both for reading older technical audits or third-party advice that might still recommend it, and for recognising it as exactly the kind of outdated pattern episode eight's guidance on evaluating third-party advice would tell you to weigh critically against Google's current, official position.
 
+> ChatGPT fact check - this paragraph claims "For a modern Shopify storefront specifically, this entire question is almost certainly moot, since Shopify's own rendering approach doesn't generally create the kind of rendering gap dynamic rendering was built to patch over in the first place.", but the counterargument is: Google's dynamic-rendering documentation does not establish that this question is almost certainly moot for modern Shopify storefronts. Themes, apps, and custom storefront implementations can differ. Remove the platform assurance. Say that the need depends on the site's actual rendering behavior and should be assessed by inspecting the rendered content.
+>
+> Sources: Dynamic rendering as a workaround; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/javascript/dynamic-rendering#dynamic-rendering-as-a-workaround; Dynamic rendering as a workaround; paragraph 3: https://developers.google.com/search/docs/crawling-indexing/javascript/dynamic-rendering#dynamic-rendering-as-a-workaround.
+>
+> A030 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap, and close out this run of JavaScript-focused episodes.
 
 Lazy-loading is a good practice implemented with browser-native lazy-loading, the IntersectionObserver API with a polyfill, or a viewport-aware JavaScript library, never anything requiring an actual user interaction Google can't perform, and never applied to content that should already be visible on first load. Infinite scroll needs genuinely persistent, unique, absolute URLs per chunk, sequential internal links between them, and History API updates as new content becomes primary, so nothing important exists only inside one visitor's transient scroll session. And dynamic rendering, while technically not cloaking as long as the served content stays substantively similar, is explicitly a legacy workaround Google no longer recommends, in favour of genuine server-side rendering, static rendering, or hydration.
 
 That closes out the deep technical run on crawling, indexing, and rendering. Next episode, we shift into page and content metadata proper: the full set of meta tags and HTML attributes Google actually supports, the robots meta tag and X-Robots-Tag in detail, and the specific mechanics of noindex. See you there.
+
+> ChatGPT fact check - this paragraph claims "Next episode, we shift into page and content metadata proper: the full set of meta tags and HTML attributes Google actually supports, the robots meta tag and X-Robots-Tag in detail, and the specific mechanics of noindex.", but the counterargument is: Episode 16 covers robots directives, not the full supported-meta-tag and HTML-attribute reference promised here. Add a separate audio section for supported metadata and valid head structure, or narrow this preview to the robots directives that Episode 16 actually covers.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/crawling-indexing/special-tags; Scope reference: https://developers.google.com/search/docs/crawling-indexing/valid-page-metadata.
+>
+> A031 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 This episode is adapted from "Fix lazy-loaded content" and "Dynamic rendering as a workaround" on Google Search Central, licensed under Creative Commons Attribution 4.0.
 
@@ -1060,11 +1496,27 @@ The robots meta tag itself.
 
 This is a meta tag placed in a page's HTML head section, with the name attribute set to "robots", that gives you precise, page-by-page control over how that individual page gets indexed and how it appears in results. The basic placement looks like this: inside the head section, a line reading meta name robots, content noindex, alongside whatever else lives in that head section.
 
+> ChatGPT fact check - this paragraph claims "The basic placement looks like this: inside the head section, a line reading meta name robots, content noindex, alongside whatever else lives in that head section.", but the counterargument is: The script says robots meta tags have to live in the head. Google explicitly says it also respects them in the body, although head placement remains the recommended way to author metadata. Place robots meta tags in the head. Google can also respect a robots meta tag in the body; use X-Robots-Tag for non-HTML resources.
+>
+> Sources: Using the robots meta tag; paragraph 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#robotsmeta.
+>
+> A034 | Overstatement | Low priority | Checked 24 September 2026
+
+
+
 Here's a detail worth knowing precisely: a rule written as meta name robots applies to search crawlers generally. If you specifically need to block a non-search crawler, something like Google's AdsBot, you may need a separate, specifically targeted rule instead, one naming that crawler by its own name rather than the generic "robots" token.
 
 X-Robots-Tag: the same rules, delivered as an HTTP header instead.
 
 Here's the practical reason this second mechanism exists: the robots meta tag only works on HTML pages, since it has to live inside an HTML head section. But plenty of things Google indexes aren't HTML at all: PDFs, video files, image files. For any of those, X-Robots-Tag is the tool, since it's delivered as part of the HTTP response header rather than embedded in markup, meaning it works on literally any file type your server serves.
+
+> ChatGPT fact check - this paragraph claims "Here's the practical reason this second mechanism exists: the robots meta tag only works on HTML pages, since it has to live inside an HTML head section.", but the counterargument is: The script says robots meta tags have to live in the head. Google explicitly says it also respects them in the body, although head placement remains the recommended way to author metadata. Place robots meta tags in the head. Google can also respect a robots meta tag in the body; use X-Robots-Tag for non-HTML resources.
+>
+> Sources: Using the robots meta tag; paragraph 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#robotsmeta.
+>
+> A034 | Overstatement | Low priority | Checked 24 September 2026
+
+
 
 Every rule available through the robots meta tag is also available through X-Robots-Tag. Here's a worked example of an HTTP response carrying an X-Robots-Tag header instructing crawlers not to index a page: the response starts with the usual 200 OK status and date, and somewhere in the header block carries a line reading simply "X-Robots-Tag: noindex".
 
@@ -1082,7 +1534,23 @@ Now, the actual supported rules, the vocabulary both mechanisms share.
 
 "Nosnippet" means show no text snippet and no video preview for this page in results at all. The URL itself can still remain indexed and can still appear with its title link, but with no descriptive preview text beneath it, which is a real trade-off worth weighing, since it can reduce how well a searcher understands what they're about to click before they click it. And here's a genuinely current detail: nosnippet's reach now extends beyond ordinary blue-link results. Google's current guidance states that nosnippet also applies to AI Overviews and AI Mode, the generative features from episode seven, meaning a page marked nosnippet is withheld from being quoted or excerpted in those AI-generated summaries too, not just in traditional snippets.
 
+> ChatGPT fact check - this paragraph claims ""Nosnippet" means show no text snippet and no video preview for this page in results at all.", but the counterargument is: Nosnippet prevents direct input to AI Overviews and AI Mode, not merely quotation. Max-snippet also limits direct input, with permission-related exceptions. indexifembedded works only with noindex. Structured data within a data-nosnippet element can still be used. Restore the exact scope and exceptions. Explain that snippet controls are not privacy controls and do not necessarily suppress explicitly supplied structured data.
+>
+> Sources: Valid indexing and serving rules; table row 6: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 7: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Using structured data; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#structureddata.
+>
+> A033 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 "Max-snippet", followed by a number, caps how many characters a text snippet for this page can run to.
+
+> ChatGPT fact check - this paragraph claims ""Max-snippet", followed by a number, caps how many characters a text snippet for this page can run to.", but the counterargument is: Nosnippet prevents direct input to AI Overviews and AI Mode, not merely quotation. Max-snippet also limits direct input, with permission-related exceptions. indexifembedded works only with noindex. Structured data within a data-nosnippet element can still be used. Restore the exact scope and exceptions. Explain that snippet controls are not privacy controls and do not necessarily suppress explicitly supplied structured data.
+>
+> Sources: Valid indexing and serving rules; table row 6: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 7: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Using structured data; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#structureddata.
+>
+> A033 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 "Max-image-preview", set to none, standard, or large, controls the size of any image preview shown alongside this page's result.
 
@@ -1096,7 +1564,23 @@ Now, the actual supported rules, the vocabulary both mechanisms share.
 
 And "indexifembedded" is a more specialised, newer rule: it allows a page to still be indexed when it's embedded elsewhere via an iframe, even if that page separately carries a noindex directive of its own, a fairly narrow use case but worth knowing exists.
 
+> ChatGPT fact check - this paragraph claims "And "indexifembedded" is a more specialised, newer rule: it allows a page to still be indexed when it's embedded elsewhere via an iframe, even if that page separately carries a noindex directive of its own, a fairly narrow use case but worth knowing exists.", but the counterargument is: Nosnippet prevents direct input to AI Overviews and AI Mode, not merely quotation. Max-snippet also limits direct input, with permission-related exceptions. indexifembedded works only with noindex. Structured data within a data-nosnippet element can still be used. Restore the exact scope and exceptions. Explain that snippet controls are not privacy controls and do not necessarily suppress explicitly supplied structured data.
+>
+> Sources: Valid indexing and serving rules; table row 6: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 7: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Using structured data; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#structureddata.
+>
+> A033 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Multiple directives can be combined in one rule, comma-separated, and you can also target a specific crawler by name in the meta tag version too, not just through X-Robots-Tag: replacing the generic "robots" name with something like "googlebot" or "googlebot-news" lets you write a directive that applies specifically to that one crawler, overriding whatever the generic robots rule says for that crawler specifically.
+
+> ChatGPT fact check - this paragraph claims "Multiple directives can be combined in one rule, comma-separated, and you can also target a specific crawler by name in the meta tag version too, not just through X-Robots-Tag: replacing the generic "robots" name with something like "googlebot" or "googlebot-news" lets you write a directive that applies specifically to that one crawler, overriding whatever the generic robots rule says for that crawler specifically.", but the counterargument is: The script says googlebot-specific directives override the generic robots rule. Google combines applicable negative directives and applies the more restrictive rule when they conflict. Google combines the rules that apply to its crawler. If they conflict, the more restrictive rule wins; a crawler-specific instruction cannot simply cancel a general noindex.
+>
+> Sources: Using the X-Robots-Tag HTTP header; paragraph 5: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#xrobotstag.
+>
+> A032 | Error | High priority | Checked 24 September 2026
+
+
 
 Now, a genuinely useful, more surgical tool: the data-nosnippet HTML attribute.
 
@@ -1108,13 +1592,37 @@ A detail worth knowing if you're implementing this yourself: the attribute doesn
 
 And a distinction worth keeping precise, since it's easy to conflate the two: data-nosnippet doesn't make a page private, doesn't remove its URL from the index, and isn't a canonicalization signal of any kind. It only ever controls what text is eligible to be pulled into a snippet; nothing more, nothing less.
 
+> ChatGPT fact check - this paragraph claims "It only ever controls what text is eligible to be pulled into a snippet; nothing more, nothing less.", but the counterargument is: Nosnippet prevents direct input to AI Overviews and AI Mode, not merely quotation. Max-snippet also limits direct input, with permission-related exceptions. indexifembedded works only with noindex. Structured data within a data-nosnippet element can still be used. Restore the exact scope and exceptions. Explain that snippet controls are not privacy controls and do not necessarily suppress explicitly supplied structured data.
+>
+> Sources: Valid indexing and serving rules; table row 6: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 7: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Using structured data; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#structureddata.
+>
+> A033 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 When is this narrower tool actually the right call, rather than the blunter page-wide nosnippet directive? Picture a product page for a store that includes a "current promotions" banner near the top, showing a price or a discount that's only valid for a narrow, specific window and lacks enough surrounding context to make sense on its own once lifted out into a search snippet. Wrapping just that banner element in data-nosnippet keeps the rest of the page's genuinely useful, evergreen description fully eligible for a snippet, while keeping that specific, context-dependent, time-sensitive text from ever being quoted out of context in a result. The same logic applies to things like cookie-consent banners, internal navigation instructions, or any other genuinely volatile interface text that happens to be visible on the page but would actively mislead a searcher if Google ever quoted it verbatim in a result.
+
+> ChatGPT fact check - this paragraph claims "Wrapping just that banner element in data-nosnippet keeps the rest of the page's genuinely useful, evergreen description fully eligible for a snippet, while keeping that specific, context-dependent, time-sensitive text from ever being quoted out of context in a result.", but the counterargument is: Nosnippet prevents direct input to AI Overviews and AI Mode, not merely quotation. Max-snippet also limits direct input, with permission-related exceptions. indexifembedded works only with noindex. Structured data within a data-nosnippet element can still be used. Restore the exact scope and exceptions. Explain that snippet controls are not privacy controls and do not necessarily suppress explicitly supplied structured data.
+>
+> Sources: Valid indexing and serving rules; table row 6: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 7: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Valid indexing and serving rules; table row 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#directives; Using structured data; paragraph 2: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#structureddata.
+>
+> A033 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 One practical note if you ever apply this yourself: Google's own guidance suggests keeping the attribute's presence stable, rather than adding or removing it dynamically through JavaScript depending on some runtime condition, and to trigger a fresh recrawl through Search Console afterward, since changes here can otherwise take a genuine while to actually show up in results.
 
 Let's recap.
 
 The robots meta tag gives page-by-page control over indexing and result appearance, placed inside a page's HTML head. X-Robots-Tag delivers the exact same set of rules through an HTTP header instead, making it the only real option for non-HTML files like PDFs and videos, and it additionally supports targeting different rules at different named crawlers within one response. The core directives are noindex, nofollow, none, nosnippet, max-snippet, max-image-preview, max-video-preview, noimageindex, notranslate, unavailable_after, and indexifembedded, and nosnippet specifically now reaches into AI Overviews and AI Mode, not just traditional results. And data-nosnippet is a narrower HTML attribute, not a meta tag, letting you exclude one specific visible block of content from snippets while leaving the rest of that same page fully eligible, useful for volatile or context-dependent text like time-limited pricing or interface banners.
+
+> ChatGPT fact check - this paragraph claims "The robots meta tag gives page-by-page control over indexing and result appearance, placed inside a page's HTML head.", but the counterargument is: The script says robots meta tags have to live in the head. Google explicitly says it also respects them in the body, although head placement remains the recommended way to author metadata. Place robots meta tags in the head. Google can also respect a robots meta tag in the body; use X-Robots-Tag for non-HTML resources.
+>
+> Sources: Using the robots meta tag; paragraph 8: https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag#robotsmeta.
+>
+> A034 | Overstatement | Low priority | Checked 24 September 2026
+
+
 
 Next episode, we cover removals properly: the full range of methods for controlling what Google shares from your site, page removal requests, image removals specifically, and keeping redacted or sensitive information out of search results entirely. See you there.
 
@@ -1142,9 +1650,25 @@ Opting out of specific Google properties. Applicable to web pages. You can tell 
 
 Opting out of the place-entity feature inside Page Insights. This is a narrower, more specialised one, worth knowing about if it's ever relevant: pages where a significant portion of the content discusses one or more physical places, hotels, restaurants, bars, that kind of thing, can have those specific place entities surfaced inside Page Insights within the Google App's browser on iOS and Android. Site owners can opt individual pages out of that specific feature.
 
+> ChatGPT fact check - this paragraph claims "Opting out of the place-entity feature inside Page Insights.", but the counterargument is: The chapter inserts a specific Page Insights place-entity opt-out. This is absent from the current Control what you share page retrieved for the audit. Its present availability was not established by the cited documentation. Remove this from a current source-only adaptation unless an applicable current Google source can be supplied and dated. Do not call it an active option based on this chapter's existing citation.
+>
+> Sources: Control what you share with Google; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/control-what-you-share#control-what-you-share-with-google.
+>
+> A036 | Unverified | Medium priority | Checked 24 September 2026
+
+
+
 Requesting removal of content already indexed.
 
 For content that's already showing up in Google's results and you want it gone faster than a natural re-crawl would achieve, Google provides dedicated removal request tools, generally accessed through Search Console. These exist specifically to accelerate removal once the underlying content has already been taken down, redacted, or blocked through one of the methods above; Google has been direct in the past that it doesn't control content across the broader web, so a URL removal request generally still requires that the underlying content itself has actually been removed or blocked at the source first, with certain narrower exceptions for content that could cause genuine personal harm, things like exposed personal contact information, government ID numbers, financial account details, or non-consensual intimate imagery, which get their own dedicated, more direct reporting pathways specifically because of the harm involved.
+
+> ChatGPT fact check - this paragraph claims "These exist specifically to accelerate removal once the underlying content has already been taken down, redacted, or blocked through one of the methods above; Google has been direct in the past that it doesn't control content across the broader web, so a URL removal request generally still requires that the underlying content itself has actually been removed or blocked at the source first, with certain narrower exceptions for content that could cause genuine personal harm, things like exposed personal contact information, government ID numbers, financial account details, or non-consensual intimate imagery, which get their own dedicated, more direct reporting pathways specifically because of the harm involved.", but the counterargument is: The script implies the source must already be removed or blocked before a Search Console removal request. Google's guide provides temporary search-result removal, lasting about six months; a permanent removal separately requires removing/updating content, access protection, or noindex. Use Search Console for quick temporary removal. To keep the page out after the temporary block expires, also remove or update the content, password-protect it, or apply noindex. Do not use robots.txt as the permanent indexing control.
+>
+> Sources: Remove a page hosted on your site from Google; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/remove-information#remove-a-page-hosted-on-your-site-from-google; Make your removal permanent; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/remove-information#make-your-removal-permanent.
+>
+> A035 | Error | High priority | Checked 24 September 2026
+
+
 
 Now, the genuinely practical half of this episode: keeping redacted information out of Google Search in the first place, which is really about avoiding a leak before it ever happens, rather than cleaning one up afterward.
 
@@ -1154,13 +1678,37 @@ Editing and exporting images before you embed them, not after. Google indexes im
 
 Editing or removing unwanted text before moving to a public file format. Before generating the actual public-facing version of a document, remove anything you don't want visible in that final file, and move to a public format that doesn't retain the document's previous change history, since some formats quietly preserve edit history that a determined searcher, or an indexing crawler, could potentially recover. And here's a specific, very common mistake worth naming directly: use genuine document redaction tools if information truly needs to be redacted, rather than simply placing black rectangles over text as a visual redaction method, since this fake-redaction technique can leave the actual underlying text still fully present, and searchable, right beneath that black box.
 
+> ChatGPT fact check - this paragraph claims "And here's a specific, very common mistake worth naming directly: use genuine document redaction tools if information truly needs to be redacted, rather than simply placing black rectangles over text as a visual redaction method, since this fake-redaction technique can leave the actual underlying text still fully present, and searchable, right beneath that black box.", but the counterargument is: The source also warns about personal data in filenames or URLs, notes that robots-blocked URLs may still be indexed, recommends checking final metadata, and advises verifying Search Console beforehand for quick removal. Add the source's filename/URL, metadata, and advance-verification safeguards. Keep the instruction to use a fresh URL for the corrected document.
+>
+> Sources: Keep redacted information out of Google Search; paragraph 4: https://developers.google.com/search/docs/crawling-indexing/keep-redacted-information-out#keep-redacted-information-out-of-google-search; Edit and export images before embedding them; list item 3: https://developers.google.com/search/docs/crawling-indexing/keep-redacted-information-out#edit-and-export-images-before-embedding-them; Edit or remove unwanted text before moving to a public file format; list item 2: https://developers.google.com/search/docs/crawling-indexing/keep-redacted-information-out#edit-or-remove-unwanted-text-before-moving-to-a-public-file-format.
+>
+> A037 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 What to do if something improperly redacted is already indexed. Google lays out a direct sequence: remove the live document from your site entirely. Use the Removals tool in Search Console to accelerate its removal from Google's own results specifically. If you still need to make a version of that document available, host a properly, genuinely redacted version at a new URL, not the same one, since the old URL may retain cached signals tied to the previous, improperly redacted version. And if other sites have separately hosted a copy of the improperly redacted document, contact those other hosts directly and ask them to remove their own copies too, since your own removal only ever covers your own site.
+
+> ChatGPT fact check - this paragraph claims "Use the Removals tool in Search Console to accelerate its removal from Google's own results specifically.", but the counterargument is: The source also warns about personal data in filenames or URLs, notes that robots-blocked URLs may still be indexed, recommends checking final metadata, and advises verifying Search Console beforehand for quick removal. Add the source's filename/URL, metadata, and advance-verification safeguards. Keep the instruction to use a fresh URL for the corrected document.
+>
+> Sources: Keep redacted information out of Google Search; paragraph 4: https://developers.google.com/search/docs/crawling-indexing/keep-redacted-information-out#keep-redacted-information-out-of-google-search; Edit and export images before embedding them; list item 3: https://developers.google.com/search/docs/crawling-indexing/keep-redacted-information-out#edit-and-export-images-before-embedding-them; Edit or remove unwanted text before moving to a public file format; list item 2: https://developers.google.com/search/docs/crawling-indexing/keep-redacted-information-out#edit-or-remove-unwanted-text-before-moving-to-a-public-file-format.
+>
+> A037 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Let's ground this directly in a business context, since it's genuinely relevant. A store dealing with customer data, order records, or even internal planning documents shared as PDFs, say specification sheets or supplier quotes that get exported to PDF and occasionally linked from an otherwise public page, should specifically watch for two things: PDF and spreadsheet exports that quietly retain edit history or hidden sheets, and screenshots or cropped images used in blog posts or guides that might carry more of the original image than what's visually apparent in the crop.
 
 Let's recap.
 
 Google supports several deliberate ways to keep content out of search: removing it outright, password protection, the noindex rule, robots.txt for images and video specifically, and opting out of specific Google properties or features. For content that's already indexed and needs to come down faster, Search Console's removal tools exist to accelerate that process, generally once the underlying content is already gone or blocked at the source, with narrower, more direct pathways for content that poses genuine personal harm. And redaction has to happen at the source, before publication: edit and flatten images before embedding them, use genuine redaction tools rather than a visual black box, move to a public format with no retained history, and if something improperly redacted does get indexed, remove the live document, use the Removals tool, republish properly redacted content at a fresh URL, and chase down any other hosts carrying their own copy.
+
+> ChatGPT fact check - this paragraph claims "Google supports several deliberate ways to keep content out of search: removing it outright, password protection, the noindex rule, robots.txt for images and video specifically, and opting out of specific Google properties or features.", but the counterargument is: The script implies the source must already be removed or blocked before a Search Console removal request. Google's guide provides temporary search-result removal, lasting about six months; a permanent removal separately requires removing/updating content, access protection, or noindex. Use Search Console for quick temporary removal. To keep the page out after the temporary block expires, also remove or update the content, password-protect it, or apply noindex. Do not use robots.txt as the permanent indexing control.
+>
+> Sources: Remove a page hosted on your site from Google; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/remove-information#remove-a-page-hosted-on-your-site-from-google; Make your removal permanent; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/remove-information#make-your-removal-permanent.
+>
+> A035 | Error | High priority | Checked 24 September 2026
+
+
 
 Next episode, we cover redirects and site moves: how 301 redirects actually work for Google Search, moving a site with or without URL changes, A/B testing without confusing Google, and how to properly pause or temporarily disable a site. See you there.
 
@@ -1174,9 +1722,33 @@ Redirects and Google Search.
 
 A redirect is an HTTP response, in the 3xx status range, that tells a browser or crawler to fetch a different URL than the one requested. There are really two categories worth distinguishing clearly for search purposes: permanent redirects and temporary redirects.
 
+> ChatGPT fact check - this paragraph claims "There are really two categories worth distinguishing clearly for search purposes: permanent redirects and temporary redirects.", but the counterargument is: Not all redirects are HTTP 3xx responses: Google also documents meta refresh, HTTP refresh, and JavaScript mechanisms. Permanent and temporary redirects are canonical signals; the promised ranking-signal transfer and traffic loss are not deterministic outcomes. Describe HTTP redirects as the preferred server-side method, distinguish permanent and temporary signals, and explain other supported mechanisms without promising a particular ranking outcome.
+>
+> Sources: Overview of redirect types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types; Overview of redirect types; table row 4: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types.
+>
+> A038 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 A 301, "Moved Permanently", and its close relative 308, tell Google the canonical URL has genuinely changed for good. Search engines respond by transferring ranking signals, accumulated link value and history, over to the new target URL, and treating that new URL as the real one going forward. A 302, "Found", and its relative 307, tell Google the opposite: this redirect is temporary, the original URL is still the real, canonical one, and it should remain what's indexed, with the redirect target simply serving as a stand-in for now.
 
+> ChatGPT fact check - this paragraph claims "A 302, "Found", and its relative 307, tell Google the opposite: this redirect is temporary, the original URL is still the real, canonical one, and it should remain what's indexed, with the redirect target simply serving as a stand-in for now.", but the counterargument is: Not all redirects are HTTP 3xx responses: Google also documents meta refresh, HTTP refresh, and JavaScript mechanisms. Permanent and temporary redirects are canonical signals; the promised ranking-signal transfer and traffic loss are not deterministic outcomes. Describe HTTP redirects as the preferred server-side method, distinguish permanent and temporary signals, and explain other supported mechanisms without promising a particular ranking outcome.
+>
+> Sources: Overview of redirect types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types; Overview of redirect types; table row 4: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types.
+>
+> A038 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Here's the practical guidance that follows directly: use a permanent redirect when a URL has moved for good, a genuine domain migration, a permanent restructure, an HTTPS upgrade from HTTP, or standardising trailing slashes and letter casing. Use a temporary redirect specifically for things that are genuinely temporary: a maintenance window, an A/B test, or geo-based routing that only applies under certain conditions. Getting this backwards is a persistent, common mistake: leaving a genuinely permanent move on a 302 can mean it takes Google a long while to reinterpret that signal correctly, during which the site can lose real traffic, since Google keeps treating the old URL as canonical when you actually wanted it retired.
+
+> ChatGPT fact check - this paragraph claims "Getting this backwards is a persistent, common mistake: leaving a genuinely permanent move on a 302 can mean it takes Google a long while to reinterpret that signal correctly, during which the site can lose real traffic, since Google keeps treating the old URL as canonical when you actually wanted it retired.", but the counterargument is: Not all redirects are HTTP 3xx responses: Google also documents meta refresh, HTTP refresh, and JavaScript mechanisms. Permanent and temporary redirects are canonical signals; the promised ranking-signal transfer and traffic loss are not deterministic outcomes. Describe HTTP redirects as the preferred server-side method, distinguish permanent and temporary signals, and explain other supported mechanisms without promising a particular ranking outcome.
+>
+> Sources: Overview of redirect types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types; Overview of redirect types; table row 4: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types.
+>
+> A038 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Minimizing A/B testing's impact on Google Search.
 
@@ -1194,6 +1766,14 @@ Run the experiment only as long as genuinely necessary. How long a reliable test
 
 And a related, genuinely useful piece of guidance if a site move and an A/B test ever happen to overlap: Google has specifically advised against running large sets of A/B tests during an active site migration, since Google is trying to build a clean, coherent understanding of what's happening across your site during a migration, and a complex, simultaneous testing setup measurably slows down how quickly it can transfer your algorithmic signals from the old site to the new one. If a migration is underway, the cleaner and simpler your signals, the faster and smoother that transition goes.
 
+> ChatGPT fact check - this paragraph claims "And a related, genuinely useful piece of guidance if a site move and an A/B test ever happen to overlap: Google has specifically advised against running large sets of A/B tests during an active site migration, since Google is trying to build a clean, coherent understanding of what's happening across your site during a migration, and a complex, simultaneous testing setup measurably slows down how quickly it can transfer your algorithmic signals from the old site to the new one.", but the counterargument is: The claim that large A/B tests during migration 'measurably' slow transfer of algorithmic signals is not supported by the cited A/B-testing guide. Google's site-move advice to change one thing at a time is narrower. During a migration, Google recommends changing one thing at a time. Remove the asserted measured algorithmic-transfer effect unless a direct source is supplied.
+>
+> Sources: General best practices for site moves; list item 2: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes#general_recommendations_for_site_moves.
+>
+> A039 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 Moving a site without changing URLs: changing your hosting.
 
 This covers switching hosting providers or moving to a content delivery network, where the URLs themselves stay exactly the same, only the underlying infrastructure serving them changes.
@@ -1205,6 +1785,14 @@ Then initiate the move itself by updating your DNS settings to point at the new 
 Expect some temporary fluctuation in Googlebot's crawl rate immediately after a move like this; it typically stabilises, and can even increase, once Google has confidently re-mapped everything to the new setup.
 
 Moving a site with URL changes is a more involved process, covered in Google's own dedicated, longer guide, since it involves the full weight of redirect mapping and canonical signal transfer discussed above, applied across an entire site at once; worth consulting directly if a genuine domain or URL-structure migration is ever on the table.
+
+> ChatGPT fact check - this paragraph claims "Moving a site with URL changes is a more involved process, covered in Google's own dedicated, longer guide, since it involves the full weight of redirect mapping and canonical signal transfer discussed above, applied across an entire site at once; worth consulting directly if a genuine domain or URL-structure migration is ever on the table.", but the counterargument is: Although the episode is presented as covering site moves, its entire treatment of URL-changing moves is a pointer to the longer guide. Mapping old/new URLs, verification, direct redirects, Change of Address where applicable, updated canonicals/hreflang/sitemaps, and monitoring are missing. Add an accessible migration chapter. Include keeping redirects for at least a year, avoiding irrelevant redirects, and the June 2026 guidance about domain variants in Change of Address.
+>
+> Sources: Start the site move; list item 4: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes#start-site-move; Start the site move; list item 5: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes#start-site-move.
+>
+> A040 | Omission | High priority | Checked 24 September 2026
+
+
 
 Temporarily pausing or disabling a website, and this section is genuinely practical for any seasonal or circumstantial business interruption.
 
@@ -1218,9 +1806,25 @@ And two closing, sharp warnings, worth remembering precisely if this situation e
 
 If a genuine, full 503 status is ever needed for the site as a whole, say during active maintenance rather than a business pause specifically, Google's practical advice is to keep that error page itself lightweight: use a retry-after HTTP header with your best estimate of when service will resume, keep the page as static HTML with minimal external resources, inline your CSS and any small images directly rather than loading them as separate requests, and give visitors clear guidance right on that page about what's happening and how to reach you in the meantime.
 
+> ChatGPT fact check - this paragraph claims "If a genuine, full 503 status is ever needed for the site as a whole, say during active maintenance rather than a business pause specifically, Google's practical advice is to keep that error page itself lightweight: use a retry-after HTTP header with your best estimate of when service will resume, keep the page as static HTML with minimal external resources, inline your CSS and any small images directly rather than loading them as separate requests, and give visitors clear guidance right on that page about what's happening and how to reach you in the meantime.", but the counterargument is: The maintenance paragraph describes how to serve a 503 page but omits Google's one-to-two-day emergency timeframe and the warning against prolonged shutdown. For an urgent shutdown of one or two days, return an informational 503 response. Longer outages require careful planning; keeping useful pages available is the recommended business-pause approach.
+>
+> Sources: Not recommended: Disable the whole website; list item 6: https://developers.google.com/search/docs/crawling-indexing/pause-online-business#disable-site.
+>
+> A041 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap.
 
 Use 301 or 308 for genuinely permanent URL moves, 302 or 307 for anything temporary, since getting this backwards costs real traffic while Google slowly reinterprets your intent. For A/B testing, never cloak, remember Googlebot generally ignores cookies, use rel canonical rather than noindex across variants, use 302s for any redirect-based test, and keep tests running only as long as they need to, especially clear of an active site migration. Moving hosting without URL changes means preparing and testing the new infrastructure first, lowering DNS TTL ahead of the switch, and only retiring the old infrastructure once everything's confirmed on the new one. And pausing a business temporarily means limiting functionality while keeping the site online, updating your structured data and Merchant Center feed to reflect reality, using data-nosnippet on any status banner, and never fully blocking the site in robots.txt or reaching for the removals tool, since either of those turns a temporary pause into a much harder recovery.
+
+> ChatGPT fact check - this paragraph claims "Use 301 or 308 for genuinely permanent URL moves, 302 or 307 for anything temporary, since getting this backwards costs real traffic while Google slowly reinterprets your intent.", but the counterargument is: Not all redirects are HTTP 3xx responses: Google also documents meta refresh, HTTP refresh, and JavaScript mechanisms. Permanent and temporary redirects are canonical signals; the promised ranking-signal transfer and traffic loss are not deterministic outcomes. Describe HTTP redirects as the preferred server-side method, distinguish permanent and temporary signals, and explain other supported mechanisms without promising a particular ranking outcome.
+>
+> Sources: Overview of redirect types; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types; Overview of redirect types; table row 4: https://developers.google.com/search/docs/crawling-indexing/301-redirects#overview-of-redirect-types.
+>
+> A038 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we move into Part Three: ranking and search appearance, starting with Google's ranking systems overview, core updates, spam updates, and the reviews system. See you there.
 
@@ -1232,9 +1836,25 @@ This episode is adapted from "Redirects and Google Search," "Minimize A/B testin
 
 Welcome back. This episode opens Part Three, ranking and search appearance. Today we cover what a "ranking system" actually is versus an "update", how core updates specifically work and how to sensibly react to one, spam updates, and Google's reviews system.
 
+> ChatGPT fact check - this paragraph claims "Today we cover what a "ranking system" actually is versus an "update", how core updates specifically work and how to sensibly react to one, spam updates, and Google's reviews system.", but the counterargument is: The episode mainly defines systems versus updates; it does not actually adapt the ranking-systems guide's descriptions of BERT, neural matching, RankBrain, passage ranking, link analysis, freshness, deduplication, and other systems. Either add a chapter covering the current ranking-systems guide or explicitly label this as an overview of updates rather than the ranking-systems documentation.
+>
+> Sources: A guide to Google Search ranking systems; paragraph 1: https://developers.google.com/search/docs/appearance/ranking-systems-guide#a-guide-to-google-search-ranking-systems.
+>
+> A043 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Ranking systems versus updates: a distinction worth having precisely, since these terms get used loosely.
 
 Ranking systems are what Google actually uses to generate search results in the first place. Google runs multiple ranking systems, each doing something different; there isn't one single monolithic algorithm, but a whole collection of systems working together. Updates, by contrast, are when Google makes an improvement to one of those existing systems. Google's own framing: results aren't perfect, and updates are how these systems get better over time at surfacing genuinely good results.
+
+> ChatGPT fact check - this paragraph claims "Ranking systems are what Google actually uses to generate search results in the first place.", but the counterargument is: The episode mainly defines systems versus updates; it does not actually adapt the ranking-systems guide's descriptions of BERT, neural matching, RankBrain, passage ranking, link analysis, freshness, deduplication, and other systems. Either add a chapter covering the current ranking-systems guide or explicitly label this as an overview of updates rather than the ranking-systems documentation.
+>
+> Sources: A guide to Google Search ranking systems; paragraph 1: https://developers.google.com/search/docs/appearance/ranking-systems-guide#a-guide-to-google-search-ranking-systems.
+>
+> A043 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Core updates.
 
@@ -1246,17 +1866,57 @@ Google offers its own analogy for this, and it's worth hearing precisely, becaus
 
 What to actually do if you suspect a core update affected your traffic. First, confirm the core update has genuinely finished rolling out, by checking the Search Status Dashboard for its start and end dates, since judging impact mid-rollout can be misleading. Then use Search Console to look for a correlating drop, and assess honestly.
 
+> ChatGPT fact check - this paragraph claims "First, confirm the core update has genuinely finished rolling out, by checking the Search Status Dashboard for its start and end dates, since judging impact mid-rollout can be misleading.", but the counterargument is: The chapter omits waiting at least one full week after a core update, distinguishing small from large drops, and link-spam benefits that cannot be regained. Matching dates suggests correlation, not proven causation. The reviews system also covers more than products/services and excludes third-party user reviews. Restore the assessment timing and recovery cautions. Explain the reviews system's first-party review scope and supported languages; say that timing alone cannot establish the cause of a traffic change.
+>
+> Sources: Check if there's a traffic drop in Search Console; list item 2: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 3: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 4: https://developers.google.com/search/docs/appearance/core-updates#check-search-console.
+>
+> A042 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Google's specific recommendation for that assessment: take a close, genuinely objective look at your site as a whole, and consider asking others you trust, people unaffiliated with your site, to do the same kind of honest assessment. This points directly back to the self-assessment questions from episode six, the same content-quality and expertise questions covered there; Google explicitly reuses that same framework here, rather than offering a separate core-update-specific checklist. Consider an audit of your drops specifically: which pages were most affected, and for what kinds of searches, then hold those particular pages up against the questions from episode six directly. And it's worth asking, honestly: are other pages, elsewhere on the web, now doing a better job answering that same query than yours does? If so, why?
+
+> ChatGPT fact check - this paragraph claims "This points directly back to the self-assessment questions from episode six, the same content-quality and expertise questions covered there; Google explicitly reuses that same framework here, rather than offering a separate core-update-specific checklist.", but the counterargument is: The chapter omits waiting at least one full week after a core update, distinguishing small from large drops, and link-spam benefits that cannot be regained. Matching dates suggests correlation, not proven causation. The reviews system also covers more than products/services and excludes third-party user reviews. Restore the assessment timing and recovery cautions. Explain the reviews system's first-party review scope and supported languages; say that timing alone cannot establish the cause of a traffic change.
+>
+> Sources: Check if there's a traffic drop in Search Console; list item 2: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 3: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 4: https://developers.google.com/search/docs/appearance/core-updates#check-search-console.
+>
+> A042 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Spam updates.
 
 These are narrower and more targeted than core updates: periodic improvements specifically to Google's automated spam-detection systems, the ones enforcing the spam policies from episode two. Google's own framing: its automated spam detection is constantly improving in the background, but periodic, more concentrated updates get released to meaningfully strengthen it further. These tend to target the familiar categories from episode two directly: low-quality, unhelpful, deceptive, or manipulative content. If your site follows the spam policies genuinely, a spam update simply isn't something to worry about; it's aimed squarely at the practices episode two already told you to avoid.
 
+> ChatGPT fact check - this paragraph claims "If your site follows the spam policies genuinely, a spam update simply isn't something to worry about; it's aimed squarely at the practices episode two already told you to avoid.", but the counterargument is: The chapter omits waiting at least one full week after a core update, distinguishing small from large drops, and link-spam benefits that cannot be regained. Matching dates suggests correlation, not proven causation. The reviews system also covers more than products/services and excludes third-party user reviews. Restore the assessment timing and recovery cautions. Explain the reviews system's first-party review scope and supported languages; say that timing alone cannot establish the cause of a traffic change.
+>
+> Sources: Check if there's a traffic drop in Search Console; list item 2: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 3: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 4: https://developers.google.com/search/docs/appearance/core-updates#check-search-console.
+>
+> A042 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Worth knowing as a practical, current detail: core updates and spam updates sometimes roll out in close succession, even overlapping in their rollout windows. When that happens, untangling which specific update caused which specific change becomes genuinely harder, since two different systems are shifting at once. If you ever notice ranking movement during a period like that, checking the Search Status Dashboard for the precise, official start and end dates of each separate update is the most reliable way to actually attribute any change you're seeing to the right cause.
+
+> ChatGPT fact check - this paragraph claims "If you ever notice ranking movement during a period like that, checking the Search Status Dashboard for the precise, official start and end dates of each separate update is the most reliable way to actually attribute any change you're seeing to the right cause.", but the counterargument is: The chapter omits waiting at least one full week after a core update, distinguishing small from large drops, and link-spam benefits that cannot be regained. Matching dates suggests correlation, not proven causation. The reviews system also covers more than products/services and excludes third-party user reviews. Restore the assessment timing and recovery cautions. Explain the reviews system's first-party review scope and supported languages; say that timing alone cannot establish the cause of a traffic change.
+>
+> Sources: Check if there's a traffic drop in Search Console; list item 2: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 3: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 4: https://developers.google.com/search/docs/appearance/core-updates#check-search-console.
+>
+> A042 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 The reviews system.
 
 This is a more specific, standing system, distinct from periodic core or spam updates, aimed specifically at content whose primary purpose is reviewing products or services. Google made a notable structural decision about this system worth knowing: at a certain point, it moved from occasionally announcing standalone "reviews system updates" to having this system improve on a continuous, ongoing basis instead, meaning there's no longer a periodic announcement to watch for the way there is with core or spam updates; refinement simply happens continuously now. The practical implication for anyone publishing reviews: Google's specific guidance on writing high-quality reviews, which we'll cover properly in the ecommerce episode later in this series, is the thing to stay focused on over time, rather than watching for discrete update announcements the way you might for core updates.
+
+> ChatGPT fact check - this paragraph claims "This is a more specific, standing system, distinct from periodic core or spam updates, aimed specifically at content whose primary purpose is reviewing products or services.", but the counterargument is: The chapter omits waiting at least one full week after a core update, distinguishing small from large drops, and link-spam benefits that cannot be regained. Matching dates suggests correlation, not proven causation. The reviews system also covers more than products/services and excludes third-party user reviews. Restore the assessment timing and recovery cautions. Explain the reviews system's first-party review scope and supported languages; say that timing alone cannot establish the cause of a traffic change.
+>
+> Sources: Check if there's a traffic drop in Search Console; list item 2: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 3: https://developers.google.com/search/docs/appearance/core-updates#check-search-console; Check if there's a traffic drop in Search Console; list item 4: https://developers.google.com/search/docs/appearance/core-updates#check-search-console.
+>
+> A042 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Let's bring this together with a concrete, useful takeaway, especially relevant to a store that occasionally publishes its own reviews or comparison content. If organic traffic to a specific page dips and the timing lines up with an announced core or spam update, resist the urge to make hasty, reactive changes before you've confirmed the rollout is actually complete. Once it is, run the honest self-assessment from episode six specifically against the affected pages, rather than guessing at some hidden technical cause. And if the content in question is genuinely a product review, hold it against Google's dedicated review-quality guidance directly, since that's a continuously evolving standard rather than a discrete update you could otherwise track and time your response around.
 
@@ -1267,6 +1927,14 @@ Ranking systems are the standing mechanisms that generate results; updates are i
 Next episode, we cover page experience properly: Core Web Vitals in technical detail, and how to avoid intrusive interstitials that can actively harm both user experience and your search standing. See you there.
 
 This episode is adapted from "Google Search's core updates and your website," Google's ranking systems documentation, and related guidance on Google Search Central, licensed under Creative Commons Attribution 4.0.
+
+> ChatGPT fact check - this paragraph claims "This episode is adapted from "Google Search's core updates and your website," Google's ranking systems documentation, and related guidance on Google Search Central, licensed under Creative Commons Attribution 4.0.", but the counterargument is: The episode mainly defines systems versus updates; it does not actually adapt the ranking-systems guide's descriptions of BERT, neural matching, RankBrain, passage ranking, link analysis, freshness, deduplication, and other systems. Either add a chapter covering the current ranking-systems guide or explicitly label this as an overview of updates rather than the ranking-systems documentation.
+>
+> Sources: A guide to Google Search ranking systems; paragraph 1: https://developers.google.com/search/docs/appearance/ranking-systems-guide#a-guide-to-google-search-ranking-systems.
+>
+> A043 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 ### Episode 20: Page Experience, Core Web Vitals, and Avoiding Intrusive Interstitials
 
@@ -1280,7 +1948,23 @@ Now, Core Web Vitals specifically: the three field metrics Google treats as most
 
 Here's the foundational thing to understand before the individual metrics themselves: these are field metrics, meaning they're measured from real visitors actually using your site, not from a single artificial lab test run once in a testing tool. The underlying data source is called the Chrome User Experience Report, drawing on real Chrome users who've opted in to share usage data. A lab tool like Lighthouse can estimate these same metrics for your own debugging purposes, but the actual scores Google uses for its ranking signal come from this aggregated real-world field data, not from any single lab run.
 
+> ChatGPT fact check - this paragraph claims "A lab tool like Lighthouse can estimate these same metrics for your own debugging purposes, but the actual scores Google uses for its ranking signal come from this aggregated real-world field data, not from any single lab run.", but the counterargument is: A normal Lighthouse navigation audit cannot directly measure a real visit's INP; it uses diagnostic proxies such as Total Blocking Time. Google does not publish a fixed modest CWV weighting or a stricter SEO threshold for transactional pages. Distinguish field INP from lab diagnostics. State that CWV are used in ranking and good scores do not guarantee rank; label conversion-based prioritization as editorial advice, not a special Google standard.
+>
+> Sources: In the lab; paragraph 2: https://web.dev/articles/inp#lab-measurement.
+>
+> A046 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 And here's a detail about how thresholds get applied that's genuinely easy to misunderstand: each metric is judged specifically at the 75th percentile of real visits. That means a page only earns a "good" rating on any given metric once at least three-quarters of its real visitors experienced a good result on that metric, not merely the typical or average visitor. This deliberately weights in the slower, worse experiences that a simple average would otherwise hide: if most visitors get a fast result but the slowest quarter consistently sees something considerably worse, the page fails that metric overall, even though a typical visit looks perfectly fine.
+
+> ChatGPT fact check - this paragraph claims "That means a page only earns a "good" rating on any given metric once at least three-quarters of its real visitors experienced a good result on that metric, not merely the typical or average visitor.", but the counterargument is: It correctly says three quarters must meet the threshold, then says a poor slowest quarter necessarily causes failure. If the 75th-percentile value meets the threshold, a worse remaining quarter does not by itself overturn that result. Evaluate the metric at the 75th percentile of eligible page views. A good result means at least roughly three quarters of measured experiences meet the good threshold.
+>
+> Sources: Core Web Vitals; paragraph 3: https://web.dev/articles/vitals#core-web-vitals; Core Web Vitals; paragraph 4: https://web.dev/articles/vitals#core-web-vitals.
+>
+> A044 | Error | Medium priority | Checked 24 September 2026
+
+
 
 The three metrics themselves, each measuring a genuinely different part of the experience.
 
@@ -1288,15 +1972,47 @@ Largest Contentful Paint, LCP, measures loading: specifically, how long it takes
 
 Interaction to Next Paint, INP, measures responsiveness. This one replaced an older metric called First Input Delay back in 2024, and the change was meaningful: rather than judging only the page's very first interaction, INP looks across every click, tap, and keypress throughout an entire visit, and reports the slowest delay between any input and the page's next visual response. The good threshold is 200 milliseconds or less.
 
+> ChatGPT fact check - this paragraph claims "This one replaced an older metric called First Input Delay back in 2024, and the change was meaningful: rather than judging only the page's very first interaction, INP looks across every click, tap, and keypress throughout an entire visit, and reports the slowest delay between any input and the page's next visual response.", but the counterargument is: INP is not always the absolute slowest interaction: it ignores a high outlier for each 50 interactions. CLS is not confined to initial page loading; it measures unexpected shifts across the page lifecycle using session windows. INP reflects a page visit's worst or near-worst interaction latency, allowing for outliers. CLS measures unexpected layout shifts over the page lifecycle, using the largest session-window score.
+>
+> Sources: What is INP?; paragraph 1: https://web.dev/articles/inp#what-is-inp; What is INP?; paragraph 4: https://web.dev/articles/inp#what-is-inp; What is CLS?; paragraph 1: https://web.dev/articles/cls#what-is-cls.
+>
+> A045 | Error | Medium priority | Checked 24 September 2026
+
+
+
 Cumulative Layout Shift, CLS, measures visual stability: essentially, how much visible content unexpectedly jumps around while a page is loading, the frustrating experience of trying to tap a button just as an ad loads in above it and shoves everything down. It's a unitless score, weighted by how much of the viewport moved and how far it moved. The good threshold is 0.1 or less.
+
+> ChatGPT fact check - this paragraph claims "Cumulative Layout Shift, CLS, measures visual stability: essentially, how much visible content unexpectedly jumps around while a page is loading, the frustrating experience of trying to tap a button just as an ad loads in above it and shoves everything down.", but the counterargument is: INP is not always the absolute slowest interaction: it ignores a high outlier for each 50 interactions. CLS is not confined to initial page loading; it measures unexpected shifts across the page lifecycle using session windows. INP reflects a page visit's worst or near-worst interaction latency, allowing for outliers. CLS measures unexpected layout shifts over the page lifecycle, using the largest session-window score.
+>
+> Sources: What is INP?; paragraph 1: https://web.dev/articles/inp#what-is-inp; What is INP?; paragraph 4: https://web.dev/articles/inp#what-is-inp; What is CLS?; paragraph 1: https://web.dev/articles/cls#what-is-cls.
+>
+> A045 | Error | Medium priority | Checked 24 September 2026
+
+
 
 A page needs to clear the good threshold on all three metrics simultaneously, at that 75th percentile, to earn the overall "good" classification Search Console will actually show you.
 
 How much does this genuinely matter for ranking, versus other factors we've covered? Worth being honest about the real proportion here, since it's frequently overstated: Core Web Vitals are a confirmed ranking signal, but a comparatively modest one. Google's own broader documentation is clear that content relevance and quality, everything from episodes four through six, outweighs page experience as a ranking factor. The realistic way to think about it: Core Web Vitals won't override genuinely strong, relevant content, but when two pages are otherwise closely matched in quality and relevance for the same search, the one with better Core Web Vitals has a real, if modest, edge. Practically speaking, that means it's worth genuine attention, but not worth letting it eclipse the content-quality work from earlier episodes.
 
+> ChatGPT fact check - this paragraph claims "Worth being honest about the real proportion here, since it's frequently overstated: Core Web Vitals are a confirmed ranking signal, but a comparatively modest one.", but the counterargument is: A normal Lighthouse navigation audit cannot directly measure a real visit's INP; it uses diagnostic proxies such as Total Blocking Time. Google does not publish a fixed modest CWV weighting or a stricter SEO threshold for transactional pages. Distinguish field INP from lab diagnostics. State that CWV are used in ranking and good scores do not guarantee rank; label conversion-based prioritization as editorial advice, not a special Google standard.
+>
+> Sources: In the lab; paragraph 2: https://web.dev/articles/inp#lab-measurement.
+>
+> A046 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 Where to check your own numbers: Search Console's Core Web Vitals report groups pages by similar URL patterns, genuinely useful on a large site rather than needing to check thousands of individual URLs one at a time, and PageSpeed Insights shows both the real field data and a lab-based estimate side by side for any single URL you want to check directly.
 
 One detail worth flagging for a store specifically: transactional pages, product pages, cart, and checkout flows, tend to be held to a more exacting standard in practice, simply because any slowdown on exactly those pages translates directly into lost conversions and lost revenue, not merely a slightly worse browsing experience. If you're going to prioritise Core Web Vitals work anywhere on a limited budget, those transactional pages are where the return is most direct.
+
+> ChatGPT fact check - this paragraph claims "One detail worth flagging for a store specifically: transactional pages, product pages, cart, and checkout flows, tend to be held to a more exacting standard in practice, simply because any slowdown on exactly those pages translates directly into lost conversions and lost revenue, not merely a slightly worse browsing experience.", but the counterargument is: A normal Lighthouse navigation audit cannot directly measure a real visit's INP; it uses diagnostic proxies such as Total Blocking Time. Google does not publish a fixed modest CWV weighting or a stricter SEO threshold for transactional pages. Distinguish field INP from lab diagnostics. State that CWV are used in ranking and good scores do not guarantee rank; label conversion-based prioritization as editorial advice, not a special Google standard.
+>
+> Sources: In the lab; paragraph 2: https://web.dev/articles/inp#lab-measurement.
+>
+> A046 | Unsupported | Medium priority | Checked 24 September 2026
+
+
 
 Now, avoiding intrusive interstitials and dialogs.
 
@@ -1314,6 +2030,14 @@ Let's recap.
 
 Page experience is broader than Core Web Vitals alone, also covering mobile-friendliness, HTTPS, security, and freedom from intrusive interstitials, and the guidance is to improve broadly across all of these rather than fixating on just one. Core Web Vitals are three field metrics measured from real visitor data at the 75th percentile: LCP for loading at 2.5 seconds or better, INP for responsiveness at 200 milliseconds or better, and CLS for visual stability at 0.1 or better. It's a genuine but comparatively modest ranking factor, well behind content relevance and quality, though transactional pages specifically reward the investment through conversions regardless of any ranking effect. And intrusive interstitials, full-page overlays or dialogs that block content immediately on arrival, particularly for promotional purposes, should generally become small, dismissable banners instead, with narrow, specific exceptions for legally required consent and age-verification dialogs.
 
+> ChatGPT fact check - this paragraph claims "It's a genuine but comparatively modest ranking factor, well behind content relevance and quality, though transactional pages specifically reward the investment through conversions regardless of any ranking effect.", but the counterargument is: A normal Lighthouse navigation audit cannot directly measure a real visit's INP; it uses diagnostic proxies such as Total Blocking Time. Google does not publish a fixed modest CWV weighting or a stricter SEO threshold for transactional pages. Distinguish field INP from lab diagnostics. State that CWV are used in ranking and good scores do not guarantee rank; label conversion-based prioritization as editorial advice, not a special Google standard.
+>
+> Sources: In the lab; paragraph 2: https://web.dev/articles/inp#lab-measurement.
+>
+> A046 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 Next episode, we move into how your listing actually looks in results: title links, snippets, site names, sitelinks, and favicons, the full set of visual elements a searcher sees before they ever click through to your page. See you there.
 
 This episode is adapted from "Understanding page experience in Google Search results," Core Web Vitals documentation, and "Avoid intrusive interstitials and dialogs" on Google Search Central, licensed under Creative Commons Attribution 4.0.
@@ -1330,11 +2054,27 @@ The snippet.
 
 This is Google's own term for the descriptive text beneath the title link, the short summary helping a searcher judge whether to click. Google draws on a number of sources to build this too, commonly the meta description tag you write directly for that page, but it may also pull from content elsewhere on the page itself, or build what's called a rich result from structured data and page content together, which we'll get into properly starting in episode twenty-three.
 
+> ChatGPT fact check - this paragraph claims "Google draws on a number of sources to build this too, commonly the meta description tag you write directly for that page, but it may also pull from content elsewhere on the page itself, or build what's called a rich result from structured data and page content together, which we'll get into properly starting in episode twenty-three.", but the counterargument is: Episode 21 says snippets commonly come from meta descriptions and may also come from page content. Google says page content is primary and the meta description is sometimes used. Episode 5 states this more faithfully. Google primarily creates snippets from page content. It may use a meta description when that describes the page better for the result.
+>
+> Sources: How snippets are created; paragraph 2: https://developers.google.com/search/docs/appearance/snippet#how-snippet-created.
+>
+> A047 | Error | Medium priority | Checked 24 September 2026
+
+
+
 A good meta description, per Google's own guidance, is short, unique to that one specific page, and covers the page's most relevant points concisely. And here's the direct link back to episode sixteen: if there's a specific piece of visible content you want to exist on the page but never want pulled into a snippet, that's exactly the narrower job data-nosnippet is built for, rather than trying to solve it purely through description-writing.
 
 Site names.
 
 This is a comparatively newer element, introduced specifically to make it easier for a searcher to identify which website a given result actually belongs to, showing a readable site name prominently rather than forcing someone to parse a raw URL to figure out where a result leads. Google draws on a variety of sources to determine this automatically. But you can directly indicate your own preferred site name using structured data placed specifically on your homepage, a dedicated site-name markup covered in its own reference documentation, which naturally overlaps with the broader structured data material starting in episode twenty-three.
+
+> ChatGPT fact check - this paragraph claims "But you can directly indicate your own preferred site name using structured data placed specifically on your homepage, a dedicated site-name markup covered in its own reference documentation, which naturally overlaps with the broader structured data material starting in episode twenty-three.", but the counterargument is: The recap says site names are made controllable through markup. Google's selection is automated and WebSite markup is a preference signal, with no guarantee the name will be used. Use WebSite structured data on the homepage to indicate a preferred site name. Google decides what appears; it supports names at domain and subdomain level, not each subdirectory.
+>
+> Sources: How site names in Google Search are created; paragraph 2: https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created; How site names in Google Search are created; paragraph 3: https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created.
+>
+> A049 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Sitelinks.
 
@@ -1344,6 +2084,14 @@ Favicons.
 
 The small icon shown alongside your result, in the browser tab, and now prominently next to your site name and URL directly within the search result snippet itself. Google's specific technical guidance here: provide an icon at least 48 by 48 pixels, ideally as a clean multiple of that size, 96 by 96 or 144 by 144 and so on, so it renders crisply at whatever size Google actually needs. The icon should be square, since Google renders it inside a circular frame in the result itself, and it needs to be genuinely crawlable, meaning not accidentally blocked by a robots.txt rule the way we discussed back in episode eleven, or it simply won't be picked up at all. A generic, unmodified default icon left over from whatever platform or theme you're using undercuts the actual point of this element, which is instant, confident brand recognition right there in the results page itself, before anyone has even clicked through.
 
+> ChatGPT fact check - this paragraph claims "Google's specific technical guidance here: provide an icon at least 48 by 48 pixels, ideally as a clean multiple of that size, 96 by 96 or 144 by 144 and so on, so it renders crisply at whatever size Google actually needs.", but the counterargument is: The required minimum is stated as 48 by 48 pixels with multiples of 48 preferred. Current Google guidance requires a square favicon at least 8 by 8 pixels and recommends one larger than 48 by 48. Multiples of 48 are not the current rule. Use a square favicon at least eight pixels on each side; Google recommends a size larger than forty-eight pixels on each side. Keep its URL stable and allow the required crawlers.
+>
+> Sources: Guidelines; list item 4: https://developers.google.com/search/docs/appearance/favicon-in-search#guidelines.
+>
+> A048 | Outdated | Medium priority | Checked 24 September 2026
+
+
+
 Byline dates.
 
 A more specific element, relevant particularly to content that's genuinely time-sensitive, articles, blog posts, guides. This is the publish or update date Google may show directly alongside a result. Getting this genuinely accurate matters more than it might first appear, and it connects directly back to a specific warning from episode six: artificially changing a page's displayed date to make it look freshly updated, without the underlying content having actually, substantively changed, is precisely the kind of manipulation Google's own people-first-content guidance explicitly warns against, and it can actively work against you rather than helping, since it's the kind of pattern Google's systems are specifically built to notice.
@@ -1352,9 +2100,41 @@ Let's bring all five of these together, since a searcher genuinely takes in the 
 
 Every one of these elements rewards the same underlying discipline we've returned to throughout this whole series: specificity per page, genuine accuracy, and resisting the temptation toward templated, repeated, one-size-fits-all boilerplate copied identically across thousands of otherwise-distinct pages.
 
+> ChatGPT fact check - this paragraph claims "Every one of these elements rewards the same underlying discipline we've returned to throughout this whole series: specificity per page, genuine accuracy, and resisting the temptation toward templated, repeated, one-size-fits-all boilerplate copied identically across thousands of otherwise-distinct pages.", but the counterargument is: The statement that every element rewards specificity per page conflates page-level title/snippet guidance with site-level name/favicon guidance. The blanket opposition to templating also omits Google's encouragement of good programmatic meta descriptions for large databases. Separate page-level titles and descriptions from site-level identity. Programmatic descriptions can be appropriate when accurate, readable, and based on page-specific information.
+>
+> Sources: Technical guidelines; list item 1: https://developers.google.com/search/docs/appearance/site-names#technical-guidelines; Programmatically generate descriptions; paragraph 1: https://developers.google.com/search/docs/appearance/snippet#programmatically-generate-descriptions.
+>
+> A050 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap.
 
 The title link is Google's headline, drawn primarily from your title element but rewritten when Google judges it inaccurate, oversized, or keyword-stuffed. The snippet is the descriptive text beneath it, generally sourced from your meta description or page content, with data-nosnippet available for excluding one specific piece of visible content from consideration. Site names, made controllable through dedicated homepage structured data, help a searcher instantly identify which business a result belongs to. Sitelinks are algorithmically generated from your own site structure and internal linking, not something set directly. Favicons need to be square, at least 48 by 48 pixels, and genuinely crawlable, not blocked in robots.txt. And byline dates should reflect genuine update activity, never be artificially manipulated to appear falsely fresh.
+
+> ChatGPT fact check - this paragraph claims "The snippet is the descriptive text beneath it, generally sourced from your meta description or page content, with data-nosnippet available for excluding one specific piece of visible content from consideration.", but the counterargument is: Episode 21 says snippets commonly come from meta descriptions and may also come from page content. Google says page content is primary and the meta description is sometimes used. Episode 5 states this more faithfully. Google primarily creates snippets from page content. It may use a meta description when that describes the page better for the result.
+>
+> Sources: How snippets are created; paragraph 2: https://developers.google.com/search/docs/appearance/snippet#how-snippet-created.
+>
+> A047 | Error | Medium priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Favicons need to be square, at least 48 by 48 pixels, and genuinely crawlable, not blocked in robots.txt.", but the counterargument is: The required minimum is stated as 48 by 48 pixels with multiples of 48 preferred. Current Google guidance requires a square favicon at least 8 by 8 pixels and recommends one larger than 48 by 48. Multiples of 48 are not the current rule. Use a square favicon at least eight pixels on each side; Google recommends a size larger than forty-eight pixels on each side. Keep its URL stable and allow the required crawlers.
+>
+> Sources: Guidelines; list item 4: https://developers.google.com/search/docs/appearance/favicon-in-search#guidelines.
+>
+> A048 | Outdated | Medium priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Site names, made controllable through dedicated homepage structured data, help a searcher instantly identify which business a result belongs to.", but the counterargument is: The recap says site names are made controllable through markup. Google's selection is automated and WebSite markup is a preference signal, with no guarantee the name will be used. Use WebSite structured data on the homepage to indicate a preferred site name. Google decides what appears; it supports names at domain and subdomain level, not each subdirectory.
+>
+> Sources: How site names in Google Search are created; paragraph 2: https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created; How site names in Google Search are created; paragraph 3: https://developers.google.com/search/docs/appearance/site-names#how-site-names-in-google-search-are-created.
+>
+> A049 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we move into images and videos specifically: how Google indexes and displays them in Search, and the concrete best practices for making sure yours are found, understood, and shown at their best. See you there.
 
@@ -1388,9 +2168,25 @@ The foundation: your video needs to be publicly accessible, present on a page at
 
 Creating a dedicated watch page. To be eligible for the fuller set of video features, video results on the main results page, Video mode, key moments, and the live badge, Google recommends a dedicated watch page for each video, where showing that one specific video is genuinely the main reason a visitor is on the page at all. Google draws a useful, precise distinction here between what counts as a watch page and what doesn't. A dedicated video landing page, a TV episode's own player page, a sports highlight page: these are watch pages. A blog post that happens to review an embedded video, a product page carrying a 360-degree product video, or a page listing many videos of equal prominence: these are not watch pages, because in each of those cases the video is complementary to other content, not the main reason someone's there. It's entirely fine to have the same video appear on both a genuine watch page and elsewhere, say embedded within a related product page too.
 
+> ChatGPT fact check - this paragraph claims "A blog post that happens to review an embedded video, a product page carrying a 360-degree product video, or a page listing many videos of equal prominence: these are not watch pages, because in each of those cases the video is complementary to other content, not the main reason someone's there.", but the counterargument is: The watch page is framed mainly as a recommendation, but the current video guide lists an indexed, well-performing watch page and an embedded video as indexing requirements. The thumbnail-format list omits AVIF. Describe watch-page eligibility explicitly, preserve the distinction from ordinary text/image results on non-watch pages, and add AVIF to the supported thumbnail formats.
+>
+> Sources: Ensure your videos can be indexed; list item 1: https://developers.google.com/search/docs/appearance/video#indexing-criteria; Ensure your videos can be indexed; list item 2: https://developers.google.com/search/docs/appearance/video#indexing-criteria; Ensure your videos can be indexed; list item 3: https://developers.google.com/search/docs/appearance/video#indexing-criteria; Provide a high-quality video thumbnail; table row 2: https://developers.google.com/search/docs/appearance/video#valid-thumbnail.
+>
+> A051 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Include your video in a proper HTML tag. Google identifies a video on a page more reliably when it's wrapped in a recognised tag: video, embed, iframe, or object specifically.
 
 Stable, accessible thumbnail and content URLs. Use one single, unique, stable thumbnail URL per video, and keep the actual video file itself available at a stable URL too, which helps Google discover it, confirm it remains genuinely available over time, and gather signals about it consistently. Supported thumbnail formats mirror the image formats: BMP, GIF, JPEG, PNG, WebP, and SVG. Minimum thumbnail size is 60 by 30 pixels, though larger is genuinely preferred for quality. The thumbnail file has to be reachable by Googlebot, so don't block it in robots.txt and don't hide it behind a login requirement. And there's a specific transparency-related technical requirement worth knowing: at least 80 percent of the thumbnail's pixels need an alpha transparency value above 250, essentially ruling out thumbnails that are mostly or fully transparent.
+
+> ChatGPT fact check - this paragraph claims "Supported thumbnail formats mirror the image formats: BMP, GIF, JPEG, PNG, WebP, and SVG.", but the counterargument is: The watch page is framed mainly as a recommendation, but the current video guide lists an indexed, well-performing watch page and an embedded video as indexing requirements. The thumbnail-format list omits AVIF. Describe watch-page eligibility explicitly, preserve the distinction from ordinary text/image results on non-watch pages, and add AVIF to the supported thumbnail formats.
+>
+> Sources: Ensure your videos can be indexed; list item 1: https://developers.google.com/search/docs/appearance/video#indexing-criteria; Ensure your videos can be indexed; list item 2: https://developers.google.com/search/docs/appearance/video#indexing-criteria; Ensure your videos can be indexed; list item 3: https://developers.google.com/search/docs/appearance/video#indexing-criteria; Provide a high-quality video thumbnail; table row 2: https://developers.google.com/search/docs/appearance/video#valid-thumbnail.
+>
+> A051 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 If you're specifically worried about bad actors, hackers or spammers, scraping your actual video content files directly, there's a legitimate technique worth knowing: you can verify that a request genuinely comes from Googlebot, using the reverse-DNS or IP-range verification from episode eleven, and serve the video's actual content URL specifically to that trusted, verified crawler, while withholding that same specific field from other, unverified requesters.
 
@@ -1400,9 +2196,25 @@ Two specific, richer features worth knowing individually, since they're genuinel
 
 The LIVE badge. Adding BroadcastEvent structured data nested specifically within your VideoObject markup makes a public livestream eligible for a distinct LIVE badge directly in results, applicable to any public video being live-streamed for any length of time, sporting events, product launch livestreams, live Q&A sessions, that kind of thing. And there's a specific, practical technical tip attached: use the Indexing API to notify Google promptly when a given stream actually starts and ends, so that badge appears and disappears at genuinely the right moments, rather than lagging behind an ordinary crawl schedule.
 
+> ChatGPT fact check - this paragraph claims "And there's a specific, practical technical tip attached: use the Indexing API to notify Google promptly when a given stream actually starts and ends, so that badge appears and disappears at genuinely the right moments, rather than lagging behind an ordinary crawl schedule.", but the counterargument is: The script says notifications make the LIVE badge track the actual start and end accurately. Notifications help Google discover changes; they do not guarantee immediate badge appearance or disappearance. Use the Indexing API as instructed for livestream updates. This helps Google process changes promptly, but does not guarantee the LIVE badge or exact display timing.
+>
+> Sources: Video ( VideoObject , Clip , BroadcastEvent ) structured data; table row 1: https://developers.google.com/search/docs/appearance/structured-data/video#video-videoobject,-clip,-broadcastevent-structured-data; General structured data guidelines; paragraph 3: https://developers.google.com/search/docs/appearance/structured-data/sd-policies#general-structured-data-guidelines.
+>
+> A052 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Key moments. This lets viewers navigate a video's internal segments the way they'd navigate chapters in a book. Google's systems will try to detect these segments automatically on their own, with no effort required from you at all. But you can also explicitly define them yourself, and Google states plainly that it will prioritise segments you've explicitly set over anything it might have guessed automatically. There are two distinct ways to define them: Clip structured data, where you specify each segment's exact start and end time along with a label to display for it, or SeekToAction structured data, where you instead define your own URL's own timestamp structure, letting Google automatically construct links to any arbitrary point within the video, based on that pattern, without you needing to hand-define every individual segment.
 
 Let's ground both halves of this episode in something concrete: a store producing short product demonstration videos, say showing a flag actually flapping in real outdoor wind conditions across different fabric weights. That's genuinely strong, non-commodity content in the sense from episode seven, first-hand, demonstrable, and hard for anyone to fake or replicate secondhand. Give each such video its own dedicated watch page, mark it up properly with VideoObject structured data including a stable, properly formatted thumbnail, and if the store ever does a live product-launch stream, add BroadcastEvent markup and notify Google promptly through the Indexing API so the LIVE badge tracks the stream's actual real-time status accurately.
+
+> ChatGPT fact check - this paragraph claims "Give each such video its own dedicated watch page, mark it up properly with VideoObject structured data including a stable, properly formatted thumbnail, and if the store ever does a live product-launch stream, add BroadcastEvent markup and notify Google promptly through the Indexing API so the LIVE badge tracks the stream's actual real-time status accurately.", but the counterargument is: The script says notifications make the LIVE badge track the actual start and end accurately. Notifications help Google discover changes; they do not guarantee immediate badge appearance or disappearance. Use the Indexing API as instructed for livestream updates. This helps Google process changes promptly, but does not guarantee the LIVE badge or exact display timing.
+>
+> Sources: Video ( VideoObject , Clip , BroadcastEvent ) structured data; table row 1: https://developers.google.com/search/docs/appearance/structured-data/video#video-videoobject,-clip,-broadcastevent-structured-data; General structured data guidelines; paragraph 3: https://developers.google.com/search/docs/appearance/structured-data/sd-policies#general-structured-data-guidelines.
+>
+> A052 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Let's recap.
 
@@ -1415,6 +2227,22 @@ This episode is adapted from "Google Images best practices" and "Video (VideoObj
 ### Episode 23: Structured Data Foundations
 
 Welcome back. This opens a genuinely important stretch of the series: structured data, the machine-readable markup behind review stars, product carousels, breadcrumbs, and every other visually rich thing you've seen in a Google result beyond plain blue text. Today is the foundation: what structured data actually is, how it's formatted, and the general guidelines governing every single type of it. Next episode we tour the specific feature types; the episode after covers shopping-specific markup in depth, directly relevant to a Shopify catalogue.
+
+> ChatGPT fact check - this paragraph claims "This opens a genuinely important stretch of the series: structured data, the machine-readable markup behind review stars, product carousels, breadcrumbs, and every other visually rich thing you've seen in a Google result beyond plain blue text.", but the counterargument is: The introduction describes structured data as powering every visually rich result beyond blue text. Many features are generated algorithmically and do not require page markup, including featured snippets and sitelinks. Structured data helps Google understand content and can make pages eligible for supported rich results. Other search features are selected through different mechanisms.
+>
+> Sources: How can I mark my page as a featured snippet?; paragraph 1: https://developers.google.com/search/docs/appearance/featured-snippets#how-can-i-mark-my-page-as-a-featured-snippet.
+>
+> A053 | Error | Medium priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Next episode we tour the specific feature types; the episode after covers shopping-specific markup in depth, directly relevant to a Shopify catalogue.", but the counterargument is: The preceding episode promises how to generate and test structured data with JavaScript, but this chapter stops at a general deployment workflow. Product-specific warnings about dynamically generated data are missing. Add the Generate structured data with JavaScript source, including rendered-DOM testing and the Product warning about less frequent or less reliable shopping crawls for rapidly changing values.
+>
+> Sources: Generate structured data with custom JavaScript; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#custom-javascript; Test your implementation; list item 2: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#testing; Test your implementation; list item 3: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#testing; Technical guidelines; list item 6: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#technical-guidelines.
+>
+> A055 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 What structured data actually is.
 
@@ -1442,9 +2270,25 @@ To be eligible for rich result display at all, structured data can't violate Goo
 
 Technical guidelines, the kind an automated tool can actually catch for you. Mark up your pages using one of the three supported formats we just covered. And critically: don't block your structured-data-carrying pages from Googlebot using robots.txt, noindex, or any other access-control method, since Google obviously can't read and use markup on a page it's never permitted to actually crawl and render in the first place. The Rich Results Test and the URL Inspection tool will catch most technical errors of this kind directly.
 
+> ChatGPT fact check - this paragraph claims "And critically: don't block your structured-data-carrying pages from Googlebot using robots.txt, noindex, or any other access-control method, since Google obviously can't read and use markup on a page it's never permitted to actually crawl and render in the first place.", but the counterargument is: The chapter groups noindex with controls preventing Google from crawling and reading a page. Noindex affects indexing and rich-result eligibility, but does not itself block crawling. Google must be able to access the page, and the page must remain eligible for indexing. Robots.txt or login controls can block access; noindex prevents indexing.
+>
+> Sources: Block Search indexing with noindex; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/block-indexing#block-search-indexing-with-noindex; Debugging noindex issues; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/block-indexing#debugging-noindex-issues.
+>
+> A054 | Error | Medium priority | Checked 24 September 2026
+
+
+
 Quality guidelines, and these are meaningfully harder to catch with any automated tool, since they're about substance rather than syntax. Follow the spam policies. Keep the information genuinely up to date; Google states plainly it won't show a rich result for time-sensitive content that's no longer actually relevant, an expired promotion or a past event, say. Provide genuinely original content, either your own or genuinely generated by your own users. And here's a specific, important rule worth remembering precisely: don't mark up content that isn't actually visible to a reader of the page. If your structured data describes, say, a product's material and dimensions, the visible HTML body of that same page has to genuinely describe that same material and those same dimensions too; you can't use structured data to silently claim something the visible page itself doesn't actually say. And don't mark up irrelevant or misleading content, fake reviews being the obvious, direct example, tying straight back to the review-quality guidance we'll cover properly in the ecommerce episode later in this series.
 
 The practical build-test-deploy sequence Google itself recommends, worth having as a genuine workflow rather than an abstract checklist. Add the required properties for whichever structured data type you're implementing, following that type's own specific documentation on exactly where in the page to place it. Follow the general guidelines we just covered. Validate your markup using the Rich Results Test, fixing any critical errors it flags; non-critical issues are worth addressing too, since they can improve overall quality, though they're not strictly required for basic eligibility. Deploy on a handful of pages first, and use the URL Inspection tool to directly confirm how Google actually sees the rendered result. And once deployed more broadly, monitor ongoing validity through the Rich result status reports in Search Console specifically, since markup that validated perfectly at launch can quietly break later, commonly due to a template change or a serving issue introduced somewhere downstream.
+
+> ChatGPT fact check - this paragraph claims "The practical build-test-deploy sequence Google itself recommends, worth having as a genuine workflow rather than an abstract checklist.", but the counterargument is: The preceding episode promises how to generate and test structured data with JavaScript, but this chapter stops at a general deployment workflow. Product-specific warnings about dynamically generated data are missing. Add the Generate structured data with JavaScript source, including rendered-DOM testing and the Product warning about less frequent or less reliable shopping crawls for rapidly changing values.
+>
+> Sources: Generate structured data with custom JavaScript; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#custom-javascript; Test your implementation; list item 2: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#testing; Test your implementation; list item 3: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#testing; Technical guidelines; list item 6: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#technical-guidelines.
+>
+> A055 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 And if you genuinely want to measure whether adding structured data made a real difference: run a before-and-after comparison specifically on stable, non-seasonal pages, ones with enough existing historical data, and compare performance directly in Search Console's own Performance report, filtered down to that specific URL, so seasonal or promotional noise doesn't distort what you're actually trying to measure.
 
@@ -1452,9 +2296,25 @@ Let's recap.
 
 Structured data is standardised, machine-readable markup describing a page's content using the schema.org vocabulary, with JSON-LD as Google's own recommended format specifically because it stays separate from visible markup. Google's own documentation, not schema.org's broader spec, is definitive for Google Search's specific behaviour. Required properties are strictly disqualifying if missing; recommended properties are worth including, but only with complete, accurate data, never padded out with fabricated values just to fill a field. The general guidelines demand the markup stay accessible to Googlebot, genuinely current, genuinely original, visibly matched to the page's actual visible content, and free of anything misleading, with a dedicated, narrower manual action specifically for structured data violations that affects rich-result eligibility without touching ordinary ranking. And the practical workflow is add, validate with the Rich Results Test, deploy narrow, inspect with URL Inspection, then monitor ongoing validity through the Rich result status reports.
 
+> ChatGPT fact check - this paragraph claims "The general guidelines demand the markup stay accessible to Googlebot, genuinely current, genuinely original, visibly matched to the page's actual visible content, and free of anything misleading, with a dedicated, narrower manual action specifically for structured data violations that affects rich-result eligibility without touching ordinary ranking.", but the counterargument is: The chapter groups noindex with controls preventing Google from crawling and reading a page. Noindex affects indexing and rich-result eligibility, but does not itself block crawling. Google must be able to access the page, and the page must remain eligible for indexing. Robots.txt or login controls can block access; noindex prevents indexing.
+>
+> Sources: Block Search indexing with noindex; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/block-indexing#block-search-indexing-with-noindex; Debugging noindex issues; paragraph 1: https://developers.google.com/search/docs/crawling-indexing/block-indexing#debugging-noindex-issues.
+>
+> A054 | Error | Medium priority | Checked 24 September 2026
+
+
+
 Next episode, we tour the actual feature types themselves: Article, Breadcrumb, Event, Job Posting, and the wider gallery of what structured data can actually unlock in a search result. See you there.
 
 This episode is adapted from "Understand how structured data works," "General structured data guidelines," and "Introduction to structured data markup in Google Search" on Google Search Central, licensed under Creative Commons Attribution 4.0.
+
+> ChatGPT fact check - this paragraph claims "This episode is adapted from "Understand how structured data works," "General structured data guidelines," and "Introduction to structured data markup in Google Search" on Google Search Central, licensed under Creative Commons Attribution 4.0.", but the counterargument is: The preceding episode promises how to generate and test structured data with JavaScript, but this chapter stops at a general deployment workflow. Product-specific warnings about dynamically generated data are missing. Add the Generate structured data with JavaScript source, including rendered-DOM testing and the Product warning about less frequent or less reliable shopping crawls for rapidly changing values.
+>
+> Sources: Generate structured data with custom JavaScript; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#custom-javascript; Test your implementation; list item 2: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#testing; Test your implementation; list item 3: https://developers.google.com/search/docs/appearance/structured-data/generate-structured-data-with-javascript#testing; Technical guidelines; list item 6: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#technical-guidelines.
+>
+> A055 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 ### Episode 24: A Tour of the Structured Data Gallery, and the FAQ Rich Result's Retirement
 
@@ -1462,9 +2322,25 @@ Welcome back. Today we walk through the actual gallery of structured data featur
 
 Let's start with the gallery itself, Google's own maintained, authoritative list of which structured data types can actually change how a result looks. As of a mid-2026 update, the gallery holds around twenty-five entries. Let's walk through the ones most broadly relevant, in Google's own descriptions.
 
+> ChatGPT fact check - this paragraph claims "As of a mid-2026 update, the gallery holds around twenty-five entries.", but the counterargument is: There are 25 gallery entries, but Dataset serves Dataset Search; Speakable supports spoken content; paywall markup distinguishes paywalls from cloaking. Movie is a gallery entry not separately included in the chapter's tour. Describe 25 entries with different purposes and surfaces. Do not imply that every type unlocks a distinct visual treatment in ordinary web results.
+>
+> Sources: Structured data markup that Google Search supports; table row 6: https://developers.google.com/search/docs/appearance/structured-data/search-gallery#structured-data-markup-that-google-search-supports; Structured data markup that Google Search supports; table row 15: https://developers.google.com/search/docs/appearance/structured-data/search-gallery#structured-data-markup-that-google-search-supports.
+>
+> A059 | Error | Medium priority | Checked 24 September 2026
+
+
+
 Article. Covers news, sports, or blog articles, eligible for features like a prominent title treatment and larger-than-thumbnail images directly in the result.
 
 Breadcrumb. Shows a page's position within your site's hierarchy, directly in the result, in place of a raw, unreadable URL, tying back to the URL-structure discussion in episode nine.
+
+> ChatGPT fact check - this paragraph claims "Breadcrumb.", but the counterargument is: The breadcrumb description omits its current desktop-only Search availability. The video paragraph says 'last episode', but the video chapter is Episode 22. Qualify breadcrumb display as desktop Search and change the video reference to Episode 22.
+>
+> Sources: Feature availability; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#availability.
+>
+> A062 | Editorial | Low priority | Checked 24 September 2026
+
+
 
 Carousel. Displays a sequential list or gallery of items from a single site, but worth noting precisely: this feature has to be combined with one of a specific set of other types, Recipe, Course list, Restaurant, or Movie; it isn't a standalone type on its own.
 
@@ -1486,7 +2362,23 @@ Review snippet. Surfaces star ratings and review summaries directly beneath a re
 
 Video. As covered fully last episode: play controls, key moments, and live-stream labelling directly in results.
 
+> ChatGPT fact check - this paragraph claims "Video.", but the counterargument is: The breadcrumb description omits its current desktop-only Search availability. The video paragraph says 'last episode', but the video chapter is Episode 22. Qualify breadcrumb display as desktop Search and change the video reference to Episode 22.
+>
+> Sources: Feature availability; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#availability.
+>
+> A062 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 And there are further, narrower types in the fuller gallery too: Course list, Dataset, Discussion forum, Education Q&A, Math solver, Profile page, Q&A, Recipe, Software app, Speakable, Subscription and paywalled content, and Vacation rental, each suited to a fairly specific kind of site or content.
+
+> ChatGPT fact check - this paragraph claims "And there are further, narrower types in the fuller gallery too: Course list, Dataset, Discussion forum, Education Q&A, Math solver, Profile page, Q&A, Recipe, Software app, Speakable, Subscription and paywalled content, and Vacation rental, each suited to a fairly specific kind of site or content.", but the counterargument is: There are 25 gallery entries, but Dataset serves Dataset Search; Speakable supports spoken content; paywall markup distinguishes paywalls from cloaking. Movie is a gallery entry not separately included in the chapter's tour. Describe 25 entries with different purposes and surfaces. Do not imply that every type unlocks a distinct visual treatment in ordinary web results.
+>
+> Sources: Structured data markup that Google Search supports; table row 6: https://developers.google.com/search/docs/appearance/structured-data/search-gallery#structured-data-markup-that-google-search-supports; Structured data markup that Google Search supports; table row 15: https://developers.google.com/search/docs/appearance/structured-data/search-gallery#structured-data-markup-that-google-search-supports.
+>
+> A059 | Error | Medium priority | Checked 24 September 2026
+
+
 
 A caveat worth holding onto precisely, and Google states this directly in its own gallery documentation: the actual appearance in search results might be different from what a given markup type technically enables. Eligibility is not entitlement. Implementing a type correctly makes you eligible for that richer display; it never guarantees Google will actually choose to show it for any specific query or result.
 
@@ -1496,21 +2388,93 @@ For years, FAQ structured data, marking up a page's own frequently-asked-questio
 
 Two further, related dates worth knowing if you're tracking this directly: in June 2026, Search Console removed its dedicated FAQ rich result reporting and validation, and support was dropped from the Rich Results Test tool specifically for this type. In August 2026, API support for FAQ rich results was removed entirely too.
 
+> ChatGPT fact check - this paragraph claims "Two further, related dates worth knowing if you're tracking this directly: in June 2026, Search Console removed its dedicated FAQ rich result reporting and validation, and support was dropped from the Rich Results Test tool specifically for this type.", but the counterargument is: The current Google changelog confirms the May retirement and June 15 documentation removal. The audit did not independently establish completed June reporting/test withdrawal and August API withdrawal from a current primary announcement. This is unverified, not proven false. Keep the confirmed retirement and documentation-removal dates. Restore the other dates only with a specific primary announcement or archived Google notice, distinguishing planned dates from confirmed completion.
+>
+> Sources: Removing documentation for the FAQ rich result feature; paragraph 1: https://developers.google.com/search/updates#removing-faq-rich-result; Removing documentation for the FAQ rich result feature; paragraph 2: https://developers.google.com/search/updates#removing-faq-rich-result; Deprecating the FAQ rich result feature; paragraph 2: https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature.
+>
+> A057 | Unverified | Medium priority | Checked 24 September 2026
+
+
+
 Here's the single most important distinction to hold onto, worth stating precisely, since it's easy to overcorrect here. The visible rich-result enhancement in search is gone. The underlying FAQ structured data itself is not harmful, and it isn't something you need to urgently strip out of your pages. Google's own general structured-data guidance is direct on this point: unused structured data doesn't cause problems for a site. If you already have FAQPage markup in place, it will continue to validate cleanly, and it will simply no longer produce that visible dropdown snippet in results; it's not a violation, not a penalty, just quietly no longer visually rewarded the way it once was.
+
+> ChatGPT fact check - this paragraph claims "If you already have FAQPage markup in place, it will continue to validate cleanly, and it will simply no longer produce that visible dropdown snippet in results; it's not a violation, not a penalty, just quietly no longer visually rewarded the way it once was.", but the counterargument is: Unused FAQ markup need not be urgently removed, but the blanket promise of clean validation ignores actual errors and the distinction between generic Schema.org validation and Google rich-result testing. 'Removing it accomplishes nothing beneficial' also makes an unsupported maintenance judgment. Correct FAQPage markup can remain in place. Use generic schema validation if needed; do not expect Google FAQ rich-result eligibility. Keeping or removing unused markup is a maintenance choice.
+>
+> Sources: Overview of the changes; paragraph 3: https://developers.google.com/search/blog/2023/08/howto-faq-changes#overview-of-the-changes.
+>
+> A058 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 And there's a real reason worth understanding for why this happened, tying directly back to episode seven's material on generative AI search: Google is explicitly reallocating exactly this kind of space, question-and-answer-formatted content sitting directly in the results page, toward AI Overviews and AI Mode instead. The question-and-answer format itself hasn't gone away as a way people get information from Google; what's changed is who, or what, is now doing the actual presenting of it.
 
+> ChatGPT fact check - this paragraph claims "And there's a real reason worth understanding for why this happened, tying directly back to episode seven's material on generative AI search: Google is explicitly reallocating exactly this kind of space, question-and-answer-formatted content sitting directly in the results page, toward AI Overviews and AI Mode instead.", but the counterargument is: The script says Google explicitly reallocated FAQ space to AI Overviews/AI Mode. The official retirement notice establishes retirement, not that motive. The recap repeats the unsupported attribution. FAQ rich results stopped appearing on May 7, 2026. Remove the AI-replacement explanation, or explicitly label it as the adapter's hypothesis outside the source narration.
+>
+> Sources: Deprecating the FAQ rich result feature; paragraph 2: https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature.
+>
+> A056 | Unsupported | High priority | Checked 24 September 2026
+
+
+
 A genuinely useful, sharp point worth remembering for future reference too: this exact same pattern already happened once before, to a different structured data type. HowTo rich results were deprecated on a very similar schedule back in 2023, and they never returned. Google's own trajectory here is consistently toward fewer traditional, visually rich result types over time, and more space handed instead to generative, AI-driven presentation. Worth keeping in mind as a general pattern: strategically over-relying on any single rich-result type as a durable traffic source carries real risk, since Google's own history shows a willingness to retire these features once it judges the underlying purpose better served elsewhere.
+
+> ChatGPT fact check - this paragraph claims "HowTo rich results were deprecated on a very similar schedule back in 2023, and they never returned.", but the counterargument is: The script says Google explicitly reallocated FAQ space to AI Overviews/AI Mode. The official retirement notice establishes retirement, not that motive. The recap repeats the unsupported attribution. FAQ rich results stopped appearing on May 7, 2026. Remove the AI-replacement explanation, or explicitly label it as the adapter's hypothesis outside the source narration.
+>
+> Sources: Deprecating the FAQ rich result feature; paragraph 2: https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature.
+>
+> A056 | Unsupported | High priority | Checked 24 September 2026
+
+
 
 What's genuinely unaffected by this specific change, worth stating plainly so the FAQ removal doesn't get overread as something broader than it is: Product, Review, Recipe, Article, Event, Organization, Local Business, Video, and Breadcrumb rich results all continue functioning entirely normally. This was a narrow, specific retirement of exactly one type, not a signal that structured data generally is being deprecated.
 
 And one more reassurance worth stating directly, since it addresses the most natural worry: existing pages that previously won an FAQ rich result don't lose their actual ranking position purely because of this change. A rich result was always a visual, presentational upgrade layered on top of a result, never a ranking factor in itself; the underlying page that was ranking where it was continues ranking there, simply without that particular visual enhancement now available to it.
 
+> ChatGPT fact check - this paragraph claims "And one more reassurance worth stating directly, since it addresses the most natural worry: existing pages that previously won an FAQ rich result don't lose their actual ranking position purely because of this change.", but the counterargument is: The episode promises that pages continue ranking in the same place. Retirement of a rich-result enhancement is not itself a ranking penalty, but positions and traffic can still change. This removes a search appearance, not the page's general eligibility to rank. It does not guarantee unchanged rankings, impressions, or clicks.
+>
+> Sources: Changes in Search Console reporting; paragraph 2: https://developers.google.com/search/blog/2023/08/howto-faq-changes#changes-in-search-console-reporting.
+>
+> A060 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Let's ground this practically. If a store's FAQ page, say shipping and returns questions, was using FAQPage markup specifically hoping for that dropdown snippet, there's genuinely no urgent action required. Leave the markup in place if it's already there; removing it accomplishes nothing beneficial. But going forward, it's worth reallocating any effort that was specifically aimed at winning that particular rich result toward markup types still genuinely active and rewarded: Product markup for the catalogue itself, Organization markup for the business as a whole, and Review markup for genuine customer reviews, all of which we're about to cover, or have already covered, in proper depth.
+
+> ChatGPT fact check - this paragraph claims "Leave the markup in place if it's already there; removing it accomplishes nothing beneficial.", but the counterargument is: Unused FAQ markup need not be urgently removed, but the blanket promise of clean validation ignores actual errors and the distinction between generic Schema.org validation and Google rich-result testing. 'Removing it accomplishes nothing beneficial' also makes an unsupported maintenance judgment. Correct FAQPage markup can remain in place. Use generic schema validation if needed; do not expect Google FAQ rich-result eligibility. Keeping or removing unused markup is a maintenance choice.
+>
+> Sources: Overview of the changes; paragraph 3: https://developers.google.com/search/blog/2023/08/howto-faq-changes#overview-of-the-changes.
+>
+> A058 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "But going forward, it's worth reallocating any effort that was specifically aimed at winning that particular rich result toward markup types still genuinely active and rewarded: Product markup for the catalogue itself, Organization markup for the business as a whole, and Review markup for genuine customer reviews, all of which we're about to cover, or have already covered, in proper depth.", but the counterargument is: The store advice recommends Review markup for genuine customer reviews without distinguishing product reviews from self-serving reviews about the store itself. Use eligible product-review markup where appropriate. Reviews of a business or organization on pages it controls are not eligible for that entity's review-star feature, even if the reviews are genuine.
+>
+> Sources: Technical guidelines; list item 10: https://developers.google.com/search/docs/appearance/structured-data/review-snippet#technical-guidelines.
+>
+> A061 | Omission | High priority | Checked 24 September 2026
+
+
 
 Let's recap.
 
 The structured data gallery holds roughly twenty-five active types, from Article and Breadcrumb through Product, Review snippet, and Video, each unlocking a specific, distinct visual treatment in results, with eligibility never guaranteeing actual display. FAQ rich results were formally retired from Google Search as of May 2026, following the same trajectory HowTo rich results took back in 2023, with the underlying space explicitly shifting toward AI Overviews and AI Mode. The FAQPage markup itself remains harmless to keep, just no longer visually rewarded, and every other major rich result type, Product very much included, continues functioning entirely normally.
+
+> ChatGPT fact check - this paragraph claims "FAQ rich results were formally retired from Google Search as of May 2026, following the same trajectory HowTo rich results took back in 2023, with the underlying space explicitly shifting toward AI Overviews and AI Mode.", but the counterargument is: The script says Google explicitly reallocated FAQ space to AI Overviews/AI Mode. The official retirement notice establishes retirement, not that motive. The recap repeats the unsupported attribution. FAQ rich results stopped appearing on May 7, 2026. Remove the AI-replacement explanation, or explicitly label it as the adapter's hypothesis outside the source narration.
+>
+> Sources: Deprecating the FAQ rich result feature; paragraph 2: https://developers.google.com/search/updates#deprecating-the-faq-rich-result-feature.
+>
+> A056 | Unsupported | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "The structured data gallery holds roughly twenty-five active types, from Article and Breadcrumb through Product, Review snippet, and Video, each unlocking a specific, distinct visual treatment in results, with eligibility never guaranteeing actual display.", but the counterargument is: There are 25 gallery entries, but Dataset serves Dataset Search; Speakable supports spoken content; paywall markup distinguishes paywalls from cloaking. Movie is a gallery entry not separately included in the chapter's tour. Describe 25 entries with different purposes and surfaces. Do not imply that every type unlocks a distinct visual treatment in ordinary web results.
+>
+> Sources: Structured data markup that Google Search supports; table row 6: https://developers.google.com/search/docs/appearance/structured-data/search-gallery#structured-data-markup-that-google-search-supports; Structured data markup that Google Search supports; table row 15: https://developers.google.com/search/docs/appearance/structured-data/search-gallery#structured-data-markup-that-google-search-supports.
+>
+> A059 | Error | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we go deep specifically on shopping structured data: Product markup itself, merchant listings, variants, loyalty programs, and merchant return and shipping policies, the single most directly relevant stretch of this whole series for a Shopify catalogue. See you there.
 
@@ -1519,6 +2483,14 @@ This episode is adapted from the structured data gallery and current FAQ rich re
 ### Episode 25: Shopping Structured Data: Product, Merchant Listings, Variants, Returns, Shipping, and Loyalty
 
 Welcome back. This is, in a real sense, the single most directly relevant episode in the entire series for a Shopify store. Today we cover Product structured data in full: the two distinct classes of markup, merchant listings specifically, product variants, and the ecommerce-policy markup that sits alongside it, return policies, shipping, and loyalty programs.
+
+> ChatGPT fact check - this paragraph claims "Today we cover Product structured data in full: the two distinct classes of markup, merchant listings specifically, product variants, and the ecommerce-policy markup that sits alongside it, return policies, shipping, and loyalty programs.", but the counterargument is: The episode promises shipping in depth but has no shipping-policy explanation. Loyalty is reduced to one paragraph, omitting MemberProgram/tiers, individual-offer benefits, and availability limits. Add ShippingService under Organization via hasShippingService, plus OfferShippingDetails overrides. Add MemberProgram and tier basics, separate offer-level loyalty benefits, and the documented supported countries.
+>
+> Sources: Merchant shipping policy ( ShippingService ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#merchant-shipping-policy-shippingservice-structured-data; Technical guidelines; list item 1: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#technical-guidelines; Loyalty program ( MemberProgram ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/loyalty-program#loyalty-program-memberprogram-structured-data.
+>
+> A067 | Omission | High priority | Checked 24 September 2026
+
+
 
 Two classes of product structured data, and choosing between them correctly matters.
 
@@ -1532,25 +2504,121 @@ Merchant listings can make a page eligible for several distinct places Google ac
 
 The core Product and Offer markup. A worked example, in the RDFa syntax, though the same properties apply identically in JSON-LD: within an Offer nested inside the Product, you specify a price, an availability status using schema.org's InStock or similar values, a price currency, and a priceValidUntil date. You also specify a direct URL to that specific offer, an itemCondition, such as UsedCondition where relevant, a representative image, and a SKU.
 
+> ChatGPT fact check - this paragraph claims "A worked example, in the RDFa syntax, though the same properties apply identically in JSON-LD: within an Offer nested inside the Product, you specify a price, an availability status using schema.org's InStock or similar values, a price currency, and a priceValidUntil date.", but the counterargument is: The narration places image and SKU among the Offer properties, omits the Product name from the core explanation, and presents recommended fields such as priceValidUntil like universal requirements. Explain the hierarchy: Product has name, image, and nested offers; SKU identifies the product. Offer contains the price and currency, with other properties required or recommended according to the feature. Never invent an expiry date merely to fill a field.
+>
+> Sources: Product; table row 2: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-properties; Product; table row 3: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-properties; Product; table row 22: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-properties; Offer; table row 9: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#offer-properties.
+>
+> A063 | Error | High priority | Checked 24 September 2026
+
+
+
 Product variants, and this section matters enormously for a flag store specifically, given how many products exist as the same base design across multiple sizes and materials. If you offer variants of a product, different sizes, colours, or materials of essentially the same underlying item, Google has dedicated variant structured data specifically for representing that relationship properly, rather than treating each individual size or material as a wholly unrelated, disconnected product. This directly ties back to the canonicalization discussion from episode twelve: without proper variant markup, Google may struggle to understand that your three-by-five-foot and four-by-six-foot versions of the same flag design are meaningfully related items, rather than simply near-duplicate, competing pages.
+
+> ChatGPT fact check - this paragraph claims "If you offer variants of a product, different sizes, colours, or materials of essentially the same underlying item, Google has dedicated variant structured data specifically for representing that relationship properly, rather than treating each individual size or material as a wholly unrelated, disconnected product.", but the counterargument is: The worked example calls six size/material variants one Product with variant Offers. Google's variant model uses ProductGroup and variant Product entities; each variant can have its own Offer. Group the flag family with ProductGroup. Represent each size/material combination as a Product, connect the variants using hasVariant or inProductGroupWithID as documented, and give each variant its own offer and identifier.
+>
+> Sources: Product variant structured data ( ProductGroup , Product ); paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/product-variants#product-variant-structured-data-productgroup,-product; Single page example: variants nested under ProductGroup; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/product-variants#single-page-example-1.
+>
+> A064 | Error | High priority | Checked 24 September 2026
+
+
 
 Now, the two dedicated ecommerce-policy markup types, both nested under your site's Organization markup rather than attached to any single individual product page, since they describe policies for your business as a whole.
 
+> ChatGPT fact check - this paragraph claims "Now, the two dedicated ecommerce-policy markup types, both nested under your site's Organization markup rather than attached to any single individual product page, since they describe policies for your business as a whole.", but the counterargument is: Return policies can be supplied under Offer to override a business-wide policy. returnFees supports FreeReturn, ReturnFeesCustomerResponsibility, and ReturnShippingFees; the chapter says only FreeReturn is supported. State the organization-level policy and product-level override separately. Explain all three supported fee categories and use returnShippingFeesAmount with ReturnShippingFees when the merchant charges return shipping.
+>
+> Sources: Technical guidelines; list item 2: https://developers.google.com/search/docs/appearance/structured-data/return-policy#technical-guidelines; Finite or unlimited return windows; table row 3: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Finite or unlimited return windows; table row 5: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Return details; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-with-returns-example.
+>
+> A066 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Now, the two dedicated ecommerce-policy markup types, both nested under your site's Organization markup rather than attached to any single individual product page, since they describe policies for your business as a whole.", but the counterargument is: The episode promises shipping in depth but has no shipping-policy explanation. Loyalty is reduced to one paragraph, omitting MemberProgram/tiers, individual-offer benefits, and availability limits. Add ShippingService under Organization via hasShippingService, plus OfferShippingDetails overrides. Add MemberProgram and tier basics, separate offer-level loyalty benefits, and the documented supported countries.
+>
+> Sources: Merchant shipping policy ( ShippingService ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#merchant-shipping-policy-shippingservice-structured-data; Technical guidelines; list item 1: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#technical-guidelines; Loyalty program ( MemberProgram ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/loyalty-program#loyalty-program-memberprogram-structured-data.
+>
+> A067 | Omission | High priority | Checked 24 September 2026
+
+
+
 Merchant return policy. This lets you specify your business's actual return policy, or policies, in a machine-readable, structured form, which can then surface directly within merchant listing results themselves. The required properties: applicableCountry, the specific country or countries this particular policy applies to, using standard two-letter country codes, with up to twenty-five countries specifiable under one policy, and returnPolicyCategory, the actual type of return policy you're offering.
 
+> ChatGPT fact check - this paragraph claims "The required properties: applicableCountry, the specific country or countries this particular policy applies to, using standard two-letter country codes, with up to twenty-five countries specifiable under one policy, and returnPolicyCategory, the actual type of return policy you're offering.", but the counterargument is: The chapter states a maximum of 25 countries for applicableCountry. Both current organization-level and merchant-listing references specify up to 50. You can specify up to fifty country codes for applicableCountry.
+>
+> Sources: MerchantReturnPolicy (nested under Organization using the hasMerchantReturnPolicy property); paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/return-policy#merchant-return-policy-properties.
+>
+> A065 | Outdated | Medium priority | Checked 24 September 2026
+
+
+
 The recommended properties build out real detail from there. merchantReturnDays specifies the number of days from delivery within which a product can be returned; this one becomes required specifically if you've set your returnPolicyCategory to a finite return window rather than an unlimited one. returnFees describes what kind of return fees apply; if returns are genuinely free, this property becomes required, and its value has to specifically be set to the FreeReturn designation, since other fee types aren't supported through this particular property; if there are actual return shipping costs instead, you'd use the separate returnShippingFeesAmount property to specify that cost directly. returnMethod describes the type of return method being offered, and becomes recommended specifically when you're using either a finite or an unlimited return window category.
+
+> ChatGPT fact check - this paragraph claims "The recommended properties build out real detail from there. merchantReturnDays specifies the number of days from delivery within which a product can be returned; this one becomes required specifically if you've set your returnPolicyCategory to a finite return window rather than an unlimited one. returnFees describes what kind of return fees apply; if returns are genuinely free, this property becomes required, and its value has to specifically be set to the FreeReturn designation, since other fee types aren't supported through this particular property; if there are actual return shipping costs instead, you'd use the separate returnShippingFeesAmount property to specify that cost directly. returnMethod describes the type of return method being offered, and becomes recommended specifically when you're using either a finite or an unlimited return window category.", but the counterargument is: Return policies can be supplied under Offer to override a business-wide policy. returnFees supports FreeReturn, ReturnFeesCustomerResponsibility, and ReturnShippingFees; the chapter says only FreeReturn is supported. State the organization-level policy and product-level override separately. Explain all three supported fee categories and use returnShippingFeesAmount with ReturnShippingFees when the merchant charges return shipping.
+>
+> Sources: Technical guidelines; list item 2: https://developers.google.com/search/docs/appearance/structured-data/return-policy#technical-guidelines; Finite or unlimited return windows; table row 3: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Finite or unlimited return windows; table row 5: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Return details; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-with-returns-example.
+>
+> A066 | Error | High priority | Checked 24 September 2026
+
+
 
 Why does this genuinely matter for conversion, beyond simply being available markup? A searcher weighing whether to click through to your product, versus a competitor's, can see your actual return policy directly in the result itself, before ever landing on your site. For a physical product like a flag, where sizing or exact colour might reasonably concern a buyer sight-unseen, a visibly reassuring return policy shown right there in the search result is a genuine, concrete edge over a competing listing that hasn't bothered to mark this up at all.
 
 Loyalty Program markup. This lets you specify details of any loyalty or rewards programme your business offers, again nested under your Organization markup, so it applies to your business generally rather than to any single product. If a store runs a repeat-customer rewards programme, or a points-based system, this is the structured, machine-readable way to make that programme's existence genuinely visible to Google, rather than leaving it buried only in unmarked page copy.
 
+> ChatGPT fact check - this paragraph claims "This lets you specify details of any loyalty or rewards programme your business offers, again nested under your Organization markup, so it applies to your business generally rather than to any single product.", but the counterargument is: The episode promises shipping in depth but has no shipping-policy explanation. Loyalty is reduced to one paragraph, omitting MemberProgram/tiers, individual-offer benefits, and availability limits. Add ShippingService under Organization via hasShippingService, plus OfferShippingDetails overrides. Add MemberProgram and tier basics, separate offer-level loyalty benefits, and the documented supported countries.
+>
+> Sources: Merchant shipping policy ( ShippingService ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#merchant-shipping-policy-shippingservice-structured-data; Technical guidelines; list item 1: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#technical-guidelines; Loyalty program ( MemberProgram ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/loyalty-program#loyalty-program-memberprogram-structured-data.
+>
+> A067 | Omission | High priority | Checked 24 September 2026
+
+
+
 Two complementary paths worth knowing exist side by side, rather than one replacing the other. You can add this structured data directly to your own webpages, exactly as we've been covering. Or, separately, you can upload a product data feed directly to Google Merchant Center, the same Merchant Center referenced back in episode seven's coverage of generative AI features. Google's own guidance here is direct: providing both structured data on your pages and a Merchant Center feed together maximises your product's actual visibility, rather than treating the two as interchangeable alternatives where only one is needed.
 
 Let's ground all of this directly in a concrete, worked example, since this episode is specifically the practical payoff for a catalogue this size. A single flag design, say a specific historical regimental flag, sold in three sizes and two fabric weights, is really one Product with distinct variant Offers underneath it, not six unrelated products competing against each other in Google's eyes. Each individual offer carries its own price, availability, and SKU. The whole family shares one return policy, marked up once under Organization rather than repeated six separate times across six separate product pages. And if the store's actual return window genuinely is, say, thirty days with free return shipping, that's precisely the kind of concrete, reassuring detail worth surfacing directly in a result through exactly this markup, rather than leaving a hesitant searcher to dig through a buried policy page just to find out before they'll commit to clicking through at all.
 
+> ChatGPT fact check - this paragraph claims "A single flag design, say a specific historical regimental flag, sold in three sizes and two fabric weights, is really one Product with distinct variant Offers underneath it, not six unrelated products competing against each other in Google's eyes.", but the counterargument is: The worked example calls six size/material variants one Product with variant Offers. Google's variant model uses ProductGroup and variant Product entities; each variant can have its own Offer. Group the flag family with ProductGroup. Represent each size/material combination as a Product, connect the variants using hasVariant or inProductGroupWithID as documented, and give each variant its own offer and identifier.
+>
+> Sources: Product variant structured data ( ProductGroup , Product ); paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/product-variants#product-variant-structured-data-productgroup,-product; Single page example: variants nested under ProductGroup; paragraph 1: https://developers.google.com/search/docs/appearance/structured-data/product-variants#single-page-example-1.
+>
+> A064 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "The whole family shares one return policy, marked up once under Organization rather than repeated six separate times across six separate product pages.", but the counterargument is: Return policies can be supplied under Offer to override a business-wide policy. returnFees supports FreeReturn, ReturnFeesCustomerResponsibility, and ReturnShippingFees; the chapter says only FreeReturn is supported. State the organization-level policy and product-level override separately. Explain all three supported fee categories and use returnShippingFeesAmount with ReturnShippingFees when the merchant charges return shipping.
+>
+> Sources: Technical guidelines; list item 2: https://developers.google.com/search/docs/appearance/structured-data/return-policy#technical-guidelines; Finite or unlimited return windows; table row 3: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Finite or unlimited return windows; table row 5: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Return details; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-with-returns-example.
+>
+> A066 | Error | High priority | Checked 24 September 2026
+
+
+
 Let's recap.
 
 Choose merchant listing markup for any page where a customer can genuinely purchase directly, which covers essentially your entire storefront, and it earns product snippet eligibility as a byproduct too. The core Offer properties are price, availability, currency, a valid-until date, item condition, image, and SKU. Use dedicated variant structured data to properly represent size, colour, or material variants as one connected family rather than disconnected competing products. Merchant return policy and Loyalty Program markup both live under your Organization markup, describing your business's policies as a whole, with return policy specifically capable of surfacing return windows and fees directly within a search result itself. And structured data on your pages and a Merchant Center feed work together, not as substitutes for one another, to maximise genuine product visibility.
+
+> ChatGPT fact check - this paragraph claims "The core Offer properties are price, availability, currency, a valid-until date, item condition, image, and SKU.", but the counterargument is: The narration places image and SKU among the Offer properties, omits the Product name from the core explanation, and presents recommended fields such as priceValidUntil like universal requirements. Explain the hierarchy: Product has name, image, and nested offers; SKU identifies the product. Offer contains the price and currency, with other properties required or recommended according to the feature. Never invent an expiry date merely to fill a field.
+>
+> Sources: Product; table row 2: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-properties; Product; table row 3: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-properties; Product; table row 22: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-properties; Offer; table row 9: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#offer-properties.
+>
+> A063 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Merchant return policy and Loyalty Program markup both live under your Organization markup, describing your business's policies as a whole, with return policy specifically capable of surfacing return windows and fees directly within a search result itself.", but the counterargument is: Return policies can be supplied under Offer to override a business-wide policy. returnFees supports FreeReturn, ReturnFeesCustomerResponsibility, and ReturnShippingFees; the chapter says only FreeReturn is supported. State the organization-level policy and product-level override separately. Explain all three supported fee categories and use returnShippingFeesAmount with ReturnShippingFees when the merchant charges return shipping.
+>
+> Sources: Technical guidelines; list item 2: https://developers.google.com/search/docs/appearance/structured-data/return-policy#technical-guidelines; Finite or unlimited return windows; table row 3: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Finite or unlimited return windows; table row 5: https://developers.google.com/search/docs/appearance/structured-data/return-policy#finite-or-unlimited-return-windows; Return details; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing#product-with-returns-example.
+>
+> A066 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Merchant return policy and Loyalty Program markup both live under your Organization markup, describing your business's policies as a whole, with return policy specifically capable of surfacing return windows and fees directly within a search result itself.", but the counterargument is: The episode promises shipping in depth but has no shipping-policy explanation. Loyalty is reduced to one paragraph, omitting MemberProgram/tiers, individual-offer benefits, and availability limits. Add ShippingService under Organization via hasShippingService, plus OfferShippingDetails overrides. Add MemberProgram and tier basics, separate offer-level loyalty benefits, and the documented supported countries.
+>
+> Sources: Merchant shipping policy ( ShippingService ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#merchant-shipping-policy-shippingservice-structured-data; Technical guidelines; list item 1: https://developers.google.com/search/docs/appearance/structured-data/shipping-policy#technical-guidelines; Loyalty program ( MemberProgram ) structured data; paragraph 2: https://developers.google.com/search/docs/appearance/structured-data/loyalty-program#loyalty-program-memberprogram-structured-data.
+>
+> A067 | Omission | High priority | Checked 24 September 2026
+
+
 
 Next episode, we cover Discover, local features, preferred sources, regional and translated result features, and Web Stories, rounding out the ranking and appearance section of this series before we move into the dedicated ecommerce and international guides. See you there.
 
@@ -1562,13 +2630,45 @@ This episode is adapted from "Introduction to Product structured data" and "Merc
 
 Welcome back. Today rounds out Part Three with four distinct but related subjects: Google Discover, the feed-style surface separate from ordinary search; establishing your official business details with Google directly; a genuinely new feature called Preferred Sources, launched in August 2026; and the content policies governing Web Stories.
 
+> ChatGPT fact check - this paragraph claims "Today rounds out Part Three with four distinct but related subjects: Google Discover, the feed-style surface separate from ordinary search; establishing your official business details with Google directly; a genuinely new feature called Preferred Sources, launched in August 2026; and the content policies governing Web Stories.", but the counterargument is: August 20, 2026 is the documentation update for the custom button, not the original launch of Preferred Sources. Google's changelog already discusses the feature in January, global language availability in April, and AI expansion in May. On August 20, 2026, Google documented a new interactive Preferred Sources button. The underlying feature predates that update. Remove the unsupported launch narrative and separately source any adoption statistic.
+>
+> Sources: New custom button for preferred sources; paragraph 1: https://developers.google.com/search/updates#new-custom-button-for-preferred-sources; Preferred sources is available in AI Mode and AI Overviews; paragraph 1: https://developers.google.com/search/updates#preferred-sources-is-available-in-ai-mode-and-ai-overviews; Expanding preferred sources to all languages where Google Search is available; paragraph 1: https://developers.google.com/search/updates#expanding-preferred-sources-to-all-languages-where-google-search-is-available.
+>
+> A068 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Today rounds out Part Three with four distinct but related subjects: Google Discover, the feed-style surface separate from ordinary search; establishing your official business details with Google directly; a genuinely new feature called Preferred Sources, launched in August 2026; and the content policies governing Web Stories.", but the counterargument is: Episode 26 is in Part Four but says it rounds out Part Three. Introduce Part Four: specialty guides.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy..
+>
+> A071 | Editorial | Low priority | Checked 24 September 2026
+
+
+
 Google Discover.
 
 Discover is the feed-style content surface inside the Google app and on the Google homepage, built around a person's interests rather than something they actively typed into a search box. Google's own guidance for increasing the likelihood of appearing there reads almost like a distilled version of episode six's content-quality principles, applied specifically to this one surface.
 
 Avoid clickbait and similar tactics that artificially inflate engagement, specifically by using misleading or exaggerated details in your preview content, your title, snippet, or images, to increase appeal, or by deliberately withholding information a reader would need to actually understand what the content is even about before clicking. Use page titles and headlines that genuinely capture the essence of the content, not headlines engineered purely to create a curiosity gap. Avoid sensationalism tactics that manipulate appeal by catering to morbid curiosity, titillation, or outrage specifically. Provide content that's genuinely timely for current interests, tells a story well, or offers real, unique insight. And include compelling, high-quality images relevant to the content, with Google specifically noting that larger images, at least 1,200 pixels wide, are more likely to actually generate visits from Discover.
 
+> ChatGPT fact check - this paragraph claims "And include compelling, high-quality images relevant to the content, with Google specifically noting that larger images, at least 1,200 pixels wide, are more likely to actually generate visits from Discover.", but the counterargument is: The chapter gives 1,200 pixels but omits the large-image permission setting, current resolution/aspect guidance, and the facts that older content can qualify and eligibility does not guarantee appearance. The asserted editorial reordering history is not evidenced by the chapter's citations. Include current image recommendations and max-image-preview:large (or the documented AMP alternative). State that indexed, policy-compliant content is eligible without special tags and that older relevant content may appear.
+>
+> Sources: How content appears in Discover; paragraph 2: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover; How content appears in Discover; list item 5: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover; How content appears in Discover; list item 6: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover.
+>
+> A070 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Two elements were specifically elevated in a more recent revision of this guidance, moved toward the top of the list to emphasise their weight. Clickbait avoidance, which we just covered, was specifically promoted from a lower position to lead the whole list. And page experience, the Core Web Vitals and broader experience factors from episode twenty, was added as a new, explicit recommendation in its own right, not merely implied. If a page's Discover traffic drops meaningfully, auditing genuine user experience is now specifically named as a direct diagnostic step worth taking.
+
+> ChatGPT fact check - this paragraph claims "If a page's Discover traffic drops meaningfully, auditing genuine user experience is now specifically named as a direct diagnostic step worth taking.", but the counterargument is: The chapter gives 1,200 pixels but omits the large-image permission setting, current resolution/aspect guidance, and the facts that older content can qualify and eligibility does not guarantee appearance. The asserted editorial reordering history is not evidenced by the chapter's citations. Include current image recommendations and max-image-preview:large (or the documented AMP alternative). State that indexed, policy-compliant content is eligible without special tags and that older relevant content may appear.
+>
+> Sources: How content appears in Discover; paragraph 2: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover; How content appears in Discover; list item 5: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover; How content appears in Discover; list item 6: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover.
+>
+> A070 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Establishing your business details with Google.
 
@@ -1586,15 +2686,55 @@ There's a separate, more detailed set of guidelines specifically for Business Pr
 
 Now, Preferred Sources, and this is genuinely new, launched on August 20, 2026, so current enough that it's worth understanding in real detail.
 
+> ChatGPT fact check - this paragraph claims "Now, Preferred Sources, and this is genuinely new, launched on August 20, 2026, so current enough that it's worth understanding in real detail.", but the counterargument is: August 20, 2026 is the documentation update for the custom button, not the original launch of Preferred Sources. Google's changelog already discusses the feature in January, global language availability in April, and AI expansion in May. On August 20, 2026, Google documented a new interactive Preferred Sources button. The underlying feature predates that update. Remove the unsupported launch narrative and separately source any adoption statistic.
+>
+> Sources: New custom button for preferred sources; paragraph 1: https://developers.google.com/search/updates#new-custom-button-for-preferred-sources; Preferred sources is available in AI Mode and AI Overviews; paragraph 1: https://developers.google.com/search/updates#preferred-sources-is-available-in-ai-mode-and-ai-overviews; Expanding preferred sources to all languages where Google Search is available; paragraph 1: https://developers.google.com/search/updates#expanding-preferred-sources-to-all-languages-where-google-search-is-available.
+>
+> A068 | Error | High priority | Checked 24 September 2026
+
+
+
 Google introduced a new button, called Preferred Sources, that publishers can embed directly on their own website. When a visitor clicks it, that specific site gets added to their own personal Preferred Sources list within Google, and the visitor is immediately returned right back to the page they were already reading, with no real friction or interruption to their actual visit.
 
 Here's the direct, practical payoff for a site whose visitors opt in this way: a person's chosen preferred sources can then appear more often specifically within Google Search features including Top Stories, AI Overviews, and AI Mode, the generative features from episode seven. As of this feature's launch, Google reported that users had already selected more than 600,000 unique sources collectively across the web, indicating genuine, immediate uptake.
+
+> ChatGPT fact check - this paragraph claims "As of this feature's launch, Google reported that users had already selected more than 600,000 unique sources collectively across the web, indicating genuine, immediate uptake.", but the counterargument is: August 20, 2026 is the documentation update for the custom button, not the original launch of Preferred Sources. Google's changelog already discusses the feature in January, global language availability in April, and AI expansion in May. On August 20, 2026, Google documented a new interactive Preferred Sources button. The underlying feature predates that update. Remove the unsupported launch narrative and separately source any adoption statistic.
+>
+> Sources: New custom button for preferred sources; paragraph 1: https://developers.google.com/search/updates#new-custom-button-for-preferred-sources; Preferred sources is available in AI Mode and AI Overviews; paragraph 1: https://developers.google.com/search/updates#preferred-sources-is-available-in-ai-mode-and-ai-overviews; Expanding preferred sources to all languages where Google Search is available; paragraph 1: https://developers.google.com/search/updates#expanding-preferred-sources-to-all-languages-where-google-search-is-available.
+>
+> A068 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Here's the direct, practical payoff for a site whose visitors opt in this way: a person's chosen preferred sources can then appear more often specifically within Google Search features including Top Stories, AI Overviews, and AI Mode, the generative features from episode seven.", but the counterargument is: The current Preferred Sources guide covers Top Stories and preferred badges in AI features. It does not establish that this button changes Discover and Google News as claimed. Search profiles separately affect Discover following. Keep Preferred Sources and Search-profile following distinct. Explain only the surfaces and behavior documented for each; remove claims of guaranteed measurable visibility gains.
+>
+> Sources: Help your readers find your site through preferred sources in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#help-your-readers-find-your-site-through-preferred-sources-in-google-search; Feature availability; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#availability; Feature availability; paragraph 2: https://developers.google.com/search/docs/appearance/preferred-sources#availability.
+>
+> A069 | Unsupported | High priority | Checked 24 September 2026
+
+
 
 For publishers wanting to actually implement this, Google makes the button's underlying code available directly through its own Search Central documentation, so adding it is a matter of embedding that provided code on your own site rather than building anything from scratch yourself.
 
 Google paired this specifically with new personalisation controls on the Discover and Google News side too, giving individual users more direct say over the kind of content populating their own feeds, part of the same broader push toward letting people more actively shape which sources and topics they see across Google's surfaces, rather than relying purely on passive algorithmic inference.
 
+> ChatGPT fact check - this paragraph claims "Google paired this specifically with new personalisation controls on the Discover and Google News side too, giving individual users more direct say over the kind of content populating their own feeds, part of the same broader push toward letting people more actively shape which sources and topics they see across Google's surfaces, rather than relying purely on passive algorithmic inference.", but the counterargument is: The current Preferred Sources guide covers Top Stories and preferred badges in AI features. It does not establish that this button changes Discover and Google News as claimed. Search profiles separately affect Discover following. Keep Preferred Sources and Search-profile following distinct. Explain only the surfaces and behavior documented for each; remove claims of guaranteed measurable visibility gains.
+>
+> Sources: Help your readers find your site through preferred sources in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#help-your-readers-find-your-site-through-preferred-sources-in-google-search; Feature availability; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#availability; Feature availability; paragraph 2: https://developers.google.com/search/docs/appearance/preferred-sources#availability.
+>
+> A069 | Unsupported | High priority | Checked 24 September 2026
+
+
+
 For a business built specifically around cultivated personal authority, exactly the kind of long-term brand-building project this podcast series has occasionally touched on in its examples, a feature like this is worth watching closely: it's a genuinely new, direct channel for turning an existing, loyal reader or customer into someone whose future searches are measurably more likely to keep surfacing your own content specifically, across Search, Discover, and the newer AI surfaces all at once.
+
+> ChatGPT fact check - this paragraph claims "For a business built specifically around cultivated personal authority, exactly the kind of long-term brand-building project this podcast series has occasionally touched on in its examples, a feature like this is worth watching closely: it's a genuinely new, direct channel for turning an existing, loyal reader or customer into someone whose future searches are measurably more likely to keep surfacing your own content specifically, across Search, Discover, and the newer AI surfaces all at once.", but the counterargument is: The current Preferred Sources guide covers Top Stories and preferred badges in AI features. It does not establish that this button changes Discover and Google News as claimed. Search profiles separately affect Discover following. Keep Preferred Sources and Search-profile following distinct. Explain only the surfaces and behavior documented for each; remove claims of guaranteed measurable visibility gains.
+>
+> Sources: Help your readers find your site through preferred sources in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#help-your-readers-find-your-site-through-preferred-sources-in-google-search; Feature availability; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#availability; Feature availability; paragraph 2: https://developers.google.com/search/docs/appearance/preferred-sources#availability.
+>
+> A069 | Unsupported | High priority | Checked 24 September 2026
+
+
 
 Web Stories.
 
@@ -1610,13 +2750,61 @@ Let's recap.
 
 Discover rewards honest, non-clickbait titles, genuinely timely and insightful content, large high-quality images, and now explicitly rewards good page experience too, having recently promoted both clickbait avoidance and page experience to top billing in its own guidance. Establishing your business details means claiming a Business Profile, verifying in Search Console, correcting your knowledge panel, and backing all of it with Organization structured data, while keeping your business description free of promotional pricing language and links entirely. Preferred Sources, launched August 2026, lets visitors directly opt into seeing more of your content across Search, AI Overviews, AI Mode, Discover, and News, through a button you embed yourself. And Web Stories need genuine narrative cohesion, light text, high-quality visuals, completeness without requiring an external click, and only a minor, restrained commercial or affiliate component.
 
+> ChatGPT fact check - this paragraph claims "Preferred Sources, launched August 2026, lets visitors directly opt into seeing more of your content across Search, AI Overviews, AI Mode, Discover, and News, through a button you embed yourself.", but the counterargument is: August 20, 2026 is the documentation update for the custom button, not the original launch of Preferred Sources. Google's changelog already discusses the feature in January, global language availability in April, and AI expansion in May. On August 20, 2026, Google documented a new interactive Preferred Sources button. The underlying feature predates that update. Remove the unsupported launch narrative and separately source any adoption statistic.
+>
+> Sources: New custom button for preferred sources; paragraph 1: https://developers.google.com/search/updates#new-custom-button-for-preferred-sources; Preferred sources is available in AI Mode and AI Overviews; paragraph 1: https://developers.google.com/search/updates#preferred-sources-is-available-in-ai-mode-and-ai-overviews; Expanding preferred sources to all languages where Google Search is available; paragraph 1: https://developers.google.com/search/updates#expanding-preferred-sources-to-all-languages-where-google-search-is-available.
+>
+> A068 | Error | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Preferred Sources, launched August 2026, lets visitors directly opt into seeing more of your content across Search, AI Overviews, AI Mode, Discover, and News, through a button you embed yourself.", but the counterargument is: The current Preferred Sources guide covers Top Stories and preferred badges in AI features. It does not establish that this button changes Discover and Google News as claimed. Search profiles separately affect Discover following. Keep Preferred Sources and Search-profile following distinct. Explain only the surfaces and behavior documented for each; remove claims of guaranteed measurable visibility gains.
+>
+> Sources: Help your readers find your site through preferred sources in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#help-your-readers-find-your-site-through-preferred-sources-in-google-search; Feature availability; paragraph 1: https://developers.google.com/search/docs/appearance/preferred-sources#availability; Feature availability; paragraph 2: https://developers.google.com/search/docs/appearance/preferred-sources#availability.
+>
+> A069 | Unsupported | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Discover rewards honest, non-clickbait titles, genuinely timely and insightful content, large high-quality images, and now explicitly rewards good page experience too, having recently promoted both clickbait avoidance and page experience to top billing in its own guidance.", but the counterargument is: The chapter gives 1,200 pixels but omits the large-image permission setting, current resolution/aspect guidance, and the facts that older content can qualify and eligibility does not guarantee appearance. The asserted editorial reordering history is not evidenced by the chapter's citations. Include current image recommendations and max-image-preview:large (or the documented AMP alternative). State that indexed, policy-compliant content is eligible without special tags and that older relevant content may appear.
+>
+> Sources: How content appears in Discover; paragraph 2: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover; How content appears in Discover; list item 5: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover; How content appears in Discover; list item 6: https://developers.google.com/search/docs/appearance/google-discover#how-content-appears-in-discover.
+>
+> A070 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Next episode, we move into the dedicated ecommerce guide in full: where product data can actually appear across Google, sharing your product data properly, launching a new ecommerce site, and writing genuinely high-quality reviews. See you there.
 
 This episode is adapted from "Discover and your website," "Establish your business details with Google," current Google Search Central documentation on Preferred Sources, and "Web Story content policies" on Google Search Central, licensed under Creative Commons Attribution 4.0.
 
 ### Episode 27: The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews
 
+> ChatGPT fact check - this paragraph claims "The Full Ecommerce Guide: Presence, Launches, and Writing Genuinely High-Quality Reviews", but the counterargument is: The chapter does not actually cover ecommerce URL design, navigation/site structure, pagination and incremental loading, or a full structured-data implementation guide. Earlier chapters promise fuller treatment here. Add the missing source sections or rename this as selected ecommerce guidance. Include crawlable pagination and the rule that each paginated page normally has its own canonical URL.
+>
+> Sources: Designing a URL structure for ecommerce websites; paragraph 1: https://developers.google.com/search/docs/specialty/ecommerce/designing-a-url-structure-for-ecommerce-sites#designing-a-url-structure-for-ecommerce-websites.
+>
+> A073 | Omission | High priority | Checked 24 September 2026
+
+
+
 Welcome back. This episode is Google's dedicated ecommerce guide, taken as a whole. Some pieces we've already touched on from different angles across this series, product structured data, URL structure, site structure; today pulls the full picture together and adds the pieces we haven't covered yet: where ecommerce content can actually appear, launch strategy for a new site, and, in real depth, what genuinely makes a product review good.
+
+> ChatGPT fact check - this paragraph claims "Some pieces we've already touched on from different angles across this series, product structured data, URL structure, site structure; today pulls the full picture together and adds the pieces we haven't covered yet: where ecommerce content can actually appear, launch strategy for a new site, and, in real depth, what genuinely makes a product review good.", but the counterargument is: Google documents four launch approaches, including a soft launch; the script gives three. For launch without availability, the source also covers excluded_destination and warns against disabling add-to-cart because of price verification. The adaptation recommends this too broadly for relaunches. Cover all four approaches and their trade-offs. Preserve the Merchant Center and cart-verification qualifications; distinguish a new-site launch from pausing an existing business.
+>
+> Sources: How to launch a new ecommerce website; list item 10: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#how-to-launch-a-new-ecommerce-website; Launch without product availability; paragraph 2: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#products-unavailable.
+>
+> A072 | Omission | Medium priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Some pieces we've already touched on from different angles across this series, product structured data, URL structure, site structure; today pulls the full picture together and adds the pieces we haven't covered yet: where ecommerce content can actually appear, launch strategy for a new site, and, in real depth, what genuinely makes a product review good.", but the counterargument is: The chapter does not actually cover ecommerce URL design, navigation/site structure, pagination and incremental loading, or a full structured-data implementation guide. Earlier chapters promise fuller treatment here. Add the missing source sections or rename this as selected ecommerce guidance. Include crawlable pagination and the rule that each paginated page normally has its own canonical URL.
+>
+> Sources: Designing a URL structure for ecommerce websites; paragraph 1: https://developers.google.com/search/docs/specialty/ecommerce/designing-a-url-structure-for-ecommerce-sites#designing-a-url-structure-for-ecommerce-websites.
+>
+> A073 | Omission | High priority | Checked 24 September 2026
+
+
 
 Google's own framing for why this guide exists at all: being discovered in Search is a critical challenge for any ecommerce site, and Google can help shoppers discover your site at each distinct stage of their shopping journey, not merely at the final moment of purchase.
 
@@ -1630,9 +2818,25 @@ Two methods, and we touched on this back in episode twenty-five, but it's worth 
 
 Structured data types particularly relevant to ecommerce specifically, beyond Product itself: LocalBusiness, Review, BreadcrumbList, WebSite, and VideoObject all have real, direct relevance to a typical storefront, on top of the Product and Offer markup from episode twenty-five.
 
+> ChatGPT fact check - this paragraph claims "Structured data types particularly relevant to ecommerce specifically, beyond Product itself: LocalBusiness, Review, BreadcrumbList, WebSite, and VideoObject all have real, direct relevance to a typical storefront, on top of the Product and Offer markup from episode twenty-five.", but the counterargument is: The chapter does not actually cover ecommerce URL design, navigation/site structure, pagination and incremental loading, or a full structured-data implementation guide. Earlier chapters promise fuller treatment here. Add the missing source sections or rename this as selected ecommerce guidance. Include crawlable pagination and the rule that each paginated page normally has its own canonical URL.
+>
+> Sources: Designing a URL structure for ecommerce websites; paragraph 1: https://developers.google.com/search/docs/specialty/ecommerce/designing-a-url-structure-for-ecommerce-sites#designing-a-url-structure-for-ecommerce-websites.
+>
+> A073 | Omission | High priority | Checked 24 September 2026
+
+
+
 How to launch a new ecommerce website.
 
 This is genuinely practical, and worth knowing if a redesign or relaunch is ever on the table. Google lays out the timing considerations around registering a new site, and distinct launch strategies, each with its own trade-offs.
+
+> ChatGPT fact check - this paragraph claims "Google lays out the timing considerations around registering a new site, and distinct launch strategies, each with its own trade-offs.", but the counterargument is: Google documents four launch approaches, including a soft launch; the script gives three. For launch without availability, the source also covers excluded_destination and warns against disabling add-to-cart because of price verification. The adaptation recommends this too broadly for relaunches. Cover all four approaches and their trade-offs. Preserve the Merchant Center and cart-verification qualifications; distinguish a new-site launch from pausing an existing business.
+>
+> Sources: How to launch a new ecommerce website; list item 10: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#how-to-launch-a-new-ecommerce-website; Launch without product availability; paragraph 2: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#products-unavailable.
+>
+> A072 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 A grand reveal: the whole site becomes available to Google and the public simultaneously. Straightforward, but it means Google has zero head start crawling and understanding your content before launch day itself.
 
@@ -1640,7 +2844,23 @@ A homepage launch: only the homepage goes live initially, potentially a placehol
 
 Launch without product availability: the full site goes live, but with every product deliberately marked out of stock, which lets Google begin crawling and indexing your actual product pages well ahead of the moment you're genuinely ready to fulfil real orders.
 
+> ChatGPT fact check - this paragraph claims "Launch without product availability: the full site goes live, but with every product deliberately marked out of stock, which lets Google begin crawling and indexing your actual product pages well ahead of the moment you're genuinely ready to fulfil real orders.", but the counterargument is: Google documents four launch approaches, including a soft launch; the script gives three. For launch without availability, the source also covers excluded_destination and warns against disabling add-to-cart because of price verification. The adaptation recommends this too broadly for relaunches. Cover all four approaches and their trade-offs. Preserve the Merchant Center and cart-verification qualifications; distinguish a new-site launch from pausing an existing business.
+>
+> Sources: How to launch a new ecommerce website; list item 10: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#how-to-launch-a-new-ecommerce-website; Launch without product availability; paragraph 2: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#products-unavailable.
+>
+> A072 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 That last option is worth genuinely considering for any significant relaunch: it front-loads the crawling and indexing work into a window before launch day matters commercially, rather than asking Google to discover, crawl, and understand an entire fresh catalogue at the exact same moment real customers are already trying to buy from it.
+
+> ChatGPT fact check - this paragraph claims "That last option is worth genuinely considering for any significant relaunch: it front-loads the crawling and indexing work into a window before launch day matters commercially, rather than asking Google to discover, crawl, and understand an entire fresh catalogue at the exact same moment real customers are already trying to buy from it.", but the counterargument is: Google documents four launch approaches, including a soft launch; the script gives three. For launch without availability, the source also covers excluded_destination and warns against disabling add-to-cart because of price verification. The adaptation recommends this too broadly for relaunches. Cover all four approaches and their trade-offs. Preserve the Merchant Center and cart-verification qualifications; distinguish a new-site launch from pausing an existing business.
+>
+> Sources: How to launch a new ecommerce website; list item 10: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#how-to-launch-a-new-ecommerce-website; Launch without product availability; paragraph 2: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#products-unavailable.
+>
+> A072 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Writing high-quality product reviews, and this section carries real weight, dating back to a specific, significant ranking update from 2022 that reshaped how Google evaluates this exact kind of content, and it remains directly relevant today.
 
@@ -1664,9 +2884,25 @@ Let's recap.
 
 Ecommerce content can surface across Search, Maps, Lens, Image Search, Shopping, and Business Profile, and value comes from more than product data alone, company information, offers, and reviews all matter at different points in a buyer's journey. Structured data and a Merchant Center feed work best together, not as alternatives. A new site launch benefits from strategic timing, and launching with products marked out of stock is a genuinely underused way to let Google index a catalogue well ahead of the moment real orders start flowing. And high-quality reviews demand genuine first-hand evidence, honest pros and cons from original research, explicit comparison against alternatives, a clear focus on the decision factors that actually matter for that category, and, whenever something is recommended as best, a direct, concrete reason why, backed by real evidence rather than assertion.
 
+> ChatGPT fact check - this paragraph claims "Structured data and a Merchant Center feed work best together, not as alternatives.", but the counterargument is: Google documents four launch approaches, including a soft launch; the script gives three. For launch without availability, the source also covers excluded_destination and warns against disabling add-to-cart because of price verification. The adaptation recommends this too broadly for relaunches. Cover all four approaches and their trade-offs. Preserve the Merchant Center and cart-verification qualifications; distinguish a new-site launch from pausing an existing business.
+>
+> Sources: How to launch a new ecommerce website; list item 10: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#how-to-launch-a-new-ecommerce-website; Launch without product availability; paragraph 2: https://developers.google.com/search/docs/specialty/ecommerce/how-to-launch-an-ecommerce-website#products-unavailable.
+>
+> A072 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Next episode, we cover international and multilingual sites: managing multi-regional content, hreflang in full technical detail, and how Google actually crawls locale-adaptive pages. See you there.
 
 This episode is adapted from "Best practices for ecommerce sites in Google Search" and "Write high quality reviews" on Google Search Central, licensed under Creative Commons Attribution 4.0.
+
+> ChatGPT fact check - this paragraph claims "This episode is adapted from "Best practices for ecommerce sites in Google Search" and "Write high quality reviews" on Google Search Central, licensed under Creative Commons Attribution 4.0.", but the counterargument is: The chapter does not actually cover ecommerce URL design, navigation/site structure, pagination and incremental loading, or a full structured-data implementation guide. Earlier chapters promise fuller treatment here. Add the missing source sections or rename this as selected ecommerce guidance. Include crawlable pagination and the rule that each paginated page normally has its own canonical URL.
+>
+> Sources: Designing a URL structure for ecommerce websites; paragraph 1: https://developers.google.com/search/docs/specialty/ecommerce/designing-a-url-structure-for-ecommerce-sites#designing-a-url-structure-for-ecommerce-websites.
+>
+> A073 | Omission | High priority | Checked 24 September 2026
+
+
 
 ### Episode 28: International and Multilingual Sites
 
@@ -1675,6 +2911,14 @@ Welcome back. Today covers managing a site that serves more than one country or 
 Geotargeting your site, and why you'd bother at all.
 
 You can deliberately target your whole website, or specific parts of it, to users in one particular country who speak a particular language. Google is direct about the trade-off involved: this can genuinely improve your rankings in that specific target country, but at the expense of your results in other locales or languages. Geotargeting is never free; it's a deliberate reallocation of relevance, not a pure addition.
+
+> ChatGPT fact check - this paragraph claims "Google is direct about the trade-off involved: this can genuinely improve your rankings in that specific target country, but at the expense of your results in other locales or languages.", but the counterargument is: The source says targeting can improve results in one country at the expense of others. 'Never free' and the unqualified prediction that a Belgian domain actively works against the business turn a conditional statement into a guarantee and personalized advice. Country targeting can affect how a site performs across regions. Explain the trade-offs without predicting a particular business's outcome or presenting a directory choice as Google's prescribed solution.
+>
+> Sources: Targeting site content to a specific country (geotargeting); paragraph 1: https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites#geotargeting.
+>
+> A076 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 URL structure options for geotargeting, and Google lays these out with genuine pros and cons for each, worth going through carefully since the right choice depends heavily on your actual situation.
 
@@ -1702,19 +2946,83 @@ Making the page's language obvious, and this is a genuinely important, specific 
 
 On automated translation specifically: use robots.txt to block search engines from crawling automatically, machine-translated pages on your site. Google's own reasoning here is direct: automated translations don't always genuinely make sense, and can be viewed as spam, tying straight back to the scraping and scaled-content concerns from episode two.
 
+> ChatGPT fact check - this paragraph claims "On automated translation specifically: use robots.txt to block search engines from crawling automatically, machine-translated pages on your site.", but the counterargument is: The chapter tells listeners to block automatically translated pages and attributes that advice to Google. Google's June 11, 2025 changelog expressly removed this old recommendation. Evaluate translated content for usefulness and policy compliance. Do not block it merely because machine translation was used; automation that produces low-value content at scale to manipulate ranking is the relevant concern.
+>
+> Sources: Spring cleaning in our multilingual documentation; paragraph 1: https://developers.google.com/search/updates#spring-cleaning-in-our-multilingual-documentation.
+>
+> A074 | Outdated | High priority | Checked 24 September 2026
+
+
+
 Hreflang, the actual mechanism for telling Google which page variant applies to which language or region.
+
+> ChatGPT fact check - this paragraph claims "Hreflang, the actual mechanism for telling Google which page variant applies to which language or region.", but the counterargument is: The chapter never explains reciprocal/self links, fully qualified alternate URLs, valid language/region codes, or x-default. It calls hreflang essential without preserving Google's statement that Google may discover alternate versions without it. Add a practical spoken walkthrough of the three equivalent implementation methods, reciprocal/self references, supported codes, and x-default. Describe explicit annotations as recommended rather than a universal prerequisite.
+>
+> Sources: Tell Google about localized versions of your page; paragraph 2: https://developers.google.com/search/docs/specialty/international/localized-versions#tell-google-about-localized-versions-of-your-page; Guidelines for all methods; list item 1: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines; Guidelines for all methods; list item 2: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines.
+>
+> A075 | Omission | High priority | Checked 24 September 2026
+
+
 
 If you're using different URLs for different languages, hreflang annotations let Google's results link directly to the appropriate language version of a page for each specific searcher. And there's a genuinely important limitation worth knowing precisely here, since it explains why hreflang matters so much rather than Google simply figuring this out on its own: if you're instead relying purely on dynamically changing content, or redirecting users, based on their own detected language preference, Google may not discover and crawl every one of those content variations, since Googlebot's crawlers typically operate from the US, and critically, the HTTP requests Googlebot sends don't set an Accept-Language header at all, meaning purely dynamic, preference-based content switching is largely invisible to it as a discovery mechanism.
 
+> ChatGPT fact check - this paragraph claims "And there's a genuinely important limitation worth knowing precisely here, since it explains why hreflang matters so much rather than Google simply figuring this out on its own: if you're instead relying purely on dynamically changing content, or redirecting users, based on their own detected language preference, Google may not discover and crawl every one of those content variations, since Googlebot's crawlers typically operate from the US, and critically, the HTTP requests Googlebot sends don't set an Accept-Language header at all, meaning purely dynamic, preference-based content switching is largely invisible to it as a discovery mechanism.", but the counterargument is: The chapter never explains reciprocal/self links, fully qualified alternate URLs, valid language/region codes, or x-default. It calls hreflang essential without preserving Google's statement that Google may discover alternate versions without it. Add a practical spoken walkthrough of the three equivalent implementation methods, reciprocal/self references, supported codes, and x-default. Describe explicit annotations as recommended rather than a universal prerequisite.
+>
+> Sources: Tell Google about localized versions of your page; paragraph 2: https://developers.google.com/search/docs/specialty/international/localized-versions#tell-google-about-localized-versions-of-your-page; Guidelines for all methods; list item 1: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines; Guidelines for all methods; list item 2: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines.
+>
+> A075 | Omission | High priority | Checked 24 September 2026
+
+
+
 Handling duplicate content across multilingual and multi-regional variants specifically, tying directly back to episode twelve's canonicalization material. If you're providing similar or genuinely duplicate content at different URLs in the same language, within a broader multi-regional site, Google's own worked example: both "example.de/" and "example.com/de/" showing similar German-language content, choose one preferred version, and use both the rel canonical element and hreflang tags together to make sure the correct regional or language URL is the one that actually surfaces for a given searcher.
+
+> ChatGPT fact check - this paragraph claims "If you're providing similar or genuinely duplicate content at different URLs in the same language, within a broader multi-regional site, Google's own worked example: both "example.de/" and "example.com/de/" showing similar German-language content, choose one preferred version, and use both the rel canonical element and hreflang tags together to make sure the correct regional or language URL is the one that actually surfaces for a given searcher.", but the counterargument is: The chapter never explains reciprocal/self links, fully qualified alternate URLs, valid language/region codes, or x-default. It calls hreflang essential without preserving Google's statement that Google may discover alternate versions without it. Add a practical spoken walkthrough of the three equivalent implementation methods, reciprocal/self references, supported codes, and x-default. Describe explicit annotations as recommended rather than a universal prerequisite.
+>
+> Sources: Tell Google about localized versions of your page; paragraph 2: https://developers.google.com/search/docs/specialty/international/localized-versions#tell-google-about-localized-versions-of-your-page; Guidelines for all methods; list item 1: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines; Guidelines for all methods; list item 2: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines.
+>
+> A075 | Omission | High priority | Checked 24 September 2026
+
+
 
 A practical, honest caveat worth carrying with you, since geotargeting is never a perfectly precise science: it's worth genuinely considering the user who lands on the "wrong" version of your site regardless of everything covered here, someone reaching your German-language page despite actually wanting the English one, say. One straightforward mitigation Google itself suggests: show a visible link on every page letting a visitor directly select their own preferred region or language, rather than assuming your targeting signals will always land every single visitor correctly.
 
 Let's ground this directly in a concrete, relevant scenario: a Belgian business selling primarily to a US audience, in English, with occasional Dutch or French content for the home market. Given everything covered today, subdirectories under one main domain, something like a dedicated English path for the primary US-facing catalogue, are likely the most practical structure: low maintenance, one shared host, with hreflang tags then doing the real, precise work of telling Google exactly which language version to actually surface for which searcher. A Belgian ccTLD would signal Belgium specifically as the primary audience, which actively works against a business whose real, primary market is the US; the domain-level signal and the actual commercial reality would be pulling in opposite directions.
 
+> ChatGPT fact check - this paragraph claims "A Belgian ccTLD would signal Belgium specifically as the primary audience, which actively works against a business whose real, primary market is the US; the domain-level signal and the actual commercial reality would be pulling in opposite directions.", but the counterargument is: The source says targeting can improve results in one country at the expense of others. 'Never free' and the unqualified prediction that a Belgian domain actively works against the business turn a conditional statement into a guarantee and personalized advice. Country targeting can affect how a site performs across regions. Explain the trade-offs without predicting a particular business's outcome or presenting a directory choice as Google's prescribed solution.
+>
+> Sources: Targeting site content to a specific country (geotargeting); paragraph 1: https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites#geotargeting.
+>
+> A076 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Let's recap.
 
 Geotargeting genuinely trades ranking strength in your target region against ranking strength elsewhere; it's a deliberate choice, not a free addition. Country-specific domains give the strongest, most unambiguous regional signal but cost the most and can only target one single country; subdomains and subdirectories are cheaper and easier but carry real URL ambiguity; URL parameters are actively not recommended. Google reads a page's actual visible content to determine language, never the lang attribute or the URL itself, so keep each page in one consistent language and block automatically translated pages from crawling. Hreflang is essential precisely because purely dynamic, preference-based content switching is largely invisible to Googlebot, which neither sends an Accept-Language header nor reliably crawls from every relevant region. And duplicate regional content in the same language needs rel canonical and hreflang working together, with a visible region or language switcher as a practical safety net for whoever inevitably still lands on the wrong version.
+
+> ChatGPT fact check - this paragraph claims "Google reads a page's actual visible content to determine language, never the lang attribute or the URL itself, so keep each page in one consistent language and block automatically translated pages from crawling.", but the counterargument is: The chapter tells listeners to block automatically translated pages and attributes that advice to Google. Google's June 11, 2025 changelog expressly removed this old recommendation. Evaluate translated content for usefulness and policy compliance. Do not block it merely because machine translation was used; automation that produces low-value content at scale to manipulate ranking is the relevant concern.
+>
+> Sources: Spring cleaning in our multilingual documentation; paragraph 1: https://developers.google.com/search/updates#spring-cleaning-in-our-multilingual-documentation.
+>
+> A074 | Outdated | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Hreflang is essential precisely because purely dynamic, preference-based content switching is largely invisible to Googlebot, which neither sends an Accept-Language header nor reliably crawls from every relevant region.", but the counterargument is: The chapter never explains reciprocal/self links, fully qualified alternate URLs, valid language/region codes, or x-default. It calls hreflang essential without preserving Google's statement that Google may discover alternate versions without it. Add a practical spoken walkthrough of the three equivalent implementation methods, reciprocal/self references, supported codes, and x-default. Describe explicit annotations as recommended rather than a universal prerequisite.
+>
+> Sources: Tell Google about localized versions of your page; paragraph 2: https://developers.google.com/search/docs/specialty/international/localized-versions#tell-google-about-localized-versions-of-your-page; Guidelines for all methods; list item 1: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines; Guidelines for all methods; list item 2: https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines.
+>
+> A075 | Omission | High priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Country-specific domains give the strongest, most unambiguous regional signal but cost the most and can only target one single country; subdomains and subdirectories are cheaper and easier but carry real URL ambiguity; URL parameters are actively not recommended.", but the counterargument is: The source says targeting can improve results in one country at the expense of others. 'Never free' and the unqualified prediction that a Belgian domain actively works against the business turn a conditional statement into a guarantee and personalized advice. Country targeting can affect how a site performs across regions. Explain the trade-offs without predicting a particular business's outcome or presenting a directory choice as Google's prescribed solution.
+>
+> Sources: Targeting site content to a specific country (geotargeting); paragraph 1: https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites#geotargeting.
+>
+> A076 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Next episode, we move into Part Five: monitoring and debugging. Getting started with Search Console, debugging traffic drops, using Search Console alongside Google Analytics, and the full range of search operators for diagnosing your own site directly. See you there.
 
@@ -1732,11 +3040,27 @@ Google's own framing: it's a tool that helps anyone with a website understand ho
 
 The core actions: verify site ownership, confirm Google can genuinely access your pages through the Index Coverage report, and, optionally, submit a sitemap, tying back to episode ten. The Search Performance report is where you monitor traffic trends over time, and it's the primary tool for debugging a drop, which we're about to cover in full depth.
 
+> ChatGPT fact check - this paragraph claims "The core actions: verify site ownership, confirm Google can genuinely access your pages through the Index Coverage report, and, optionally, submit a sitemap, tying back to episode ten.", but the counterargument is: The script uses Index Coverage rather than Page Indexing, while other chapters use the current name. Some source overview language may itself lag; an actionable audio guide should name the current report consistently. Use 'Page Indexing report', optionally noting its older Index Coverage name once.
+>
+> Sources: What does this report show?; paragraph 1: https://support.google.com/webmasters/answer/7440203.
+>
+> A077 | Outdated | Low priority | Checked 24 September 2026
+
+
+
 Google frames Search Console's reports as splitting roughly into two audiences, worth knowing so you check the right place for the right question. For SEO specialists, digital marketers, and site administrators: reports for managing manual actions, removal requests, site migrations, and rich result status. For developers specifically: reports for understanding indexing behaviour, debugging individual page issues, checking for security threats, and monitoring real user page experience data, tying directly back to the Core Web Vitals reporting from episode twenty.
 
 Now, debugging a genuine drop in Search traffic, and this is Google's own dedicated, systematic guide, worth having as an actual mental checklist rather than a vague sense of where to look.
 
 Google names five main causes, and it's genuinely useful to know the shape each one tends to produce on a traffic graph, since the shape itself is often the first real diagnostic clue.
+
+> ChatGPT fact check - this paragraph claims "Google names five main causes, and it's genuinely useful to know the shape each one tends to produce on a traffic graph, since the shape itself is often the first real diagnostic clue.", but the counterargument is: Google's current guide also explicitly covers migrations. A graph shape or common page template is a clue, not proof of technical rather than ranking causes. 'Rule in or out entirely' overstates what a clean report establishes. Present common causes rather than an exhaustive five-cause model. Add migrations, compare clicks with impressions, use the recommended longer date window, and test hypotheses instead of declaring a cause from shape alone.
+>
+> Sources: Site moves and migrations; paragraph 1: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations; Site moves and migrations; paragraph 2: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations.
+>
+> A078 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Technical issues. Errors that can prevent Google from crawling, indexing, or serving your pages at all: server unavailability, robots.txt fetching failures, pages returning not-found errors, and similar problems. These can affect your entire site at once, if the whole site goes down, say, or an individual page specifically, a stray noindex tag applied where it shouldn't have been, tying straight back to episode sixteen. A site-wide technical failure tends to produce a large, sudden drop; a single mistaken noindex tag tends to produce a slower, more contained one. Check the Crawl Stats report and the Page Indexing report specifically for a spike in errors that lines up with when the drop actually started.
 
@@ -1750,9 +3074,25 @@ Seasonality and changing interests. Sometimes a genuine shift in demand for cert
 
 And there's a worth-knowing sixth possibility, not a genuine drop at all: a reporting glitch, where the data itself is simply wrong due to a processing change or a logging error on Google's side. Worth checking the Search Console Data Anomalies page directly for exactly this before assuming any of the five genuine causes above actually applies to your situation.
 
+> ChatGPT fact check - this paragraph claims "Worth checking the Search Console Data Anomalies page directly for exactly this before assuming any of the five genuine causes above actually applies to your situation.", but the counterargument is: Google's current guide also explicitly covers migrations. A graph shape or common page template is a clue, not proof of technical rather than ranking causes. 'Rule in or out entirely' overstates what a clean report establishes. Present common causes rather than an exhaustive five-cause model. Add migrations, compare clicks with impressions, use the recommended longer date window, and test hypotheses instead of declaring a cause from shape alone.
+>
+> Sources: Site moves and migrations; paragraph 1: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations; Site moves and migrations; paragraph 2: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations.
+>
+> A078 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 A further useful diagnostic technique, once you're past identifying the broad cause: look for patterns by segmenting your traffic by specific query, country, and device. If traffic from one particular country specifically has dropped, check your hreflang implementation from episode twenty-eight directly for an error there. If traffic to one specific page has dropped while the rest of the site looks fine, the URL Inspection tool is the right next step, and two of the most common things it reveals in exactly this situation are worth naming directly: the page isn't canonical, meaning Google has selected a different page as the canonical version instead, tying back to episode twelve, or the page simply can't be crawled at all for some technical reason.
 
 Now, search operators, a genuinely useful, hands-on diagnostic technique you can run directly in an ordinary Google search box, no Search Console login required.
+
+> ChatGPT fact check - this paragraph claims "Now, search operators, a genuinely useful, hands-on diagnostic technique you can run directly in an ordinary Google search box, no Search Console login required.", but the counterargument is: The previous episode promised Search Console with Google Analytics and a full operator treatment. This chapter explains site and filetype only, with a vague pointer to other operators, and never explains the Analytics comparison. Add the Analytics/Search Console comparison, including why metrics differ, and the documented operator limitations and supported image-search operators. Keep exact syntax in the accessible companion.
+>
+> Sources: Comparing data in Google Analytics and Search Console; paragraph 1: https://developers.google.com/search/docs/monitor-debug/google-analytics-search-console#comparing-data; Understanding data discrepancies between Google Analytics and Search Console; paragraph 1: https://developers.google.com/search/docs/monitor-debug/google-analytics-search-console#discrepancies.
+>
+> A079 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 The site colon operator, which we actually first met all the way back in episode four: typing "site:" followed directly by your domain shows you a rough sense of what Google currently has indexed from your site. It's not a perfectly precise or complete count, but it's a fast, genuinely useful first check, whether after a migration, a redesign, or simply to spot-check that a specific new section is actually showing up in the index at all.
 
@@ -1760,27 +3100,99 @@ The filetype colon operator, which we met back in episode nine, lets you restric
 
 Beyond these two we've already covered, Google documents a fuller family of operators for more targeted diagnostic searches, letting you combine terms, exclude specific words, or search within a specific site more precisely than the bare site colon operator alone allows. These are worth knowing exist as a lightweight, genuinely fast first-pass diagnostic tool, precisely the kind of thing worth reaching for before opening Search Console at all, when you just want a quick, immediate answer to a simple, specific question.
 
+> ChatGPT fact check - this paragraph claims "Beyond these two we've already covered, Google documents a fuller family of operators for more targeted diagnostic searches, letting you combine terms, exclude specific words, or search within a specific site more precisely than the bare site colon operator alone allows.", but the counterargument is: The previous episode promised Search Console with Google Analytics and a full operator treatment. This chapter explains site and filetype only, with a vague pointer to other operators, and never explains the Analytics comparison. Add the Analytics/Search Console comparison, including why metrics differ, and the documented operator limitations and supported image-search operators. Keep exact syntax in the accessible companion.
+>
+> Sources: Comparing data in Google Analytics and Search Console; paragraph 1: https://developers.google.com/search/docs/monitor-debug/google-analytics-search-console#comparing-data; Understanding data discrepancies between Google Analytics and Search Console; paragraph 1: https://developers.google.com/search/docs/monitor-debug/google-analytics-search-console#discrepancies.
+>
+> A079 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Let's bring the whole episode together with a concrete, worked scenario: a store notices a meaningful drop in organic traffic to its product pages specifically, starting roughly two weeks ago. The systematic path, following Google's own guidance directly: first, rule out a reporting glitch by checking the Data Anomalies page. Then check Security Issues and Manual Actions in Search Console, both quick to rule in or out entirely. Then check whether the timing lines up with any announced core or spam update from episode nineteen. Then segment the actual Performance report by query and country, watching specifically for whether the drop is broad and even, or concentrated in one particular product category, one particular country, or one specific page template, since a template-level pattern points strongly toward a technical issue affecting every page built from that same template at once, rather than a genuine content-quality or ranking problem. And throughout, Google Trends tells you directly whether searches for that product category are simply down industry-wide right now, a straightforward seasonal or demand shift, rather than anything specific to the site itself at all.
+
+> ChatGPT fact check - this paragraph claims "Then segment the actual Performance report by query and country, watching specifically for whether the drop is broad and even, or concentrated in one particular product category, one particular country, or one specific page template, since a template-level pattern points strongly toward a technical issue affecting every page built from that same template at once, rather than a genuine content-quality or ranking problem.", but the counterargument is: Google's current guide also explicitly covers migrations. A graph shape or common page template is a clue, not proof of technical rather than ranking causes. 'Rule in or out entirely' overstates what a clean report establishes. Present common causes rather than an exhaustive five-cause model. Add migrations, compare clicks with impressions, use the recommended longer date window, and test hypotheses instead of declaring a cause from shape alone.
+>
+> Sources: Site moves and migrations; paragraph 1: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations; Site moves and migrations; paragraph 2: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations.
+>
+> A078 | Overstatement | Medium priority | Checked 24 September 2026
+
+
 
 Let's recap.
 
 Search Console starts with verifying ownership, checking the Index Coverage report, and optionally submitting a sitemap, then splits broadly into developer-focused reports and SEO or marketing-focused reports. A genuine traffic drop has five real causes: technical issues, security issues, manual actions, algorithmic updates, and seasonality or changing interests, plus the possibility of a pure reporting glitch worth ruling out first. Each cause tends to produce a recognisably different shape on the actual traffic graph, sudden and site-wide for a major technical or security failure, slower and page-specific for a narrower technical issue, and cyclical for genuine seasonality. And search operators, site colon and filetype colon among them, are a fast, genuinely useful first-pass diagnostic tool worth reaching for before ever opening a dedicated report.
 
+> ChatGPT fact check - this paragraph claims "Search Console starts with verifying ownership, checking the Index Coverage report, and optionally submitting a sitemap, then splits broadly into developer-focused reports and SEO or marketing-focused reports.", but the counterargument is: The script uses Index Coverage rather than Page Indexing, while other chapters use the current name. Some source overview language may itself lag; an actionable audio guide should name the current report consistently. Use 'Page Indexing report', optionally noting its older Index Coverage name once.
+>
+> Sources: What does this report show?; paragraph 1: https://support.google.com/webmasters/answer/7440203.
+>
+> A077 | Outdated | Low priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "Each cause tends to produce a recognisably different shape on the actual traffic graph, sudden and site-wide for a major technical or security failure, slower and page-specific for a narrower technical issue, and cyclical for genuine seasonality.", but the counterargument is: Google's current guide also explicitly covers migrations. A graph shape or common page template is a clue, not proof of technical rather than ranking causes. 'Rule in or out entirely' overstates what a clean report establishes. Present common causes rather than an exhaustive five-cause model. Add migrations, compare clicks with impressions, use the recommended longer date window, and test hypotheses instead of declaring a cause from shape alone.
+>
+> Sources: Site moves and migrations; paragraph 1: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations; Site moves and migrations; paragraph 2: https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops#site-moves-and-migrations.
+>
+> A078 | Overstatement | Medium priority | Checked 24 September 2026
+
+
+
 Next episode, the final one in this series, we cover Google Trends properly, a brief word on preventing and monitoring abuse on your own site, and close the whole series out with a proper wrap-up. See you there.
 
 This episode is adapted from "Get started with Search Console" and "Debugging drops in Google Search traffic" on Google Search Central, licensed under Creative Commons Attribution 4.0.
+
+> ChatGPT fact check - this paragraph claims "This episode is adapted from "Get started with Search Console" and "Debugging drops in Google Search traffic" on Google Search Central, licensed under Creative Commons Attribution 4.0.", but the counterargument is: The previous episode promised Search Console with Google Analytics and a full operator treatment. This chapter explains site and filetype only, with a vague pointer to other operators, and never explains the Analytics comparison. Add the Analytics/Search Console comparison, including why metrics differ, and the documented operator limitations and supported image-search operators. Keep exact syntax in the accessible companion.
+>
+> Sources: Comparing data in Google Analytics and Search Console; paragraph 1: https://developers.google.com/search/docs/monitor-debug/google-analytics-search-console#comparing-data; Understanding data discrepancies between Google Analytics and Search Console; paragraph 1: https://developers.google.com/search/docs/monitor-debug/google-analytics-search-console#discrepancies.
+>
+> A079 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 ### Episode 30: Google Trends, Preventing Abuse, and Series Wrap-Up
 
 Welcome to the final episode of this series. We've walked the entire span of Google's Search Central documentation, from the technical requirements in episode one through to debugging a traffic drop last episode. Today: Google Trends as a practical tool, a brief but important word on preventing abuse on your own site, and then we close the whole thing out properly.
 
+> ChatGPT fact check - this paragraph claims "Welcome to the final episode of this series.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+>
+> A082 | Omission | High priority | Checked 24 September 2026
+
+
+
 Google Trends.
 
 We already met this tool briefly last episode, as a way to check whether a traffic change reflects a genuine, wider shift in search interest rather than something specific to your own site. Worth restating its practical value directly, since it's a genuinely useful, freely available tool many site owners underuse. It lets you compare search interest in specific terms over time, across regions, and against related queries, entirely independent of your own site's own analytics.
 
+> ChatGPT fact check - this paragraph claims "We already met this tool briefly last episode, as a way to check whether a traffic change reflects a genuine, wider shift in search interest rather than something specific to your own site.", but the counterargument is: The chapter omits Trends' sampled/aggregated nature and the distinction between Explore and Trending now, and reduces the concrete Safe Browsing repeat-offender restriction to vague escalation. Explain the tool's data and limits, including relative interest versus raw counts where applicable. State the actual repeat-offender condition and 30-day inability to request another review.
+>
+> Sources: About Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; About Google Trends; list item 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; About Google Trends; list item 2: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; Google Safe Browsing Repeat Offenders Policy; paragraph 3: https://developers.google.com/search/docs/monitor-debug/security/safe-browsing-repeat-offenders#google-safe-browsing-repeat-offenders-policy.
+>
+> A081 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Two concrete, practical ways to use it beyond simple drop diagnosis. Check the top queries in your own geographic area and compare them against the queries you're actually receiving traffic from, visible directly in the Search Console Performance report. If a query is clearly trending in your own region but genuinely missing from your own traffic, that's a real signal: check whether you have genuinely relevant content on that specific topic at all, and if you do, confirm it's actually been crawled and indexed properly. And check queries related to your important topics generally, which can help you spot a related query with real, rising momentum early, letting you prepare relevant content for it ahead of the curve, rather than reactively catching up once the trend has already peaked.
 
+> ChatGPT fact check - this paragraph claims "Two concrete, practical ways to use it beyond simple drop diagnosis.", but the counterargument is: The chapter omits Trends' sampled/aggregated nature and the distinction between Explore and Trending now, and reduces the concrete Safe Browsing repeat-offender restriction to vague escalation. Explain the tool's data and limits, including relative interest versus raw counts where applicable. State the actual repeat-offender condition and 30-day inability to request another review.
+>
+> Sources: About Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; About Google Trends; list item 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; About Google Trends; list item 2: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; Google Safe Browsing Repeat Offenders Policy; paragraph 3: https://developers.google.com/search/docs/monitor-debug/security/safe-browsing-repeat-offenders#google-safe-browsing-repeat-offenders-policy.
+>
+> A081 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 A brief historical footnote worth knowing, purely so the tool's own reputation makes sense in context: Google Trends has, at points in its history, been targeted by bad actors specifically because trending terms attract a large, sudden volume of searchers, making them a tempting target for malicious, deceptive sites designed to exploit exactly that spike. This isn't a reason to avoid the tool; it's simply worth knowing as context for why Google's own spam and security systems, covered next, matter as much as they do.
+
+> ChatGPT fact check - this paragraph claims "A brief historical footnote worth knowing, purely so the tool's own reputation makes sense in context: Google Trends has, at points in its history, been targeted by bad actors specifically because trending terms attract a large, sudden volume of searchers, making them a tempting target for malicious, deceptive sites designed to exploit exactly that spike.", but the counterargument is: The history of malicious exploitation of Trends, the claim about one of the most common compromise routes, and the Shopify-specific vulnerability analysis are not established by the chapter's cited documents. Remove the historical and prevalence claims unless separately sourced. Keep Google's actual prevention steps and clearly separate any platform-specific advice from the adaptation.
+>
+> Sources: Get started with Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#get-started-with-google-trends; About Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends.
+>
+> A080 | Unsupported | Medium priority | Checked 24 September 2026
+
+
 
 Preventing and monitoring abuse on your own site.
 
@@ -1792,15 +3204,47 @@ Malware and unwanted software. Google draws a specific, useful distinction betwe
 
 Preventing a malware infection in the first place. Google's own guidance here centres on the practical basics: keeping software genuinely up to date, using strong, unique passwords rather than reused or weak ones, and being cautious specifically about third-party code, plugins, and themes, since a compromised or poorly maintained third-party plugin is one of the single most common ways an otherwise well-run site ends up compromised.
 
+> ChatGPT fact check - this paragraph claims "Google's own guidance here centres on the practical basics: keeping software genuinely up to date, using strong, unique passwords rather than reused or weak ones, and being cautious specifically about third-party code, plugins, and themes, since a compromised or poorly maintained third-party plugin is one of the single most common ways an otherwise well-run site ends up compromised.", but the counterargument is: The history of malicious exploitation of Trends, the claim about one of the most common compromise routes, and the Shopify-specific vulnerability analysis are not established by the chapter's cited documents. Remove the historical and prevalence claims unless separately sourced. Keep Google's actual prevention steps and clearly separate any platform-specific advice from the adaptation.
+>
+> Sources: Get started with Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#get-started-with-google-trends; About Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends.
+>
+> A080 | Unsupported | Medium priority | Checked 24 September 2026
+
+
+
 Social engineering, covering phishing and deceptive sites specifically. This is about a site being used to trick visitors into revealing sensitive information or taking a genuinely harmful action, rather than a purely technical malware infection.
 
 Google Safe Browsing, and its specific repeat-offenders policy. Safe Browsing is the system that shows warnings directly to users before they reach a genuinely dangerous site, or before they download a genuinely dangerous file. Worth knowing precisely: Google has a specific, escalating policy for sites that are repeatedly flagged, treating repeat violations more severely than a single, isolated incident, which is a real, concrete reason to treat any security warning as something to fix properly and permanently the first time, not merely patch quickly and hope it doesn't recur.
 
+> ChatGPT fact check - this paragraph claims "Google Safe Browsing, and its specific repeat-offenders policy.", but the counterargument is: The chapter omits Trends' sampled/aggregated nature and the distinction between Explore and Trending now, and reduces the concrete Safe Browsing repeat-offender restriction to vague escalation. Explain the tool's data and limits, including relative interest versus raw counts where applicable. State the actual repeat-offender condition and 30-day inability to request another review.
+>
+> Sources: About Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; About Google Trends; list item 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; About Google Trends; list item 2: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends; Google Safe Browsing Repeat Offenders Policy; paragraph 3: https://developers.google.com/search/docs/monitor-debug/security/safe-browsing-repeat-offenders#google-safe-browsing-repeat-offenders-policy.
+>
+> A081 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 For a Shopify storefront specifically, the most directly relevant piece of all of this is the app and plugin ecosystem: every third-party app added to a store is a genuine, real point of potential vulnerability, and it's worth periodically reviewing which apps are actually still in active use, removing anything genuinely abandoned or no longer needed, rather than letting unused, unmaintained integrations quietly accumulate indefinitely.
+
+> ChatGPT fact check - this paragraph claims "For a Shopify storefront specifically, the most directly relevant piece of all of this is the app and plugin ecosystem: every third-party app added to a store is a genuine, real point of potential vulnerability, and it's worth periodically reviewing which apps are actually still in active use, removing anything genuinely abandoned or no longer needed, rather than letting unused, unmaintained integrations quietly accumulate indefinitely.", but the counterargument is: The history of malicious exploitation of Trends, the claim about one of the most common compromise routes, and the Shopify-specific vulnerability analysis are not established by the chapter's cited documents. Remove the historical and prevalence claims unless separately sourced. Keep Google's actual prevention steps and clearly separate any platform-specific advice from the adaptation.
+>
+> Sources: Get started with Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#get-started-with-google-trends; About Google Trends; paragraph 1: https://developers.google.com/search/docs/monitor-debug/trends-start#about-google-trends.
+>
+> A080 | Unsupported | Medium priority | Checked 24 September 2026
+
+
 
 And now, the series wrap-up itself.
 
 We began, back in episode one, with the Search Essentials: three technical requirements, and the promise that appearing in Google's results costs nothing and can't be bought. Thirty episodes later, we've covered the entire documented landscape built on top of that simple foundation.
+
+> ChatGPT fact check - this paragraph claims "Thirty episodes later, we've covered the entire documented landscape built on top of that simple foundation.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+>
+> A082 | Omission | High priority | Checked 24 September 2026
+
+
 
 Part One covered the rules of the road: the spam policies, how search actually works end to end, the full Starter Guide, genuine people-first content and E-E-A-T, the newly current guidance on generative AI search, and how to sensibly evaluate outside help.
 
@@ -1808,7 +3252,23 @@ Part Two went deep on crawling and indexing: file types, URL structure, links, s
 
 Part Three covered ranking and appearance: how ranking systems and updates actually work, page experience and Core Web Vitals, every visual element of a result from title link to favicon, images and video, and the full structured data landscape, general guidelines, the feature gallery, the genuinely current FAQ rich result retirement, and shopping markup in real depth.
 
+> ChatGPT fact check - this paragraph claims "Part Three covered ranking and appearance: how ranking systems and updates actually work, page experience and Core Web Vitals, every visual element of a result from title link to favicon, images and video, and the full structured data landscape, general guidelines, the feature gallery, the genuinely current FAQ rich result retirement, and shopping markup in real depth.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+>
+> A082 | Omission | High priority | Checked 24 September 2026
+
+
+
 Part Four covered the specialty guides: Discover, business details, the brand-new Preferred Sources feature, Web Stories, the complete ecommerce guide including how to actually write a review worth reading, and managing an international, multilingual presence properly.
+
+> ChatGPT fact check - this paragraph claims "Part Four covered the specialty guides: Discover, business details, the brand-new Preferred Sources feature, Web Stories, the complete ecommerce guide including how to actually write a review worth reading, and managing an international, multilingual presence properly.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+>
+> A082 | Omission | High priority | Checked 24 September 2026
+
+
 
 And Part Five closed with monitoring and debugging: Search Console itself, the systematic five-cause method for diagnosing a genuine traffic drop, search operators as a fast diagnostic tool, Google Trends, and keeping a site genuinely secure.
 
@@ -1816,35 +3276,115 @@ If there's one idea worth carrying forward above every other single detail in th
 
 Thank you for walking through all of this. This has been Walking Through Google Search, a complete adaptation of Google Search Central's own documentation, current as of September 2026.
 
+> ChatGPT fact check - this paragraph claims "This has been Walking Through Google Search, a complete adaptation of Google Search Central's own documentation, current as of September 2026.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
+>
+> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+>
+> A082 | Omission | High priority | Checked 24 September 2026
+
+
+
 This episode is adapted from "Get started with Google Trends" and "Preventing and monitoring abuse on your site" on Google Search Central, licensed under Creative Commons Attribution 4.0.
 
 ### Episode 31: Supplementary Update: Search Profiles, Regional Search Experiences, Social and Video Analysis, and Fake Reviews
 
 Welcome to a supplementary episode. The rest of this series was researched and written across September 2026, but Google Search Central kept publishing during that same window. This episode covers four genuinely new pieces of documentation that landed after the relevant main episodes were finished: Search profile badges, regional differences in Search experience, a new Search Console guide for social and video content, and a real tightening of the review-snippet rules around fake and incentivized reviews.
 
+> ChatGPT fact check - this paragraph claims "The rest of this series was researched and written across September 2026, but Google Search Central kept publishing during that same window.", but the counterargument is: The script says the main series was researched in September 2026, yet describes July 24 and July 29 documentation as unavailable at the time and published after the main episodes were finished. The July dates are genuine; the explanatory research story is inconsistent. Describe these as supplementary topics omitted from the main series. Do not invent a research timeline or imply that July updates postdated September research.
+>
+> Sources: Added guide on analyzing social and video platform content; paragraph 1: https://developers.google.com/search/updates#added-guide-on-analyzing-social-and-video-platform-content; Added a new review snippet guideline; paragraph 1: https://developers.google.com/search/updates#added-a-new-review-snippet-guideline.
+>
+> A083 | Error | Medium priority | Checked 24 September 2026
+
+
+
 Search profile badges.
 
 This is new documentation, published mid-September 2026, explaining how to add a Search profile badge to your own website. A Search profile is a way for an entity, a business, a creator, an author, to have a dedicated presence Google can point searchers toward directly. The badge itself is something you embed on your own site, functioning similarly in spirit to the Preferred Sources button from episode twenty-six: a direct, site-owner-controlled way to point your own audience toward your official Search profile, rather than leaving Google to piece one together purely from scattered signals. If a personal-brand or authority-building project is actively cultivating a recognisable public presence, this is worth pairing directly with the knowledge panel and Business Profile guidance from episode twenty-six.
+
+> ChatGPT fact check - this paragraph claims "This is new documentation, published mid-September 2026, explaining how to add a Search profile badge to your own website.", but the counterargument is: Search profiles' Discover-following purpose and prior claiming step are omitted. Regional units are not identified as EEA features, and supplier units' dependence on an aggregator unit is omitted. Social/video reporting requires separately added and verified platform properties. Restore those conditions and distinguish documentation publication from feature launch. Explain supported platform properties and verification rather than implying an ordinary website property automatically contains this data.
+>
+> Sources: How Search profiles work on Google; paragraph 1: https://developers.google.com/search/docs/appearance/search-profiles#how-search-profiles-work; Add a Search profile badge to your website; paragraph 2: https://developers.google.com/search/docs/appearance/search-profiles#how-to; Aggregator unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/aggregator-unit#aggregator-unit-in-google-search; Supplier unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/supplier-unit#supplier-unit-in-google-search; Get started with Search Console; paragraph 2: https://developers.google.com/search/docs/monitor-debug/analyze-social-video-content#get-started.
+>
+> A084 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Regional differences in Search experience.
 
 New documentation, published in two parts in early-to-mid September 2026, covering something worth knowing conceptually even if it may not immediately apply everywhere: certain countries get distinct Search features unavailable elsewhere. Google specifically names aggregator units and supplier units as examples. An aggregator unit is a distinct visual treatment for sites that aggregate listings from many underlying suppliers, think a marketplace or a comparison site; a supplier unit is the counterpart treatment for the individual businesses actually being aggregated within that experience. As of the most recent update, these units now also support local business queries specifically, on top of whatever query types they originally launched with.
 
+> ChatGPT fact check - this paragraph claims "Google specifically names aggregator units and supplier units as examples.", but the counterargument is: Search profiles' Discover-following purpose and prior claiming step are omitted. Regional units are not identified as EEA features, and supplier units' dependence on an aggregator unit is omitted. Social/video reporting requires separately added and verified platform properties. Restore those conditions and distinguish documentation publication from feature launch. Explain supported platform properties and verification rather than implying an ordinary website property automatically contains this data.
+>
+> Sources: How Search profiles work on Google; paragraph 1: https://developers.google.com/search/docs/appearance/search-profiles#how-search-profiles-work; Add a Search profile badge to your website; paragraph 2: https://developers.google.com/search/docs/appearance/search-profiles#how-to; Aggregator unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/aggregator-unit#aggregator-unit-in-google-search; Supplier unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/supplier-unit#supplier-unit-in-google-search; Get started with Search Console; paragraph 2: https://developers.google.com/search/docs/monitor-debug/analyze-social-video-content#get-started.
+>
+> A084 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 The practical relevance: these features carry their own specific eligibility criteria and their own regional availability, so a site genuinely operating in, or targeting, a market where these features exist has a real, concrete reason to check the current eligibility requirements directly, since regional feature rollouts like this one tend to expand gradually over time, exactly the pattern we saw repeatedly with Preferred Sources across episode twenty-six's own changelog history, and could plausibly extend further since this documentation entry itself.
+
+> ChatGPT fact check - this paragraph claims "The practical relevance: these features carry their own specific eligibility criteria and their own regional availability, so a site genuinely operating in, or targeting, a market where these features exist has a real, concrete reason to check the current eligibility requirements directly, since regional feature rollouts like this one tend to expand gradually over time, exactly the pattern we saw repeatedly with Preferred Sources across episode twenty-six's own changelog history, and could plausibly extend further since this documentation entry itself.", but the counterargument is: Search profiles' Discover-following purpose and prior claiming step are omitted. Regional units are not identified as EEA features, and supplier units' dependence on an aggregator unit is omitted. Social/video reporting requires separately added and verified platform properties. Restore those conditions and distinguish documentation publication from feature launch. Explain supported platform properties and verification rather than implying an ordinary website property automatically contains this data.
+>
+> Sources: How Search profiles work on Google; paragraph 1: https://developers.google.com/search/docs/appearance/search-profiles#how-search-profiles-work; Add a Search profile badge to your website; paragraph 2: https://developers.google.com/search/docs/appearance/search-profiles#how-to; Aggregator unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/aggregator-unit#aggregator-unit-in-google-search; Supplier unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/supplier-unit#supplier-unit-in-google-search; Get started with Search Console; paragraph 2: https://developers.google.com/search/docs/monitor-debug/analyze-social-video-content#get-started.
+>
+> A084 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 Analyzing social and video platform content.
 
 This is a genuinely new Search Console guide, published in late July 2026, and it fills a real gap that episode twenty-nine's coverage of Search Console didn't have available to draw on at the time. It explains how to analyse the performance of your social media and video platform content specifically within Search Console's own reporting, intended directly for content creators, social media managers, and SEO professionals who want to understand how that specific kind of content performs within Google Search itself, not merely within the native platform it was posted to.
 
+> ChatGPT fact check - this paragraph claims "This is a genuinely new Search Console guide, published in late July 2026, and it fills a real gap that episode twenty-nine's coverage of Search Console didn't have available to draw on at the time.", but the counterargument is: The script says the main series was researched in September 2026, yet describes July 24 and July 29 documentation as unavailable at the time and published after the main episodes were finished. The July dates are genuine; the explanatory research story is inconsistent. Describe these as supplementary topics omitted from the main series. Do not invent a research timeline or imply that July updates postdated September research.
+>
+> Sources: Added guide on analyzing social and video platform content; paragraph 1: https://developers.google.com/search/updates#added-guide-on-analyzing-social-and-video-platform-content; Added a new review snippet guideline; paragraph 1: https://developers.google.com/search/updates#added-a-new-review-snippet-guideline.
+>
+> A083 | Error | Medium priority | Checked 24 September 2026
+
+
+
+> ChatGPT fact check - this paragraph claims "It explains how to analyse the performance of your social media and video platform content specifically within Search Console's own reporting, intended directly for content creators, social media managers, and SEO professionals who want to understand how that specific kind of content performs within Google Search itself, not merely within the native platform it was posted to.", but the counterargument is: Search profiles' Discover-following purpose and prior claiming step are omitted. Regional units are not identified as EEA features, and supplier units' dependence on an aggregator unit is omitted. Social/video reporting requires separately added and verified platform properties. Restore those conditions and distinguish documentation publication from feature launch. Explain supported platform properties and verification rather than implying an ordinary website property automatically contains this data.
+>
+> Sources: How Search profiles work on Google; paragraph 1: https://developers.google.com/search/docs/appearance/search-profiles#how-search-profiles-work; Add a Search profile badge to your website; paragraph 2: https://developers.google.com/search/docs/appearance/search-profiles#how-to; Aggregator unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/aggregator-unit#aggregator-unit-in-google-search; Supplier unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/supplier-unit#supplier-unit-in-google-search; Get started with Search Console; paragraph 2: https://developers.google.com/search/docs/monitor-debug/analyze-social-video-content#get-started.
+>
+> A084 | Omission | Medium priority | Checked 24 September 2026
+
+
+
 Here's why this genuinely matters, tying back to episode twenty-two's video coverage: content posted to platforms like YouTube, or to other video and social platforms, can itself surface directly within Google Search results, and this new guide is specifically about measuring that cross-platform visibility properly, inside the same Search Console interface already covered in episode twenty-nine, rather than needing to piece that picture together from each platform's own separate, siloed native analytics.
+
+> ChatGPT fact check - this paragraph claims "Here's why this genuinely matters, tying back to episode twenty-two's video coverage: content posted to platforms like YouTube, or to other video and social platforms, can itself surface directly within Google Search results, and this new guide is specifically about measuring that cross-platform visibility properly, inside the same Search Console interface already covered in episode twenty-nine, rather than needing to piece that picture together from each platform's own separate, siloed native analytics.", but the counterargument is: Search profiles' Discover-following purpose and prior claiming step are omitted. Regional units are not identified as EEA features, and supplier units' dependence on an aggregator unit is omitted. Social/video reporting requires separately added and verified platform properties. Restore those conditions and distinguish documentation publication from feature launch. Explain supported platform properties and verification rather than implying an ordinary website property automatically contains this data.
+>
+> Sources: How Search profiles work on Google; paragraph 1: https://developers.google.com/search/docs/appearance/search-profiles#how-search-profiles-work; Add a Search profile badge to your website; paragraph 2: https://developers.google.com/search/docs/appearance/search-profiles#how-to; Aggregator unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/aggregator-unit#aggregator-unit-in-google-search; Supplier unit in Google Search; paragraph 1: https://developers.google.com/search/docs/appearance/supplier-unit#supplier-unit-in-google-search; Get started with Search Console; paragraph 2: https://developers.google.com/search/docs/monitor-debug/analyze-social-video-content#get-started.
+>
+> A084 | Omission | Medium priority | Checked 24 September 2026
+
+
 
 And now, the update that carries the most direct, practical weight of all four: a new review snippet guideline addressing fake and undisclosed incentivized reviews.
 
 This landed in late July 2026, as a direct addition to the review snippet documentation we referenced back in episode twenty-five's shopping structured data material, and it deserves to be understood precisely, since it sharpens something episode twenty-seven already covered from a different angle.
 
+> ChatGPT fact check - this paragraph claims "This landed in late July 2026, as a direct addition to the review snippet documentation we referenced back in episode twenty-five's shopping structured data material, and it deserves to be understood precisely, since it sharpens something episode twenty-seven already covered from a different angle.", but the counterargument is: The script says the main series was researched in September 2026, yet describes July 24 and July 29 documentation as unavailable at the time and published after the main episodes were finished. The July dates are genuine; the explanatory research story is inconsistent. Describe these as supplementary topics omitted from the main series. Do not invent a research timeline or imply that July updates postdated September research.
+>
+> Sources: Added guide on analyzing social and video platform content; paragraph 1: https://developers.google.com/search/updates#added-guide-on-analyzing-social-and-video-platform-content; Added a new review snippet guideline; paragraph 1: https://developers.google.com/search/updates#added-a-new-review-snippet-guideline.
+>
+> A083 | Error | Medium priority | Checked 24 September 2026
+
+
+
 Recall from episode twenty-seven: Google's guidance on writing genuinely high-quality reviews already emphasised real, original testing and honest, evidence-backed pros and cons. This new guideline adds a more explicit, more pointed layer specifically targeting reviews that are fake outright, or that were incentivized, meaning the reviewer received some form of compensation or benefit in exchange for writing it, without that incentive being genuinely, clearly disclosed to the reader. Google's stated purpose, worth remembering precisely: to improve user review transparency specifically.
 
 Why this matters directly for a store collecting its own product reviews: if a business ever runs a review-incentive programme, offering a discount, a small gift, or any other benefit in exchange for a customer leaving a review, that relationship now needs to be clearly, genuinely disclosed within the review content itself, not quietly omitted. An undisclosed incentivized review sits in essentially the same category Google is now actively targeting as a fake one, at least for the purposes of review-snippet structured data eligibility. This connects directly back to episode sixteen's data-nosnippet material and episode twenty-three's structured data quality guidelines too: Google has been consistently tightening what counts as legitimate, trustworthy review content across this entire series, and this is simply the newest, most explicit instance of that same underlying pressure.
+
+> ChatGPT fact check - this paragraph claims "Why this matters directly for a store collecting its own product reviews: if a business ever runs a review-incentive programme, offering a discount, a small gift, or any other benefit in exchange for a customer leaving a review, that relationship now needs to be clearly, genuinely disclosed within the review content itself, not quietly omitted.", but the counterargument is: The new review rule prohibits fake or undisclosed incentivized reviews on the page or in markup. There is no source-supported connection making data-nosnippet a compliance remedy. Require genuine experience and clear, prominent incentive disclosure. Remove the data-nosnippet connection and retain the separate self-serving-review restriction for organizations/local businesses.
+>
+> Sources: Technical guidelines; list item 8: https://developers.google.com/search/docs/appearance/structured-data/review-snippet#technical-guidelines; Technical guidelines; list item 9: https://developers.google.com/search/docs/appearance/structured-data/review-snippet#technical-guidelines.
+>
+> A085 | Unsupported | Medium priority | Checked 24 September 2026
+
+
 
 The practical takeaway, stated plainly: if a store solicits reviews with any kind of incentive attached, disclose that incentive directly and visibly within the review itself, and audit any existing review collection process now, before this newer, more explicit guideline gets tested against actual review content already live on the site.
 
