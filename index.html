@@ -373,6 +373,13 @@
   .btn[data-tooltip]:hover::before, .btn[data-tooltip]:focus-visible::before{
     opacity:1; visibility:visible;
   }
+  /* nerd-mode secret button: tapping pins the tooltip open (touch has no hover), with a nudge per tap */
+  .btn.tip-open[data-tooltip]::after, .btn.tip-open[data-tooltip]::before{ opacity:1; visibility:visible; }
+  .btn.secret-tap{ animation:secret-tap .18s ease-out; }
+  .btn.secret-unlocked{ animation:secret-unlocked .9s ease-out forwards; }
+  @keyframes secret-tap{ 0%,100%{ transform:translateX(0); } 30%{ transform:translateX(-3px); } 70%{ transform:translateX(3px); } }
+  @keyframes secret-unlocked{ 0%{ box-shadow:0 0 0 0 rgba(255,210,90,.9); } 100%{ box-shadow:0 0 0 18px rgba(255,210,90,0); } }
+  @media (prefers-reduced-motion: reduce){ .btn.secret-tap, .btn.secret-unlocked{ animation:none; } }
 
   /* ---------- speaking (Experience pillar, optional: delete the whole block to remove) ---------- */
   .speaking, .pinned{ margin-top:2rem; text-align:left; }
@@ -809,14 +816,15 @@
       var navLinks = Array.prototype.slice.call(nav.querySelectorAll('.btn'));
       var normalNav = navLinks.map(function(a){ return { href: a.getAttribute('href'), text: a.textContent, tooltip: a.getAttribute('data-tooltip') }; });
       // Nerd-mode nav: any entries beyond the normal nav's count just hide the extra normal buttons.
+      var SECRET_TIP = 'Developer mode only! You know what to do...';
       var nerdNavItems = [
         { text: 'WW2044 Project', href: 'https://kaisercatcinema.com/ww2044', tooltip: 'World War II reimagined with modern-day equipment and vehicles.' },
         { text: 'Cold War Project', href: 'https://kaisercatcinema.com/pages/about-coldwarproject', tooltip: 'What if there had been a three-way Cold War?' },
         { text: 'Open Dice Roller (MIT)', href: 'https://github.com/VincentDN/MiroDnD-3D-Dice-Roller', tooltip: 'A screen-overlay 3D dice roller built for playing D&D on Miro.' },
         { text: 'Kaiserreich on Steam', href: 'https://steamcommunity.com/workshop/filedetails/?id=1521695605', tooltip: 'Kaiserreich: Legacy of the Weltkrieg — the alt-history mod for Hearts of Iron IV.' },
         { text: 'Dystopia Game', href: 'https://dystopia-game.com/', tooltip: 'Cyberpunk HL2 total conversion mod.' },
-        { text: 'Sheepdog AI', href: 'https://github.com/VincentDN/Sheepdog-AI', tooltip: 'Lets ChatGPT and Claude tag-team a dev project, saving tokens and downtime.' },
-        { text: 'OPFOR.js', href: 'https://github.com/VincentDN/OPFOR.js', tooltip: 'A three.js experiment in improved video game shooter AI.' }
+        // Android build-number easter egg: 7 taps unlocks /projects/, see "secret projects" below.
+        { text: '👻 Experiments and Secret Projects', href: 'projects/', tooltip: SECRET_TIP, secret: true }
       ];
 
       /* ---------------- pinned dev diaries swap ---------------- */
@@ -915,11 +923,88 @@
         }
       });
 
+      /* ---------------- nerd mode: secret projects (tap 7 times, like Android's build number) ---------------- */
+      var SECRET_TAPS = 7;
+      var secretTaps = 0, secretTipTimer = null, secretUnlocking = false;
+
+      // Taps 1-6: a ping that climbs a whole tone each time and gains notes and volume as it goes.
+      function playSecretPing(step){
+        var ctx = ensureCtx();
+        if(!ctx) return;
+        var t = ctx.currentTime + 0.01;
+        var base = 660 * Math.pow(2, (step - 1) * 2 / 12);
+        var peak = 0.04 + step * 0.012;
+        scheduleTone(t, base, 0.08, 'square', peak);
+        scheduleTone(t + 0.06, base * 1.5, 0.08, 'square', peak * 0.8);
+        if(step >= 3){ scheduleTone(t + 0.12, base * 2, 0.09, 'square', peak * 0.7); }
+        if(step >= 4){ scheduleTone(t, base / 2, 0.2, 'sawtooth', peak * 0.35); }
+        if(step >= 5){ scheduleTone(t + 0.18, base * 3, 0.1, 'square', peak * 0.6); }
+        if(step >= 6){ scheduleTone(t + 0.24, base * 4, 0.12, 'triangle', peak * 0.8); }
+      }
+
+      // Tap 7: a fast rising arpeggio into a held major chord.
+      function playLevelUnlocked(){
+        var ctx = ensureCtx();
+        if(!ctx) return;
+        var t = ctx.currentTime + 0.01;
+        [523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98].forEach(function(f, i){
+          scheduleTone(t + i * 0.07, f, 0.1, 'square', 0.1);
+        });
+        var c = t + 0.45;
+        scheduleTone(c, 1046.5, 0.6, 'square', 0.09);
+        scheduleTone(c, 1318.51, 0.6, 'square', 0.07);
+        scheduleTone(c, 1567.98, 0.6, 'square', 0.07);
+        scheduleTone(c, 2093, 0.6, 'triangle', 0.08);
+        scheduleTone(c, 261.63, 0.6, 'sawtooth', 0.05);
+      }
+
+      function showSecretTip(a, text, ms){
+        a.setAttribute('data-tooltip', text);
+        a.classList.add('tip-open');
+        clearTimeout(secretTipTimer);
+        secretTipTimer = setTimeout(function(){ a.classList.remove('tip-open'); }, ms);
+      }
+
+      function resetSecret(){
+        secretTaps = 0;
+        secretUnlocking = false;
+        clearTimeout(secretTipTimer);
+        navLinks.forEach(function(a){ a.classList.remove('tip-open', 'secret-tap', 'secret-unlocked'); });
+      }
+
+      nav.addEventListener('click', function(e){
+        var a = e.target.closest && e.target.closest('.secret-btn');
+        if(!a || !nerdMode) return;
+        e.preventDefault();
+        if(secretUnlocking) return;
+        var ctx = ensureCtx();
+        if(ctx && ctx.state === 'suspended'){ ctx.resume(); }
+
+        secretTaps++;
+        a.classList.remove('secret-tap');
+        void a.offsetWidth; // restart the nudge animation
+        a.classList.add('secret-tap');
+
+        if(secretTaps < SECRET_TAPS){
+          playSecretPing(secretTaps);
+          showSecretTip(a, SECRET_TIP, 2500);
+          return;
+        }
+
+        secretUnlocking = true;
+        playLevelUnlocked();
+        a.classList.add('secret-unlocked');
+        showSecretTip(a, '🔓 Level unlocked!', 5000);
+        var dest = a.getAttribute('href');
+        setTimeout(function(){ window.location.href = dest; }, 1200);
+      });
+
       /* ---------------- nerd mode toggle ---------------- */
       nerdBtn.addEventListener('click', function(){
         nerdMode = !nerdMode;
         document.body.classList.toggle('nerd-mode', nerdMode);
         nerdBtn.setAttribute('aria-pressed', String(nerdMode));
+        resetSecret();
 
         var tip = nerdMode ? 'Switch to LinkedIn mode' : 'Switch to nerd mode';
         nerdBtn.setAttribute('data-tooltip', tip);
@@ -936,6 +1021,7 @@
               a.setAttribute('href', nerdNavItems[i].href);
               a.textContent = nerdNavItems[i].text;
               a.setAttribute('data-tooltip', nerdNavItems[i].tooltip);
+              a.classList.toggle('secret-btn', !!nerdNavItems[i].secret);
               a.style.display = '';
             } else {
               a.style.display = 'none';
@@ -944,6 +1030,7 @@
             a.setAttribute('href', normalNav[i].href);
             a.textContent = normalNav[i].text;
             a.setAttribute('data-tooltip', normalNav[i].tooltip);
+            a.classList.remove('secret-btn');
             a.style.display = '';
           }
         });
