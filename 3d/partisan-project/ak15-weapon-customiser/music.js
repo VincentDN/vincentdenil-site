@@ -89,10 +89,12 @@ function resumeFrom(audio,track){
 
 // Live player: one AudioContext, switchable tracks; keeps playing in background tabs.
 export class Music{
- constructor(){this.volume=.4;this.playing=false;this.track=TRACKS[0].id;}
+ // `route(ctx)` optionally returns the node the master gain feeds instead of the speakers
+ // (the workbench plays the music through its radio chain).
+ constructor({route}={}){this.volume=.4;this.playing=false;this.track=TRACKS[0].id;this.route=route;}
  setup(){
   if(this.ctx)return;
-  this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=0;this.master.connect(this.ctx.destination);
+  this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=0;this.master.connect(this.route?.(this.ctx)||this.ctx.destination);
   this.graph=createGraph(this.ctx,this.master);this.bar=0;this.next=this.ctx.currentTime+.1;
  }
  file(){return TRACKS.find(t=>t.id===this.track)?.src;}

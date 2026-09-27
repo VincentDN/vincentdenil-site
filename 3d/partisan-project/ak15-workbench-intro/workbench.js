@@ -10,31 +10,45 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {MODELS,DEFAULT_MODEL} from '../ak15-weapon-customiser/models.js';
 import {DEFAULT_OPERATOR,buildOperator} from '../ak15-weapon-customiser/operator.js';
 import {solveArm} from '../ak15-weapon-customiser/field.js';
-import {Music} from '../ak15-weapon-customiser/music.js';
+import {Music,TRACKS} from '../ak15-weapon-customiser/music.js';
+import {createBench} from './bench-audio.js';
 
 const CUSTOMISER='../ak15-weapon-customiser/';
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
 const RIFLE_AT=new T.Vector3(.04,0,.47);// x/z on the table; y comes from the rifle's own thickness
 // Camera behind and above the right shoulder, looking down at the rifle.
-const SHOT={position:new T.Vector3(-.52,1.84,.06),target:new T.Vector3(.04,.88,.47)};
+const SHOT={position:new T.Vector3(-.56,1.86,0),target:new T.Vector3(-.06,.84,.42)};
 const PUSH_IN={duration:1.9,fadeAt:.75};// seconds; the fade starts at this fraction of the push
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ---------- Music: Abdulena, sharing the customiser's on/off and volume setting ----------
-// Always Abdulena here, whatever track the customiser last played; it carries on playing
-// into the customiser (music.js hands the position over) when that track is selected there.
-const MUSIC_KEY='ak-customiser-music-v2';
+// ---------- Sound: the radio, its crackle and the camp outside (bench-audio.js) ----------
+// Shares the customiser's on/off and volume setting. The radio plays audio/radio-song.mp3 when
+// that file is present (the song meant for this bench) and Abdulena until then. Abdulena
+// carries on into the customiser (music.js hands the position over) when it is selected there.
+const MUSIC_KEY='ak-customiser-music-v2',RADIO_SONG=new URL('./audio/radio-song.mp3',import.meta.url).href;
 const musicPrefs=(()=>{const base={on:true,volume:.4};try{return {...base,...JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}')};}catch{return base;}})();
-const music=new Music(),musicButton=document.querySelector('#music-toggle');
+let bench=null,tuned=false;
+const music=new Music({route:ctx=>(bench=createBench(ctx)).radioIn}),musicButton=document.querySelector('#music-toggle');
 music.setVolume(musicPrefs.volume);music.setTrack('abdulena');
 function saveMusic(){try{const saved=JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}');localStorage.setItem(MUSIC_KEY,JSON.stringify({...saved,on:musicPrefs.on}));}catch{}}
 const showMusic=()=>musicButton.setAttribute('aria-pressed',String(musicPrefs.on));showMusic();
+// Sound on: the music player creates the AudioContext (and with it the bench graph); the first
+// time, the radio is tuned in, and the camp fades up with it.
+function soundOn(fade=1.5){
+ const started=music.start(fade);
+ if(!tuned){tuned=true;bench.tune();}
+ bench.fade(true,musicPrefs.volume,3);
+ return started;
+}
+function soundOff(){music.stop();bench?.fade(false,0,.6);}
 // Browsers block sound until a gesture, so the first click or key press starts it.
-function firstGesture(e){if(e.target===musicButton)return;stopWaiting();if(musicPrefs.on)music.start(1.5);}
+function firstGesture(e){if(e.target===musicButton)return;stopWaiting();if(musicPrefs.on)soundOn();}
 function stopWaiting(){removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);}
 addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
-if(musicPrefs.on)music.start(1.5).then(playing=>{if(playing)stopWaiting();});
-musicButton.onclick=()=>{stopWaiting();if(musicPrefs.on&&!music.audible()){music.start(1.5);return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();saveMusic();showMusic();};
+// Use the bench song if it's there, then try to autoplay (works where the visitor has engaged before).
+const songCheck=fetch(RADIO_SONG,{method:'HEAD'}).then(r=>r.ok,()=>false).then(ok=>{if(ok){TRACKS.push({id:'radio',label:'Radio',src:RADIO_SONG});music.setTrack('radio');}});
+songCheck.then(()=>{if(musicPrefs.on&&!music.playing)soundOn().then(playing=>{if(playing)stopWaiting();});});
+musicButton.onclick=()=>{stopWaiting();if(musicPrefs.on&&!music.audible()){soundOn();return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?soundOn(.4):soundOff();saveMusic();showMusic();};
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),start=document.querySelector('#start'),fade=document.querySelector('#fade');
 const renderer=new T.WebGLRenderer({antialias:true});
@@ -69,8 +83,8 @@ mesh(new T.BoxGeometry(1.4,.8,.015),std(0x4a3f30,.9),[.1,1.42,TABLE.z[1]+.035],f
 // Props: screwdriver, file, rag, ammo tin, power strip with a lit switch.
 const tools=std(0x3a3f44,.45,{metalness:.7});
 const driver=new T.Group();driver.add(new T.Mesh(new T.CylinderGeometry(.014,.016,.11,8).rotateZ(Math.PI/2),std(0x3f4b3a,.6)),new T.Mesh(new T.CylinderGeometry(.004,.004,.12,6).rotateZ(Math.PI/2).translate(.115,0,0),tools));
-driver.position.set(-.2,TABLE.top+.016,.98);driver.rotation.y=.25;driver.traverse(m=>{if(m.isMesh)m.castShadow=true;});scene.add(driver);
-mesh(new T.BoxGeometry(.2,.008,.025),tools,[-.52,TABLE.top+.004,.9]).rotation.y=-.4;
+driver.position.set(.18,TABLE.top+.016,.96);driver.rotation.y=.25;driver.traverse(m=>{if(m.isMesh)m.castShadow=true;});scene.add(driver);
+mesh(new T.BoxGeometry(.2,.008,.025),tools,[.32,TABLE.top+.004,.72]).rotation.y=-.4;
 const rag=mesh(new T.IcosahedronGeometry(.1,1).scale(1.3,.28,1),std(0x6d6a60,.98,{flatShading:true}),[.6,TABLE.top+.012,.95]);rag.rotation.y=.6;
 mesh(new T.BoxGeometry(.18,.1,.1),std(0x3e4a32,.7),[-.68,TABLE.top+.05,.62]).rotation.y=.3;
 const strip=mesh(new T.BoxGeometry(.06,.035,.3),std(0x8e9092,.6),[.8,TABLE.top+.018,.5]);strip.rotation.y=-.15;
@@ -78,6 +92,57 @@ mesh(new T.BoxGeometry(.03,.012,.03),std(0xff2a1a,.4,{emissive:0xff2a1a,emissive
 // The lamp itself: a shade and a glowing bulb above the bench.
 mesh(new T.ConeGeometry(.12,.14,10,1,true),std(0x3c4a3f,.6,{side:T.DoubleSide}),[lamp.position.x,lamp.position.y+.05,lamp.position.z],false);
 mesh(new T.SphereGeometry(.03,8,6),new T.MeshBasicMaterial({color:0xfff0d0}),[lamp.position.x,lamp.position.y,lamp.position.z],false);
+
+// The old radio at the back of the bench: wooden case, cloth grille, lit tuning dial, two knobs
+// and a carry handle. The music comes out of it (bench-audio.js pans the sound to its position).
+const RADIO_AT=new T.Vector3(-.26,TABLE.top,.92);
+const radio=new T.Group();radio.position.copy(RADIO_AT);radio.rotation.y=.25;scene.add(radio);
+{
+ const part=(geo,material,[x,y,z])=>{const m=new T.Mesh(geo,material);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;radio.add(m);return m;};
+ const W=.34,H=.21,D=.13,wood=std(0x4a2e1a,.6,{flatShading:true});
+ part(new T.BoxGeometry(W,H,D),wood,[0,H/2,0]);
+ part(new T.BoxGeometry(W+.012,.014,D+.012),std(0x2e1c10,.6),[0,H-.004,0]);// lid lip
+ part(new T.BoxGeometry(W*.52,H*.72,.004),std(0x8a7a5c,.95),[-W*.2,H*.47,-D/2-.001]);// grille cloth
+ for(let i=0;i<5;i++)part(new T.BoxGeometry(W*.52,.008,.006),wood,[-W*.2,H*.18+i*H*.14,-D/2-.004]);// grille slats
+ part(new T.BoxGeometry(W*.3,H*.26,.006),std(0x1a1410,.5),[W*.29,H*.68,-D/2-.002]);// dial bezel
+ radio.userData.dial=part(new T.PlaneGeometry(W*.26,H*.2).rotateY(Math.PI),std(0xffd9a0,.5,{emissive:0xffa447,emissiveIntensity:1.4}),[W*.29,H*.68,-D/2-.0055]);
+ part(new T.BoxGeometry(.003,H*.18,.002),std(0x9a2a1a,.5),[W*.25,H*.68,-D/2-.007]);// needle
+ for(const x of [.2,.38])part(new T.CylinderGeometry(.017,.019,.018,10).rotateX(Math.PI/2),std(0x201a15,.4),[W*x+W*.03,H*.26,-D/2-.009]);// knobs
+ part(new T.TorusGeometry(.07,.008,5,10,Math.PI),std(0x2a2522,.5,{metalness:.4}),[0,H+.002,0]);// handle
+}
+
+// FIA flag (Altis) draped over the near edge of the bench: most of it lies flat on the table
+// top under the rifle and the rest hangs down towards the operator's knees, swaying a little. The cloth is a grid
+// bent over the edge on the CPU each frame; texture: fia-flag.png (supplied by the site owner).
+const FLAG={x:[-.95,-.25],flat:.3,height:.40,bend:.012,cols:36,rows:26};
+const flagGeo=new T.PlaneGeometry(1,1,FLAG.cols,FLAG.rows);
+// flipY off turns the image 180° together with the +x mapping in drapeFlag (not a mirror image):
+// the crest ends up in view and reads the right way round from above.
+const flagTexture=new T.TextureLoader().load('./fia-flag.png');flagTexture.flipY=false;flagTexture.colorSpace=T.SRGBColorSpace;flagTexture.anisotropy=8;
+const flagMat=new T.MeshStandardMaterial({map:flagTexture,roughness:.95,side:T.DoubleSide});
+const flag=new T.Mesh(flagGeo,flagMat);flag.castShadow=flag.receiveShadow=true;flag.frustumCulled=false;scene.add(flag);
+function drapeFlag(time){
+ const p=flagGeo.attributes.position,uv=flagGeo.attributes.uv,width=FLAG.x[1]-FLAG.x[0],edge=TABLE.z[0],arc=FLAG.bend*Math.PI/2;
+ for(let i=0;i<p.count;i++){
+  const u=uv.getX(i),v=uv.getY(i),s=(1-v)*FLAG.height;// s: distance down the cloth from the top edge
+  // Hoist (the black triangle) at the operator's end (+x), so the crest lies in the open patch of
+  // table right of the stock where the bench shot sees it.
+  let x=FLAG.x[0]+u*width,y,z;
+  if(s<FLAG.flat){y=TABLE.top+.002;z=edge+FLAG.flat-s;}
+  else if(s<FLAG.flat+arc){const a=(s-FLAG.flat)/FLAG.bend;y=TABLE.top+.002-FLAG.bend*(1-Math.cos(a));z=edge-FLAG.bend*Math.sin(a);}
+  else{
+   const h=s-FLAG.flat-arc,k=h/(FLAG.height-FLAG.flat);// 0 at the edge, 1 at the bottom hem
+   y=TABLE.top+.002-FLAG.bend-h;
+   // Folds from the weight of the cloth, plus a slow sway (off under reduced motion).
+   const sway=reduceMotion?0:Math.sin(time*1.1+u*5)*.008*k+Math.sin(time*.7+u*11)*.003*k;
+   z=edge-FLAG.bend-Math.sin(u*Math.PI*5)*.012*k-.01*k*k-sway;
+   x+=reduceMotion?0:Math.sin(time*.9+v*4)*.004*k;
+  }
+  p.setXYZ(i,x,y,z);
+ }
+ p.needsUpdate=true;flagGeo.computeVertexNormals();
+}
+drapeFlag(0);
 
 // ---------- Operator, leaning over the bench ----------
 const op=buildOperator({...DEFAULT_OPERATOR,headgear:'none',gloves:'none',pack:'none'});
@@ -164,6 +229,9 @@ function frame(){
  pollPad();
  const k=1-Math.exp(-dt*(push?1.5:4));look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
  pose(time);placeRifle();
+ drapeFlag(time);
+ radio.userData.dial.material.emissiveIntensity=1.3+Math.random()*.15;// valve glow flicker
+ if(bench){const at=radio.getWorldPosition(new T.Vector3()).project(camera);bench.setPan(at.x*.8);}
  if(push){
   // Wall-clock time, so a slow device still hands over on schedule.
   const t=performance.now()/1000-push.start,u=Math.min(t/PUSH_IN.duration,1),e=ease(u);
