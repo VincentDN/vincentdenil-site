@@ -1,6 +1,6 @@
 # Crane-mounted XXL flag
 
-Route: `/3d/crane-mounted-flag-xxl/`. Linked from `/projects/3d/`, with `noindex` and `seo_hidden=true`. Serve the repository root over HTTP; no build step. Based on the Louisiana XXL viewer's sidebar, measurement interaction, meter-based geometry, units helper, FMP branding and Three.js 0.160.0 / OrbitControls setup.
+Route: `/previz/crane-mounted-flag-xxl/`. Linked from `/projects/previz/`, with `noindex` and `seo_hidden=true`. Serve the repository root over HTTP; no build step. Based on the Louisiana XXL viewer's sidebar, measurement interaction, meter-based geometry, units helper, FMP branding and Three.js 0.160.0 / OrbitControls setup.
 
 ## Scale assumptions
 
@@ -43,4 +43,6 @@ blender --background --python model-source/export-crane.py
 
 Crane, Flag, Front and Mount detail camera presets; mouse/touch orbit and zoom; keyboard arrows and +/− on the focused scene; metric/imperial display; selectable dimensions; measurement and human visibility; wind pause and breeze strength. Reduced-motion preferences disable wind by default. All measurement values remain available in the sidebar when projected labels overlap or leave the viewport.
 
-Checked in headless Microsoft Edge with WebGL: GLB loading, all camera buttons, imperial conversion, dimension selection, visibility and motion buttons, 390 px mobile layout, and navigation from the 3D index. Desktop, flag close-up, mount close-up and mobile screenshots were visually reviewed. Three.js modules use the same pinned jsDelivr dependency as the base viewer and require network access; the crane is served locally.
+Checked in headless Microsoft Edge with WebGL: GLB loading, all camera buttons, imperial conversion, dimension selection, visibility and motion buttons, 390 px mobile layout, and navigation from the PREVIZ index. Desktop, flag close-up, mount close-up and mobile screenshots were visually reviewed. Three.js modules use the same pinned jsDelivr dependency as the base viewer and require network access; the crane is served locally.
+
+The viewer follows the previz no-outward-links convention: no site navigation or clickable credits. Attribution remains plain text; source URLs are retained here for provenance. The previous 3D URL redirects to this viewer.
