@@ -1,0 +1,43 @@
+reel_time_s,file,class,chapter,source_time_s
+0.39,click/bolt-0042_94s.wav,click,Bolt Action Rifle,42.936
+1.57,click/bolt-0065_15s.wav,click,Bolt Action Rifle,65.149
+2.79,click/revolver-0435_23s.wav,click,Revolver,435.231
+3.99,click/bolt-0039_83s.wav,click,Bolt Action Rifle,39.83
+5.17,click/pump-0164_97s.wav,click,Pump Shotgun,164.969
+6.36,click/sar-0500_12s.wav,click,Semi Auto Rifle,500.125
+7.52,clunk/bolt-0125_61s.wav,clunk,Bolt Action Rifle,125.614
+8.67,clunk/bolt-0076_36s.wav,clunk,Bolt Action Rifle,76.355
+9.94,clunk/pump-0157_58s.wav,clunk,Pump Shotgun,157.576
+11.24,clunk/revolver-0413_02s.wav,clunk,Revolver,413.019
+12.46,clunk/revolver-0398_20s.wav,clunk,Revolver,398.204
+13.63,clunk/bolt-0129_86s.wav,clunk,Bolt Action Rifle,129.86
+14.9,ratchet/pump-0138_38s.wav,ratchet,Pump Shotgun,138.385
+16.28,ratchet/bow-0232_15s.wav,ratchet,Bow,232.15
+17.87,ratchet/bow-0208_12s.wav,ratchet,Bow,208.117
+19.54,ratchet/bolt-0058_78s.wav,ratchet,Bolt Action Rifle,58.778
+21.15,ratchet/bolt-0060_64s.wav,ratchet,Bolt Action Rifle,60.644
+22.56,ratchet/sar-0532_41s.wav,ratchet,Semi Auto Rifle,532.41
+24.25,slide/bolt-0083_05s.wav,slide,Bolt Action Rifle,83.046
+25.85,slide/bolt-0068_16s.wav,slide,Bolt Action Rifle,68.159
+27.68,slide/bolt-0074_49s.wav,slide,Bolt Action Rifle,74.489
+29.17,slide/bolt-0025_12s.wav,slide,Bolt Action Rifle,25.124
+30.65,slide/pump-0167_72s.wav,slide,Pump Shotgun,167.717
+32.38,slide/sar-0494_73s.wav,slide,Semi Auto Rifle,494.727
+34.02,hit/bolt-0075_79s.wav,hit,Bolt Action Rifle,75.789
+35.41,hit/bolt-0039_37s.wav,hit,Bolt Action Rifle,39.369
+36.6,hit/bolt-0043_31s.wav,hit,Bolt Action Rifle,43.311
+37.87,hit/bolt-0029_02s.wav,hit,Bolt Action Rifle,29.024
+39.14,hit/sapistol-0280_34s.wav,hit,Semi Auto Pistol,280.337
+40.4,hit/pump-0142_41s.wav,hit,Pump Shotgun,142.413
+41.64,handle/sar-0494_00s.wav,handle,Semi Auto Rifle,494.001
+42.8,handle/sar-0505_05s.wav,handle,Semi Auto Rifle,505.048
+44.04,handle/sar-0504_10s.wav,handle,Semi Auto Rifle,504.096
+45.4,handle/sar-0499_49s.wav,handle,Semi Auto Rifle,499.493
+46.53,handle/sar-0527_74s.wav,handle,Semi Auto Rifle,527.737
+47.81,handle/sar-0554_24s.wav,handle,Semi Auto Rifle,554.242
+48.99,long/bolt-0034_58s.wav,long,Bolt Action Rifle,34.58
+50.51,long/bolt-0069_49s.wav,long,Bolt Action Rifle,69.494
+52.09,long/bolt-0019_58s.wav,long,Bolt Action Rifle,19.58
+53.77,long/bolt-0052_26s.wav,long,Bolt Action Rifle,52.262
+55.2,long/sar-0495_80s.wav,long,Semi Auto Rifle,495.795
+56.85,long/sar-0552_84s.wav,long,Semi Auto Rifle,552.843
