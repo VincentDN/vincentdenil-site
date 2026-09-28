@@ -1,19 +1,19 @@
 // Workbench intro: an over-the-shoulder opening shot in the style of The Last of Us Part II's
 // workbench. The operator from the AK customiser leans over a table with the rifle lying flat,
 // hands on it. "Start customising" pushes the camera in on the rifle, fades to black and hands
-// over to the normal 3D viewer at /3d/partisan-project/ak15-weapon-customiser/.
+// over to the normal 3D viewer at /3d/partisan-project/ak15-workbench-intro/ak15-weapon-customiser/.
 // Scene space: operator's feet on y=0 facing +z, right side -x (see operator.js); meters.
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
-import {MODELS,DEFAULT_MODEL} from '../ak15-weapon-customiser/models.js';
-import {DEFAULT_OPERATOR,buildOperator} from '../ak15-weapon-customiser/operator.js';
-import {solveArm} from '../ak15-weapon-customiser/field.js';
+import {MODELS,DEFAULT_MODEL} from './ak15-weapon-customiser/models.js';
+import {DEFAULT_OPERATOR,buildOperator} from './ak15-weapon-customiser/operator.js';
+import {solveArm} from './ak15-weapon-customiser/field.js';
 import {soundLayer} from '../sound-layer.js';
-import * as mech from '../ak15-weapon-customiser/mech.js';
+import * as mech from './ak15-weapon-customiser/mech.js';
 
-const CUSTOMISER='../ak15-weapon-customiser/';
+const CUSTOMISER='./ak15-weapon-customiser/';
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
 const RIFLE_AT=new T.Vector3(.04,0,.47);// x/z on the table; y comes from the rifle's own thickness
 // Camera behind and above the right shoulder, looking down at the rifle.
@@ -51,7 +51,7 @@ scene.add(new T.HemisphereLight(0x4a5a66,0x120d08,.35));
 const lamp=new T.SpotLight(0xffc98a,26,4,.62,.55,2);lamp.position.set(.42,1.62,.78);lamp.target.position.set(.02,TABLE.top,.6);
 lamp.castShadow=true;lamp.shadow.mapSize.set(2048,2048);lamp.shadow.bias=-.0004;lamp.shadow.normalBias=.01;scene.add(lamp,lamp.target);
 const fill=new T.DirectionalLight(0x6f8fb0,.35);fill.position.set(-1.5,2,-1);scene.add(fill);
-new RGBELoader().load('../ak15-weapon-customiser/lighting/studio.hdr',hdr=>{hdr.mapping=T.EquirectangularReflectionMapping;scene.environment=hdr;scene.environmentIntensity=.28;});
+new RGBELoader().load('./ak15-weapon-customiser/lighting/studio.hdr',hdr=>{hdr.mapping=T.EquirectangularReflectionMapping;scene.environment=hdr;scene.environmentIntensity=.28;});
 
 // ---------- Room and bench (original low-poly geometry) ----------
 const std=(color,roughness=.85,extra={})=>new T.MeshStandardMaterial({color,roughness,...extra});
