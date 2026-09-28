@@ -11,6 +11,11 @@
 // Heavier parts (by grams) seat lower and louder.
 import {audio} from './sfx.js';
 
+// Muted pending human review (2026-09-28): the principle stands, the sounds themselves need work.
+// Every call site in viewer.js and the workbench stays wired up; set this to true to hear them
+// again. Tracked in the TLOU II-style modding roadmap (vdn-roadmap).
+export const ENABLED=false;
+
 const rand=(a,b)=>a+Math.random()*(b-a),jit=(v,amount=.04)=>v*(1+rand(-amount,amount));
 let room=null;
 function bus(){
@@ -68,25 +73,25 @@ const now=()=>audio().ctx.currentTime+.01;
 const heft=grams=>Math.min(1,Math.max(0,(grams||150)/900));
 
 // A part seating home: transient, low body thump and the steel ringing briefly.
-export function clunk(weight=.5,t=now(),pan=0){
+export function clunk(weight=.5,t=now(),pan=0){if(!ENABLED)return;
  transient(t,{freq:1500,type:'lowpass',gain:.35+.25*weight,decay:.02,pan});
  thump(t,{from:150-50*weight,to:48,gain:.36+.32*weight,decay:.14+.1*weight,pan});
  ring(t,{modes:[[jit(230-60*weight),.22],[jit(540-90*weight),.16,.7],[jit(960),.1,.6],[jit(1720),.07,.5],[jit(2890),.045,.35]],gain:.15+.08*weight,pan});
 }
 // A spring latch snapping shut: sharp, bright and short.
-export function latch(t=now(),pan=0){
+export function latch(t=now(),pan=0){if(!ENABLED)return;
  tick(t,{pitch:jit(1),gain:.3,pan});
  ring(t+.004,{modes:[[1150,.08],[2630,.06,.7],[4100,.035,.5]],gain:.13,pan});
  thump(t,{from:220,to:120,gain:.15,decay:.05,pan});
 }
 // Sliding along a rail, clicking over the rail slots, then clamping.
-export function railSlide(t=now(),{slots=3,dur=.22,pan=0}={}){
+export function railSlide(t=now(),{slots=3,dur=.22,pan=0}={}){if(!ENABLED)return;
  scrape(t,{dur,from:1400,to:2400,gain:.1,pan});
  for(let i=1;i<=slots;i++)tick(t+dur*i/(slots+1),{pitch:jit(.9,.06),gain:.13,pan});
  return t+dur;
 }
 // One rail slot: a firm detent, slightly different each time.
-export function railStep(dir=1){const t=now();scrape(t,{dur:.07,from:dir>0?1800:2400,to:dir>0?2400:1800,gain:.06});tick(t+.06,{pitch:jit(1.05,.05),gain:.28});thump(t+.06,{from:180,to:110,gain:.12,decay:.05});}
+export function railStep(dir=1){if(!ENABLED)return;const t=now();scrape(t,{dur:.07,from:dir>0?1800:2400,to:dir>0?2400:1800,gain:.06});tick(t+.06,{pitch:jit(1.05,.05),gain:.28});thump(t+.06,{from:180,to:110,gain:.12,decay:.05});}
 // Threading on (or off): a run of ratchet ticks that speed up, over a thin scrape.
 function thread(t,{turns=7,dur=.5,on=true,pan=0}={}){
  scrape(t,{dur,from:on?2200:2800,to:on?2800:2200,gain:.05,q:5,pan});
@@ -96,13 +101,13 @@ function thread(t,{turns=7,dur=.5,on=true,pan=0}={}){
 // Screws being run down: a few tight clicks.
 function screw(t,{n=4,pan=0}={}){for(let i=0;i<n;i++)tick(t+i*.055,{pitch:jit(1.3,.04),gain:.12,pan});return t+n*.055;}
 // Magazine: release paddle, the old mag coming out, the new one rocked in and latched.
-export function magazine(weight=.4,{out=true,in:seat=true}={}){
+export function magazine(weight=.4,{out=true,in:seat=true}={}){if(!ENABLED)return;
  let t=now();
  if(out){latch(t);scrape(t+.02,{dur:.12,from:900,to:600,gain:.07});t+=.28;}
  if(seat){scrape(t,{dur:.14,from:700,to:1000,gain:.07,q:2});clunk(.3+.5*weight,t+.13);latch(t+.16);}
 }
 // Charging handle: pulled to the rear against the spring, released, the bolt slamming home.
-export function charge(){
+export function charge(){if(!ENABLED)return;
  const t=now();
  tick(t,{pitch:.8,gain:.2});scrape(t,{dur:.13,from:1100,to:2100,gain:.13,q:2.5});
  ring(t+.13,{modes:[[1800,.05],[3400,.03,.6]],gain:.06});thump(t+.13,{from:260,to:140,gain:.18,decay:.05});// hits the rear
@@ -111,14 +116,14 @@ export function charge(){
  ring(home,{modes:[[410,.35],[1230,.25,.6],[2470,.18,.4]],gain:.05});// the receiver rings on
 }
 // Picking the rifle up or turning it in the hands: sling swivel and parts settling. Quiet.
-export function handle(intensity=.5){
+export function handle(intensity=.5){if(!ENABLED)return;
  const t=now(),n=1+Math.round(rand(0,2)*intensity);
  for(let i=0;i<n;i++)tick(t+rand(0,.08),{pitch:rand(.55,.8),gain:.1+.12*intensity,pan:rand(-.4,.4)});
  transient(t,{freq:700,type:'lowpass',gain:.12*intensity,decay:.05});
  thump(t,{from:170,to:110,gain:.08*intensity,decay:.06});
 }
 // The rifle set down on the bench: wood knock, body thump, a small rattle.
-export function setDown(){
+export function setDown(){if(!ENABLED)return;
  const t=now();
  thump(t,{from:110,to:45,gain:.7,decay:.22});
  ring(t,{modes:[[175,.12],[395,.09,.7],[690,.06,.5]],gain:.12});// the table
@@ -126,12 +131,12 @@ export function setDown(){
  for(let i=0;i<3;i++)tick(t+.03+i*rand(.03,.06),{pitch:rand(.6,.9),gain:.08});
 }
 // A file drawn across the steel (wear): gritty scrape.
-export function file(){scrape(now(),{dur:rand(.08,.13),from:3500,to:2600,gain:.16,q:1.2});}
+export function file(){if(!ENABLED)return;scrape(now(),{dur:rand(.08,.13),from:3500,to:2600,gain:.16,q:1.2});}
 // Finish: a light tap as the part is turned under the brush.
-export function tap(){const t=now();tick(t,{pitch:.7,gain:.12});thump(t,{from:200,to:130,gain:.1,decay:.05});}
+export function tap(){if(!ENABLED)return;const t=now();tick(t,{pitch:.7,gain:.12});thump(t,{from:200,to:130,gain:.1,decay:.05});}
 
 // Fitting a part to a slot (or taking it off). Each slot has its own mechanism.
-export function fit(slot,option,previous){
+export function fit(slot,option,previous){if(!ENABLED)return;
  const off=!option.grams&&/^(none|bare)$/.test(option.id),w=heft(option.grams||previous?.grams);
  let t=now();
  switch(slot){

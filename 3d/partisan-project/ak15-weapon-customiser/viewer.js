@@ -8,7 +8,7 @@ import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
 import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator,camoFor} from './operator.js';
-import {shot} from './sfx.js';
+import {shot,magOut,magIn} from './sfx.js';
 import * as mech from './mech.js';
 import {DRILL,drillPlan,fireString,score,drawTarget} from './range.js';
 import {POSES,applyPose,rifleFrame} from './field.js';
@@ -25,7 +25,10 @@ const HERO={azimuth:-.2,elevation:.1};
 // Hero angles per mode (radians): the rifle from just behind its right side; the operator from
 // front-right; the field shot from the operator's right, where the rifle's right side faces.
 const MODE_HERO={armoury:HERO,operator:{azimuth:-.45,elevation:.08},field:{azimuth:-1.05,elevation:.1}};
-const MODES=['armoury','operator','field'];
+// Operator and Field are parked for now (2026-09-28): their tabs are hidden and links to them open
+// Armoury. The code stays; add ?screens=all to the URL to bring them back (the smoke test does).
+const ALL_MODES=['armoury','operator','field'];
+const MODES=new URLSearchParams(location.search).get('screens')==='all'?ALL_MODES:['armoury'];
 // Reduced motion: camera moves and part swaps jump straight to their end state.
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Camera presets are sized for a rifle this long (m); longer or shorter builds scale them.
@@ -614,8 +617,8 @@ function stepReload(dt){
  if(!reload)return;
  // body[data-reload] exposes progress (0–1) for tests.
  reload.t+=dt;document.body.dataset.reload=(reload.t/reload.duration).toFixed(2);const r=reload.t/reload.duration;
- if(r>.18&&!reload.cues.has('out')){reload.cues.add('out');mech.magazine(.4,{out:true,in:false});}
- if(r>.66&&!reload.cues.has('in')){reload.cues.add('in');mech.magazine(.4,{out:false,in:true});}
+ if(r>.18&&!reload.cues.has('out')){reload.cues.add('out');magOut();}
+ if(r>.66&&!reload.cues.has('in')){reload.cues.add('in');magIn();}
  if(r>=1){reload=null;delete document.body.dataset.reload;document.querySelector('#pose-detail').textContent=POSES.find(p=>p.id===pose).detail;}
 }
 
@@ -750,6 +753,10 @@ try{
  // Warm the HTTP cache with the other rifles once the page is idle, so switching is instant.
  (window.requestIdleCallback||setTimeout)(()=>{for(const [id,m] of Object.entries(MODELS))if(id!==rifle.id)fetch(m.url).catch(()=>{});},{timeout:4000});
  for(const b of document.querySelectorAll('[data-mode]'))b.onclick=()=>setMode(b.dataset.mode);
+ // Parked screens: hide their tabs, and the whole tab bar when only Armoury is left.
+ for(const b of document.querySelectorAll('[data-mode]'))b.hidden=!MODES.includes(b.dataset.mode);
+ document.querySelector('.modes').hidden=MODES.length<2;
+ if(MODES.length<2){const hint=document.querySelector('#first-run'),dismiss=hint.querySelector('button');while(hint.firstChild.nextSibling!==dismiss)hint.firstChild.nextSibling.remove();dismiss.before(' Try a preset, then swap a part and hover options to see the handling change.');}
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#photo').onclick=savePhoto;
