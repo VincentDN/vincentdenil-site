@@ -3,7 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
-import {Music,TRACKS} from './music.js';
+import {soundLayer} from '../sound-layer.js';
 import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
@@ -30,32 +30,36 @@ const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Camera presets are sized for a rifle this long (m); longer or shorter builds scale them.
 const FRAME_LENGTH=.943;
 
-// Background music: on by default at 40% volume. It tries to start as the page opens, fading in
-// slowly; where the browser blocks autoplay it starts on the first click or key press instead.
-// The choice, track and volume persist per browser.
-const music=new Music(),musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
-// v2: the default volume went up to 40%, so older saved settings are left behind.
-const MUSIC_KEY='ak-customiser-music-v2';
-const musicPrefs=(()=>{const base={on:true,volume:.4,track:TRACKS[0].id};try{return {...base,...JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}')};}catch{return base;}})();
-function saveMusic(){try{localStorage.setItem(MUSIC_KEY,JSON.stringify(musicPrefs));}catch{}}
+// Background music: on by default at 40% volume, starting on "The Duce Puts On His Uniform". It
+// tries to start as the page opens, fading in slowly; where the browser blocks autoplay it starts
+// on the first click or key press instead. The choice, track and volume persist per browser.
+// The player is the Partisan sound layer (../sound-layer.js): opened from the workbench it's the
+// workbench shell's, so the music carries on from the bench without stopping or restarting.
+const sound=soundLayer(),musicPrefs=sound.prefs,musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
+sound.scene('viewer');
+function saveMusic(){sound.save();sound.changed();}
 function showMusic(){musicButton.setAttribute('aria-pressed',String(musicPrefs.on));for(const b of document.querySelectorAll('[data-track]'))b.setAttribute('aria-pressed',String(b.dataset.track===musicPrefs.track));musicVolume.value=String(Math.round(musicPrefs.volume*100));document.querySelector('#music-level').textContent=Math.round(musicPrefs.volume*100)+'%';}
-if(!TRACKS.some(t=>t.id===musicPrefs.track))musicPrefs.track=TRACKS[0].id;
-music.setVolume(musicPrefs.volume);music.setTrack(musicPrefs.track);showMusic();
+showMusic();
+// Stay in sync when the other page changes the setting; re-attach after a back/forward restore.
+let unsubscribe=sound.subscribe(showMusic);
+addEventListener('pagehide',()=>unsubscribe());
+addEventListener('pageshow',e=>{if(e.persisted){unsubscribe=sound.subscribe(showMusic);sound.scene('viewer');showMusic();}});
 const AUTOPLAY_FADE=1.5;
 function stopWaiting(){removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);}
 function firstGesture(e){
  if(e.target===musicButton||e.target.closest?.('[data-track]'))return;
  stopWaiting();
- if(musicPrefs.on)music.start(AUTOPLAY_FADE);
+ if(musicPrefs.on)sound.start(AUTOPLAY_FADE);
 }
 addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
 // Where autoplay is blocked, resume() stays pending until a gesture, so the listeners stay armed.
-if(musicPrefs.on)music.start(AUTOPLAY_FADE).then(playing=>{if(playing)stopWaiting();});
+// Already playing (carried over from the bench): start() only re-affirms the level.
+if(musicPrefs.on)sound.start(AUTOPLAY_FADE).then(playing=>{if(playing)stopWaiting();});
 // If music is on but the browser has not let it sound yet, ♪ starts it rather than switching it off.
-musicButton.onclick=()=>{if(musicPrefs.on&&!music.audible()){stopWaiting();music.start(AUTOPLAY_FADE);return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?music.start():music.stop();stopWaiting();saveMusic();showMusic();};
+musicButton.onclick=()=>{if(musicPrefs.on&&!sound.music.audible()){stopWaiting();sound.start(AUTOPLAY_FADE);return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?sound.start(.4):sound.stop();stopWaiting();saveMusic();showMusic();};
 // Picking a track also turns music on.
-for(const b of document.querySelectorAll('[data-track]'))b.onclick=()=>{musicPrefs.track=b.dataset.track;music.setTrack(musicPrefs.track);if(!musicPrefs.on){musicPrefs.on=true;music.start();}saveMusic();showMusic();};
-musicVolume.oninput=()=>{musicPrefs.volume=Number(musicVolume.value)/100;music.setVolume(musicPrefs.volume);saveMusic();showMusic();};
+for(const b of document.querySelectorAll('[data-track]'))b.onclick=()=>{sound.setTrack(b.dataset.track);if(!musicPrefs.on){musicPrefs.on=true;sound.start(.4);}saveMusic();showMusic();};
+musicVolume.oninput=()=>{sound.setVolume(Number(musicVolume.value)/100);saveMusic();showMusic();};
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),detail=document.querySelector('#detail');
 const buildPanel=document.querySelector('#build'),finishPanel=document.querySelector('#finish'),statsPanel=document.querySelector('#stats');

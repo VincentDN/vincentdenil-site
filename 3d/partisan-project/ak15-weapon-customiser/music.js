@@ -75,6 +75,7 @@ const LOOKAHEAD=3;
 // gain, so volume and fades are shared. The file only downloads once music starts. File paths
 // resolve from this module, so other pages (the workbench intro) can play them too.
 export const TRACKS=[
+ {id:'duce',label:'The Duce Puts On His Uniform',src:new URL('./audio/duce-uniform.mp3',import.meta.url).href},
  {id:'abdulena',label:'Abdulena',src:new URL('./audio/abdulena.mp3',import.meta.url).href},
  {id:'ambient',label:'Ambient loop'}
 ];

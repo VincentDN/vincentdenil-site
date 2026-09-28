@@ -6,8 +6,10 @@
 // createBench(ctx) builds the graph on the music player's AudioContext and returns:
 //   radioIn  where music.js's master gain connects (see Music's `route` option)
 //   tune()   the tuning sweep: static and a whistle, then the station locks in
-//   fade(on,volume,seconds)  the camp and crackle level (the music level is music.js's own)
+//   mix(scene,level,seconds)  'bench': music through the radio, with crackle and camp at `level`;
+//            'viewer': music clean and full-range, radio noise and camp silent. Crossfades.
 //   setPan(x)  -1…1, the radio's horizontal position on screen
+// The music level itself is music.js's own master gain.
 
 // ---------- Helpers ----------
 const rand=(a,b)=>a+Math.random()*(b-a);
@@ -77,7 +79,9 @@ function clank(ctx,out,t){
 export function createBench(ctx){
  const out=ctx.destination;
  // Radio: music in, band-limited to a small speaker, lightly driven, panned to the radio.
- const radioIn=gain(ctx,1),station=gain(ctx,1),drive=ctx.createWaveShaper(),radioPan=ctx.createStereoPanner(),radioOut=gain(ctx,.9);
+ const radioIn=gain(ctx,1),station=gain(ctx,1),drive=ctx.createWaveShaper(),radioPan=ctx.createStereoPanner(),radioOut=gain(ctx,0);
+ // Clean path for the customiser: the same music, full-range, crossfaded against the radio.
+ const clean=gain(ctx,1);radioIn.connect(clean).connect(out);
  const curve=new Float32Array(1024);for(let i=0;i<curve.length;i++){const x=i/511.5-1;curve[i]=Math.tanh(2.2*x)/Math.tanh(2.2);}drive.curve=curve;
  radioIn.connect(station).connect(filter(ctx,'highpass',320)).connect(filter(ctx,'lowpass',3400)).connect(filter(ctx,'peaking',1400,1.2)).connect(drive).connect(radioPan).connect(radioOut).connect(out);
  // The radio's own noise: crackle bed and the tuning sweep, band-limited like the music.
@@ -92,8 +96,9 @@ export function createBench(ctx){
  const wind=gain(ctx,.35);loop(ctx,noise(ctx,6,{brown:true}),wind);const windTone=filter(ctx,'lowpass',420);wind.connect(windTone).connect(camp);
  // Scheduler, like music.js: runs 1.5 s ahead so background-tab timer throttling doesn't gap it.
  let nextClank=ctx.currentTime+rand(4,10);
+ let campOn=false;
  setInterval(()=>{
-  const until=ctx.currentTime+1.5;for(const v of voices)v(until);
+  const until=ctx.currentTime+1.5;if(campOn)for(const v of voices)v(until);
   while(nextClank<until){clank(ctx,camp,nextClank);nextClank+=rand(7,22);}
   windTone.frequency.setTargetAtTime(rand(250,650),ctx.currentTime,1.5);// gusts
  },250);
@@ -112,9 +117,10 @@ export function createBench(ctx){
    // A snatch of another station's voice passing by mid-sweep.
    voice(ctx,noiseBus,{pitch:140,pan:0,level:.25,start:t+.55,stop:t+1.6})(t+.56);
   },
-  fade(on,volume,seconds=1){
-   const t=ctx.currentTime,k=seconds/3;
-   camp.gain.setTargetAtTime(on?volume*.9:0,t,k);noiseBus.gain.setTargetAtTime(on?volume*.5:0,t,k);
+  mix(scene,level,seconds=1){
+   const t=ctx.currentTime,k=seconds/3,bench=scene==='bench';campOn=bench&&level>0;
+   radioOut.gain.setTargetAtTime(bench?.9:0,t,k);clean.gain.setTargetAtTime(bench?0:1,t,k);
+   camp.gain.setTargetAtTime(bench?level*.9:0,t,k);noiseBus.gain.setTargetAtTime(bench?level*.5:0,t,k);
   },
   setPan(x){radioPan.pan.setTargetAtTime(Math.max(-1,Math.min(1,x)),ctx.currentTime,.1);}
  };

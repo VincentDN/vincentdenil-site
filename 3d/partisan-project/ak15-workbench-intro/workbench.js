@@ -10,8 +10,7 @@ import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {MODELS,DEFAULT_MODEL} from '../ak15-weapon-customiser/models.js';
 import {DEFAULT_OPERATOR,buildOperator} from '../ak15-weapon-customiser/operator.js';
 import {solveArm} from '../ak15-weapon-customiser/field.js';
-import {Music,TRACKS} from '../ak15-weapon-customiser/music.js';
-import {createBench} from './bench-audio.js';
+import {soundLayer} from '../sound-layer.js';
 
 const CUSTOMISER='../ak15-weapon-customiser/';
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
@@ -22,33 +21,22 @@ const PUSH_IN={duration:1.9,fadeAt:.75};// seconds; the fade starts at this frac
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ---------- Sound: the radio, its crackle and the camp outside (bench-audio.js) ----------
-// Shares the customiser's on/off and volume setting. The radio plays audio/radio-song.mp3 when
-// that file is present (the song meant for this bench) and Abdulena until then. Abdulena
-// carries on into the customiser (music.js hands the position over) when it is selected there.
-const MUSIC_KEY='ak-customiser-music-v2',RADIO_SONG=new URL('./audio/radio-song.mp3',import.meta.url).href;
-const musicPrefs=(()=>{const base={on:true,volume:.4};try{return {...base,...JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}')};}catch{return base;}})();
-let bench=null,tuned=false;
-const music=new Music({route:ctx=>(bench=createBench(ctx)).radioIn}),musicButton=document.querySelector('#music-toggle');
-music.setVolume(musicPrefs.volume);music.setTrack('abdulena');
-function saveMusic(){try{const saved=JSON.parse(localStorage.getItem(MUSIC_KEY)||'{}');localStorage.setItem(MUSIC_KEY,JSON.stringify({...saved,on:musicPrefs.on}));}catch{}}
+// The Partisan sound layer (../sound-layer.js), in its bench mix: the music ("The Duce Puts On His
+// Uniform" by default) comes out of the radio, with the camp around it. Inside the workbench shell
+// the layer belongs to the shell, so the music carries on into the customiser; the ♪ button, on/off
+// and volume are shared with the customiser.
+const sound=soundLayer(),musicPrefs=sound.prefs,musicButton=document.querySelector('#music-toggle');
+sound.scene('bench');
 const showMusic=()=>musicButton.setAttribute('aria-pressed',String(musicPrefs.on));showMusic();
-// Sound on: the music player creates the AudioContext (and with it the bench graph); the first
-// time, the radio is tuned in, and the camp fades up with it.
-function soundOn(fade=1.5){
- const started=music.start(fade);
- if(!tuned){tuned=true;bench.tune();}
- bench.fade(true,musicPrefs.volume,3);
- return started;
-}
-function soundOff(){music.stop();bench?.fade(false,0,.6);}
+let unsubscribe=sound.subscribe(showMusic);
+addEventListener('pagehide',()=>unsubscribe());
 // Browsers block sound until a gesture, so the first click or key press starts it.
-function firstGesture(e){if(e.target===musicButton)return;stopWaiting();if(musicPrefs.on)soundOn();}
+function firstGesture(e){if(e.target===musicButton)return;stopWaiting();if(musicPrefs.on)sound.start();}
 function stopWaiting(){removeEventListener('pointerdown',firstGesture,true);removeEventListener('keydown',firstGesture,true);}
 addEventListener('pointerdown',firstGesture,true);addEventListener('keydown',firstGesture,true);
-// Use the bench song if it's there, then try to autoplay (works where the visitor has engaged before).
-const songCheck=fetch(RADIO_SONG,{method:'HEAD'}).then(r=>r.ok,()=>false).then(ok=>{if(ok){TRACKS.push({id:'radio',label:'Radio',src:RADIO_SONG});music.setTrack('radio');}});
-songCheck.then(()=>{if(musicPrefs.on&&!music.playing)soundOn().then(playing=>{if(playing)stopWaiting();});});
-musicButton.onclick=()=>{stopWaiting();if(musicPrefs.on&&!music.audible()){soundOn();return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?soundOn(.4):soundOff();saveMusic();showMusic();};
+// Try to autoplay (works where the visitor has engaged before); already playing, it only re-affirms.
+if(musicPrefs.on)sound.start().then(playing=>{if(playing)stopWaiting();});
+musicButton.onclick=()=>{stopWaiting();if(musicPrefs.on&&!sound.music.audible()){sound.start();return;}musicPrefs.on=!musicPrefs.on;musicPrefs.on?sound.start(.4):sound.stop();sound.save();sound.changed();showMusic();};
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),start=document.querySelector('#start'),fade=document.querySelector('#fade');
 const renderer=new T.WebGLRenderer({antialias:true});
@@ -215,7 +203,7 @@ function begin(){
 start.addEventListener('click',begin);
 addEventListener('keydown',e=>{if(e.key==='e'||e.key==='E'||(e.key==='Enter'&&document.activeElement!==start))begin();});
 // Coming back with the browser's back button restores this page from cache: reset the shot.
-addEventListener('pageshow',e=>{if(e.persisted){push=null;start.disabled=false;document.body.classList.remove('leaving');fade.classList.add('clear');clock.getDelta();requestAnimationFrame(frame);}});
+addEventListener('pageshow',e=>{if(e.persisted){unsubscribe=sound.subscribe(showMusic);sound.scene('bench');showMusic();push=null;start.disabled=false;document.body.classList.remove('leaving');fade.classList.add('clear');clock.getDelta();requestAnimationFrame(frame);}});
 
 const currentTarget=SHOT.target.clone();
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -231,14 +219,14 @@ function frame(){
  pose(time);placeRifle();
  drapeFlag(time);
  radio.userData.dial.material.emissiveIntensity=1.3+Math.random()*.15;// valve glow flicker
- if(bench){const at=radio.getWorldPosition(new T.Vector3()).project(camera);bench.setPan(at.x*.8);}
+ if(sound.bench){const at=radio.getWorldPosition(new T.Vector3()).project(camera);sound.bench.setPan(at.x*.8);}
  if(push){
   // Wall-clock time, so a slow device still hands over on schedule.
   const t=performance.now()/1000-push.start,u=Math.min(t/PUSH_IN.duration,1),e=ease(u);
   camera.position.lerpVectors(push.from,push.to,e);currentTarget.lerpVectors(push.fromTarget,push.toTarget,e);
   if(u>=PUSH_IN.fadeAt&&!push.faded){push.faded=true;fade.classList.remove('clear');}
   // Fully black: stop rendering so the main thread is free for the navigation.
-  if(t>=PUSH_IN.duration+.5){music.handoff();location.href=CUSTOMISER;return;}
+  if(t>=PUSH_IN.duration+.5){if(!sound.shared)sound.music.handoff();location.href=CUSTOMISER;return;}
  }else{
   const sway=reduceMotion?0:Math.sin(time*.6)*.006;
   camera.position.set(SHOT.position.x+look.x*.05,SHOT.position.y-look.y*.03+sway,SHOT.position.z);
