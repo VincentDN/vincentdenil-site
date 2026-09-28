@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {InteractionRecorder,validateTimeline} from '../weaver-timeline.js';
+let time=1000;
+const initial={units:'metric',selected:null,view:'crane',showDimensions:true,human:true,motion:true,wind:.45,camera:{position:[50,50,80],target:[10,20,0],zoom:1}};
+const recorder=new InteractionRecorder(()=>time);
+recorder.start(initial);initial.units='imperial';
+assert.equal(recorder.data.initialState.units,'metric');
+time+=100;recorder.action({type:'selection',value:'width'});recorder.action({type:'execute',value:'bad'});
+time+=100;recorder.camera({...initial.camera,position:[10,30,50]});
+time+=10;recorder.camera({...initial.camera,position:[11,30,50]});
+time+=50;recorder.pointer({kind:'click',surface:'stage',target:'marker:width',x:.2,y:.4});
+time+=100;const data=recorder.stop(initial.camera);
+assert.equal(data.duration,.36);assert.equal(data.actions.length,1);assert.equal(data.actions[0].time,.1);assert.equal(data.camera.length,3);
+assert.equal(validateTimeline(JSON.parse(JSON.stringify(data))).pointer[0].target,'marker:width');
+const bad=structuredClone(data);bad.actions[0].type='execute';assert.throws(()=>validateTimeline(bad));
+const badCamera=structuredClone(data);badCamera.initialState.camera.zoom=0;assert.throws(()=>validateTimeline(badCamera));
+const badTime=structuredClone(data);badTime.actions[0].time=50;assert.throws(()=>validateTimeline(badTime));
+console.log('PASS: initial-state isolation, semantic action allowlist, throttled camera capture, timestamps, JSON validation.');
