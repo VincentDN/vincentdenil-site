@@ -119,7 +119,9 @@ export function createBench(ctx){
   },
   mix(scene,level,seconds=1){
    const t=ctx.currentTime,k=seconds/3,bench=scene==='bench';campOn=bench&&level>0;
-   radioOut.gain.setTargetAtTime(bench?.9:0,t,k);clean.gain.setTargetAtTime(bench?0:1,t,k);
+   // The radio sits 10% under its old level on the bench (.81 vs .9); the clean track in the
+   // customiser plays at full level, so the music swells as you go in to modify.
+   radioOut.gain.setTargetAtTime(bench?.81:0,t,k);clean.gain.setTargetAtTime(bench?0:1,t,k);
    camp.gain.setTargetAtTime(bench?level*.9:0,t,k);noiseBus.gain.setTargetAtTime(bench?level*.5:0,t,k);
   },
   setPan(x){radioPan.pan.setTargetAtTime(Math.max(-1,Math.min(1,x)),ctx.currentTime,.1);}
