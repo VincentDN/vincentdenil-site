@@ -13,7 +13,7 @@ const BENCH=new URL('./bench.html',location.href),CUSTOMISER=new URL('../ak15-we
 // The address bar follows the frame: ?view=customiser plus the customiser's loadout hash, so a
 // reload (or a copied link) comes back to the same screen and build.
 const params=new URLSearchParams(location.search);
-// Local sound review: ?sfx=placeholder switches the frame's pages to the placeholder recordings (see mech.js).
+// ?sfx=placeholder switches the frame's pages to the placeholder recordings (see mech.js).
 if(params.get('sfx')==='placeholder')try{sessionStorage.setItem('ak-sfx','placeholder');}catch{}
 view.src=params.get('view')==='customiser'?CUSTOMISER.href+location.hash:BENCH.href;
 function sync(){

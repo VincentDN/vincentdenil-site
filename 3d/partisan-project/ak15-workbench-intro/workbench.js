@@ -214,15 +214,10 @@ function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSiz
 addEventListener('resize',resize);resize();
 
 const clock=new T.Clock();
-let handled=0;
 function frame(){
  const dt=Math.min(clock.getDelta(),.05),time=clock.elapsedTime;
  pollPad();
- const k=1-Math.exp(-dt*(push?1.5:4)),lx=look.x,ly=look.y;look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
- // The rifle shifting under the hands: a quiet rattle every so often as it moves. Only after the
- // first click or key press, since browsers keep audio off until then.
- handled+=Math.abs(look.x-lx)+Math.abs(look.y-ly);
- if(handled>.45&&!push&&navigator.userActivation?.hasBeenActive!==false){handled=0;mech.handle(.35);}
+ const k=1-Math.exp(-dt*(push?1.5:4));look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
  pose(time);placeRifle();
  drapeFlag(time);
  radio.userData.dial.material.emissiveIntensity=1.3+Math.random()*.15;// valve glow flicker

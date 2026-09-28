@@ -22,7 +22,7 @@ const at=()=>audio().ctx.currentTime+.01;
 function sample(lib,cls,t,gain=1){
  const list=lib?.[cls];if(!list?.length)return t;
  const {ctx,out}=audio(),buf=list[Math.floor(Math.random()*list.length)],src=ctx.createBufferSource(),g=ctx.createGain();
- src.buffer=buf;src.playbackRate.value=jit(1,.03);g.gain.value=gain*.8;src.connect(g).connect(out);src.start(t);
+ src.buffer=buf;src.playbackRate.value=jit(1,.03);g.gain.value=gain*.88;src.connect(g).connect(out);src.start(t);
  return t+buf.duration/src.playbackRate.value;
 }
 // A bank of the same actions, built from whatever `lib()` returns (a getter, since it loads async).
@@ -71,7 +71,7 @@ let foley=null,foleyLoad=null;
 function ensureFoley(){return foleyLoad??=loadBank(new URL('./sfx/cuts/',import.meta.url)).then(b=>foley=b).catch(()=>{});}
 const FOLEY=bank(()=>foley);
 
-// ---------- Placeholder recordings (local review only) ----------
+// ---------- Placeholder recordings ----------
 // ?sfx=placeholder (remembered for the tab, so it carries through the workbench shell) plays
 // recorded takes from ./placeholder-sfx/ instead of the shipped foley above. That folder holds
 // sounds cut from a TLOU II workbench recording: git-ignored, never deployed, so on the live site
@@ -99,9 +99,9 @@ function bus(){
   const n=Math.floor(ctx.sampleRate*.5),ir=ctx.createBuffer(2,n,ctx.sampleRate);
   for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n)**3*Math.exp(-i/n*3);}
   const verb=ctx.createConvolver();verb.buffer=ir;const damp=ctx.createBiquadFilter();damp.type='lowpass';damp.frequency.value=3200;
-  const wet=ctx.createGain();wet.gain.value=.22;
+  const wet=ctx.createGain();wet.gain.value=.242;
   const shelf=ctx.createBiquadFilter();shelf.type='lowshelf';shelf.frequency.value=180;shelf.gain.value=5;
-  const dry=ctx.createGain();dry.gain.value=.9;
+  const dry=ctx.createGain();dry.gain.value=.99;
   const input=ctx.createGain();input.connect(shelf).connect(dry).connect(out);shelf.connect(verb).connect(damp).connect(wet).connect(out);
   room={input};
  }

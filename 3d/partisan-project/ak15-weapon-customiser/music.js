@@ -92,7 +92,7 @@ function resumeFrom(audio,track){
 export class Music{
  // `route(ctx)` optionally returns the node the master gain feeds instead of the speakers
  // (the workbench plays the music through its radio chain).
- constructor({route}={}){this.volume=.4;this.playing=false;this.track=TRACKS[0].id;this.route=route;}
+ constructor({route}={}){this.volume=.36;this.playing=false;this.track=TRACKS[0].id;this.route=route;}
  setup(){
   if(this.ctx)return;
   this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=0;this.master.connect(this.route?.(this.ctx)||this.ctx.destination);

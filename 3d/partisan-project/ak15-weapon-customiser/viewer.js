@@ -693,16 +693,6 @@ try{
  const small=matchMedia('(max-width: 780px), (pointer: coarse)').matches;
  renderer=new T.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,small?1.5:2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;stage.prepend(renderer.domElement);
  camera=new T.PerspectiveCamera(35,1,.01,20);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=.15;controls.maxDistance=3.5;controls.enablePan=true;
- // Turning the rifle by hand: a soft rattle of the sling swivel and parts settling about every
- // 20° of drag, louder for a quicker turn. Only while the visitor drags, not during damping.
- let turn=null;
- const angles=()=>({az:controls.getAzimuthalAngle(),el:controls.getPolarAngle(),t:performance.now()});
- controls.addEventListener('start',()=>{turn=angles();});
- controls.addEventListener('end',()=>{turn=null;});
- controls.addEventListener('change',()=>{
-  if(!turn)return;const now=angles();let d=Math.abs(now.az-turn.az);if(d>Math.PI)d=2*Math.PI-d;d+=Math.abs(now.el-turn.el);
-  if(d>.35){mech.handle(Math.min(1,.3+.15*d/Math.max(.05,(now.t-turn.t)/1000)));turn=now;}
- });
 
  // Image-based lighting from an HDR environment. The directional key only casts the shadow;
  // it is aimed at the HDR's brightest texel and turns with the environment.

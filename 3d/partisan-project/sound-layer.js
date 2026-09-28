@@ -15,7 +15,7 @@ import {createBench} from './ak15-workbench-intro/bench-audio.js';
 // v2; the saved track doesn't, so everyone starts on the new default.
 const KEY='ak-customiser-music-v3',OLD_KEY='ak-customiser-music-v2';
 function loadPrefs(){
- const base={on:true,volume:.4,track:TRACKS[0].id};
+ const base={on:true,volume:.36,track:TRACKS[0].id};
  try{
   const saved=JSON.parse(localStorage.getItem(KEY)||'null');
   if(saved)return {...base,...saved};
