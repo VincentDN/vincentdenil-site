@@ -16,6 +16,8 @@ function setup(){
  const level=ctx.createGain();level.gain.value=.5;out.connect(level).connect(ctx.destination);
  noise=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const d=noise.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
 }
+// Shared with mech.js (handling and fitting sounds): one context, one compressor.
+export function audio(){setup();ctx.resume();return {ctx,out,noise};}
 function burst(t,{gain,type,freq,q=.7,attack=.001,decay}){
  const src=ctx.createBufferSource();src.buffer=noise;const f=ctx.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q;
  const g=ctx.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(gain,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+attack+decay);

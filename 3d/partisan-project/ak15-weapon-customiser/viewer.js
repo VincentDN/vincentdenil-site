@@ -8,7 +8,8 @@ import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
 import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator,camoFor} from './operator.js';
-import {shot,magOut,magIn} from './sfx.js';
+import {shot} from './sfx.js';
+import * as mech from './mech.js';
 import {DRILL,drillPlan,fireString,score,drawTarget} from './range.js';
 import {POSES,applyPose,rifleFrame} from './field.js';
 
@@ -209,7 +210,7 @@ function renderBuild(){
    for(const [text,delta,label] of [['−',-step,'rearward'],[`${mm>0?'+':''}${mm} mm`,0],['+',step,'forward']]){
     if(!delta){const out=document.createElement('output');out.textContent=text;stepper.append(out);continue;}
     const b=document.createElement('button');b.textContent=text;b.setAttribute('aria-label',`Move ${slot.spec.label.toLowerCase()} ${label} one rail slot`);
-    b.disabled=delta<0?slot.offset<=min+1e-6:slot.offset>=max-1e-6;b.onclick=()=>{applySlot(slot.spec.id,rifle.build[slot.spec.id],slot.offset+delta,true);frame(slot.spec.id);};stepper.append(b);
+    b.disabled=delta<0?slot.offset<=min+1e-6:slot.offset>=max-1e-6;b.onclick=()=>{mech.railStep(Math.sign(delta));applySlot(slot.spec.id,rifle.build[slot.spec.id],slot.offset+delta,true);frame(slot.spec.id);};stepper.append(b);
    }
    head.append(stepper);
   }
@@ -219,7 +220,7 @@ function renderBuild(){
    // Blocked options stay visible; clicking explains why instead of fitting them.
    const rule=blockedBy(rifle.build,slot.spec.id,o.id);
    if(rule){b.setAttribute('aria-disabled','true');b.classList.add('blocked');b.title=rule.reason;}
-   b.onclick=()=>{if(rule){detail.textContent=`${o.label} can't be fitted: ${rule.reason}`;detail.classList.remove('flash');void detail.offsetWidth;detail.classList.add('flash');return;}applySlot(slot.spec.id,o.id,undefined,true);frame(slot.spec.id);};
+   b.onclick=()=>{if(rule){detail.textContent=`${o.label} can't be fitted: ${rule.reason}`;detail.classList.remove('flash');void detail.offsetWidth;detail.classList.add('flash');return;}if(o.id!==current.id)mech.fit(slot.spec.id,o,current);applySlot(slot.spec.id,o.id,undefined,true);frame(slot.spec.id);};
    // Hover or focus previews the stat change this option would make.
    const preview=()=>renderStats({...rifle.build,[slot.spec.id]:o.id});
    b.onpointerenter=b.onfocus=preview;b.onpointerleave=b.onblur=()=>renderStats();
@@ -304,7 +305,7 @@ function renderFinish(){
   const label=target.label||target.part.label;
   const row=document.createElement('div');row.className='finish-row';row.textContent=label;
   const swatches=document.createElement('div');swatches.className='swatches';swatches.role='group';swatches.setAttribute('aria-label',label+' colour');
-  for(const f of target.finishes){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(rifle.finish[target.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';if(f.pattern)b.classList.add('pattern');b.onclick=()=>applyFinish(target.id,f.id);swatches.append(b);}
+  for(const f of target.finishes){const b=document.createElement('button');b.title=f.label;b.setAttribute('aria-label',f.label);b.setAttribute('aria-pressed',String(rifle.finish[target.id]===f.id));b.style.background=f.color||'linear-gradient(135deg,#1c1d1f 50%,#3a3c3f 50%)';if(f.pattern)b.classList.add('pattern');b.onclick=()=>{if(rifle.finish[target.id]!==f.id)mech.tap();applyFinish(target.id,f.id);};swatches.append(b);}
   row.append(swatches);return row;
  }));
 }
@@ -409,7 +410,7 @@ function switchRifle(id){
  if(rifle?.id===id)return;
  const params=location.hash.replace(/^#/,'').split('&').filter(p=>p&&!p.startsWith('rifle='));
  if(id!==DEFAULT_MODEL)params.unshift('rifle='+id);
- restore('#'+params.join('&'));
+ return restore('#'+params.join('&'));
 }
 
 function view(name){
@@ -613,8 +614,8 @@ function stepReload(dt){
  if(!reload)return;
  // body[data-reload] exposes progress (0–1) for tests.
  reload.t+=dt;document.body.dataset.reload=(reload.t/reload.duration).toFixed(2);const r=reload.t/reload.duration;
- if(r>.18&&!reload.cues.has('out')){reload.cues.add('out');magOut();}
- if(r>.66&&!reload.cues.has('in')){reload.cues.add('in');magIn();}
+ if(r>.18&&!reload.cues.has('out')){reload.cues.add('out');mech.magazine(.4,{out:true,in:false});}
+ if(r>.66&&!reload.cues.has('in')){reload.cues.add('in');mech.magazine(.4,{out:false,in:true});}
  if(r>=1){reload=null;delete document.body.dataset.reload;document.querySelector('#pose-detail').textContent=POSES.find(p=>p.id===pose).detail;}
 }
 
@@ -689,6 +690,16 @@ try{
  const small=matchMedia('(max-width: 780px), (pointer: coarse)').matches;
  renderer=new T.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,small?1.5:2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;stage.prepend(renderer.domElement);
  camera=new T.PerspectiveCamera(35,1,.01,20);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=.15;controls.maxDistance=3.5;controls.enablePan=true;
+ // Turning the rifle by hand: a soft rattle of the sling swivel and parts settling about every
+ // 20° of drag, louder for a quicker turn. Only while the visitor drags, not during damping.
+ let turn=null;
+ const angles=()=>({az:controls.getAzimuthalAngle(),el:controls.getPolarAngle(),t:performance.now()});
+ controls.addEventListener('start',()=>{turn=angles();});
+ controls.addEventListener('end',()=>{turn=null;});
+ controls.addEventListener('change',()=>{
+  if(!turn)return;const now=angles();let d=Math.abs(now.az-turn.az);if(d>Math.PI)d=2*Math.PI-d;d+=Math.abs(now.el-turn.el);
+  if(d>.35){mech.handle(Math.min(1,.3+.15*d/Math.max(.05,(now.t-turn.t)/1000)));turn=now;}
+ });
 
  // Image-based lighting from an HDR environment. The directional key only casts the shadow;
  // it is aimed at the HDR's brightest texel and turns with the environment.
@@ -735,14 +746,14 @@ try{
  await restore(location.hash);
  if(!rifle)throw new Error('No rifle loaded');
  view('hero');
- for(const b of document.querySelectorAll('[data-rifle]'))b.onclick=()=>switchRifle(b.dataset.rifle);
+ for(const b of document.querySelectorAll('[data-rifle]'))b.onclick=()=>{if(rifle?.id===b.dataset.rifle)return;mech.setDown();switchRifle(b.dataset.rifle)?.then(()=>mech.charge());};
  // Warm the HTTP cache with the other rifles once the page is idle, so switching is instant.
  (window.requestIdleCallback||setTimeout)(()=>{for(const [id,m] of Object.entries(MODELS))if(id!==rifle.id)fetch(m.url).catch(()=>{});},{timeout:4000});
  for(const b of document.querySelectorAll('[data-mode]'))b.onclick=()=>setMode(b.dataset.mode);
  document.querySelector('#randomise').onclick=()=>{opState=randomOperator();applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#operator-default').onclick=()=>{opState={...DEFAULT_OPERATOR};applyMode();renderOperatorPanel();writeHash();view('hero');};
  document.querySelector('#photo').onclick=savePhoto;
- document.querySelector('#wear').oninput=e=>setWear(Number(e.target.value)/100);
+ let lastFile=0;document.querySelector('#wear').oninput=e=>{setWear(Number(e.target.value)/100);if(performance.now()-lastFile>70){lastFile=performance.now();mech.file();}};
  document.querySelector('#wear').onchange=()=>writeHash();
  document.querySelector('#card').onclick=saveCard;
  document.querySelector('#reload').onclick=startReload;
@@ -752,9 +763,9 @@ try{
  {const hint=document.querySelector('#first-run');let seen=false;try{seen=!!localStorage.getItem('partisan-demo-seen');}catch{}
   if(!seen){hint.hidden=false;const close=()=>{hint.hidden=true;try{localStorage.setItem('partisan-demo-seen','1');}catch{}};hint.querySelector('button').onclick=close;setTimeout(close,14000);}}
  for(const b of document.querySelectorAll('.fire'))b.onclick=testFire;
- document.querySelector('#presets').replaceChildren(...PRESETS.map(p=>{const b=document.createElement('button');b.textContent=p.label;b.onclick=()=>applyPreset(p);return b;}));
+ document.querySelector('#presets').replaceChildren(...PRESETS.map(p=>{const b=document.createElement('button');b.textContent=p.label;b.onclick=()=>{mech.handle(1);mech.clunk(.6);setTimeout(()=>mech.charge(),250);applyPreset(p);};return b;}));
  // Reset returns the rifle build to its defaults; mode, pose and operator stay.
- document.querySelector('#reset').onclick=()=>{const keep=location.hash.replace(/^#/,'').split('&').filter(p=>/^(rifle|mode|pose|o\.)/.test(p));restore(keep.length?'#'+keep.join('&'):'').then(()=>view('hero'));};
+ document.querySelector('#reset').onclick=()=>{mech.handle(1);mech.clunk(.5);const keep=location.hash.replace(/^#/,'').split('&').filter(p=>/^(rifle|mode|pose|o\.)/.test(p));restore(keep.length?'#'+keep.join('&'):'').then(()=>view('hero'));};
  document.querySelector('#share').onclick=async e=>{const button=e.currentTarget;writeHash();try{await navigator.clipboard.writeText(location.href);button.textContent='Link copied';}catch{prompt('Copy this loadout link:',location.href);}setTimeout(()=>{button.textContent='Copy loadout link';},1600);};
  addEventListener('hashchange',()=>restore(location.hash));
 

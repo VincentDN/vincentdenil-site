@@ -11,6 +11,7 @@ import {MODELS,DEFAULT_MODEL} from '../ak15-weapon-customiser/models.js';
 import {DEFAULT_OPERATOR,buildOperator} from '../ak15-weapon-customiser/operator.js';
 import {solveArm} from '../ak15-weapon-customiser/field.js';
 import {soundLayer} from '../sound-layer.js';
+import * as mech from '../ak15-weapon-customiser/mech.js';
 
 const CUSTOMISER='../ak15-weapon-customiser/';
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
@@ -196,6 +197,7 @@ let push=null;
 function begin(){
  if(push||start.disabled)return;
  start.disabled=true;document.body.classList.add('leaving');
+ mech.charge();// picks it up and racks it before going in
  const focus=rifle.getWorldPosition(new T.Vector3());
  push={start:performance.now()/1000,from:camera.position.clone(),fromTarget:currentTarget.clone(),to:focus.clone().add(new T.Vector3(-.08,.3,-.16)),toTarget:focus,faded:false};
  if(reduceMotion)push.start-=PUSH_IN.duration*PUSH_IN.fadeAt;
@@ -212,10 +214,15 @@ function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSiz
 addEventListener('resize',resize);resize();
 
 const clock=new T.Clock();
+let handled=0;
 function frame(){
  const dt=Math.min(clock.getDelta(),.05),time=clock.elapsedTime;
  pollPad();
- const k=1-Math.exp(-dt*(push?1.5:4));look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
+ const k=1-Math.exp(-dt*(push?1.5:4)),lx=look.x,ly=look.y;look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
+ // The rifle shifting under the hands: a quiet rattle every so often as it moves. Only after the
+ // first click or key press, since browsers keep audio off until then.
+ handled+=Math.abs(look.x-lx)+Math.abs(look.y-ly);
+ if(handled>.45&&!push&&navigator.userActivation?.hasBeenActive!==false){handled=0;mech.handle(.35);}
  pose(time);placeRifle();
  drapeFlag(time);
  radio.userData.dial.material.emissiveIntensity=1.3+Math.random()*.15;// valve glow flicker

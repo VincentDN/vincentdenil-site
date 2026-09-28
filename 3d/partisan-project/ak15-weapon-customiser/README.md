@@ -58,6 +58,16 @@ Three tracks, picked under Music: **The Duce Puts On His Uniform** (default), **
 
 The player defaults to on at 40% volume and tries to autoplay as the page opens, fading in over about 4 s. Browsers only allow that where the visitor has engaged with the site before; otherwise `AudioContext.resume()` stays pending and music starts on the first click or key press anywhere on the page (the ♪ button starts it too, rather than switching it off, while it is still blocked). The ♪ button on the stage toggles it; the track buttons (which also switch music on) and the volume slider sit under Music. All three are saved in `localStorage` (`ak-customiser-music-v3`; v3 made the Duce song the default, so on/off and volume carry over from v2 but the saved track doesn't) and the page works without it. Music keeps playing while the tab is in the background; the synth schedules 3 s ahead to ride out background timer throttling. The player and its settings live in the Partisan sound layer (`../sound-layer.js`), shared with the workbench intro. Opened from the workbench, this page runs inside the workbench shell's frame and uses the shell's layer, so the music never stops or restarts between the two; it crossfades from the bench's radio sound to the clean track. Opened directly, the page makes its own layer. File paths in `TRACKS` resolve from `music.js` itself. When the intro's `bench.html` is opened on its own (no shell), it hands over by saving the playback position in `sessionStorage` (`ak-music-handoff`), and this page resumes from there if the same track is selected and music starts within 15 s.
 
+## Mechanical sounds
+Every hands-on change to the rifle makes a heavy, mechanical sound, synthesised live in `mech.js` (original, no samples), on the same audio context as Test fire (`sfx.js`), so they play whether or not music is on. Four ingredients make the steel: modal synthesis (a few inharmonic sine modes, each with its own decay, jittered so no two hits match) for the ringing metal, a falling low sine for the rifle's body, band-passed grainy noise for metal sliding on metal, and short detent clicks. Everything runs through a small damped room (0.5 s) with a low shelf for weight. Heavier parts (by grams) seat lower and louder.
+
+- **Swapping a part** plays that slot's mechanism: muzzle devices unthread and thread on (ratchet clicks speeding up, then the seat); optics, foregrips and side-rail devices slide along the rail over its slots, clamp and latch (optics also get their screws run down); magazines release, drop, rock in and latch; the pistol grip is screwed and seated; the stock latches off or slides on and locks. Blocked options stay silent.
+- **Rail steps** (± 10 mm): a short slide and a firm detent.
+- **Finishes**: a light tap. **Wear**: file strokes while the slider moves (at most every 70 ms).
+- **Turning the rifle** (orbit drag): a soft rattle of the sling swivel and parts settling about every 20°, louder for a quicker turn; not during damping.
+- **Switching rifles**: the old one is set down on the bench, and the new one's charging handle is racked once it's loaded. **Presets and Reset**: handling, a seat, then the rack.
+- **Workbench intro**: the rifle rattles quietly as it shifts under the hands (after the first click or key press), and *Start customising* racks the charging handle before the push-in.
+
 ## Handling stats and rules
 `stats.js` is pure data: five illustrative 0–100 stats (Ergonomics, Recoil, Handling, Loudness, Sighting range), per-option modifiers keyed by slot and option id, and compatibility rules. Each rifle in `models.js` sets its base `stats`, and options may override `rounds` (the AK-15K's 40-round RPK and 75-round drum). The Build panel shows capacity, weight and length tiles plus stat bars. Hovering or focusing an option previews its change: green is better, red worse (for Recoil and Loudness, lower is better).
 
@@ -89,7 +99,7 @@ The hash covers the whole loadout: `mode`, `pose`, rifle build and finishes (as 
 
 ## Field motion, reload and loadout card
 - The Field re-solves the pose every frame: the operator breathes, and the rifle sways in a slow figure of eight whose size grows with weight and poor Ergonomics. Test fire kicks the rifle inside the pose, so both hands ride the recoil.
-- **Reload** (Field) animates the support hand to the magazine, drops the old one, fetches a fresh one from the chest and seats it, with synthesised release and seating clicks (`sfx.js`). Its duration follows Handling (1.4–3.6 s), longer for the quad-stack and drum. `body[data-reload]` exposes progress for tests.
+- **Reload** (Field) animates the support hand to the magazine, drops the old one, fetches a fresh one from the chest and seats it, with the magazine sounds from `mech.js` (release, drop, rock in, latch). Its duration follows Handling (1.4–3.6 s), longer for the quad-stack and drum. `body[data-reload]` exposes progress for tests.
 - **Save loadout card** writes a 1600 × 900 PNG: the current view beside the rifle's stats, build, operator summary and the loadout link.
 
 ## Range drill
