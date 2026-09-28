@@ -3,7 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
-import {soundLayer} from '../sound-layer.js';
+import {soundLayer} from '../../sound-layer.js';
 import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
@@ -34,10 +34,10 @@ const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Camera presets are sized for a rifle this long (m); longer or shorter builds scale them.
 const FRAME_LENGTH=.943;
 
-// Background music: on by default at 40% volume, starting on "The Duce Puts On His Uniform". It
+// Background music: on by default at 36% volume, starting on "The Duce Puts On His Uniform". It
 // tries to start as the page opens, fading in slowly; where the browser blocks autoplay it starts
 // on the first click or key press instead. The choice, track and volume persist per browser.
-// The player is the Partisan sound layer (../sound-layer.js): opened from the workbench it's the
+// The player is the Partisan sound layer (../../sound-layer.js): opened from the workbench it's the
 // workbench shell's, so the music carries on from the bench without stopping or restarting.
 const sound=soundLayer(),musicPrefs=sound.prefs,musicButton=document.querySelector('#music-toggle'),musicVolume=document.querySelector('#music-volume');
 sound.scene('viewer');

@@ -8,7 +8,7 @@
 //
 // layer.scene('bench'|'viewer')  where the listener is: the radio with the camp around it, or the
 //                                clean track. The switch crossfades; the music never restarts.
-import {Music,TRACKS} from './ak15-weapon-customiser/music.js';
+import {Music,TRACKS} from './ak15-workbench-intro/ak15-weapon-customiser/music.js';
 import {createBench} from './ak15-workbench-intro/bench-audio.js';
 
 // v3: the default track became "The Duce Puts On His Uniform". On/off and volume carry over from
