@@ -6,380 +6,98 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="seo_hidden" content="true">
 <title>Flagmaker Subdomain Rollout</title>
-<style>
-/* layout: shared ground rules up top, two spec cards side by side on desktop / stacked on mobile, config snippets in mono blocks, checklist last */
-:root {
-  --bg: #f5f8fc;
-  --surface: #ffffff;
-  --border: #dbe4f0;
-  --fg: #131c2e;
-  --fg-muted: #5b6b85;
-  --accent: #1d5fd6;
-  --accent-fg: #ffffff;
-  --locked: #12805c;
-  --locked-bg: #e0f2ea;
-  --hidden: #a15c07;
-  --hidden-bg: #fbecd4;
-  --code-bg: #0d1b33;
-  --code-fg: #dbe6f7;
-  --code-accent: #6fa8f5;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b1524;
-    --surface: #101d31;
-    --border: #223255;
-    --fg: #e6ecf8;
-    --fg-muted: #8ea0c2;
-    --accent: #5b93f2;
-    --accent-fg: #071324;
-    --locked: #4fce9c;
-    --locked-bg: #12291f;
-    --hidden: #e5a742;
-    --hidden-bg: #2c2110;
-    --code-bg: #060d1c;
-    --code-fg: #dbe6f7;
-    --code-accent: #7bb4ff;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0b1524;
-  --surface: #101d31;
-  --border: #223255;
-  --fg: #e6ecf8;
-  --fg-muted: #8ea0c2;
-  --accent: #5b93f2;
-  --accent-fg: #071324;
-  --locked: #4fce9c;
-  --locked-bg: #12291f;
-  --hidden: #e5a742;
-  --hidden-bg: #2c2110;
-  --code-bg: #060d1c;
-  --code-fg: #dbe6f7;
-  --code-accent: #7bb4ff;
-  color-scheme: dark;
-}
-
-* { box-sizing: border-box; }
-html, body { margin: 0; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
-  padding-inline: 20px;
-  padding-block: 32px;
-  line-height: 1.5;
-}
-.mono {
-  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
-}
-img { max-width: 100%; }
-.wrap {
-  max-width: 880px;
-  margin-inline: auto;
-}
-header.page {
-  margin-bottom: 32px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--border);
-}
-.eyebrow {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 10px;
-}
-h1 {
-  font-size: clamp(1.6rem, 4vw, 2.15rem);
-  margin: 0 0 10px;
-  text-wrap: balance;
-  letter-spacing: -0.01em;
-}
-.dek {
-  color: var(--fg-muted);
-  font-size: 0.98rem;
-  max-width: 62ch;
-  margin: 0;
-}
-h2 {
-  font-size: 1.02rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  margin: 0 0 14px;
-  padding-left: 10px;
-  border-left: 3px solid var(--accent);
-  font-family: "IBM Plex Mono", monospace;
-  font-weight: 600;
-}
-section { margin-bottom: 36px; }
-.rules {
-  display: grid;
-  gap: 10px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.rules li {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 12px 14px;
-  font-size: 0.94rem;
-  display: flex;
-  gap: 10px;
-}
-.rules li::before {
-  content: "→";
-  color: var(--accent);
-  flex-shrink: 0;
-  font-weight: 600;
-}
-.split-note {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-.owner-tag {
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 5px 12px;
-  font-size: 0.78rem;
-  font-family: "IBM Plex Mono", monospace;
-  color: var(--fg-muted);
-  background: var(--surface);
-}
-.owner-tag b { color: var(--fg); }
-
-.cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-@media (max-width: 640px) {
-  .cards { grid-template-columns: 1fr; }
-}
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--accent);
-  border-radius: 10px;
-  padding: 20px;
-  min-width: 0;
-}
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 6px;
-  flex-wrap: wrap;
-}
-.domain {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--accent);
-  word-break: break-word;
-}
-.badge {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 4px 9px;
-  border-radius: 999px;
-  white-space: nowrap;
-  font-weight: 600;
-}
-.badge.locked { background: var(--locked-bg); color: var(--locked); }
-.badge.hidden { background: var(--hidden-bg); color: var(--hidden); }
-.repo {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.85rem;
-  color: var(--fg-muted);
-  margin-bottom: 16px;
-}
-.card ol {
-  margin: 0;
-  padding-left: 1.1em;
-  display: grid;
-  gap: 9px;
-  font-size: 0.92rem;
-}
-.card ol li::marker {
-  color: var(--accent);
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.85em;
-}
-.risk {
-  margin-top: 16px;
-  padding: 11px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--hidden);
-  background: var(--hidden-bg);
-  color: var(--hidden);
-  font-size: 0.85rem;
-  line-height: 1.4;
-}
-
-.snippets {
-  display: grid;
-  gap: 14px;
-}
-.snippet-label {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
-  color: var(--fg-muted);
-  margin-bottom: 6px;
-}
-pre {
-  background: var(--code-bg);
-  color: var(--code-fg);
-  border-radius: 8px;
-  padding: 14px 16px;
-  overflow-x: auto;
-  margin: 0;
-  font-size: 0.84rem;
-  line-height: 1.55;
-}
-pre code {
-  font-family: "IBM Plex Mono", monospace;
-}
-.tag { color: var(--code-accent); }
-
-.checklist {
-  display: grid;
-  gap: 8px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.checklist li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 12px;
-  font-size: 0.92rem;
-  cursor: pointer;
-}
-.checklist input {
-  margin-top: 3px;
-  accent-color: var(--accent);
-  flex-shrink: 0;
-}
-.checklist li.done span { color: var(--fg-muted); text-decoration: line-through; }
-
-footer {
-  margin-top: 8px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-  color: var(--fg-muted);
-  font-size: 0.82rem;
-}
-</style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<!-- "Blue Sheet" house style for internal /docs/ documents — see assets/blue-sheet.css -->
+<link rel="stylesheet" href="/assets/blue-sheet.css">
 </head>
 <body>
-<div class="wrap">
+<header class="top"><div class="row">
+  <a class="wordmark" href="../index.html"><span class="mark">AVDN</span><span class="name">Atelier Vincent De Nil</span></a>
+  <span class="section-badge">Blue Sheet</span>
+  <span class="top-spacer"></span>
+  <a class="top-back" href="index.html">/docs/</a>
+</div></header>
 
-  <p class="mono" style="margin:0 0 20px"><a href="index.html" style="color:var(--fg-muted)">&larr; /docs/</a></p>
-
-  <header class="page">
-    <p class="eyebrow">Build briefing — internal, for engineering crew</p>
+<main class="sheet">
+  <article>
+    <div class="eyebrow-row">
+      <p class="eyebrow">Build briefing &middot; internal</p>
+      <button class="copy-btn" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1"/><path d="M10.5 5.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6.5a1 1 0 0 0 1 1h2.5"/></svg><span class="lbl">Copy page</span></button>
+    </div>
     <h1>Flagmaker Subdomain Rollout</h1>
-    <p class="dek">Two hidden static subdomains under flagmaker-print.com. Different access posture, same isolation rules. Read the whole thing before opening either repo.</p>
-  </header>
+    <p class="lede">Two hidden static subdomains under flagmaker-print.com. Different access posture, same isolation rules. Read the whole thing before opening either repo.</p>
 
-  <section>
-    <h2>Ground rules — both builds</h2>
-    <ul class="rules">
-      <li>One GitHub repo per subdomain, nothing shared with the main site or Shopify theme repo. Never commit to any repo outside the one you were assigned.</li>
-      <li>Hosting is Cloudflare Pages, connected directly to the GitHub repo (git-integrated deploy). No build step, no Cloudflare API token needed to ship — push to the branch, Pages deploys it.</li>
-      <li>Every page ships an HTML <span class="mono">&lt;meta name="robots"&gt;</span> noindex tag, a <span class="mono">_headers</span> file, and a <span class="mono">robots.txt</span> — exact contents below. No page goes live without all three.</li>
-      <li>Nothing here touches the DNS records for <span class="mono">@</span> or <span class="mono">www</span> — those stay on Shopify, untouched.</li>
-    </ul>
-    <div class="split-note">
-      <span class="owner-tag"><b>Crew scope:</b> repo content, folder structure, headers/robots config, PRs</span>
-      <span class="owner-tag"><b>Admin-only:</b> Cloudflare Pages project, custom domain, DNS, Access policy</span>
-    </div>
-  </section>
+    <section class="sheet-section">
+      <h2 class="section">Ground rules &mdash; both builds</h2>
+      <ul class="rule-list">
+        <li>One GitHub repo per subdomain, nothing shared with the main site or Shopify theme repo. Never commit to any repo outside the one you were assigned.</li>
+        <li>Hosting is Cloudflare Pages, connected directly to the GitHub repo (git-integrated deploy). No build step, no Cloudflare API token needed to ship &mdash; push to the branch, Pages deploys it.</li>
+        <li>Every page ships an HTML <code>&lt;meta name="robots"&gt;</code> noindex tag, a <code>_headers</code> file, and a <code>robots.txt</code> &mdash; exact contents below. No page goes live without all three.</li>
+        <li>Nothing here touches the DNS records for <code>@</code> or <code>www</code> &mdash; those stay on Shopify, untouched.</li>
+      </ul>
+      <p class="callout"><b>Crew scope:</b> repo content, folder structure, headers/robots config, PRs.<br><b>Admin-only:</b> Cloudflare Pages project, custom domain, DNS, Access policy.</p>
+    </section>
 
-  <section>
-    <h2>The two builds</h2>
-    <div class="cards">
+    <section class="sheet-section">
+      <h2 class="section">The two builds</h2>
+      <div class="card-grid">
 
-      <div class="card">
-        <div class="card-head">
-          <span class="domain">ops.flagmaker-print.com</span>
-          <span class="badge locked">Password gated</span>
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">ops.flagmaker-print.com</span>
+            <span class="badge good">Password gated</span>
+          </div>
+          <p class="lede" style="font-size:13px;margin:0 0 12px;color:var(--text-dimmer)">repo: flagmaker-ops</p>
+          <ol>
+            <li>Build the static pages as normal HTML under whatever folder structure fits ops content. No login form needed in the code &mdash; gating happens at the network edge, not in the page.</li>
+            <li>Ship the noindex meta tag, <code>_headers</code>, and <code>robots.txt</code> from the snippets below.</li>
+            <li>Do not build your own password screen or client-side JS check. That's not real security and it isn't the plan here &mdash; leave the login gate to Cloudflare Access, set up by admin after your repo is connected.</li>
+            <li>Once your PR merges to the deploy branch, tell admin &mdash; they wire up the custom domain and Access policy on their end. Confirm with them before treating this as live.</li>
+          </ol>
         </div>
-        <p class="repo">repo: flagmaker-ops</p>
-        <ol>
-          <li>Build the static pages as normal HTML under whatever folder structure fits ops content. No login form needed in the code — gating happens at the network edge, not in the page.</li>
-          <li>Ship the noindex meta tag, <span class="mono">_headers</span>, and <span class="mono">robots.txt</span> from the snippets below.</li>
-          <li>Do not build your own password screen or client-side JS check. That's not real security and it isn't the plan here — leave the login gate to Cloudflare Access, set up by admin after your repo is connected.</li>
-          <li>Once your PR merges to the deploy branch, tell admin — they wire up the custom domain and Access policy on their end. Confirm with them before treating this as live.</li>
-        </ol>
-      </div>
 
-      <div class="card">
-        <div class="card-head">
-          <span class="domain">studio.flagmaker-print.com</span>
-          <span class="badge hidden">Unlisted, no login</span>
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">studio.flagmaker-print.com</span>
+            <span class="badge warn">Unlisted, no login</span>
+          </div>
+          <p class="lede" style="font-size:13px;margin:0 0 12px;color:var(--text-dimmer)">repo: flagmaker-studio</p>
+          <ol>
+            <li>No index page. Root path should 404 or show a blank generic placeholder &mdash; never a page that lists or links to other pages here.</li>
+            <li>No links between pages, no shared nav, no sitemap.xml. Each page stands alone and is reachable only by whoever was given its exact URL.</li>
+            <li>Use a long unguessable path per page, not a readable slug &mdash; e.g. <code>/p/9f2a7c-acme</code>, not <code>/acme</code>. Treat the URL itself as the access control.</li>
+            <li>No analytics or third-party embeds on these pages. Any script that logs referrers or is publicly queryable can leak the URL you're relying on staying secret.</li>
+            <li>Same noindex meta, <code>_headers</code>, and <code>robots.txt</code> as ops &mdash; ship them here too.</li>
+          </ol>
+          <p class="callout warn" style="margin-top:16px">No password = anyone who gets a link can view it forever, and links leak (screenshots, forwarded emails, browser history sync). This is obscurity, not access control. Don't put anything on studio you'd mind becoming public &mdash; flag it back to admin if a page needs real protection instead.</p>
         </div>
-        <p class="repo">repo: flagmaker-studio</p>
-        <ol>
-          <li>No index page. Root path should 404 or show a blank generic placeholder — never a page that lists or links to other pages here.</li>
-          <li>No links between pages, no shared nav, no sitemap.xml. Each page stands alone and is reachable only by whoever was given its exact URL.</li>
-          <li>Use a long unguessable path per page, not a readable slug — e.g. <span class="mono">/p/9f2a7c-acme</span>, not <span class="mono">/acme</span>. Treat the URL itself as the access control.</li>
-          <li>No analytics or third-party embeds on these pages. Any script that logs referrers or is publicly queryable can leak the URL you're relying on staying secret.</li>
-          <li>Same noindex meta, <span class="mono">_headers</span>, and <span class="mono">robots.txt</span> as ops — ship them here too.</li>
-        </ol>
-        <p class="risk">No password = anyone who gets a link can view it forever, and links leak (screenshots, forwarded emails, browser history sync). This is obscurity, not access control. Don't put anything on studio you'd mind becoming public — flag it back to admin if a page needs real protection instead.</p>
-      </div>
 
-    </div>
-  </section>
-
-  <section>
-    <h2>Config snippets — ship on both repos</h2>
-    <div class="snippets">
-      <div>
-        <p class="snippet-label">In every page's &lt;head&gt;</p>
-        <pre><code>&lt;<span class="tag">meta</span> name="robots" content="noindex, nofollow, noarchive"&gt;</code></pre>
       </div>
-      <div>
-        <p class="snippet-label">/_headers — repo root, Cloudflare Pages reads this automatically</p>
-        <pre><code>/*
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Config snippets &mdash; ship on both repos</h2>
+      <p class="snippet-label">In every page's &lt;head&gt;</p>
+      <pre><code>&lt;<span class="tag-hl">meta</span> name="robots" content="noindex, nofollow, noarchive"&gt;</code></pre>
+      <p class="snippet-label">/_headers &mdash; repo root, Cloudflare Pages reads this automatically</p>
+      <pre><code>/*
   X-Robots-Tag: noindex, nofollow</code></pre>
-      </div>
-      <div>
-        <p class="snippet-label">/robots.txt — repo root</p>
-        <pre><code>User-agent: *
+      <p class="snippet-label">/robots.txt &mdash; repo root</p>
+      <pre><code>User-agent: *
 Disallow: /</code></pre>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <h2>Before you call either one done</h2>
-    <ul class="checklist" id="checklist"></ul>
-  </section>
+    <section class="sheet-section">
+      <h2 class="section">Before you call either one done</h2>
+      <ul class="checklist" id="checklist"></ul>
+    </section>
 
-  <footer>
-    Questions on scope or access → ask admin before improvising. Don't request a Cloudflare or Shopify login to get either build done — if a task seems to need one, that's a sign it belongs to admin, not crew.
-  </footer>
+    <p class="callout">Questions on scope or access &rarr; ask admin before improvising. Don't request a Cloudflare or Shopify login to get either build done &mdash; if a task seems to need one, that's a sign it belongs to admin, not crew.</p>
+  </article>
+</main>
 
-</div>
+<footer class="site"><div class="row">
+  Internal build briefing &middot; Flagmaker subdomain rollout &middot; <a href="index.html">/docs/</a>
+</div></footer>
 
 <script>
 (function () {
@@ -421,6 +139,22 @@ Disallow: /</code></pre>
     });
     list.appendChild(li);
   });
+
+  var copyBtn = document.querySelector('.copy-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      var text = document.querySelector('article').innerText;
+      var done = function () {
+        var l = copyBtn.querySelector('.lbl');
+        var was = l.textContent;
+        l.textContent = 'Copied';
+        setTimeout(function () { l.textContent = was; }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else { done(); }
+    });
+  }
 })();
 </script>
 </body>

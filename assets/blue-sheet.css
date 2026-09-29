@@ -1,0 +1,109 @@
+/* ============================================================
+   "Blue Sheet" house style
+   Flat navy background, serif display headings, JetBrains-Mono
+   labels. Shared visual language for internal /docs/ documents —
+   todo notes, build briefings, internal specs.
+
+   Origin: extracted from docs/seo-study.html's inline styles.
+   That page still keeps its own copy (31 linked episode pages
+   make touching it risky); every *new* blue sheet should link
+   this file instead of re-inlining the style block.
+   ============================================================ */
+:root{
+  --flat:#002b43; --panel:#061f30; --panel-2:#0a3a5c; --panel-3:#0f4a70;
+  --line:rgba(122,170,205,.22); --line-strong:rgba(122,170,205,.4);
+  --text:#f2f7fb; --text-dim:#7ab0d6; --text-dimmer:#5f8fae;
+  --accent:#7ab0d6; --accent-strong:#a7cbe8;
+  --good:#7fce8e; --good-bg:#12291f;
+  --warn:#e5a742; --warn-bg:#2c2110;
+  --font-display:Georgia,"Iowan Old Style","Times New Roman",Times,serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,"JetBrains Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --topbar-h:56px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--flat);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--panel-3);color:var(--text)}
+
+/* ---- top bar ---- */
+header.top{position:sticky;top:0;z-index:20;background:var(--flat);border-bottom:1px solid var(--line);height:var(--topbar-h)}
+header.top .row{max-width:1000px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;gap:14px}
+.wordmark{display:flex;align-items:center;gap:10px;font-family:var(--font-sans);text-decoration:none}
+.wordmark .mark{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--accent);color:var(--accent);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.02em}
+.wordmark .name{font-weight:600;font-size:14.5px;color:var(--text);letter-spacing:.01em;white-space:nowrap}
+.wordmark:hover .name{color:var(--accent-strong)}
+.section-badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--line-strong);padding:3px 8px;white-space:nowrap}
+.top-spacer{flex:1}
+.top-back{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);text-decoration:none;white-space:nowrap}
+.top-back:hover{color:var(--accent)}
+.top-back::before{content:"\2190 ";opacity:.7}
+
+/* ---- single-column content well ----
+   Blue sheets are one document, not a multi-episode series, so
+   there's no sidebar shell here — just a centered content column. */
+main.sheet{max-width:1000px;margin:0 auto;min-width:0;padding:40px 40px 80px}
+.eyebrow-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.eyebrow{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0}
+.copy-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-sans);font-size:12.5px;font-weight:600;color:var(--text-dim);background:var(--panel);border:1px solid var(--line-strong);padding:7px 12px;cursor:pointer}
+.copy-btn:hover{color:var(--text);border-color:var(--accent)}
+.copy-btn svg{width:13px;height:13px}
+
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(28px,4vw,38px);line-height:1.2;color:var(--text);margin:0 0 26px;max-width:26ch}
+h2.section{font-family:var(--font-sans);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:9px;margin:0 0 16px}
+article p{margin:0 0 20px;max-width:68ch;color:var(--text)}
+.lede{font-size:18px;color:var(--text-dim);max-width:64ch;margin:0 0 26px}
+.sheet-section{margin:0 0 36px}
+
+.callout{font-family:var(--font-sans);font-size:14px;line-height:1.65;background:rgba(122,170,205,.08);border-left:3px solid var(--accent);padding:14px 18px;color:var(--text-dim);max-width:62ch;margin:0 0 20px}
+.callout b{color:var(--text)}
+.callout a{color:var(--accent-strong);text-decoration:underline;text-underline-offset:2px}
+.callout a:hover{color:var(--text)}
+.callout.warn{border-left-color:var(--warn);background:rgba(229,167,66,.08);color:var(--warn)}
+.callout.warn b{color:#f4cf8a}
+
+/* ---- rule / step lists ---- */
+.rule-list{display:grid;gap:10px;padding:0;margin:0 0 16px;list-style:none;max-width:68ch}
+.rule-list li{background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:12px 14px 12px 34px;font-size:14px;color:var(--text);position:relative}
+.rule-list li::before{content:"\2192";color:var(--accent);font-weight:600;position:absolute;left:14px}
+
+/* ---- cards ---- */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:720px){.card-grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line-strong);border-top:3px solid var(--accent);border-radius:4px;padding:20px;min-width:0}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.card-title{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--accent-strong);word-break:break-word}
+.card ol{margin:0;padding-left:1.1em;display:grid;gap:9px;font-size:14px;color:var(--text)}
+.card ol li::marker{color:var(--accent);font-family:var(--font-mono);font-size:.85em}
+
+/* ---- status badges ---- */
+.badge{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap;font-weight:600}
+.badge.good{background:var(--good-bg);color:var(--good)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+
+/* ---- config / code snippets ---- */
+.snippet-label{font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);margin-bottom:6px}
+pre{background:#04141f;color:var(--text);border:1px solid var(--line);border-radius:4px;padding:14px 16px;overflow-x:auto;margin:0 0 16px;font-size:13.5px;line-height:1.55;font-family:var(--font-mono)}
+.tag-hl{color:var(--accent-strong)}
+
+/* ---- checklist ---- */
+.checklist{display:grid;gap:8px;list-style:none;padding:0;margin:0;max-width:68ch}
+.checklist li{display:flex;align-items:flex-start;gap:10px;background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:10px 12px;font-size:14px;cursor:pointer;color:var(--text)}
+.checklist input{margin-top:3px;accent-color:var(--accent);flex-shrink:0}
+.checklist li.done span{color:var(--text-dimmer);text-decoration:line-through}
+
+footer.site{border-top:1px solid var(--line);color:var(--text-dimmer);font-family:var(--font-sans);font-size:12.5px;line-height:1.7}
+footer.site .row{max-width:1000px;margin:0 auto;padding:22px 40px 40px}
+footer.site a{color:var(--text-dim);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+@media (max-width:480px){
+  header.top .row{gap:8px}
+  .wordmark .name{font-size:13px}
+  .section-badge{display:none}
+}
+@media (max-width:860px){
+  main.sheet{padding:28px 20px 56px}
+  footer.site .row{padding:20px 20px 32px}
+}
