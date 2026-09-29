@@ -1,4 +1,4 @@
-# TinyShell 🐚 — local static file server with a built-in comment API
+﻿# TinyShell 🐚 — local static file server with a built-in comment API
 # Lives in tools/, but serves the repo root at http://localhost:8000/ over
 # a real http:// origin instead of file://, and saves comments straight to
 # feedback/ on disk. Run via tools/TinyShell.bat (double-click that instead
@@ -9,8 +9,17 @@
 # assets/tinyshell-comments.js, wired up to every page under /docs/. See
 # the printed guide below.
 
+param(
+    # TinyShell.bat passes this explicitly (the repo root, one level up from
+    # tools/) so serving doesn't depend on how $PSScriptRoot gets resolved
+    # under whatever invoked this script. Falls back to that auto-detection
+    # only if run some other way (e.g. right-click > Run with PowerShell).
+    [string]$Root
+)
+if (-not $Root) { $Root = Split-Path -Parent $PSScriptRoot }
+$Root = [System.IO.Path]::GetFullPath($Root)
+
 $Port = 8000
-$Root = Split-Path -Parent $PSScriptRoot
 $FeedbackDir = Join-Path $Root "feedback"
 $ImagesDir = Join-Path $FeedbackDir "images"
 $CommentsJsonPath = Join-Path $FeedbackDir "comments.json"
@@ -31,7 +40,7 @@ try {
     exit 1
 }
 
-$RootFull = [System.IO.Path]::GetFullPath($Root)
+$RootFull = $Root
 $StartUrl = "http://localhost:$Port/projects/"
 
 Write-Host ""
