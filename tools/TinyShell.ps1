@@ -1,7 +1,8 @@
-# TinyShell — local static file server with a built-in comment API
-# Serves this folder at http://localhost:8000/ over a real http:// origin
-# instead of file://, and saves comments straight to feedback/ on disk.
-# Run via TinyShell.bat (double-click that instead of this file).
+# TinyShell 🐚 — local static file server with a built-in comment API
+# Lives in tools/, but serves the repo root at http://localhost:8000/ over
+# a real http:// origin instead of file://, and saves comments straight to
+# feedback/ on disk. Run via tools/TinyShell.bat (double-click that instead
+# of this file).
 #
 # This is the same tool used in the vdn-roadmap repo (there it powers
 # comments on the Ops Wiki) - here it's a generic copy: the backend works
@@ -9,7 +10,7 @@
 # widget wired up to it yet. See the printed guide below.
 
 $Port = 8000
-$Root = $PSScriptRoot
+$Root = Split-Path -Parent $PSScriptRoot
 $FeedbackDir = Join-Path $Root "feedback"
 $ImagesDir = Join-Path $FeedbackDir "images"
 $CommentsJsonPath = Join-Path $FeedbackDir "comments.json"
@@ -35,7 +36,7 @@ $StartUrl = "http://localhost:$Port/"
 
 Write-Host ""
 Write-Host "===================================================================="
-Write-Host " TinyShell -- local server + comment API for vincentdenil-site"
+Write-Host " 🐚 TinyShell -- local server + comment API for vincentdenil-site"
 Write-Host "===================================================================="
 Write-Host " Serving this folder now: $StartUrl"
 Write-Host ""

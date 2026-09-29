@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# TinyShell — local static file server (Mac/Linux; use TinyShell.bat on Windows).
-# Serves this folder at http://localhost:8000/ over a real http:// origin
-# instead of file://, and saves comments straight to feedback/ on disk.
+# TinyShell 🐚 — local static file server (Mac/Linux; use TinyShell.bat on Windows).
+# Lives in tools/, but serves the repo root at http://localhost:8000/ over a
+# real http:// origin instead of file://, and saves comments straight to
+# feedback/ on disk.
 set -e
 cd "$(dirname "$0")"
 

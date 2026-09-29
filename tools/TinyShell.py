@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""TinyShell — local static file server with a built-in comment API.
+"""TinyShell 🐚 — local static file server with a built-in comment API.
 
-Serves this folder at http://localhost:8000/ over a real http:// origin
-(some browser features, including this comment API, don't work reliably
-over file://), and saves comments straight to feedback/ on disk via a
-small /api/comments endpoint. Double-click this file (if .py is set to
-open with Python), or run TinyShell.sh / `python3 TinyShell.py`.
+Lives in tools/, but serves the repo root at http://localhost:8000/ over a
+real http:// origin (some browser features, including this comment API,
+don't work reliably over file://), and saves comments straight to
+feedback/ on disk via a small /api/comments endpoint. Double-click this
+file (if .py is set to open with Python), or run tools/TinyShell.sh /
+`python3 tools/TinyShell.py`.
 
 This is the same tool used in the vdn-roadmap repo (there it powers
 comments on the Ops Wiki) - here it's a generic copy: the backend works
@@ -25,7 +26,7 @@ import webbrowser
 from pathlib import Path
 
 PORT = 8000
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 FEEDBACK_DIR = ROOT / "feedback"
 IMAGES_DIR = FEEDBACK_DIR / "images"
 COMMENTS_JSON = FEEDBACK_DIR / "comments.json"
@@ -57,7 +58,7 @@ def open_in_file_manager(path):
 
 GUIDE = f"""
 ════════════════════════════════════════════════════════════════
- TinyShell — local server + comment API for vincentdenil-site
+ 🐚 TinyShell — local server + comment API for vincentdenil-site
 ════════════════════════════════════════════════════════════════
  Serving this folder now: {START_URL}
 
