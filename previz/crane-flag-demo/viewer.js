@@ -118,7 +118,7 @@ try{
  deform(0);ready=true;status.hidden=true;
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();status.hidden=false;status.classList.remove('viewer-loading');status.textContent='Graphics context lost. Reload to reopen the viewer.';});
  // WeaverShell adapter: explicit state, semantic actions, and stable target IDs.
- let restoring=false;
+ let restoring=false,playbackPhase=null;
  const cameraState=()=>({position:camera.position.toArray(),target:controls.target.toArray(),zoom:camera.zoom});
  const getState=()=>({units,selected,showDimensions,human:human.visible,motion,wind:Number(document.querySelector('#wind').value),view:document.querySelector('[data-view][aria-pressed="true"]')?.dataset.view||null,camera:cameraState()});
  const setState=state=>{
@@ -138,6 +138,8 @@ try{
  const emit=action=>{if(!restoring)adapterEvents.dispatchEvent(new CustomEvent('action',{detail:action}));};
  Object.assign(weaverAdapter,{
   getState,setState,
+  setPlaybackPhase(value){playbackPhase=typeof value==='number'&&Number.isFinite(value)?value:null;},
+  projectMarker(id){const spec=dimensions.find(d=>d.id===id);if(!spec||!showDimensions||(id==='human'&&!human.visible))return null;camera.updateMatrixWorld();const p=new T.Vector3(...spec.anchor).project(camera);if(Math.abs(p.x)>1||Math.abs(p.y)>1||p.z< -1||p.z>1)return null;const r=stage.getBoundingClientRect();return {x:r.left+(p.x*.5+.5)*r.width,y:r.top+(-p.y*.5+.5)*r.height};},
   applyAction(action){if(!validAction(action))throw new Error('Unsupported WeaverShell action');if(action.type==='view'){restoring=true;try{view(action.value);}finally{restoring=false;}}else{const state=getState();state[action.type==='selection'?'selected':action.type]=action.value;setState(state);}},
   subscribe(listener){const handler=e=>listener(e.detail);adapterEvents.addEventListener('action',handler);return()=>adapterEvents.removeEventListener('action',handler);}
  });
@@ -159,5 +161,5 @@ try{
  controls.addEventListener('change',()=>emit({type:'camera',value:cameraState()}));
  resolveAdapter(weaverAdapter);
  let t=0,last=0;
- renderer.setAnimationLoop(now=>{const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(motion)t+=dt;deform(t);controls.update();camera.updateMatrixWorld();const occupied=[];for(const {d,button} of labels){const p=new T.Vector3(...d.anchor).project(camera);button.hidden=!ready||!showDimensions||p.z>1||p.z<-1||Math.abs(p.x)>.94||Math.abs(p.y)>.94||(d.id==='human'&&!human.visible);if(!button.hidden){const x=(p.x*.5+.5)*stage.clientWidth,y=(-p.y*.5+.5)*stage.clientHeight;const rect={x,y,w:button.offsetWidth+10,h:button.offsetHeight+6};if(occupied.some(r=>Math.abs(r.x-x)<(r.w+rect.w)/2&&Math.abs(r.y-y)<(r.h+rect.h)/2))button.hidden=true;else{occupied.push(rect);button.style.left=x+'px';button.style.top=y+'px';}}}renderer.render(scene,camera);});
+ renderer.setAnimationLoop(now=>{const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(playbackPhase!==null)t=playbackPhase;else if(motion)t+=dt;deform(t);controls.update();camera.updateMatrixWorld();const occupied=[];for(const {d,button} of labels){const p=new T.Vector3(...d.anchor).project(camera);button.hidden=!ready||!showDimensions||p.z>1||p.z<-1||Math.abs(p.x)>.94||Math.abs(p.y)>.94||(d.id==='human'&&!human.visible);if(!button.hidden){const x=(p.x*.5+.5)*stage.clientWidth,y=(-p.y*.5+.5)*stage.clientHeight;const rect={x,y,w:button.offsetWidth+10,h:button.offsetHeight+6};if(occupied.some(r=>Math.abs(r.x-x)<(r.w+rect.w)/2&&Math.abs(r.y-y)<(r.h+rect.h)/2))button.hidden=true;else{occupied.push(rect);button.style.left=x+'px';button.style.top=y+'px';}}}renderer.render(scene,camera);});
 }catch(err){console.error(err);status.classList.remove('viewer-loading');status.textContent='The 3D scene could not load. Check your connection and WebGL support, then reload.';}
