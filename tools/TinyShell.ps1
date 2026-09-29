@@ -42,11 +42,24 @@ try {
 
 $RootFull = $Root
 $StartUrl = "http://localhost:$Port/projects/"
+$ProjectsIndexPath = Join-Path $Root "projects\index.html"
 
 Write-Host ""
 Write-Host "===================================================================="
 Write-Host " 🐚 TinyShell -- local server + comment API for vincentdenil-site"
 Write-Host "===================================================================="
+Write-Host " Serving from: $Root"
+if (-not (Test-Path $ProjectsIndexPath -PathType Leaf)) {
+    Write-Host ""
+    Write-Host " *** WARNING: $ProjectsIndexPath does not exist. ***"
+    Write-Host " TinyShell thinks the repo root is the folder above, but that"
+    Write-Host " folder doesn't contain projects\index.html, so every page"
+    Write-Host " request will 404. This usually means tools\ isn't sitting"
+    Write-Host " directly inside the vincentdenil-site repo, or TinyShell.bat"
+    Write-Host " and TinyShell.ps1 got separated. Close this window and check"
+    Write-Host " that tools\TinyShell.bat lives at <repo root>\tools\TinyShell.bat."
+    Write-Host ""
+}
 Write-Host " Serving this folder now: $StartUrl"
 Write-Host ""
 Write-Host " WHAT THIS IS"
