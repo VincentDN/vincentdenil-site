@@ -9,9 +9,9 @@ file (if .py is set to open with Python), or run tools/TinyShell.sh /
 `python3 tools/TinyShell.py`.
 
 This is the same tool used in the vdn-roadmap repo (there it powers
-comments on the Ops Wiki) - here it's a generic copy: the backend works
-the same way, but no page in this repo has the select-text-and-comment
-widget wired up to it yet. See the printed guide below.
+comments on the Ops Wiki). The select-text-and-comment widget itself is
+assets/tinyshell-comments.js, wired up to every page under /docs/. See
+the printed guide below.
 """
 import base64
 import json
@@ -31,7 +31,7 @@ FEEDBACK_DIR = ROOT / "feedback"
 IMAGES_DIR = FEEDBACK_DIR / "images"
 COMMENTS_JSON = FEEDBACK_DIR / "comments.json"
 COMMENTS_MD = FEEDBACK_DIR / "comments.md"
-START_URL = f"http://localhost:{PORT}/"
+START_URL = f"http://localhost:{PORT}/projects/"
 
 ALLOWED_IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
@@ -69,12 +69,11 @@ GUIDE = f"""
    backend used by the Ops Wiki's comment feature in vdn-roadmap.
 
  USING IT FOR COMMENTS
-   This copy only provides the backend (GET/POST /api/comments,
-   POST /api/upload-image, POST /api/reveal). No page here has the
-   select-text-and-comment widget wired up to it yet - that UI lives
-   in ops-wiki/FMP_VA_Wiki.html over in vdn-roadmap. Ask Claude to add
-   it to whichever page(s) you want commentable, and it will talk to
-   this same API automatically once it's there.
+   The backend (GET/POST /api/comments, POST /api/upload-image, POST
+   /api/reveal) is wired up on every page under /docs/ via
+   assets/tinyshell-comments.js. Select any text on one of those pages
+   to leave a comment. Add the same <script> tag to another page to
+   make it commentable too — it talks to this same API automatically.
 
  HOW IT SAVES (once a page uses the API)
    Comments are written straight to disk, automatically:

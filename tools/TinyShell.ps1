@@ -5,9 +5,9 @@
 # of this file).
 #
 # This is the same tool used in the vdn-roadmap repo (there it powers
-# comments on the Ops Wiki) - here it's a generic copy: the backend works
-# the same way, but no page in this repo has the select-text-and-comment
-# widget wired up to it yet. See the printed guide below.
+# comments on the Ops Wiki). The select-text-and-comment widget itself is
+# assets/tinyshell-comments.js, wired up to every page under /docs/. See
+# the printed guide below.
 
 $Port = 8000
 $Root = Split-Path -Parent $PSScriptRoot
@@ -32,7 +32,7 @@ try {
 }
 
 $RootFull = [System.IO.Path]::GetFullPath($Root)
-$StartUrl = "http://localhost:$Port/"
+$StartUrl = "http://localhost:$Port/projects/"
 
 Write-Host ""
 Write-Host "===================================================================="
@@ -47,12 +47,12 @@ Write-Host "   small /api/comments endpoint that writes straight to disk, the"
 Write-Host "   same backend used by the Ops Wiki's comment feature in vdn-roadmap."
 Write-Host ""
 Write-Host " USING IT FOR COMMENTS"
-Write-Host "   This copy only provides the backend (GET/POST /api/comments,"
-Write-Host "   POST /api/upload-image, POST /api/reveal). No page here has the"
-Write-Host "   select-text-and-comment widget wired up to it yet -- that UI"
-Write-Host "   lives in ops-wiki/FMP_VA_Wiki.html over in vdn-roadmap. Ask Claude"
-Write-Host "   to add it to whichever page(s) you want commentable, and it will"
-Write-Host "   talk to this same API automatically once it's there."
+Write-Host "   The backend (GET/POST /api/comments, POST /api/upload-image, POST"
+Write-Host "   /api/reveal) is wired up on every page under /docs/ via"
+Write-Host "   assets/tinyshell-comments.js. Select any text on one of those"
+Write-Host "   pages to leave a comment. Add the same <script> tag to another"
+Write-Host "   page to make it commentable too -- it talks to this same API"
+Write-Host "   automatically."
 Write-Host ""
 Write-Host " HOW IT SAVES (once a page uses the API)"
 Write-Host "   Comments are written straight to disk, automatically:"

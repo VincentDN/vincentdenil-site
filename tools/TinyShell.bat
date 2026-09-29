@@ -6,4 +6,4 @@ REM close it later, or press Ctrl+C in that window, when you're done.
 cd /d "%~dp0"
 start "TinyShell 🐚" powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0TinyShell.ps1"
 timeout /t 2 /nobreak >nul
-start "" http://localhost:8000/
+start "" http://localhost:8000/projects/
