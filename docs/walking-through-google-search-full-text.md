@@ -376,7 +376,7 @@ Ads are a normal part of the web, but they shouldn't overwhelm the content or bl
 
 > ChatGPT fact check - this paragraph claims "Google specifically names interstitial pages, the pop-up-style pages shown before or after your actual content, as something that can make a site hard to use if overdone.", but the counterargument is: The interstitial discussion points to Episode 19. Page experience and interstitials are in Episode 20. Change the spoken reference to Episode 20.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/page-experience.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/page-experience.
 >
 > A009 | Editorial | Low priority | Checked 24 September 2026
 
@@ -414,7 +414,7 @@ Below the title sits the snippet, the short description that helps someone decid
 
 > ChatGPT fact check - this paragraph claims "Occasionally the snippet instead comes from your meta description tag, a short, page-specific summary you write directly for this purpose.", but the counterargument is: Titles/snippets are assigned to Episode 20 instead of 21; video to 21 instead of 22; site moves to 17 instead of 18. Use Episode 21 for titles/snippets, Episode 22 for images/video, and Episode 18 for site moves.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
 >
 > A010 | Editorial | Low priority | Checked 24 September 2026
 
@@ -434,7 +434,7 @@ If parts of your site are primarily about individual videos, people can discover
 
 > ChatGPT fact check - this paragraph claims "If parts of your site are primarily about individual videos, people can discover you through video results too, and many of the same practices from images and text apply directly.", but the counterargument is: Titles/snippets are assigned to Episode 20 instead of 21; video to 21 instead of 22; site moves to 17 instead of 18. Use Episode 21 for titles/snippets, Episode 22 for images/video, and Episode 18 for site moves.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
 >
 > A010 | Editorial | Low priority | Checked 24 September 2026
 
@@ -476,7 +476,7 @@ Let's close with Google's own suggested next steps, because they map neatly onto
 
 > ChatGPT fact check - this paragraph claims "Learn to maintain your SEO over the long term, including scenarios like site moves, which we'll touch in episode seventeen.", but the counterargument is: Titles/snippets are assigned to Episode 20 instead of 21; video to 21 instead of 22; site moves to 17 instead of 18. Use Episode 21 for titles/snippets, Episode 22 for images/video, and Episode 18 for site moves.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/title-link; Scope reference: https://developers.google.com/search/docs/appearance/video; Scope reference: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
 >
 > A010 | Editorial | Low priority | Checked 24 September 2026
 
@@ -496,7 +496,7 @@ Welcome back. Two episodes ago, we closed the Starter Guide with a small bombshe
 
 > ChatGPT fact check - this paragraph claims "Two episodes ago, we closed the Starter Guide with a small bombshell: Google saying flatly that E-E-A-T is not a ranking factor.", but the counterargument is: The Starter Guide ended in the immediately preceding episode, not two episodes ago. Page experience is Episode 20, not Episode 19. Say 'Last episode' in the opening and 'Episode 20' for page experience.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
 >
 > A011 | Editorial | Low priority | Checked 24 September 2026
 
@@ -524,7 +524,7 @@ Google's core ranking systems reward a good overall page experience, and the gui
 
 > ChatGPT fact check - this paragraph claims "Google's core ranking systems reward a good overall page experience, and the guidance here is explicit about not fixating on just one or two aspects of that.", but the counterargument is: The Starter Guide ended in the immediately preceding episode, not two episodes ago. Page experience is Episode 20, not Episode 19. Say 'Last episode' in the opening and 'Episode 20' for page experience.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
 >
 > A011 | Editorial | Low priority | Checked 24 September 2026
 
@@ -622,7 +622,7 @@ And if you're using generative AI tools yourself to help draft content, Google p
 
 > ChatGPT fact check - this paragraph claims "And if you're using generative AI tools yourself to help draft content, Google points directly to a companion guide, on using generative AI responsibly, which is exactly where we're headed after this episode.", but the counterargument is: Episode 8 does not cover the promised AI-content production guide, ongoing SEO maintenance, or developer guide. The structured-data reference also starts at Episode 22 rather than 23. Add separate source-faithful sections for the promised guides, or remove those promises. Correct the structured-data reference to Episode 23.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
 >
 > A015 | Omission | Medium priority | Checked 24 September 2026
 
@@ -670,7 +670,7 @@ Overfocusing on structured data. Structured data isn't required for generative A
 
 > ChatGPT fact check - this paragraph claims "It's still worth using as part of your broader SEO strategy, because it remains the path to eligibility for rich results in ordinary Search, which we'll cover fully starting in episode twenty-two.", but the counterargument is: Episode 8 does not cover the promised AI-content production guide, ongoing SEO maintenance, or developer guide. The structured-data reference also starts at Episode 22 rather than 23. Add separate source-faithful sections for the promised guides, or remove those promises. Correct the structured-data reference to Episode 23.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
 >
 > A015 | Omission | Medium priority | Checked 24 September 2026
 
@@ -708,7 +708,7 @@ Next episode, we look at the flip side of everything we just discussed: Google's
 
 > ChatGPT fact check - this paragraph claims "Next episode, we look at the flip side of everything we just discussed: Google's specific guidance on using generative AI tools to actually produce your content, plus a look at maintaining your SEO over time, the developer's guide to Search, the question of whether you need to hire an SEO at all, and how to judge third-party SEO advice, including the AEO and GEO consultants this episode already warned you about.", but the counterargument is: Episode 8 does not cover the promised AI-content production guide, ongoing SEO maintenance, or developer guide. The structured-data reference also starts at Episode 22 rather than 23. Add separate source-faithful sections for the promised guides, or remove those promises. Correct the structured-data reference to Episode 23.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started; Scope reference: https://developers.google.com/search/docs/fundamentals/get-started-developers.
 >
 > A015 | Omission | Medium priority | Checked 24 September 2026
 
@@ -1396,7 +1396,7 @@ Using structured data with JavaScript. You can generate the JSON-LD structured d
 
 > ChatGPT fact check - this paragraph claims "Using structured data with JavaScript.", but the counterargument is: The structured-data sequence starts at Episode 23, not 22. The next-episode promise also drifts into metadata content not actually provided in Episode 15. Point structured data to Episode 23 and limit the next-episode preview to lazy loading and dynamic rendering.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
 >
 > A029 | Editorial | Low priority | Checked 24 September 2026
 
@@ -1414,7 +1414,7 @@ Next episode, we finish this stretch of technical crawling and indexing episodes
 
 > ChatGPT fact check - this paragraph claims "Next episode, we finish this stretch of technical crawling and indexing episodes with lazy-loaded content specifically, dynamic rendering as a workaround, and then move into page and content metadata: the full set of meta tags and HTML attributes Google actually supports.", but the counterargument is: The structured-data sequence starts at Episode 23, not 22. The next-episode promise also drifts into metadata content not actually provided in Episode 15. Point structured data to Episode 23 and limit the next-episode preview to lazy loading and dynamic rendering.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
 >
 > A029 | Editorial | Low priority | Checked 24 September 2026
 
@@ -1480,7 +1480,7 @@ That closes out the deep technical run on crawling, indexing, and rendering. Nex
 
 > ChatGPT fact check - this paragraph claims "Next episode, we shift into page and content metadata proper: the full set of meta tags and HTML attributes Google actually supports, the robots meta tag and X-Robots-Tag in detail, and the specific mechanics of noindex.", but the counterargument is: Episode 16 covers robots directives, not the full supported-meta-tag and HTML-attribute reference promised here. Add a separate audio section for supported metadata and valid head structure, or narrow this preview to the robots directives that Episode 16 actually covers.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/crawling-indexing/special-tags; Scope reference: https://developers.google.com/search/docs/crawling-indexing/valid-page-metadata.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs/crawling-indexing/special-tags; Scope reference: https://developers.google.com/search/docs/crawling-indexing/valid-page-metadata.
 >
 > A031 | Omission | Medium priority | Checked 24 September 2026
 
@@ -2640,7 +2640,7 @@ Welcome back. Today rounds out Part Three with four distinct but related subject
 
 > ChatGPT fact check - this paragraph claims "Today rounds out Part Three with four distinct but related subjects: Google Discover, the feed-style surface separate from ordinary search; establishing your official business details with Google directly; a genuinely new feature called Preferred Sources, launched in August 2026; and the content policies governing Web Stories.", but the counterargument is: Episode 26 is in Part Four but says it rounds out Part Three. Introduce Part Four: specialty guides.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy..
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy..
 >
 > A071 | Editorial | Low priority | Checked 24 September 2026
 
@@ -3156,7 +3156,7 @@ Welcome to the final episode of this series. We've walked the entire span of Goo
 
 > ChatGPT fact check - this paragraph claims "Welcome to the final episode of this series.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
 >
 > A082 | Omission | High priority | Checked 24 September 2026
 
@@ -3240,7 +3240,7 @@ We began, back in episode one, with the Search Essentials: three technical requi
 
 > ChatGPT fact check - this paragraph claims "Thirty episodes later, we've covered the entire documented landscape built on top of that simple foundation.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
 >
 > A082 | Omission | High priority | Checked 24 September 2026
 
@@ -3254,7 +3254,7 @@ Part Three covered ranking and appearance: how ranking systems and updates actua
 
 > ChatGPT fact check - this paragraph claims "Part Three covered ranking and appearance: how ranking systems and updates actually work, page experience and Core Web Vitals, every visual element of a result from title link to favicon, images and video, and the full structured data landscape, general guidelines, the feature gallery, the genuinely current FAQ rich result retirement, and shopping markup in real depth.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
 >
 > A082 | Omission | High priority | Checked 24 September 2026
 
@@ -3264,7 +3264,7 @@ Part Four covered the specialty guides: Discover, business details, the brand-ne
 
 > ChatGPT fact check - this paragraph claims "Part Four covered the specialty guides: Discover, business details, the brand-new Preferred Sources feature, Web Stories, the complete ecommerce guide including how to actually write a review worth reading, and managing an international, multilingual presence properly.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
 >
 > A082 | Omission | High priority | Checked 24 September 2026
 
@@ -3278,7 +3278,7 @@ Thank you for walking through all of this. This has been Walking Through Google 
 
 > ChatGPT fact check - this paragraph claims "This has been Walking Through Google Search, a complete adaptation of Google Search Central's own documentation, current as of September 2026.", but the counterargument is: The conclusion says the entire documented landscape, every visual element, the full structured-data landscape, and complete ecommerce guide have been covered. The body of the series does not support those assertions. Replace these completeness claims with an accurate scope statement and a link to the remaining-source coverage checklist. Call this the main-series conclusion if Episode 31 remains supplementary.
 >
-> Sources: Internal source: seo-study/index.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
+> Sources: Internal source: seo-study.html, episode listings and introductory paragraphs; compare the chapter headings and text. This is an editorial or coverage correction, not an additional Google policy.; Scope reference: https://developers.google.com/search/docs.
 >
 > A082 | Omission | High priority | Checked 24 September 2026
 

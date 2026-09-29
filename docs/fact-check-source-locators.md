@@ -4,11 +4,11 @@ Retrieved 24 September 2026. Paragraph numbers below are audit locators, not num
 
 ## A001 — The index overstates completeness
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs.
 
 ## A002 — Google guidance and the writer's advice are mixed
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/seo-starter-guide, https://developers.google.com/search/docs/fundamentals/third-party-seo.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/seo-starter-guide, https://developers.google.com/search/docs/fundamentals/third-party-seo.
 
 ## A003 — Source attribution is too broad to audit or navigate
 
@@ -18,7 +18,7 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A004 — Narration structure needs an accessibility pass
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/seo-starter-guide.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/seo-starter-guide.
 
 ## A005 — A 200 response does not make Google trust an error page
 
@@ -52,15 +52,15 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A009 — Page-experience episode number is wrong
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/appearance/page-experience.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/appearance/page-experience.
 
 ## A010 — Three spoken episode numbers are wrong
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/appearance/title-link, https://developers.google.com/search/docs/appearance/video, https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/appearance/title-link, https://developers.google.com/search/docs/appearance/video, https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes.
 
 ## A011 — Opening and page-experience references are wrong
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/creating-helpful-content.
 
 ## A012 — Invented YMYL boundary for flag etiquette
 
@@ -78,7 +78,7 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A015 — Promised next-episode material is missing
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content, https://developers.google.com/search/docs/fundamentals/get-started, https://developers.google.com/search/docs/fundamentals/get-started-developers.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/fundamentals/using-gen-ai-content, https://developers.google.com/search/docs/fundamentals/get-started, https://developers.google.com/search/docs/fundamentals/get-started-developers.
 
 ## A016 — Third-party tools can display authorized Google data
 
@@ -154,7 +154,7 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A029 — The structured-data reference is off by one
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data.
 
 ## A030 — Shopify is given a blanket rendering exemption
 
@@ -164,7 +164,7 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A031 — The promised full meta-tag guide is not delivered
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs/crawling-indexing/special-tags, https://developers.google.com/search/docs/crawling-indexing/valid-page-metadata.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs/crawling-indexing/special-tags, https://developers.google.com/search/docs/crawling-indexing/valid-page-metadata.
 
 ## A032 — Specific crawler rules do not override restrictive general rules
 
@@ -406,7 +406,7 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A071 — The chapter introduces the wrong part
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: .
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: .
 
 ## A072 — Launch advice omits a fourth option and important Merchant Center caveats
 
@@ -468,7 +468,7 @@ Internal editorial/coverage comparison: seo-study/index.html and the episode tex
 
 ## A082 — The wrap-up falsely certifies complete coverage
 
-Internal editorial/coverage comparison: seo-study/index.html and the episode text. Source scope references: https://developers.google.com/search/docs.
+Internal editorial/coverage comparison: seo-study.html and the episode text. Source scope references: https://developers.google.com/search/docs.
 
 ## A083 — The stated research chronology is internally impossible
 
