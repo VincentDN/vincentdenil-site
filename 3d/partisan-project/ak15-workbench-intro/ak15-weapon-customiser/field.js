@@ -24,9 +24,9 @@ function aimJoint(joint,dir){
 }
 // Two-bone IK: shoulder stays put; elbow bends toward `pole` (a world direction); the palm
 // centre lands on `target` (or as close as the arm reaches).
-export function solveArm(op,side,target,pole){
+export function solveArm(op,side,target,pole,{handExtension=op.lengths.hand*.5}={}){
  const upper=op.joints['upperArm'+side],fore=op.joints['foreArm'+side];
- const a=op.lengths.upperArm,b=op.lengths.foreArm+op.lengths.hand*.5;
+ const a=op.lengths.upperArm,b=op.lengths.foreArm+handExtension;
  const S=upper.getWorldPosition(new T.Vector3()),d=target.clone().sub(S);
  const dist=T.MathUtils.clamp(d.length(),Math.abs(a-b)+1e-3,a+b-1e-3),dir=d.normalize();
  const alpha=Math.acos(T.MathUtils.clamp((a*a+dist*dist-b*b)/(2*a*dist),-1,1));

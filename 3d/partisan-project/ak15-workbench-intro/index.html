@@ -9,18 +9,18 @@
 import {soundLayer} from '../sound-layer.js';
 const sound=soundLayer();sound.shared=true;// created here, before the frame's pages ask for it
 const view=document.querySelector('#view');
-const BENCH=new URL('./bench.html',location.href),CUSTOMISER=new URL('./ak15-weapon-customiser/',location.href);
+const BENCH=new URL('./bench.html',location.href),CUSTOMISER=new URL('./ak15-weapon-customiser/',location.href),ADVANCED=new URL('./advanced.html',location.href);
 // The address bar follows the frame: ?view=customiser plus the customiser's loadout hash, so a
 // reload (or a copied link) comes back to the same screen and build.
 const params=new URLSearchParams(location.search);
 // ?sfx=placeholder switches the frame's pages to the placeholder recordings (see mech.js).
 if(params.get('sfx')==='placeholder')try{sessionStorage.setItem('ak-sfx','placeholder');}catch{}
-view.src=params.get('view')==='customiser'?CUSTOMISER.href+location.hash:BENCH.href;
+view.src=(params.get('view')==='customiser'?CUSTOMISER:params.get('view')==='advanced'?ADVANCED:BENCH).href+location.hash;
 function sync(){
  let inner;try{inner=view.contentWindow.location;}catch{return;}
  if(!inner.href||inner.href==='about:blank')return;
  const customiser=inner.pathname===CUSTOMISER.pathname;
- const want=location.pathname+(customiser?'?view=customiser'+inner.hash:'');
+ const want=location.pathname+(customiser?'?view=customiser':inner.pathname===ADVANCED.pathname?'?view=advanced':'')+inner.hash;
  if(location.pathname+location.search+location.hash!==want)history.replaceState(null,'',want);
  const title=view.contentDocument?.title;if(title&&document.title!==title)document.title=title;
 }

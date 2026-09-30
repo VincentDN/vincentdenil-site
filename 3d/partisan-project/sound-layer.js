@@ -27,7 +27,7 @@ function loadPrefs(){
 function createLayer(){
  const prefs=loadPrefs();
  if(!TRACKS.some(t=>t.id===prefs.track))prefs.track=TRACKS[0].id;
- let bench=null,where='viewer',tuned=false;
+ let bench=null,where='viewer',tuned=false,ducked=false;
  const music=new Music({route:ctx=>(bench=createBench(ctx)).radioIn});
  music.setVolume(prefs.volume);music.setTrack(prefs.track);
  const level=()=>prefs.on?prefs.volume:0;
@@ -53,7 +53,8 @@ function createLayer(){
    if(where==='bench'&&music.playing&&!tuned){tuned=true;bench?.tune();}
    mix(1.5);
   },
-  setVolume(v){prefs.volume=v;music.setVolume(v);mix(.3);},
+  setVolume(v){prefs.volume=v;music.setVolume(v*(ducked?.6:1));mix(.3);},
+  duck(on){ducked=!!on;music.setVolume(prefs.volume*(ducked?.6:1));},
   setTrack(id){prefs.track=id;music.setTrack(id);},
   // True when this layer outlives page changes (it belongs to the shell).
   shared:false

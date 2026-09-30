@@ -1,13 +1,12 @@
+import {installCamo as installRifleCamo,applyFinishState} from './rifle-finishes.js';
+import {loadRifle as loadRifleInstance,applySlotState} from './rifle-instance.js';
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {soundLayer} from '../../sound-layer.js';
-import {SLOTS,FINISHES,FINISH_TARGETS} from './attachments.js';
 import {MODELS,DEFAULT_MODEL} from './models.js';
 import {STATS,computeStats,blockedBy} from './stats.js';
-import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator,camoFor} from './operator.js';
+import {OPERATOR_SECTIONS,OPERATOR_KEYS,DEFAULT_OPERATOR,buildOperator,disposeOperator} from './operator.js';
 import {shot,magOut,magIn} from './sfx.js';
 import * as mech from './mech.js';
 import {DRILL,drillPlan,fireString,score,drawTarget} from './range.js';
@@ -74,69 +73,9 @@ let rifle=null;
 const socketMarkers=new T.Group();socketMarkers.visible=false;scene.add(socketMarkers);
 const floor=new T.Mesh(new T.PlaneGeometry(4,4),new T.ShadowMaterial({opacity:.28}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
 
-// Lay the longest axis along x with the muzzle (the slimmer end) at +x, scale to meters, center.
-function normalize(root,scale){
- root.updateMatrixWorld(true);
- let size=new T.Box3().setFromObject(root).getSize(new T.Vector3());
- if(size.z>size.x&&size.z>=size.y)root.rotation.y=Math.PI/2;
- else if(size.y>size.x&&size.y>size.z)root.rotation.z=Math.PI/2;
- root.updateMatrixWorld(true);
- const bounds=new T.Box3().setFromObject(root);size=bounds.getSize(new T.Vector3());
- const ends=[[Infinity,-Infinity],[Infinity,-Infinity]],v=new T.Vector3();
- root.traverse(o=>{if(!o.isMesh)return;const p=o.geometry.attributes.position;for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(o.matrixWorld);const t=(v.x-bounds.min.x)/size.x,e=t<.12?ends[0]:t>.88?ends[1]:null;if(e){e[0]=Math.min(e[0],v.y);e[1]=Math.max(e[1],v.y);}}});
- if(ends[0][1]-ends[0][0]<ends[1][1]-ends[1][0])root.rotateY(Math.PI);
- root.scale.multiplyScalar(scale);
- root.updateMatrixWorld(true);
- const center=new T.Box3().setFromObject(root).getCenter(new T.Vector3());
- const holder=new T.Group();holder.add(root);root.position.sub(center);return holder;
-}
-
 const nodeName=name=>T.PropertyBinding.sanitizeNodeName(name);
-// Load a rifle and build its parts, slots (with library options) and finish targets.
-async function loadRifle(id){
- const config=MODELS[id],root=(await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(config.url)).scene;
- root.traverse(o=>{if(o.isMesh)o.castShadow=o.receiveShadow=true;});
- const sockets=config.sockets.map(([sid,label,p,d])=>{const o=new T.Object3D();o.name='socket:'+sid;o.position.set(...p);o.userData={id:sid,label,direction:new T.Vector3(...d)};root.add(o);return o;});
- const model=normalize(root,config.scale);
- // Clone materials so highlighting, finishes and wireframe only touch this rifle's meshes.
- model.traverse(o=>{if(o.isMesh)o.material=o.material.clone();});
- // A node claimed by one part is skipped when collecting another part's meshes.
- const claimed=new Set(config.parts.flatMap(p=>p.nodes.map(nodeName)));
- const parts=config.parts.map(p=>{
-  const objects=[],own=new Set(p.nodes.map(nodeName));
-  const walk=o=>{if(o.isMesh)objects.push(o);for(const c of o.children)if(!claimed.has(c.name)||own.has(c.name))walk(c);};
-  for(const n of p.nodes){const node=model.getObjectByName(nodeName(n));if(node)walk(node);}
-  return {...p,objects};
- });
- const materials={};model.traverse(o=>{if(o.isMesh&&!materials[o.material.name])materials[o.material.name]=o.material;});
- // Slots: a container at each mount point (model space, meters). The rifle's own part moves into
- // the container's "original" group so poses, rail offsets and swaps act on one object.
- const slots={};
- for(const spec of SLOTS){
-  const socket=sockets.find(s=>s.userData.id===spec.id),part=parts.find(p=>p.id===spec.id),slotConfig=config.slots[spec.id];
-  if(!socket||!part||!slotConfig)continue;
-  const container=new T.Group();container.name='slot:'+spec.id;model.add(container);
-  container.position.copy(model.worldToLocal(socket.getWorldPosition(new T.Vector3())));
-  const original=new T.Group();container.add(original);
-  const nodes=part.nodes.map(n=>model.getObjectByName(nodeName(n))).filter(Boolean);
-  for(const node of nodes)original.attach(node);
-  const home=new Map(nodes.map(n=>[n,n.position.clone()]));
-  const library=slotConfig.library.map(entry=>{const o=typeof entry==='string'?{id:entry}:entry;return {...spec.library.find(l=>l.id===o.id),...o};});
-  const options=[...slotConfig.factory,...library].map(o=>{
-   let object=null;
-   if(o.build){object=o.build({original,materials});object.traverse(m=>{if(m.isMesh){m.castShadow=m.receiveShadow=true;m.material=m.material.clone();}});object.visible=false;container.add(object);}
-   return {...o,object};
-  });
-  // Every mesh the slot can show belongs to its part, so clicks and highlights cover attachments too.
-  part.objects=[];container.traverse(m=>{if(m.isMesh)part.objects.push(m);});
-  slots[spec.id]={spec,rail:slotConfig.rail,container,original,home,options,part,direction:socket.userData.direction.clone().transformDirection(socket.matrixWorld),base:container.position.clone(),offset:0,baseDetail:part.detail};
- }
- installCamo(model);
- // A finish target covers a whole part (attachments included) or one option's object only.
- const finishTargets=FINISH_TARGETS.map(t=>({...t,part:parts.find(p=>p.id===(t.part||t.id)),finishes:t.finishes||FINISHES}))
-  .filter(t=>t.part&&(t.part.objects.length||t.option)&&(!t.option||slots[t.part.id]?.options.some(o=>o.id===t.option)));
- return {id,config,model,parts:parts.filter(p=>p.objects.length||slots[p.id]),sockets,slots,finishTargets,build:{},finish:{}};
-}
+const loadRifle=id=>loadRifleInstance(id,{decorate:installCamo});
+
 
 function disposeRifle(r){
  r.model.removeFromParent();
@@ -163,16 +102,7 @@ function applySlot(id,optionId,offset,animate=false){
  const slot=rifle.slots[id],option=slot.options.find(o=>o.id===optionId)||slot.options[0];
  const shownBefore=slot.original.visible?slot.original:slot.options.find(o=>o.object?.visible)?.object;
  const before={container:slot.container.position.clone(),position:slot.original.position.clone(),rotationY:slot.original.rotation.y,nodes:new Map([...slot.home.keys()].map(n=>[n,n.position.clone()]))};
- rifle.build[id]=option.id;
- slot.original.visible=!!option.original;
- slot.original.rotation.set(0,option.pose?.rotationY||0,0);
- slot.original.position.set(...(option.pose?.position||[0,0,0]));
- for(const [node,p] of slot.home){node.position.copy(p);const d=option.pose?.nodes?.[Object.keys(option.pose.nodes).find(n=>nodeName(n)===node.name)];if(d)node.position.add(new T.Vector3(...d));}
- for(const o of slot.options)if(o.object)o.object.visible=o===option;
- if(slot.rail&&offset!==undefined){const {min,max,step}=slot.rail;slot.offset=Math.round(T.MathUtils.clamp(offset,min,max)/step)*step;}
- if(!slot.rail)slot.offset=0;
- slot.container.position.copy(slot.base).x+=slot.offset;
- slot.part.detail=option.detail||slot.baseDetail;
+ applySlotState(rifle,id,option.id,offset);
  slot.part.entry?.querySelector('span')&&(slot.part.entry.querySelector('span').textContent=option.label);
  if(selected===id)detail.textContent=slot.part.detail;
  renderBuild();renderFinish();updateStats();writeHash();
@@ -244,60 +174,9 @@ function frame(id){
 
 // Camo on the rifle: it has no UVs, so recolourable materials get a triplanar projection in the
 // rifle's own space (fixed per part at load, so the pattern stays glued to each part).
-const CAMO_SCALE=4;// texture repeats per meter
-// Wear (0–1) is one shared uniform for the whole rifle: scuffs expose bare metal, low spots gather dust.
 const wearUniform={value:0};let wear=0;
-function installCamo(model){
- model.updateMatrixWorld(true);const inverse=model.matrixWorld.clone().invert();
- model.traverse(o=>{
-  if(!o.isMesh||!RECOLOURED.has(o.material.name))return;
-  const uniforms={camoMap:{value:null},camoOn:{value:0},camoMatrix:{value:inverse.clone().multiply(o.matrixWorld)},wear:wearUniform};
-  o.material.userData.camo=uniforms;
-  o.material.onBeforeCompile=shader=>{
-   Object.assign(shader.uniforms,uniforms);
-   shader.vertexShader='uniform mat4 camoMatrix;\nvarying vec3 vCamoPos;\nvarying vec3 vCamoNormal;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n vCamoPos=(camoMatrix*vec4(position,1.)).xyz;vCamoNormal=normalize(mat3(camoMatrix)*normal);');
-   shader.fragmentShader=`uniform sampler2D camoMap;
-uniform float camoOn;
-uniform float wear;
-varying vec3 vCamoPos;
-varying vec3 vCamoNormal;
-float wHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
-float wNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
- return mix(mix(mix(wHash(i),wHash(i+vec3(1,0,0)),f.x),mix(wHash(i+vec3(0,1,0)),wHash(i+vec3(1,1,0)),f.x),f.y),
-  mix(mix(wHash(i+vec3(0,0,1)),wHash(i+vec3(1,0,1)),f.x),mix(wHash(i+vec3(0,1,1)),wHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
-`+shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
- if(camoOn>.5){vec3 n=pow(abs(normalize(vCamoNormal)),vec3(4.));n/=n.x+n.y+n.z;vec3 p=vCamoPos*${CAMO_SCALE.toFixed(1)};
-  diffuseColor.rgb=texture2D(camoMap,p.yz).rgb*n.x+texture2D(camoMap,p.xz).rgb*n.y+texture2D(camoMap,p.xy).rgb*n.z;}
- if(wear>0.){
-  // Scuffs: fine, stretched noise along the rifle (handling marks run lengthwise).
-  float scuff=wNoise(vCamoPos*vec3(60.,320.,320.))*.65+wNoise(vCamoPos*vec3(18.,70.,70.))*.35;
-  // At full wear about a fifth of the paint is gone; colours are linear (bare steel ≈ #6d7074).
-  float bare=smoothstep(1.-wear*.2,1.-wear*.2+.04,scuff);
-  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.15,.16,.17),bare*.8);
-  // Dust: broad, soft patches that settle on upward faces.
-  float dust=smoothstep(.45,.9,wNoise(vCamoPos*14.))*wear*(.35+.65*max(vCamoNormal.y,0.));
-  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.33,.27,.19),dust*.4);
- }`);
-  };
-  o.material.customProgramCacheKey=()=>'rifle-camo-wear-v2';o.material.needsUpdate=true;
- });
-}
-// Finishes recolour only black-finish and polymer surfaces.
-const RECOLOURED=new Set(['h-190','polymer']);
-function targetMeshes(target){
- if(!target.option)return target.part.objects;
- const meshes=[];rifle.slots[target.part.id].options.find(o=>o.id===target.option).object.traverse(m=>{if(m.isMesh)meshes.push(m);});return meshes;
-}
-function applyFinish(targetId,finishId){
- const target=rifle.finishTargets.find(t=>t.id===targetId),choice=target.finishes.find(f=>f.id===finishId)||target.finishes[0];
- rifle.finish[targetId]=choice.id;
- for(const mesh of targetMeshes(target)){
-  const m=mesh.material;if(!RECOLOURED.has(m.name))continue;m.userData.baseColor??=m.color.clone();
-  m.color.copy(choice.color?new T.Color(choice.color):m.userData.baseColor);
-  if(m.userData.camo){m.userData.camo.camoOn.value=choice.pattern?1:0;m.userData.camo.camoMap.value=choice.pattern?camoFor(choice.pattern):null;}
- }
- renderFinish();writeHash();
-}
+const installCamo=model=>installRifleCamo(model,wearUniform);
+function applyFinish(targetId,finishId){applyFinishState(rifle,targetId,finishId);renderFinish();writeHash();}
 function setWear(value){
  wear=value;wearUniform.value=value;
  const input=document.querySelector('#wear');if(input){input.value=String(Math.round(value*100));document.querySelector('#wear-level').textContent=value<.05?'Factory new':value<.35?'Light':value<.7?'Field used':'Battle worn';}
@@ -319,7 +198,7 @@ function updateStats(){buildBox=localBox(rifle.model);renderStats();}
 function localBox(object){
  object.updateMatrixWorld(true);
  const inverse=object.matrixWorld.clone().invert(),box=new T.Box3(),m=new T.Matrix4();
- for(const child of object.children)child.traverseVisible(o=>{if(!o.isMesh)return;if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();box.union(o.geometry.boundingBox.clone().applyMatrix4(m.multiplyMatrices(inverse,o.matrixWorld)));});
+ for(const child of object.children)child.traverseVisible(o=>{if(!o.isMesh||o.userData.visualEffect)return;if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();box.union(o.geometry.boundingBox.clone().applyMatrix4(m.multiplyMatrices(inverse,o.matrixWorld)));});
  return box;
 }
 function buildSummary(build){
@@ -359,6 +238,8 @@ function writeHash(){
  for(const t of rifle.finishTargets)if(rifle.finish[t.id]!==defaultFinish(t))params.push(t.id+'-finish='+rifle.finish[t.id]);
  if(wear)params.push('wear='+Math.round(wear*100));
  history.replaceState(null,'',params.length?'#'+params.join('&'):location.pathname+location.search);
+ const back=document.querySelector('header a');
+ if(back){back.href='../bench.html'+location.hash;back.target='_self';}
 }
 
 // Swap in another rifle; the camera, lighting and music carry on untouched.
@@ -807,3 +688,6 @@ try{
   if(next!==ratio){renderer.setPixelRatio(next);resize();}
  }
 }catch(err){console.error(err);status.hidden=false;status.textContent='The viewer could not load. Reload in a browser with WebGL enabled.';}
+
+// Explicit opt-in; ordinary editing stays in the full customiser.
+document.querySelector('#advanced-test').onclick=()=>{location.href='../advanced.html'+location.hash;};

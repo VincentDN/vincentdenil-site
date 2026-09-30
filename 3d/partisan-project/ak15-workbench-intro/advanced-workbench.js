@@ -1,24 +1,15 @@
-// Workbench intro: an over-the-shoulder opening shot in the style of The Last of Us Part II's
-// workbench. The operator from the AK customiser leans over a table with the rifle lying flat,
-// hands on it. "Start customising" pushes the camera in on the rifle, fades to black and hands
-// over to the normal 3D viewer at /3d/partisan-project/ak15-workbench-intro/ak15-weapon-customiser/.
+import {BenchSession} from './bench-session.js';
+// Persistent workbench: shared rifle state, timed part changes and optional full viewer.
 // Scene space: operator's feet on y=0 facing +z, right side -x (see operator.js); meters.
 import * as T from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
-import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {MODELS,DEFAULT_MODEL} from './ak15-weapon-customiser/models.js';
 import {DEFAULT_OPERATOR,buildOperator} from './ak15-weapon-customiser/operator.js';
-import {solveArm} from './ak15-weapon-customiser/field.js';
 import {soundLayer} from '../sound-layer.js';
-import * as mech from './ak15-weapon-customiser/mech.js';
 
-const CUSTOMISER='./ak15-weapon-customiser/';
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
-const RIFLE_AT=new T.Vector3(.04,0,.47);// x/z on the table; y comes from the rifle's own thickness
 // Camera behind and above the right shoulder, looking down at the rifle.
 const SHOT={position:new T.Vector3(-.56,1.86,0),target:new T.Vector3(-.06,.84,.42)};
-const PUSH_IN={duration:1.9,fadeAt:.75};// seconds; the fade starts at this fraction of the push
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ---------- Sound: the radio, its crackle and the camp outside (bench-audio.js) ----------
@@ -41,14 +32,14 @@ musicButton.onclick=()=>{stopWaiting();if(musicPrefs.on&&!sound.music.audible())
 
 const stage=document.querySelector('#stage'),status=document.querySelector('#status'),start=document.querySelector('#start'),fade=document.querySelector('#fade');
 const renderer=new T.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<780?1.25:1.75));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
 renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;stage.append(renderer.domElement);
 const scene=new T.Scene();scene.background=new T.Color(0x07090a);scene.fog=new T.Fog(0x07090a,2.2,5);
 const camera=new T.PerspectiveCamera(42,1,.05,20);camera.position.copy(SHOT.position);camera.lookAt(SHOT.target);
 
 // ---------- Lighting: one warm work lamp, a cold fill, a dim HDR for the metal ----------
 scene.add(new T.HemisphereLight(0x4a5a66,0x120d08,.35));
-const lamp=new T.SpotLight(0xffc98a,26,4,.62,.55,2);lamp.position.set(.42,1.62,.78);lamp.target.position.set(.02,TABLE.top,.6);
+const lamp=new T.SpotLight(0xffc98a,17,4,.62,.55,2);lamp.position.set(.42,1.62,.78);lamp.target.position.set(.02,TABLE.top,.6);
 lamp.castShadow=true;lamp.shadow.mapSize.set(2048,2048);lamp.shadow.bias=-.0004;lamp.shadow.normalBias=.01;scene.add(lamp,lamp.target);
 const fill=new T.DirectionalLight(0x6f8fb0,.35);fill.position.set(-1.5,2,-1);scene.add(fill);
 new RGBELoader().load('./ak15-weapon-customiser/lighting/studio.hdr',hdr=>{hdr.mapping=T.EquirectangularReflectionMapping;scene.environment=hdr;scene.environmentIntensity=.28;});
@@ -138,52 +129,18 @@ const op=buildOperator({...DEFAULT_OPERATOR,headgear:'none',gloves:'none',pack:'
 op.root.traverse(m=>{if(m.isMesh)m.castShadow=m.receiveShadow=true;});scene.add(op.root);
 const LEAN={hips:.1,spine:.16,chest:.18,neck:.08,head:.42};
 function pose(time){
- const breath=reduceMotion?0:Math.sin(time*1.4)*.012;
- for(const [joint,x] of Object.entries(LEAN))op.joints[joint].rotation.x=x+(joint==='chest'?breath:0);
+ const breath=reduceMotion||session.actions.busy?0:Math.sin(time*1.4)*.012;
+ const effort=session.open?1-session.lift:0;
+ for(const [joint,x] of Object.entries(LEAN))op.joints[joint].rotation.x=x+(joint==='chest'?breath:0)+(['hips','spine','chest'].includes(joint)?effort*.065:0);
  op.joints.head.rotation.y=-.1+look.x*.12;
  for(const side of ['R','L']){op.joints['upperLeg'+side].rotation.x=-.08;op.joints['lowerLeg'+side].rotation.x=.14;}
  op.root.updateMatrixWorld(true);
 }
 
-// ---------- Rifle: lying flat on its side, hands resting on the grip and handguard ----------
-function normalize(root,scale){// long axis along +x, muzzle (the slimmer end) at +x, meters, centered
- root.updateMatrixWorld(true);
- let size=new T.Box3().setFromObject(root).getSize(new T.Vector3());
- if(size.z>size.x&&size.z>=size.y)root.rotation.y=Math.PI/2;else if(size.y>size.x&&size.y>size.z)root.rotation.z=Math.PI/2;
- root.updateMatrixWorld(true);
- const bounds=new T.Box3().setFromObject(root);size=bounds.getSize(new T.Vector3());
- const ends=[[Infinity,-Infinity],[Infinity,-Infinity]],v=new T.Vector3();
- root.traverse(o=>{if(!o.isMesh)return;const p=o.geometry.attributes.position;for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(o.matrixWorld);const t=(v.x-bounds.min.x)/size.x,e=t<.12?ends[0]:t>.88?ends[1]:null;if(e){e[0]=Math.min(e[0],v.y);e[1]=Math.max(e[1],v.y);}}});
- if(ends[0][1]-ends[0][0]<ends[1][1]-ends[1][0])root.rotateY(Math.PI);
- root.scale.multiplyScalar(scale);root.updateMatrixWorld(true);
- root.position.sub(new T.Box3().setFromObject(root).getCenter(new T.Vector3()));
- const holder=new T.Group();holder.add(root);return holder;
-}
-const rifle=new T.Group();scene.add(rifle);// yaw and tilt live here; the model inside lies on its left side
-let rifleHalf=0,rifleLength=0;
-async function loadRifle(){
- const config=MODELS[DEFAULT_MODEL],gltf=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(CUSTOMISER+config.url.replace('./',''));
- const model=normalize(gltf.scene,config.scale);
- model.rotation.x=Math.PI/2;// top of the rifle points away from the operator, right side up
- model.traverse(o=>{if(o.isMesh)o.castShadow=o.receiveShadow=true;});
- model.updateMatrixWorld(true);
- const box=new T.Box3().setFromObject(model),size=box.getSize(new T.Vector3());
- model.position.sub(box.getCenter(new T.Vector3()));
- rifleHalf=size.y/2;rifleLength=size.x;rifle.add(model);
-}
-// Palm targets along the rifle: grip (right hand) and handguard (left hand), just above the top face.
-const HOLD={R:{along:-.2,pole:new T.Vector3(-1,-.2,-.5)},L:{along:.2,pole:new T.Vector3(1,-.4,-.4)}};
-function placeRifle(){
- const tilt=look.y*.07;// lift the far edge a touch, as if checking the ejection port
- rifle.position.set(RIFLE_AT.x,TABLE.top+rifleHalf+Math.abs(tilt)*rifleHalf,RIFLE_AT.z);
- rifle.rotation.set(tilt,-.22+look.x*.08,0,'YXZ');rifle.updateMatrixWorld(true);
- for(const [side,h] of Object.entries(HOLD)){
-  const target=new T.Vector3(h.along*rifleLength,rifleHalf+.035,-.015).applyMatrix4(rifle.matrixWorld);
-  solveArm(op,side,target,h.pole);
- }
-}
-
-// ---------- Look (mouse, touch, gamepad) and the push-in ----------
+// Shared, editable rifle and transactional bench actions.
+const rifle=new T.Group();scene.add(rifle);
+const session=new BenchSession({scene,holder:rifle,op,table:TABLE,sound,reduceMotion,onChange:()=>resize()});
+// ---------- Look (mouse, touch, gamepad) and the working camera ----------
 const look={x:0,y:0},want={x:0,y:0};
 addEventListener('pointermove',e=>{want.x=e.clientX/innerWidth*2-1;want.y=e.clientY/innerHeight*2-1;});
 function pollPad(){
@@ -193,56 +150,47 @@ function pollPad(){
   if(pad.buttons[0]?.pressed||pad.buttons[9]?.pressed)begin();
  }
 }
-let push=null;
-function begin(){
- if(push||start.disabled)return;
- start.disabled=true;document.body.classList.add('leaving');
- mech.charge();// picks it up and racks it before going in
- const focus=rifle.getWorldPosition(new T.Vector3());
- push={start:performance.now()/1000,from:camera.position.clone(),fromTarget:currentTarget.clone(),to:focus.clone().add(new T.Vector3(-.08,.3,-.16)),toTarget:focus,faded:false};
- if(reduceMotion)push.start-=PUSH_IN.duration*PUSH_IN.fadeAt;
-}
+function begin(){if(start.disabled||session.open)return;document.querySelector('.prompt').hidden=true;session.enter();resize();}
 start.addEventListener('click',begin);
-addEventListener('keydown',e=>{if(e.target.matches('a,button,input,select,textarea'))return;if(e.key==='e'||e.key==='E'||e.key==='Enter')begin();});
-const advancedLink=document.querySelector('#advanced-test');
-const syncAdvancedLink=()=>advancedLink.href='./advanced.html'+location.hash;
-syncAdvancedLink();addEventListener('hashchange',syncAdvancedLink);
-// Coming back with the browser's back button restores this page from cache: reset the shot.
-addEventListener('pageshow',e=>{if(e.persisted){unsubscribe=sound.subscribe(showMusic);sound.scene('bench');showMusic();push=null;start.disabled=false;document.body.classList.remove('leaving');fade.classList.add('clear');clock.getDelta();requestAnimationFrame(frame);}});
+addEventListener('keydown',e=>{if(e.key==='Escape'){session.cancel();return;}if(e.target.matches('input,button,select,textarea'))return;if(e.key.toLowerCase()==='e')begin();});
+addEventListener('pageshow',e=>{if(e.persisted){unsubscribe=sound.subscribe(showMusic);sound.scene('bench');showMusic();}});
 
 const currentTarget=SHOT.target.clone();
-const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;
- camera.fov=w/h<1?60:42;camera.updateProjectionMatrix();}
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<780?1.25:1.75));renderer.setSize(w,h,false);camera.aspect=w/h;
+ camera.fov=w/h<1?(session.open?65:60):42;camera.updateProjectionMatrix();}
 addEventListener('resize',resize);resize();
 
 const clock=new T.Clock();
+const frameSamples=[];let nextMetric=0;
+const performanceNote=new URLSearchParams(location.search).has('review')?document.createElement('output'):null;
+if(performanceNote){performanceNote.id='bench-performance';performanceNote.className='bench-note';session.panel.querySelector('.bench-review').append(performanceNote);}
 function frame(){
- const dt=Math.min(clock.getDelta(),.05),time=clock.elapsedTime;
+ const elapsed=clock.getDelta(),dt=Math.min(elapsed,.05),time=clock.elapsedTime;
  pollPad();
- const k=1-Math.exp(-dt*(push?1.5:4));look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
- pose(time);placeRifle();
+ const k=1-Math.exp(-dt*4);look.x+=(want.x-look.x)*k;look.y+=(want.y-look.y)*k;
+ pose(time);session.update(time,look);
  drapeFlag(time);
  radio.userData.dial.material.emissiveIntensity=1.3+Math.random()*.15;// valve glow flicker
  if(sound.bench){const at=radio.getWorldPosition(new T.Vector3()).project(camera);sound.bench.setPan(at.x*.8);}
- if(push){
-  // Wall-clock time, so a slow device still hands over on schedule.
-  const t=performance.now()/1000-push.start,u=Math.min(t/PUSH_IN.duration,1),e=ease(u);
-  camera.position.lerpVectors(push.from,push.to,e);currentTarget.lerpVectors(push.fromTarget,push.toTarget,e);
-  if(u>=PUSH_IN.fadeAt&&!push.faded){push.faded=true;fade.classList.remove('clear');}
-  // Fully black: stop rendering so the main thread is free for the navigation.
-  if(t>=PUSH_IN.duration+.5){if(!sound.shared)sound.music.handoff();location.href=CUSTOMISER+location.hash;return;}
- }else{
-  const sway=reduceMotion?0:Math.sin(time*.6)*.006;
-  camera.position.set(SHOT.position.x+look.x*.05,SHOT.position.y-look.y*.03+sway,SHOT.position.z);
-  currentTarget.set(SHOT.target.x+look.x*.1,SHOT.target.y-look.y*.06,SHOT.target.z);
- }
+ const sway=reduceMotion||session.actions.busy?0:Math.sin(time*.6)*.003;
+ const desired=session.open?new T.Vector3(-.28,2.14,.70).lerp(new T.Vector3(.04,2.1,.95),1-session.lift):SHOT.position.clone();
+ desired.x+=look.x*.025;desired.y+=sway;
+ const transition=session.open?Math.min(1,(performance.now()-session.enteredAt)/850):0;
+ const blend=reduceMotion?1:transition*transition*(3-2*transition);
+ camera.position.copy(session.open?SHOT.position.clone().lerp(desired,blend):desired);
+ const focus=session.open?new T.Vector3(.04,.97,.49):SHOT.target;
+ currentTarget.copy(session.open?SHOT.target.clone().lerp(focus,blend):focus);
  camera.lookAt(currentTarget);
  renderer.render(scene,camera);
+ if(performanceNote){
+  if(elapsed>0&&!document.hidden){frameSamples.push(elapsed*1000);if(frameSamples.length>180)frameSamples.shift();}
+  if(time>=nextMetric&&frameSamples.length){const sorted=[...frameSamples].sort((a,b)=>a-b);performanceNote.textContent=`Recent frames · median ${sorted[Math.floor(sorted.length*.5)].toFixed(1)} ms · p95 ${sorted[Math.min(sorted.length-1,Math.floor(sorted.length*.95))].toFixed(1)} ms · ${renderer.info.memory.geometries} geometries · ${renderer.info.memory.textures} textures`;nextMetric=time+.5;}
+ }
  requestAnimationFrame(frame);
 }
 
-loadRifle().then(()=>{
- status.hidden=true;start.disabled=false;start.focus({preventScroll:true});
+const requestedRifle=new URLSearchParams(location.hash.slice(1)).get('rifle');
+session.load(MODELS[requestedRifle]?requestedRifle:DEFAULT_MODEL).then(()=>{
+ status.hidden=true;start.disabled=false;begin();
  requestAnimationFrame(frame);requestAnimationFrame(()=>fade.classList.add('clear'));
 }).catch(err=>{status.textContent='Could not load the rifle: '+err.message;fade.classList.add('clear');});
