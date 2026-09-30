@@ -1,6 +1,10 @@
 # Workbench intro (AK customiser experiment)
 
-URL: `/3d/partisan-project/ak15-workbench-intro/`. Serve the repository root over HTTP; no build step. **Work on this rifle** (E, focused Enter, or gamepad A) now opens a persistent bench panel. Lift/set down the rifle, select parts, and use Skip or Cancel during changes. **Open full customiser** retains the build and opens the existing viewer inside the shell. Its Back link returns to the bench with the build preserved. Both AK-74M and AK-15K are supported by the prototype. Listed under `/3d/partisan-project/` and `/projects/3d/`, with `seo_hidden=true` and robots `noindex`.
+URL: `/3d/partisan-project/ak15-workbench-intro/`. The default experience is restored to the pre-prototype flow: **Start customising** plays the original opener transition and enters the **Full Customiser**, where normal editing happens. The original `bench.html` / `workbench.js` scene does not import the experimental action or hand modules.
+
+**Load Advanced animations test** is an explicit opt-in button on the opener and in the Full Customiser. It loads `advanced.html` / `advanced-workbench.js`, containing the new bench panel, lift/set-down actions, attachment animations, articulated hands, timed handling sounds and review controls. The shell records this as `?view=advanced`; copied advanced links and reloads retain that choice. The full customiser remains available from the advanced panel. All animation roadmap phases below belong to this separate test experience.
+
+Serve the repository root over HTTP; no build step. The project remains linked through `/projects/3d/` and the Partisan index, with `seo_hidden=true` and robots `noindex`.
 
 Implementation checkpoint: 29 September 2026, rebased by fast-forward onto main **87567c3**. This is a working animation prototype; the complete roadmap's visual, audio and device acceptance gates are not yet all met.
 
@@ -28,7 +32,7 @@ The [illustrated workbench roadmap](../workbench-roadmap/) (28 September 2026, b
 
 ## Review and tests
 
-Open `bench.html?review=1` for an animation checkpoint selector. Choose Reach, Release, On table, Seat or Recover before starting a change. The action pauses at the selected beat; Resume continues without counting paused time. Skip and Cancel remain available. The review-only palm target error readout helps find unreachable poses; it is not a mesh-intersection detector.
+Open `advanced.html?review=1` for an animation checkpoint selector. Choose Reach, Release, On table, Seat or Recover before starting a change. The action pauses at the selected beat; Resume continues without counting paused time. Skip and Cancel remain available. The review-only palm target error readout helps find unreachable poses; it is not a mesh-intersection detector.
 
 Run from the repository root:
 

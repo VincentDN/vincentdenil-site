@@ -5,6 +5,12 @@
 **Baseline:** [VincentDN/vincentdenil-site, main at a6545cc](https://github.com/VincentDN/vincentdenil-site/tree/a6545cc). This was the inspected Partisan baseline. The implementation checkout was subsequently fetched and fast-forwarded to **87567c3** on 29 September 2026. Later upstream changes affected the crane demo, docs and TinyShell, without overlapping this bench implementation.
 
 
+## Experience split — 30 September 2026
+
+The default product flow is **original workbench opener → Full Customiser**. Ordinary editing stays in the Full Customiser. All new bench editing, hand/action animations and the P1–P6 development described here belong exclusively to the opt-in **Load Advanced animations test** experience, available from the opener and the Full Customiser. The six video stills remain references for that experiment.
+
+The test lives at [Advanced animations test](../ak15-workbench-intro/?view=advanced), with its scene in `advanced.html` and renderer in `advanced-workbench.js`. Use `advanced.html?review=1` for checkpoint authoring. The basic opener uses the restored `bench.html` and `workbench.js`; it does not load the test's action/hand modules. Future animation work should stay in the advanced route unless explicitly promoted.
+
 ## Implementation checkpoint — 29 September 2026
 
 The six reference stills and analysis below remain the reference study. Development has now begun across all phases; **implementation coverage is not the same as passing each phase's exit gate**.
@@ -19,7 +25,7 @@ The six reference stills and analysis below remain the reference study. Developm
 | P5 | Both rifles, all seven slot families, rail moves, in-place stock adjustment, Quick changes and Skip | Verify every model/option extreme and tune each family beyond the common transfer framework |
 | P6 | Responsive panel, keyboard controls, reduced-motion skip, saved builds/finishes, viewer return links, capped pixel ratio | Physical-device performance/memory profiling, full input and accessibility audit |
 
-Validation so far: ten automated tests pass. Browser checks passed for all seven attachment families using Skip, optic rollback before commit, switching between both rifles, customiser loading and camouflage/wear-preserving return navigation. The authoring mode at `bench.html?review=1` pauses at 30%, 38%, 50%, 70% or 82% for repeatable stills. Its palm error metric measures rig reach, not intersections or anatomical realism. No frame-rate or audio-fidelity target is claimed as achieved.
+Validation so far: ten automated tests pass. Browser checks passed for all seven attachment families using Skip, optic rollback before commit, switching between both rifles, customiser loading and camouflage/wear-preserving return navigation. The authoring mode at `advanced.html?review=1` pauses at 30%, 38%, 50%, 70% or 82% for repeatable stills. Its palm error metric measures rig reach, not intersections or anatomical realism. No frame-rate or audio-fidelity target is claimed as achieved.
 
 Development paused at the user's request on 30 September 2026. This work-in-progress checkpoint includes the latest remote main changes through ff628f3. The remaining visual, sound and device acceptance gates are not complete. The next priority is contact and sound review, not declaring the breadth of prototype options production-ready.
 

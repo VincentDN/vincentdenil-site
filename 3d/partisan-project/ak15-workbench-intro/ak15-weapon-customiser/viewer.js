@@ -688,3 +688,6 @@ try{
   if(next!==ratio){renderer.setPixelRatio(next);resize();}
  }
 }catch(err){console.error(err);status.hidden=false;status.textContent='The viewer could not load. Reload in a browser with WebGL enabled.';}
+
+// Explicit opt-in; ordinary editing stays in the full customiser.
+document.querySelector('#advanced-test').onclick=()=>{location.href='../advanced.html'+location.hash;};
