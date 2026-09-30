@@ -10,6 +10,7 @@
 @media(max-width:600px){.prompt{left:10px;right:10px;max-width:none;padding:14px 16px;background:#07090ad9;border-radius:6px}.addr{display:none}header{padding:12px 16px}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<link rel="stylesheet" href="./bench-panel.css">
 </head><body>
 <header><span class="addr">//vincentdenil.com/3d/partisan-project/ak15-workbench-intro/</span><a href="/3d/partisan-project/">← Back to /partisan-project/</a></header>
 <div id="stage" aria-label="Over-the-shoulder view of a partisan at a workbench, an AK rifle lying flat on the table under a lamp. Move the mouse to look around."></div>
@@ -17,9 +18,10 @@
 <div class="prompt">
  <h1>ANTISTASI EXPERIMENT · THE WORKBENCH</h1>
  <p>Somewhere deep in the mountains of Altis, an FIA insurgent builds weapons for the resistance. <span lang="el">Θάνατος στον εισβολέα</span>, ALTIS MUST BE FREE!</p>
- <button id="start" disabled>Start customising<span class="key">E</span></button>
+ <button id="start" disabled>Work on this rifle<span class="key">E</span></button>
 </div>
 <button id="music-toggle" aria-pressed="false" aria-label="Background music" title="Background music">♪</button>
+<aside id="bench-panel" aria-label="Workbench customization" hidden></aside>
 <div id="fade"></div>
 <script type="module" src="./workbench.js"></script>
 </body></html>

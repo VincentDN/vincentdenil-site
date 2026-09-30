@@ -119,7 +119,7 @@ export const SLOTS=[
    return g;}},
   {id:'laser',grams:80,label:'Laser',detail:'Visible laser aiming module; the dot helps from the hip.',build:({materials})=>{
    const g=group([[box(.03,.012,.016,[0,0,.008]),box(.06,.028,.026,[.005,.02,.025])],materials['h-190']],[box(.002,.008,.008,[.036,.02,.025]),materials.red_emission]);
-   const ray=new T.Mesh(new T.CylinderGeometry(.0006,.0006,1.4,4).rotateZ(-Math.PI/2).translate(.037+.7,.02,.025),new T.MeshBasicMaterial({color:'#ff2a2a',transparent:true,opacity:.55,depthWrite:false}));g.add(ray);return g;}},
+   const ray=new T.Mesh(new T.CylinderGeometry(.0006,.0006,1.4,4).rotateZ(-Math.PI/2).translate(.037+.7,.02,.025),new T.MeshBasicMaterial({color:'#ff2a2a',transparent:true,opacity:.55,depthWrite:false}));ray.userData.visualEffect=true;g.add(ray);return g;}},
   {id:'combo',grams:190,label:'Light + laser',detail:'Combined light and laser unit.',build:({materials})=>{
    const g=group([[box(.03,.012,.016,[0,0,.008]),box(.065,.028,.028,[0,.022,.026])],materials['h-190']],
     [tube(.0105,.0325,.0335,[.026,.026],10),new T.MeshStandardMaterial({color:'#fff6de',emissive:'#fff1c4',emissiveIntensity:2})],[box(.002,.006,.006,[.0335,.012,.026]),materials.red_emission]);
