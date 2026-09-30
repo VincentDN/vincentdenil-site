@@ -36,7 +36,7 @@ export class InteractionRecorder{
   if(this.active)throw new Error('A recording is already running.');
   if(!validState(initialState))throw new Error('The scene is not ready to record.');
   this.started=this.now();this.active=true;this.lastCamera=-1;this.lastPointer=-1;
-  this.data={schemaVersion:1,feature:'WeaverShell',project:{...PROJECT},createdAt:new Date().toISOString(),duration:0,syncOffset:0,initialState:structuredClone(initialState),actions:[],camera:[{time:0,...structuredClone(initialState.camera)}],pointer:[]};
+  this.data={schemaVersion:1,feature:'vWeaver',project:{...PROJECT},createdAt:new Date().toISOString(),duration:0,syncOffset:0,initialState:structuredClone(initialState),actions:[],camera:[{time:0,...structuredClone(initialState.camera)}],pointer:[]};
  }
  time(){return Math.round((this.now()-this.started))/1000;}
  action(action){if(this.active&&validAction(action))this.data.actions.push({time:this.time(),...structuredClone(action)});}

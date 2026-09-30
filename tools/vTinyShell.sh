@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# TinyShell 🐚 — local static file server (Mac/Linux; use TinyShell.bat on Windows).
+# vTinyShell — local static file server (Mac/Linux; use vTinyShell.bat on Windows).
 # Lives in tools/, but serves the repo root at http://localhost:8000/ over a
 # real http:// origin instead of file://, and saves comments straight to
 # feedback/ on disk.
@@ -13,4 +13,4 @@ if [ -z "$PYTHON" ]; then
 fi
 
 # The Python script itself opens the browser and prints the how-to guide.
-exec "$PYTHON" "TinyShell.py"
+exec "$PYTHON" "vTinyShell.py"

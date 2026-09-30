@@ -1,16 +1,18 @@
 /*!
- * TinyShell Comments — select-text-and-comment widget.
+ * vTinyShell Comments — select-text-and-comment widget.
  *
  * Drop-in port of the comment engine from vdn-roadmap's ops-wiki/FMP_VA_Wiki.html,
  * generalized to work across many separate pages sharing one comments store
- * instead of many sections inside one page. Include with a single tag:
+ * instead of many sections inside one page. Filename kept as
+ * tinyshell-comments.js (referenced by 32 pages) even though the tool itself
+ * was renamed to vTinyShell. Include with a single tag:
  *
  *   <script src="/assets/tinyshell-comments.js" defer></script>
  *
- * Needs TinyShell (tools/TinyShell.bat / .sh) running for comments to persist
- * to disk (feedback/comments.json + .md) and for image attachments / "Show on
- * disk" to work. Opened directly as a file:// page, comments still work but
- * fall back to this browser's localStorage.
+ * Needs vTinyShell (tools/vTinyShell.bat / .sh) running for comments to
+ * persist to disk (feedback/comments.json + .md) and for image attachments /
+ * "Show on disk" to work. Opened directly as a file:// page, comments still
+ * work but fall back to this browser's localStorage.
  *
  * Every comment is tagged with the page it was left on (location.pathname),
  * so a single shared feedback/comments.json can hold comments from every page
@@ -147,7 +149,7 @@
 
   // ── storage ──────────────────────────────────────────────
   // Source of truth is the local server's /api/comments (writes to disk under
-  // feedback/), when this page is opened via tools/TinyShell.bat/.sh. Opened
+  // feedback/), when this page is opened via tools/vTinyShell.bat/.sh. Opened
   // directly as a file:// page, there's no server to talk to, so we fall back
   // to this browser's localStorage — same UI either way. One comments store
   // is shared by every page that includes this script; each page filters to
@@ -176,7 +178,7 @@
     if (storageStatusEl) {
       storageStatusEl.innerHTML = serverAvailable
         ? 'Saved to disk in <code>feedback/</code> (comments.json + comments.md) — nothing leaves your machine.'
-        : 'Saved only in this browser (<code>localStorage</code>) — start <code>tools/TinyShell.bat</code> / <code>.sh</code> to save to disk instead (also needed for image attachments and "Show on disk"). Export below meanwhile.';
+        : 'Saved only in this browser (<code>localStorage</code>) — start <code>tools/vTinyShell.bat</code> / <code>.sh</code> to save to disk instead (also needed for image attachments and "Show on disk"). Export below meanwhile.';
     }
     if (revealBtn) revealBtn.disabled = !serverAvailable;
   }
@@ -591,7 +593,7 @@
   }
   function uploadImage(file) {
     if (!serverAvailable) {
-      alert('Image attachments need the local server running — start tools/TinyShell.bat (Windows) or tools/TinyShell.sh (Mac/Linux) first.');
+      alert('Image attachments need the local server running — start tools/vTinyShell.bat (Windows) or tools/vTinyShell.sh (Mac/Linux) first.');
       return;
     }
     var placeholder = document.createElement('div');

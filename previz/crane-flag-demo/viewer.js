@@ -117,12 +117,12 @@ try{
  for(const g of Object.values(groups))g.traverse(o=>{if(o.isMesh)o.material=o.material.clone();});
  deform(0);ready=true;status.hidden=true;
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();status.hidden=false;status.classList.remove('viewer-loading');status.textContent='Graphics context lost. Reload to reopen the viewer.';});
- // WeaverShell adapter: explicit state, semantic actions, and stable target IDs.
+ // vWeaver adapter: explicit state, semantic actions, and stable target IDs.
  let restoring=false,playbackPhase=null;
  const cameraState=()=>({position:camera.position.toArray(),target:controls.target.toArray(),zoom:camera.zoom});
  const getState=()=>({units,selected,showDimensions,human:human.visible,motion,wind:Number(document.querySelector('#wind').value),view:document.querySelector('[data-view][aria-pressed="true"]')?.dataset.view||null,camera:cameraState()});
  const setState=state=>{
-  if(!validState(state))throw new Error('Invalid WeaverShell scene state');
+  if(!validState(state))throw new Error('Invalid vWeaver scene state');
   restoring=true;
   try{
    units=state.units;updateUnits();selected=null;select(state.selected);
@@ -140,7 +140,7 @@ try{
   getState,setState,
   setPlaybackPhase(value){playbackPhase=typeof value==='number'&&Number.isFinite(value)?value:null;},
   projectMarker(id){const spec=dimensions.find(d=>d.id===id);if(!spec||!showDimensions||(id==='human'&&!human.visible))return null;camera.updateMatrixWorld();const p=new T.Vector3(...spec.anchor).project(camera);if(Math.abs(p.x)>1||Math.abs(p.y)>1||p.z< -1||p.z>1)return null;const r=stage.getBoundingClientRect();return {x:r.left+(p.x*.5+.5)*r.width,y:r.top+(-p.y*.5+.5)*r.height};},
-  applyAction(action){if(!validAction(action))throw new Error('Unsupported WeaverShell action');if(action.type==='view'){restoring=true;try{view(action.value);}finally{restoring=false;}}else{const state=getState();state[action.type==='selection'?'selected':action.type]=action.value;setState(state);}},
+  applyAction(action){if(!validAction(action))throw new Error('Unsupported vWeaver action');if(action.type==='view'){restoring=true;try{view(action.value);}finally{restoring=false;}}else{const state=getState();state[action.type==='selection'?'selected':action.type]=action.value;setState(state);}},
   subscribe(listener){const handler=e=>listener(e.detail);adapterEvents.addEventListener('action',handler);return()=>adapterEvents.removeEventListener('action',handler);}
  });
  document.querySelectorAll('[data-view]').forEach(b=>b.dataset.weaverId='view:'+b.dataset.view);
