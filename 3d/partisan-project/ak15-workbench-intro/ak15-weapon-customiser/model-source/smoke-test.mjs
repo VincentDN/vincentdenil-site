@@ -23,7 +23,9 @@ if(threeDir)await page.route(/cdn\.jsdelivr\.net\/npm\/three@[^/]+\//,r=>{const 
 
 const settle=ms=>page.waitForTimeout(ms);
 const click=async sel=>{await page.locator(sel).first().click({force:true});};
-const stats=()=>page.$eval('#stats',e=>e.innerText);
+// The BUILD stats panel (#stats) was removed from the UI; the loadout hash still changes with
+// every option, so it stands in as the "something changed" oracle below.
+const stats=()=>page.evaluate(()=>location.hash);
 let checks=0;
 async function step(label,fn){try{await fn();checks++;}catch(err){problems.push(`${label}: ${err.message.split('\n')[0]}`);}}
 

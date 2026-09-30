@@ -138,6 +138,12 @@ These are the broader Partisan demo tracks, not requirements to re-enable parked
 
 ### M3 — character art and customisation
 
+![Low-poly operator keyframe: a masked, helmeted soldier firing a modernized rifle with a red-dot and foregrip, muzzle flash and shell casings, a second operator with an AK in the background](references/low-poly-operator-keyframe-01.webp)
+
+![Low-poly operator keyframe: a close-up of a masked operator with NVG-mounted helmet, plaid layer over a plate carrier, aiming a suppressed rifle with a red-dot, a flag and a second operator behind](references/low-poly-operator-keyframe-02.webp)
+
+**Target look** (owner-supplied keyframes, 30 September 2026): low-poly but readable at speed — faceted geometry, painterly flat-shaded materials, legible silhouette for mask/helmet/plate-carrier/patch layers, held together by rim light and dust/impact FX rather than surface detail. Judge the M3 base and rig against this bar before investing in a full wardrobe. Reference for style only, not a source asset.
+
 - Select a low-poly standard-skeleton base compatible with the rifle style: male/female bases or an agreed adjustable base, with build, height and face morphs. Quaternius/Kenney or commissioned art remain candidates, not selected assets.
 - Extend the existing procedural creator into layered head, face, torso, legs, feet, hands, vest, backpack and patch slots. Cull hidden body regions and test clipping across outfit combinations.
 - Preserve shared clothing/weapon camo and palettes; extend fabric wear/dirt, faction patches and armbands once setting and insignia direction are settled.

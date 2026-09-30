@@ -74,7 +74,7 @@ Every hands-on change to the rifle makes a heavy, mechanical sound. The fallback
 - **Workbench intro**: *Start customising* racks the charging handle before the push-in.
 
 ## Handling stats and rules
-`stats.js` is pure data: five illustrative 0–100 stats (Ergonomics, Recoil, Handling, Loudness, Sighting range), per-option modifiers keyed by slot and option id, and compatibility rules. Each rifle in `models.js` sets its base `stats`, and options may override `rounds` (the AK-15K's 40-round RPK and 75-round drum). The Build panel shows capacity, weight and length tiles plus stat bars. Hovering or focusing an option previews its change: green is better, red worse (for Recoil and Loudness, lower is better).
+`stats.js` is pure data: five illustrative 0–100 stats (Ergonomics, Recoil, Handling, Loudness, Sighting range), per-option modifiers keyed by slot and option id, and compatibility rules. Each rifle in `models.js` sets its base `stats`, and options may override `rounds` (the AK-15K's 40-round RPK and 75-round drum). These stats still drive the mechanics below (Field sway, Test fire recoil, the range drill, weapon-light trade-offs) — only the BUILD stat-bar panel and the REFERENCE spec list in the sidebar were deprecated and removed (30 September 2026); `renderStats()` in `viewer.js` is now a guarded no-op kept for that data plumbing, not a UI panel.
 
 A rule blocks options in other slots while its trigger is fitted, in both directions: drum or quad-stack against the folded stock, the 4× scope against folded or removed stocks, the angled grip against the drum. Blocked chips stay visible (struck through, `aria-disabled`); clicking one explains the rule. Links that break a rule fall back to the later slot's default.
 

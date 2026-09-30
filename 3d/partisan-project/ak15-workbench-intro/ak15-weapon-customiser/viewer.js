@@ -207,7 +207,7 @@ function buildSummary(build){
  return {grams,...computeStats(rifle.config.stats,options)};
 }
 function renderStats(preview){
- if(restoring)return;
+ if(restoring||!statsPanel)return;
  const now=buildSummary(rifle.build),next=preview?buildSummary(preview):now;
  const delta=(a,b,better)=>{if(a===b)return '';const good=better==='low'?b<a:b>a;return `<em class="${good?'up':'down'}">${b>a?'+':''}${b-a}</em>`;};
  const kg=g=>(g/1000).toFixed(2);
@@ -252,7 +252,6 @@ async function mount(id){
  const config=rifle.config;
  floor.position.y=new T.Box3().setFromObject(rifle.model).min.y-.002;
  for(const b of document.querySelectorAll('[data-rifle]'))b.setAttribute('aria-pressed',String(b.dataset.rifle===id));
- document.querySelector('#specs').replaceChildren(...config.specs.map(([k,v])=>{const row=document.createElement('div');row.className='spec';row.innerHTML='<span></span><strong></strong>';row.firstChild.textContent=k;row.lastChild.textContent=v;return row;}));
  document.querySelector('#source').innerHTML=`Model: <a href="${config.source.url}">${config.source.title}</a> by <a href="${config.author.url}">${config.author.name}</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Loose rounds and spare magazine removed.`;
  for(const part of rifle.parts){
   const entry=document.createElement('button');entry.className='part';entry.setAttribute('aria-pressed','false');
