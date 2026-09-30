@@ -194,8 +194,30 @@
       updateStorageStatus();
     });
   }
+  var SYNCED_KEY = STORAGE_KEY + '_synced';
   allComments = loadLocal(); // provisional, replaced once initComments() resolves
   syncFromAll();
+
+  // A comment's anchor is a (sectionId, start, end) character-offset span
+  // into this page's own text, not a match on its actual content — so once
+  // the page is edited (e.g. its feedback gets incorporated during a review
+  // pass), old offsets just point at whatever new text now occupies that
+  // span. That's how a resolved comment appears to "jump" onto unrelated
+  // nearby text instead of disappearing: nothing detects the drift on its
+  // own. Each comment keeps its original selected text in `quote`, so we can
+  // check the live text at its saved offsets still matches, and drop it if
+  // not. Only comments belonging to *this* page can be checked here (other
+  // pages' comments pass through untouched — each validates its own on its
+  // own load). Deleted outright rather than just hidden — git history is the
+  // rollback path, not a soft-delete flag in this store.
+  function pruneOrphanedComments(list) {
+    return list.filter(function (c) {
+      if (c.sectionId !== PAGE_ID) return true;
+      if (!c.quote || c.start === null || c.start === undefined || c.end === null || c.end === undefined) return true;
+      var live = getFilteredText(content).slice(c.start, c.end).trim();
+      return live === c.quote;
+    });
+  }
 
   function initComments() {
     fetch('/api/comments', { cache: 'no-store' })
@@ -203,13 +225,30 @@
       .then(function (serverList) {
         serverAvailable = true;
         var local = loadLocal();
-        if ((!serverList || !serverList.length) && local.length) {
-          // first time the server has been used in this browser — migrate local comments in
+        var everSynced = false;
+        try { everSynced = localStorage.getItem(SYNCED_KEY) === '1'; } catch (e) {}
+        var migrated = false;
+        if (!everSynced && (!serverList || !serverList.length) && local.length) {
+          // genuinely the first time this browser has ever talked to a
+          // server — preserve locally-drafted comments by pushing them up.
           allComments = local;
+          migrated = true;
+        } else {
+          // The server is authoritative from here on, including when it's
+          // empty: once we've synced at least once, an empty server list
+          // means comments were resolved and cleared, not that this browser
+          // has unsynced local work to push back up. Re-migrating stale
+          // localStorage comments every load was the actual bug — resolved
+          // comments kept resurrecting themselves after being cleared.
+          allComments = Array.isArray(serverList) ? serverList : [];
+        }
+        try { localStorage.setItem(SYNCED_KEY, '1'); } catch (e) {}
+        var before = allComments.length;
+        allComments = pruneOrphanedComments(allComments);
+        if (migrated || allComments.length !== before) {
           saveComments(allComments);
         } else {
-          allComments = Array.isArray(serverList) ? serverList : [];
-          saveLocal(allComments);
+          saveLocal(allComments); // keep the local cache in sync with the server even when nothing changed
         }
         syncFromAll();
         updateStorageStatus();
@@ -218,7 +257,9 @@
       })
       .catch(function () {
         serverAvailable = false;
-        allComments = loadLocal();
+        var loaded = loadLocal();
+        allComments = pruneOrphanedComments(loaded);
+        if (allComments.length !== loaded.length) saveLocal(allComments);
         syncFromAll();
         updateStorageStatus();
         renderHighlights();
