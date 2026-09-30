@@ -59,6 +59,11 @@ Low-poly, code-built in `attachments.js` using the model's own materials. Illust
 ## Next: Partisan demo
 The plan for turning this into an interactive Partisan demo (deep weapon and character customisation) is in `PARTISAN-ROADMAP.md`.
 
+## Next: weapon roster & attachment content
+The plan for replacing the code-built attachments with real downloaded assets and growing
+the roster (G3A3, modernized RPK/M16/Mk14 EBR/SIG Spear, WW2-to-modern kitbashes) is in
+`CONTENT-ROADMAP.md`.
+
 ## Ideas for later
 - GLB export of the current build, carrying the CC BY credit.
 - More attachments: drum magazine, side-folding stock variants, lasers/lights on the handguard side rails.
