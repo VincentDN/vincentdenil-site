@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""TinyShell 🐚 — local static file server with a built-in comment API.
+"""vTinyShell — local static file server with a built-in comment API.
 
 Lives in tools/, but serves the repo root at http://localhost:8000/ over a
 real http:// origin (some browser features, including this comment API,
 don't work reliably over file://), and saves comments straight to
 feedback/ on disk via a small /api/comments endpoint. Double-click this
-file (if .py is set to open with Python), or run tools/TinyShell.sh /
-`python3 tools/TinyShell.py`.
+file (if .py is set to open with Python), or run tools/vTinyShell.sh /
+`python3 tools/vTinyShell.py`.
 
 This is the same tool used in the vdn-roadmap repo (there it powers
 comments on the Ops Wiki). The select-text-and-comment widget itself is
@@ -58,7 +58,7 @@ def open_in_file_manager(path):
 
 GUIDE = f"""
 ════════════════════════════════════════════════════════════════
- 🐚 TinyShell — local server + comment API for vincentdenil-site
+ vTinyShell — local server + comment API for vincentdenil-site
 ════════════════════════════════════════════════════════════════
  Serving this folder now: {START_URL}
 

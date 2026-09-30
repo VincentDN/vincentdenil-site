@@ -1,16 +1,18 @@
 /*!
- * TinyShell Comments — select-text-and-comment widget.
+ * vTinyShell Comments — select-text-and-comment widget.
  *
  * Drop-in port of the comment engine from vdn-roadmap's ops-wiki/FMP_VA_Wiki.html,
  * generalized to work across many separate pages sharing one comments store
- * instead of many sections inside one page. Include with a single tag:
+ * instead of many sections inside one page. Filename kept as
+ * tinyshell-comments.js (referenced by 32 pages) even though the tool itself
+ * was renamed to vTinyShell. Include with a single tag:
  *
  *   <script src="/assets/tinyshell-comments.js" defer></script>
  *
- * Needs TinyShell (tools/TinyShell.bat / .sh) running for comments to persist
- * to disk (feedback/comments.json + .md) and for image attachments / "Show on
- * disk" to work. Opened directly as a file:// page, comments still work but
- * fall back to this browser's localStorage.
+ * Needs vTinyShell (tools/vTinyShell.bat / .sh) running for comments to
+ * persist to disk (feedback/comments.json + .md) and for image attachments /
+ * "Show on disk" to work. Opened directly as a file:// page, comments still
+ * work but fall back to this browser's localStorage.
  *
  * Every comment is tagged with the page it was left on (location.pathname),
  * so a single shared feedback/comments.json can hold comments from every page
@@ -147,7 +149,7 @@
 
   // ── storage ──────────────────────────────────────────────
   // Source of truth is the local server's /api/comments (writes to disk under
-  // feedback/), when this page is opened via tools/TinyShell.bat/.sh. Opened
+  // feedback/), when this page is opened via tools/vTinyShell.bat/.sh. Opened
   // directly as a file:// page, there's no server to talk to, so we fall back
   // to this browser's localStorage — same UI either way. One comments store
   // is shared by every page that includes this script; each page filters to
@@ -176,7 +178,7 @@
     if (storageStatusEl) {
       storageStatusEl.innerHTML = serverAvailable
         ? 'Saved to disk in <code>feedback/</code> (comments.json + comments.md) — nothing leaves your machine.'
-        : 'Saved only in this browser (<code>localStorage</code>) — start <code>tools/TinyShell.bat</code> / <code>.sh</code> to save to disk instead (also needed for image attachments and "Show on disk"). Export below meanwhile.';
+        : 'Saved only in this browser (<code>localStorage</code>) — start <code>tools/vTinyShell.bat</code> / <code>.sh</code> to save to disk instead (also needed for image attachments and "Show on disk"). Export below meanwhile.';
     }
     if (revealBtn) revealBtn.disabled = !serverAvailable;
   }
@@ -192,8 +194,30 @@
       updateStorageStatus();
     });
   }
+  var SYNCED_KEY = STORAGE_KEY + '_synced';
   allComments = loadLocal(); // provisional, replaced once initComments() resolves
   syncFromAll();
+
+  // A comment's anchor is a (sectionId, start, end) character-offset span
+  // into this page's own text, not a match on its actual content — so once
+  // the page is edited (e.g. its feedback gets incorporated during a review
+  // pass), old offsets just point at whatever new text now occupies that
+  // span. That's how a resolved comment appears to "jump" onto unrelated
+  // nearby text instead of disappearing: nothing detects the drift on its
+  // own. Each comment keeps its original selected text in `quote`, so we can
+  // check the live text at its saved offsets still matches, and drop it if
+  // not. Only comments belonging to *this* page can be checked here (other
+  // pages' comments pass through untouched — each validates its own on its
+  // own load). Deleted outright rather than just hidden — git history is the
+  // rollback path, not a soft-delete flag in this store.
+  function pruneOrphanedComments(list) {
+    return list.filter(function (c) {
+      if (c.sectionId !== PAGE_ID) return true;
+      if (!c.quote || c.start === null || c.start === undefined || c.end === null || c.end === undefined) return true;
+      var live = getFilteredText(content).slice(c.start, c.end).trim();
+      return live === c.quote;
+    });
+  }
 
   function initComments() {
     fetch('/api/comments', { cache: 'no-store' })
@@ -201,13 +225,30 @@
       .then(function (serverList) {
         serverAvailable = true;
         var local = loadLocal();
-        if ((!serverList || !serverList.length) && local.length) {
-          // first time the server has been used in this browser — migrate local comments in
+        var everSynced = false;
+        try { everSynced = localStorage.getItem(SYNCED_KEY) === '1'; } catch (e) {}
+        var migrated = false;
+        if (!everSynced && (!serverList || !serverList.length) && local.length) {
+          // genuinely the first time this browser has ever talked to a
+          // server — preserve locally-drafted comments by pushing them up.
           allComments = local;
+          migrated = true;
+        } else {
+          // The server is authoritative from here on, including when it's
+          // empty: once we've synced at least once, an empty server list
+          // means comments were resolved and cleared, not that this browser
+          // has unsynced local work to push back up. Re-migrating stale
+          // localStorage comments every load was the actual bug — resolved
+          // comments kept resurrecting themselves after being cleared.
+          allComments = Array.isArray(serverList) ? serverList : [];
+        }
+        try { localStorage.setItem(SYNCED_KEY, '1'); } catch (e) {}
+        var before = allComments.length;
+        allComments = pruneOrphanedComments(allComments);
+        if (migrated || allComments.length !== before) {
           saveComments(allComments);
         } else {
-          allComments = Array.isArray(serverList) ? serverList : [];
-          saveLocal(allComments);
+          saveLocal(allComments); // keep the local cache in sync with the server even when nothing changed
         }
         syncFromAll();
         updateStorageStatus();
@@ -216,7 +257,9 @@
       })
       .catch(function () {
         serverAvailable = false;
-        allComments = loadLocal();
+        var loaded = loadLocal();
+        allComments = pruneOrphanedComments(loaded);
+        if (allComments.length !== loaded.length) saveLocal(allComments);
         syncFromAll();
         updateStorageStatus();
         renderHighlights();
@@ -591,7 +634,7 @@
   }
   function uploadImage(file) {
     if (!serverAvailable) {
-      alert('Image attachments need the local server running — start tools/TinyShell.bat (Windows) or tools/TinyShell.sh (Mac/Linux) first.');
+      alert('Image attachments need the local server running — start tools/vTinyShell.bat (Windows) or tools/vTinyShell.sh (Mac/Linux) first.');
       return;
     }
     var placeholder = document.createElement('div');

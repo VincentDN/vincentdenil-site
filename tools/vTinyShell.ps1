@@ -1,7 +1,7 @@
-﻿# TinyShell 🐚 — local static file server with a built-in comment API
+﻿# vTinyShell — local static file server with a built-in comment API
 # Lives in tools/, but serves the repo root at http://localhost:8000/ over
 # a real http:// origin instead of file://, and saves comments straight to
-# feedback/ on disk. Run via tools/TinyShell.bat (double-click that instead
+# feedback/ on disk. Run via tools/vTinyShell.bat (double-click that instead
 # of this file).
 #
 # This is the same tool used in the vdn-roadmap repo (there it powers
@@ -10,7 +10,7 @@
 # the printed guide below.
 
 param(
-    # TinyShell.bat passes this explicitly (the repo root, one level up from
+    # vTinyShell.bat passes this explicitly (the repo root, one level up from
     # tools/) so serving doesn't depend on how $PSScriptRoot gets resolved
     # under whatever invoked this script. Falls back to that auto-detection
     # only if run some other way (e.g. right-click > Run with PowerShell).
@@ -46,18 +46,18 @@ $ProjectsIndexPath = Join-Path $Root "projects\index.html"
 
 Write-Host ""
 Write-Host "===================================================================="
-Write-Host " 🐚 TinyShell -- local server + comment API for vincentdenil-site"
+Write-Host " vTinyShell -- local server + comment API for vincentdenil-site"
 Write-Host "===================================================================="
 Write-Host " Serving from: $Root"
 if (-not (Test-Path $ProjectsIndexPath -PathType Leaf)) {
     Write-Host ""
     Write-Host " *** WARNING: $ProjectsIndexPath does not exist. ***"
-    Write-Host " TinyShell thinks the repo root is the folder above, but that"
+    Write-Host " vTinyShell thinks the repo root is the folder above, but that"
     Write-Host " folder doesn't contain projects\index.html, so every page"
     Write-Host " request will 404. This usually means tools\ isn't sitting"
-    Write-Host " directly inside the vincentdenil-site repo, or TinyShell.bat"
-    Write-Host " and TinyShell.ps1 got separated. Close this window and check"
-    Write-Host " that tools\TinyShell.bat lives at <repo root>\tools\TinyShell.bat."
+    Write-Host " directly inside the vincentdenil-site repo, or vTinyShell.bat"
+    Write-Host " and vTinyShell.ps1 got separated. Close this window and check"
+    Write-Host " that tools\vTinyShell.bat lives at <repo root>\tools\vTinyShell.bat."
     Write-Host ""
 }
 Write-Host " Serving this folder now: $StartUrl"

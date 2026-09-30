@@ -1,4 +1,4 @@
-# WeaverShell — crane flag demo
+# vWeaver — crane flag demo
 
 Route: `/previz/crane-flag-demo/`. Linked from `/projects/previz/`, with `noindex` and `seo_hidden=true`. Serve the repository root over HTTP; no build step. Based on the Louisiana XXL viewer's sidebar, measurement interaction, meter-based geometry, units helper, FMP branding and Three.js 0.160.0 / OrbitControls setup.
 
@@ -47,4 +47,4 @@ Checked in headless Microsoft Edge with WebGL: GLB loading, all camera buttons, 
 
 The viewer follows the previz no-outward-links convention: no site navigation or clickable credits. Attribution remains plain text; source URLs are retained here for provenance. This is a separate demo-shell clone; the original viewer remains at `/previz/crane-mounted-flag-xxl/`.
 
-See ROADMAP.md for the phased WeaverShell feature. Part 1 adds the placeholder and device-local presenter video. Part 2 captures and exports interactions in `?author=1` mode. Synchronized playback and webcam capture remain Parts 3 and 4.
+See ROADMAP.md for the phased vWeaver feature. Part 1 adds the placeholder and device-local presenter video. Part 2 captures and exports interactions in `?author=1` mode. Synchronized playback and webcam capture remain Parts 3 and 4.

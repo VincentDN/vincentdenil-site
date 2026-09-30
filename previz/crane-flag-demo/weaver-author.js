@@ -4,7 +4,7 @@ import {downloadBlob} from './weaver-zip.js';
 import {publishingPackage} from './weaver-publish.js';
 
 export function initAuthor(app){
- const panel=document.createElement('section');panel.className='weaver-author';panel.setAttribute('aria-label','WeaverShell authoring');
+ const panel=document.createElement('section');panel.className='weaver-author';panel.setAttribute('aria-label','vWeaver authoring');
  panel.innerHTML=`<div class="weaver-author-title">WEAVERSHELL <span>AUTHOR MODE</span></div>
  <p class="weaver-session" role="status">Ready to capture a walkthrough.</p>
  <div class="weaver-actions"><button type="button" data-record>Record interactions</button><button type="button" data-stop disabled>Stop</button></div>

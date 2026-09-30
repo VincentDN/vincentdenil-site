@@ -23,11 +23,11 @@ Implementation checkpoint: 29 September 2026, rebased by fast-forward onto main 
 - Camera entry and action timelines use elapsed wall time. The initial shoulder shot transitions to a higher working view, with a side panel on desktop and bottom panel on narrow screens. Coarse-pointer targets have a 44 px minimum.
 - `moodboard/tlou2-workbench-reference.webp`: the reference frame (The Last of Us Part II workbench, © Sony Interactive Entertainment / Naughty Dog), kept for mood only and not used on the page.
 
-The full plan for where this goes (holding and tilting the rifle, setting it down, modding at the bench) is `extras/tlouii-style-modding-roadmap.md` in the vdn-roadmap repo.
+The single maintained local plan is the [Partisan master roadmap](../roadmap/). It records the older external roadmap reference and its uninspected status.
 
 ## Animation implementation roadmap
 
-The [illustrated workbench roadmap](../workbench-roadmap/) (28 September 2026, baseline a6545cc) covers the current shell and sound system, contact-driven animation, hand articulation, sample synchronization, phased implementation and acceptance tests. It includes six timestamped reference stills from the supplied TLOU II video. The roadmap now includes an implementation checkpoint separating working features from outstanding acceptance gates.
+The [Partisan master roadmap](../roadmap/) consolidates weapon content, Operator/Field plans and the optional advanced animation experiment, including six reference stills and remaining acceptance gates.
 
 
 ## Review and tests

@@ -1,4 +1,4 @@
-# WeaverShell — interactive project demonstrations
+# vWeaver — interactive project demonstrations
 
 ## Goal
 Wrap static project pages in a Loom-style presentation experience: a presenter video in the lower-left corner, with timed clicks, highlights, and camera actions replayed on the live project. Keep the existing static hosting and previz no-outward-links convention. Source project: `/previz/crane-mounted-flag-xxl/`; experimental clone: `/previz/crane-flag-demo/`. Work branch: `feat/weavershell`.
@@ -29,7 +29,7 @@ demo.json: schema version, project ID/revision, video URL, poster URL, captions 
 ## Next checkpoint
 Part 3 is next: video-clock playback, seeking and cursor replay. The viewer adapter and capture/export path are implemented. Keep each stage independently usable and committed. Update this roadmap with completed checks and unresolved decisions at each checkpoint. Actual webcam footage is needed for final content and synchronization QA, not for building the recorder and player.
 
-## WeaverShell authoring checkpoint
+## vWeaver authoring checkpoint
 
 Audience route: `/previz/crane-flag-demo/`. Author route: `/previz/crane-flag-demo/?author=1`. Both remain static pages with no outward navigation. Author mode requests no camera or microphone permissions in Part 2.
 
