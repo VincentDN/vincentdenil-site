@@ -1,0 +1,7 @@
+# Partisan Project moved to its own repository and GitHub Pages site (2026-10-01).
+# Old shared links keep working (Cloudflare Pages honours this file).
+/3d/partisan-project            https://vincentdn.github.io/partisan-project/  301
+/3d/partisan-project/           https://vincentdn.github.io/partisan-project/  301
+/3d/partisan-project/roadmap/*  https://vincentdn.github.io/partisan-project/docs/master-roadmap.html  301
+/3d/partisan-project/workbench-roadmap/*  https://vincentdn.github.io/partisan-project/docs/master-roadmap.html  301
+/3d/partisan-project/ak15-workbench-intro/*  https://vincentdn.github.io/partisan-project/workbench/  301
