@@ -1,0 +1,681 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="seo_hidden" content="true"><title>Partisan — Master roadmap</title><style>:root{color-scheme:light;--ink:#1f3032;--muted:#566563;--line:#d7ded9;--accent:#915324}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f2f2e9;color:var(--ink);font:17px/1.72 Georgia,serif}header{background:#112024;color:#eee9db;padding:42px max(24px,calc((100vw - 1260px)/2));font:14px/1.6 system-ui}header strong{font-size:24px;letter-spacing:.06em}header a{color:#c8dddb}header p{margin:10px 0 0;color:#c3cecb}.layout{max-width:1320px;margin:auto;display:grid;grid-template-columns:245px minmax(0,1fr);gap:45px;padding:36px 30px 70px}nav{position:sticky;top:24px;align-self:start;max-height:92vh;overflow:auto;font:13px/1.5 system-ui}nav a{display:block;color:#47625e;padding:7px 0;text-decoration:none;border-bottom:1px solid var(--line)}nav a:hover{color:var(--accent)}article{min-width:0;background:#fffef8;padding:36px 46px;border:1px solid var(--line)}h1,h2,h3,h4{font-family:system-ui,sans-serif;line-height:1.25;color:#203c3d}h1{font-size:38px;margin-top:0;letter-spacing:-.04em}h2{font-size:26px;border-top:2px solid #9aae9f;margin-top:55px;padding-top:25px;scroll-margin-top:24px}h3{font-size:20px;margin-top:32px}p{margin:16px 0}a{color:#885026;text-underline-offset:3px}code{font:13px/1.55 ui-monospace,monospace;background:#eaf0e9;padding:2px 4px;overflow-wrap:anywhere}.table-wrap{overflow-x:auto;margin:24px 0}table{width:100%;border-collapse:collapse;font:13px/1.5 system-ui}td,th{text-align:left;vertical-align:top;padding:11px 12px;border:1px solid var(--line);min-width:105px}th{background:#173439;color:#f5f4e9}tr:nth-child(even){background:#f0f3ed}article img{display:block;max-width:100%;height:auto;margin:22px auto;border:1px solid var(--line)}li{margin:6px 0}strong{font-weight:700}footer{font:13px/1.5 system-ui;color:var(--muted);margin-top:45px;border-top:1px solid var(--line);padding-top:20px}@media(max-width:950px){.layout{display:block;padding:20px 14px}nav{position:static;max-height:none;margin-bottom:24px;columns:2}article{padding:25px}h1{font-size:30px}}@media(max-width:520px){body{font-size:16px}nav{columns:1}article{padding:18px}header{padding:24px}h2{font-size:23px}}@media print{body{background:white;font-size:11pt}header,nav{display:none}.layout{display:block;padding:0}article{border:0;padding:0}h2{break-after:avoid}img,table{break-inside:avoid}a{color:inherit}h1{font-size:25pt}}</style></head><body><header><strong>PARTISAN / MASTER ROADMAP</strong><p>30 September 2026 · Development paused · Internal project plan</p><p><a href="../">Back to Partisan project</a> · <a href="MASTER-ROADMAP.md">Markdown source</a> · <a href="../workbench-roadmap/reference-board.jpg">Reference board</a></p></header><div class="layout"><nav aria-label="Contents"><a href="#section-1">1. Product boundaries and status</a><a href="#section-2">2. Delivery order and dependencies</a><a href="#section-3">3. Full Customiser — remaining weapon depth</a><a href="#section-4">4. Weapon and attachment content</a><a href="#section-5">5. Operator, Field and sharing</a><a href="#section-6">6. Shared architecture and production</a><a href="#section-7">7. Advanced animations — paused prototype checkpoint</a><a href="#section-8">8. Video reference study and stills</a><a href="#section-9">9. Advanced animation specification</a><a href="#section-10">10. Advanced phase gates and original estimates</a><a href="#section-11">11. Remaining advanced acceptance work</a><a href="#section-12">12. Acceptance and test matrix</a><a href="#section-13">13. Risks and release definition</a><a href="#section-14">14. Open decisions and maintenance</a></nav><article><h1>Partisan — master roadmap</h1>
+<p>Updated 30 September 2026. Consolidated against main at <code>042383b</code>, fetched before this edit. <strong>Development remains paused.</strong> This consolidation changes documentation only; it does not authorize implementation or promote experimental features into the default experience.</p>
+<p>This is the single maintained roadmap for the Partisan demo. It supersedes the customiser, broader Partisan, content-roster and workbench-animation roadmaps. Their former paths remain as pointers. Existing implementation and verification records below are inherited checkpoints, not fresh acceptance-test results from this documentation pass.</p>
+<h2 id="section-1">1. Product boundaries and status</h2>
+<p>The default flow remains <strong>workbench opener → Full Customiser</strong>. Normal weapon editing and future weapon/attachment content belong in the Full Customiser. All new bench editing, articulated hands, staged part changes and advanced handling audio stay behind <strong>Load Advanced animations test</strong>, accessible from the opener and Full Customiser. No animation phase implies changing that default flow.</p>
+<ul>
+<li><a href="../ak15-workbench-intro/">Open the normal experience</a>.</li>
+<li><a href="../ak15-workbench-intro/?view=customiser">Open the Full Customiser</a>.</li>
+<li><a href="../ak15-workbench-intro/?view=advanced">Load Advanced animations test</a>.</li>
+<li>Operator and Field exist as procedural prototypes but remain parked; development access uses <code>?screens=all</code> on the nested customiser. Re-exposing them is a separate product decision.</li>
+</ul>
+<p>Status vocabulary: <strong>Implemented</strong> means recorded in the current code/checkpoint, not universally validated; <strong>Prototype</strong> means working coverage with unfinished acceptance gates; <strong>Planned</strong> means remaining scope; <strong>Blocked</strong> means a stated dependency is unresolved; <strong>Optional</strong> means outside the required delivery path.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Track</th>
+<th>Current state</th>
+<th>Remaining outcome</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default opener and Full Customiser</td>
+<td>Implemented; original flow restored</td>
+<td>Preserve routes, saved builds and ordinary editing</td>
+</tr>
+<tr>
+<td>Weapon depth</td>
+<td>Implemented foundation: stats/deltas, compatibility checks, presets, finishes/camo/wear, test fire</td>
+<td>General rail footprints/rules, additional slots, broader platform coverage</td>
+</tr>
+<tr>
+<td>Weapon roster</td>
+<td>Two AK variants implemented; content expansion planned</td>
+<td>G3A3, modern platforms, then historical modernisations subject to cleared assets</td>
+</tr>
+<tr>
+<td>Operator</td>
+<td>Procedural creator implemented; parked</td>
+<td>Art-directed skinned base, outfits and clipping acceptance</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>Procedural IK, poses, breathing/sway/recoil/reload implemented; parked</td>
+<td>Broader combination coverage and eventual clip/rig integration</td>
+</tr>
+<tr>
+<td>Sharing and range</td>
+<td>Photo mode, loadout card, hash state and range prototype implemented</td>
+<td>Verify exports, versioned codes/backward compatibility, optional visual polish</td>
+</tr>
+<tr>
+<td>Advanced animations</td>
+<td>P0–P6 prototype coverage; paused</td>
+<td>Contact polish, listening/source review, complete matrix and device acceptance</td>
+</tr>
+<tr>
+<td>Production</td>
+<td>Compression, adaptive resolution, reduced motion and first-run hint implemented</td>
+<td>LOD/tooling decisions, full accessibility and measured performance</td>
+</tr>
+</tbody></table></div>
+<h3>Completed foundation — do not recreate as backlog</h3>
+<p>The original customiser Steps 1–6 and checked Step 7 entries delivered the base viewer, real AK-74M and AK-15K, rotatable HDR lighting, slot/mount registry, rail offsets, illustrative attachment library, per-part finishes, URL builds, swap/fold/slide transitions and mobile layout. Later additions include the drum, side-rail light/laser/combo, suppressor colours, presets and per-slot cameras. These are existing features, not new roadmap tasks.</p>
+<p>Historical music defaults (ambient 18%, then Abdulena 40%) have been superseded. The current default is “The Duce Puts On His Uniform” at 36%, with saved preferences and parent-shell continuity. Weapon appearance code now includes <code>rifle-finishes.js</code>; old references placing all finish logic in <code>viewer.js</code> are obsolete.</p>
+<h2 id="section-2">2. Delivery order and dependencies</h2>
+<p>No dates are committed. Earlier estimates were initial scope estimates, not remaining effort after the prototype work; re-estimate when development resumes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Order / ID</th>
+<th>Deliverable</th>
+<th>Dependency / exit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M0</td>
+<td>Maintain default/advanced separation and this status inventory</td>
+<td>Already established; regression constraint for every later change</td>
+</tr>
+<tr>
+<td>M1</td>
+<td>Full Customiser content stage 1 plus remaining weapon depth</td>
+<td>Cleared attachment assets and G3A3; three weapons, meaningful rules/deltas, presets and test fire</td>
+</tr>
+<tr>
+<td>M2</td>
+<td>Modern weapon roster, then historical modernisations</td>
+<td>Per-asset clearance and integration; see exact stage exits below</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>Operator art and layered outfits</td>
+<td>Setting/art direction, asset policy and compatible skeleton; two bases or agreed adjustable equivalent, around eight outfit slots, 3–5 options per slot, no clipping in agreed poses</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>Weapon/character integration</td>
+<td>M3 and per-weapon contacts; five smooth poses, supported weapon/grip/stock combinations reviewed</td>
+</tr>
+<tr>
+<td>M5</td>
+<td>Sharing and Field presentation</td>
+<td>Stable loadout state and M4 for final operator imagery; exports and old/new share-code round-trips</td>
+</tr>
+<tr>
+<td>M6</td>
+<td>Production acceptance</td>
+<td>Relevant supported features complete; performance, input, accessibility and asset checks pass</td>
+</tr>
+<tr>
+<td>X0–X6</td>
+<td>Advanced animation experiment (formerly P0–P6)</td>
+<td>Separate optional track, currently paused; its own phase table and release gates below</td>
+</tr>
+</tbody></table></div>
+<p>Content can progress independently of advanced animation polish. New weapons are not automatically supported by the advanced experiment: add explicit contact/clearance profiles and acceptance coverage before declaring support. Field improvements likewise do not automatically change the default navigation.</p>
+<h2 id="section-3">3. Full Customiser — remaining weapon depth</h2>
+<p>Preserve existing illustrative stats and hover deltas; extend per-option ergonomics, recoil, mass, length, sound signature, ADS and handling consistently without claiming measured real-world performance. Extend declarative <code>requires</code>, <code>excludes</code> and <code>replaces</code> rules with visible reasons. Generalise rail length, pitch and attachment footprints so incompatible placements cannot overlap.</p>
+<p>Side-rail light/laser/combo already exists. Remaining slot candidates are sling mount, charging handle, trigger and a separate dust-cover rail; extra folding-stock variants remain optional content. Preserve presets, camo, wear, finish controls and muzzle-dependent test fire while expanding the roster. The older generic LMG/DMR/pistol examples are superseded in priority by the concrete roster below; a pistol is an optional later candidate.</p>
+<p><strong>Weapon-depth exit:</strong> at least three supported weapons, visible compatibility restrictions, hover deltas, presets and test-fire sound. Existing features need regression coverage rather than reimplementation.</p>
+<h2 id="section-4">4. Weapon and attachment content</h2>
+<p>The source leads below are preserved from Claude&#39;s content roadmap. License labels such as “confirmed” describe that document&#39;s prior assessment, <strong>not a fresh verification during consolidation</strong>. Check the exact asset and terms before importing it. Keep the existing CC0/CC BY-only rule unless the owner explicitly changes it; a paid or royalty-free asset is not automatically eligible.</p>
+<p>Asset pipeline: strip loose/duplicate geometry, normalise node names/parts/sockets, meshopt-compress, add factory/library options in <code>models.js</code> and <code>attachments.js</code>, retain reproducible source-processing scripts, and add visible Credits. Validate dimensions, materials, loadout persistence and supported slot combinations.</p>
+<h3>Stage 1 — Real assets, no placeholders; add the G3A3</h3>
+<p>Today&#39;s muzzle devices, optics, foregrips, magazines, grips and stocks in
+<code>attachments.js</code> are low-poly shapes built in code from the AK model&#39;s own materials
+(&quot;illustrative shapes, not measured replicas&quot; — <code>ROADMAP.md</code> Step 4). Stage 1 swaps as
+many of these as practical for real downloaded models, and adds one new rifle.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Source</th>
+<th>Licence</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Generic attachment donor pack</td>
+<td><a href="https://opengameart.org/node/187893">Low Poly Weapon Pack</a> by byzmod3d, OpenGameArt</td>
+<td><strong>CC0</strong>, confirmed</td>
+<td><code>.obj</code> pack; also the easiest source for Stage 2&#39;s M16 and Stage 3&#39;s STG44 bases (see below) — one download covers three roadmap items</td>
+</tr>
+<tr>
+<td>Modular parts reference</td>
+<td><a href="https://chilly-durango.itch.io/low-poly-firearms">Low Poly Firearms</a> by chilly-durango, itch.io</td>
+<td><strong>CC0</strong>, confirmed</td>
+<td>AK/M4/AUG/SMGs with slides, mags, triggers as separate meshes — useful as a <em>second</em> geometry reference for building real optic/grip/stock shapes to replace the code-built ones, since it&#39;s already modelled part-by-part</td>
+</tr>
+<tr>
+<td>Optics/suppressors/rails, none found as a ready CC0 pack</td>
+<td>—</td>
+<td>—</td>
+<td>No free tactical-attachment pack surfaced in this pass (only paid ones: Superhive &quot;25 Tactical Attachments&quot;, Gumroad &quot;Tactical Gun Attachments&quot;). <strong>Open item</strong>: either license-check a paid pack against this project&#39;s CC0/CC BY-only rule (likely a no), or keep building these low-poly in code but modelled closer to real references (measured, not illustrative)</td>
+</tr>
+<tr>
+<td>G3A3</td>
+<td><a href="https://www.3dcadbrowser.com/3d-model/g3a3">3DCADBrowser G3A3</a></td>
+<td><strong>license: verify</strong> — 3DCADBrowser models are usually royalty-free-for-use rather than CC0/CC BY, so check the exact terms before treating it like the Sketchfab downloads</td>
+<td>No CC0/CC BY G3A3 surfaced on Sketchfab in this pass; if the licence doesn&#39;t clear, search Sketchfab directly for &quot;G3&quot; or &quot;CETME&quot; (same roller-delayed blowback family, visually close) as a substitute base</td>
+</tr>
+</tbody></table></div>
+<p>Exit criteria: at least the magazine, one muzzle device and one optic are real downloaded
+geometry instead of code-built primitives; G3A3 shipped as a third rifle in <code>models.js</code>.</p>
+<h3>Stage 2 — Modernized RPK, modernized M16, Mk14 EBR, SIG Spear</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Source</th>
+<th>Licence</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M16 (base for &quot;modernized&quot;)</td>
+<td><a href="https://opengameart.org/node/187893">Low Poly Weapon Pack</a> (<code>m16.obj</code>) — same CC0 pack as Stage 1</td>
+<td><strong>CC0</strong>, confirmed</td>
+<td>Also: <a href="https://gintoki1234.itch.io/m16-a4">M16 A4</a> by Gintoki1234, itch.io, <strong>CC BY 4.0</strong> (needs credit) as a second, more detailed option</td>
+</tr>
+<tr>
+<td>Modernized RPK</td>
+<td>none found</td>
+<td>—</td>
+<td>No CC0/CC BY RPK surfaced. Best lead: check <a href="https://sketchfab.com/DU1701">D_U&#39;s Sketchfab catalog</a> directly — the same creator as the current AK-74M and AK-15K (both CC BY 4.0), so an RPK from them would match the existing art style exactly. Otherwise, kitbash: the customiser already simulates an RPK-style 40-round magazine on the AK-15K; a full RPK could reuse the AK-74M/AK-15K receiver plus a longer barrel and bipod bashed in. Target look: see the reference photo below</td>
+</tr>
+<tr>
+<td>Mk14 EBR</td>
+<td><a href="https://sketchfab.com/notcplkerry">Sketchfab: notcplkerry</a> (animated Mk14 EBR) and <a href="https://sketchfab.com/samanthacford/models">Sketchfab: samanthacford</a> (Low Poly MK14)</td>
+<td><strong>license: verify</strong> — neither model&#39;s licence was visible from search results; open each page and check before download</td>
+<td>Two independent leads is a good sign something downloadable exists; whichever clears the CC0/CC BY bar wins</td>
+</tr>
+<tr>
+<td>SIG Spear (MCX-SPEAR)</td>
+<td>none free found</td>
+<td>—</td>
+<td>Only paid results: <a href="https://sketchfab.com/3d-models/sig-sauer-mcx-shrike-72b04e481e9c403cbb3b702176628ea6">Sig Sauer MCX Shrike</a> (Sketchfab, premium, 79k tri — too dense anyway), <a href="https://3dmilitaryassets.com/products/sig-sauer-xm7-mcx-spear">3DMilitaryAssets XM7 MCX Spear</a> ($30). The hardest item on the whole roadmap to source for free — likely needs a code-built placeholder (matching this project&#39;s existing Stage-1-style approach) until a CC0/CC BY upload appears, or a paid-asset decision from the project owner</td>
+</tr>
+</tbody></table></div>
+<p><img src="references/modernized-rpk-01.png" alt="Modernized RPK reference: a real AK-pattern build with a KPOS-style folding/adjustable stock, M-LOK handguard, flip-up back-up sights behind a red-dot optic, and a translucent polymer magazine"></p>
+<p><strong>Modernized RPK target look</strong> (owner-supplied reference photo, 30 September 2026): whichever base gets sourced for this slot, re-fur it toward this silhouette — KPOS-style folding/adjustable stock, M-LOK handguard, flip-up back-up sights paired with a red-dot, translucent polymer magazine — rather than the plain furniture on the current AK-74M/AK-15K. Reference only; not a licensed asset to import as-is.</p>
+<p>Exit criteria: RPK, M16, Mk14 EBR and SIG Spear each have a <code>models.js</code> entry; any slot
+still without a cleared real asset stays clearly marked illustrative/placeholder rather
+than silently shipped as if it were the real thing.</p>
+<h3>Stage 3 — WW2 kitbashes into modern-looking variants</h3>
+<p>STG44 and PPSh-41 → M4 Custom, AK, &quot;PPSh&quot; builds; take the WW2 shape and re-skin/re-part
+it with modern furniture (rail, red dot, foregrip) the way the AK attachments already work.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Source</th>
+<th>Licence</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Modernized STG (44)</td>
+<td><a href="https://opengameart.org/node/187893">Low Poly Weapon Pack</a> (<code>stg44.obj</code>) — same CC0 pack as Stage 1 &amp; 2</td>
+<td><strong>CC0</strong>, confirmed</td>
+<td>Third item out of the same single download</td>
+</tr>
+<tr>
+<td>Modernized PPSh</td>
+<td><a href="https://victorcstr.itch.io/mini-pack-of-weapons-of-the-second-world-war">mini pack of weapons of the second world war</a> by victorcstr, itch.io — includes a PPSh-41 with its drum/box mags and ammo</td>
+<td><strong>license: verify</strong> — not stated in search results, check the itch.io page</td>
+<td>Also several paid PPSh-41 options on CGTrader/TurboSquid/Fab if this one doesn&#39;t clear</td>
+</tr>
+<tr>
+<td>Modernized Bren</td>
+<td>none found</td>
+<td>—</td>
+<td>No CC0/CC BY Bren surfaced. Leads to check by hand: <a href="https://bigmack.itch.io/wwii-mega-gun-pack">bigmack&#39;s WWII Mega Gun Pack</a>, <a href="https://jimhatama.itch.io/world-wars-weapons-pack">jimhatama&#39;s World Wars Weapons Pack</a>, <a href="https://marmok1932.itch.io/soviet">marmok1932&#39;s Soviet Weapons Pack</a> — general WW2 bundles that may or may not include one; none confirmed to contain a Bren in this pass</td>
+</tr>
+<tr>
+<td>Modernized Chauchat</td>
+<td>none found</td>
+<td>—</td>
+<td>The rarest weapon on this whole roadmap as a free asset — a WWI French LMG gets modelled far less often than WW2 subjects. No lead surfaced at all in this pass. Likely needs either a from-scratch build (code-built, like today&#39;s attachments) or a commissioned/paid model if the project wants it sooner than &quot;whenever someone uploads one&quot;</td>
+</tr>
+</tbody></table></div>
+<p>Exit criteria: STG and PPSh shipped as modernized kitbash builds (real base geometry,
+modern furniture); Bren and Chauchat at minimum have a confirmed source lined up, even if
+not yet built.</p>
+<h3>Open items carried forward</h3>
+<ul>
+<li>No free tactical-attachment pack (optics/suppressors/rails) was found; Stage 1&#39;s
+attachment upgrade may end up &quot;better code-built shapes&quot; rather than &quot;downloaded parts&quot;
+unless one turns up.</li>
+<li>Four items across the roadmap have no confirmed free source yet: SIG Spear, RPK, Bren,
+Chauchat. Checking D_U&#39;s Sketchfab catalog directly (rather than by search) is the
+single most promising unopened lead, since it&#39;s the exact art style already in use and
+already cleared for this project once.</li>
+<li>Every &quot;license: verify&quot; row must be individually opened and checked — CC0/CC BY only,
+same bar as the existing README&#39;s Models section — before any download is added to the
+repo or <code>model-source/</code>.</li>
+</ul>
+<p><strong>Stage 1 scope reconciliation:</strong> better code-built shapes are a permissible interim fallback, but they do not satisfy the stated downloaded-geometry exit. An uncleared G3A3 source likewise leaves that milestone open. Do not silently mark the stage complete or substitute a different rifle without documenting the scope change.</p>
+<p><strong>Stage 2 scope reconciliation:</strong> clearly labelled illustrative placeholders may satisfy registry coverage, but are not cleared real-asset delivery. Track those two outcomes separately.</p>
+<p><strong>Stage 3 scope reconciliation:</strong> STG44 and PPSh are implementation deliverables; Bren and Chauchat only require confirmed sources at this stage. Chauchat is a WWI-origin platform grouped here for the historical-modernisation workstream.</p>
+<h2 id="section-5">5. Operator, Field and sharing</h2>
+<p>These are the broader Partisan demo tracks, not requirements to re-enable parked screens now. The original statement “there is no character yet” is obsolete: the procedural creator and IK spike exist. They do not replace the planned skinned asset, morphs or retargeted clips.</p>
+<h3>M3 — character art and customisation</h3>
+<p><img src="references/low-poly-operator-keyframe-01.webp" alt="Low-poly operator keyframe: a masked, helmeted soldier firing a modernized rifle with a red-dot and foregrip, muzzle flash and shell casings, a second operator with an AK in the background"></p>
+<p><img src="references/low-poly-operator-keyframe-02.webp" alt="Low-poly operator keyframe: a close-up of a masked operator with NVG-mounted helmet, plaid layer over a plate carrier, aiming a suppressed rifle with a red-dot, a flag and a second operator behind"></p>
+<p><strong>Target look</strong> (owner-supplied keyframes, 30 September 2026): low-poly but readable at speed — faceted geometry, painterly flat-shaded materials, legible silhouette for mask/helmet/plate-carrier/patch layers, held together by rim light and dust/impact FX rather than surface detail. Judge the M3 base and rig against this bar before investing in a full wardrobe. Reference for style only, not a source asset.</p>
+<ul>
+<li>Select a low-poly standard-skeleton base compatible with the rifle style: male/female bases or an agreed adjustable base, with build, height and face morphs. Quaternius/Kenney or commissioned art remain candidates, not selected assets.</li>
+<li>Extend the existing procedural creator into layered head, face, torso, legs, feet, hands, vest, backpack and patch slots. Cull hidden body regions and test clipping across outfit combinations.</li>
+<li>Preserve shared clothing/weapon camo and palettes; extend fabric wear/dirt, faction patches and armbands once setting and insignia direction are settled.</li>
+<li>Provide face and outfit-slot framing. Judge final bases next to existing rifles before investing in a full wardrobe.</li>
+</ul>
+<h3>M4 — weapon on character</h3>
+<p>Preserve the existing two-bone IK and procedural poses. Author per-weapon pistol-grip, support-hand and cheek contacts, foregrip-dependent targets and folded-stock stance changes. Add or retarget idle, ready, aim, low-ready, reload and inspect clips when a compatible rig exists. Use illustrative build mass to inform restrained posture and handling feedback. Every declared weapon/foregrip/stock combination needs visual contact review; a smoke test cannot certify lack of clipping.</p>
+<h3>M5 — sharing and presentation</h3>
+<p>Photo mode, loadout cards, hash state and a stat-driven range drill already exist. Audit the implemented subset before adding pose/lighting/backdrop controls, optional depth of field, PNG export with subtle branding and a complete operator/weapon/stats card. Add versioned compact base64url loadout codes only with backward-compatible old AK hashes. Verify weapon, operator, mode and pose survive round-trip, refresh and navigation; parked modes must respect the current navigation policy.</p>
+<p>The range remains optional, one scene with five targets/timer and illustrative recoil feedback. Do not turn it into a separate game. Its existing prototype is not proof of final performance or input acceptance.</p>
+<h2 id="section-6">6. Shared architecture and production</h2>
+<p>Retain the current static Three.js delivery and valid nested URLs. Shared loadout state should describe weapon build/finish/rails and operator base/morphs/outfit/colours/insignia; views must not silently diverge. Generalise option semantics across registries where useful, keeping original/build/pose, compatibility, stats and finishes explicit.</p>
+<p>Shared rifle/state/appearance modules already exist. The advanced scene uses <code>advanced-workbench.js</code>, <code>bench-session.js</code>, <code>bench-actions.js</code>, <code>bench-motion.js</code>, <code>bench-hands.js</code> and <code>bench-audio-cues.js</code>; ordinary opener code stays in <code>workbench.js</code>. Do not import the full DOM-owning viewer into either scene. Contact/pose data can evolve within those boundaries; earlier proposed <code>bench-poses.js</code> and <code>bench-contacts.js</code> filenames were not mandatory deliverables.</p>
+<p>Vite is a conditional tooling decision if rig/clip/decoder complexity warrants it, not a prerequisite imposed by the old phase-C schedule. Preserve URL compatibility through any migration. Existing meshopt compression, adaptive resolution, mobile shadow limits and preload remain; evaluate texture atlases, lazy outfit/weapon loads and LOD against actual budgets.</p>
+<p>Production backlog: complete a short guided first run (preset → part → stat change; include Operator only if exposed); consistent screen audio and UI cues; keyboard operation, focus, reduced motion, colour-independent stat deltas and captions if voice lines are introduced. Optional analytics must remain privacy-light and opt-in. GLB build export is deferred and must include applicable attribution.</p>
+<p>Original mobile ambitions were 60 fps Armoury/Operator and 30 fps Field; advanced targets are 60 fps desktop / 30 fps selected mid-range phone. These are goals, not measured achievements. Record device/browser, cold/warm load, frame-time percentiles and memory under repeated actions before choosing final budgets.</p>
+<h2 id="section-7">7. Advanced animations — paused prototype checkpoint</h2>
+<p>All material in this track applies exclusively to <strong>Load Advanced animations test</strong>. Full Customiser editing remains the standard workflow. Former P0–P6 phase identifiers are retained below for source continuity (equivalent to X0–X6 in the master delivery table).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Working in the local prototype</th>
+<th>Still required for the exit gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P0</td>
+<td>Repository integrated at the recorded checkpoint, six timestamped reference stills, existing sample source discrepancy documented</td>
+<td>Audition and trace every active audio take; approve the final pose sheet</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Shared rifle loading/slot operations, shared appearance, loadout validation, one-commit timeline, rollback, Skip, cancellation and deterministic review checkpoints</td>
+<td>Broader failure and repeated-load testing</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Persistent bench with inspection/set-down and staged outgoing/incoming optic objects; camera and hand targets</td>
+<td>Judge and polish continuous motion at all contact checkpoints</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Palm-space wrist solve, articulated fingers/thumbs, contact error readout in review mode</td>
+<td>Per-option grip profiles, anatomical silhouette refinement, wrist blending and collision review</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>Event-driven sample/synth voices, obsolete-cue suppression, cancellation, handling controls, music ducking</td>
+<td>Listening review, exact cue envelopes/selection, source clearance and mix verification</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>Both rifles, all seven slot families, rail moves, in-place stock adjustment, Quick changes and Skip</td>
+<td>Verify every model/option extreme and tune each family beyond the common transfer framework</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>Responsive panel, keyboard controls, reduced-motion skip, saved builds/finishes, viewer return links, capped pixel ratio</td>
+<td>Physical-device performance/memory profiling, full input and accessibility audit</td>
+</tr>
+</tbody></table></div>
+<p>Validation so far: ten automated tests pass. Browser checks passed for all seven attachment families using Skip, optic rollback before commit, switching between both rifles, customiser loading and camouflage/wear-preserving return navigation. The authoring mode at <code>advanced.html?review=1</code> pauses at 30%, 38%, 50%, 70% or 82% for repeatable stills. Its palm error metric measures rig reach, not intersections or anatomical realism. No frame-rate or audio-fidelity target is claimed as achieved.</p>
+<p>Development paused at the user&#39;s request on 30 September 2026. This work-in-progress checkpoint includes the latest remote main changes through ff628f3, followed by the experience split at 042383b. The remaining visual, sound and device acceptance gates are not complete. The next priority is contact and sound review, not declaring the breadth of prototype options production-ready.</p>
+<h2 id="section-8">8. Video reference study and stills</h2>
+<p>Source: <strong>LunarGaming, “The Last of Us Part 2 Remastered — All Weapon Upgrade Animations (All Guns)”</strong>, <a href="https://www.youtube.com/watch?v=sibhkC6dDJs">YouTube video</a>, published 17 January 2024, duration approximately 16:48. Game imagery: Naughty Dog / Sony Interactive Entertainment. Captures below are reference material, not original Partisan art or runtime textures.</p>
+<p>These are selected paused browser captures, cropped to the video image, not a complete frame-by-frame study. Times are recorded player positions, rounded in captions. Still images establish poses, composition and object placement; they do not establish exact velocities, action duration, force or audio timing. The animation durations later in this document are proposed starting values.</p>
+<p>The video audio has not been listened to in this analysis. Current sound behavior is assessed from code and repository metadata. Sound texture, source separation and perceptual synchronization remain listening-review tasks. Acoustic classifications in the existing cue sheet are useful candidates, not proof that a sound matches a particular visible action.</p>
+<h3>R1 — Supported inspection · 00:11.31</h3>
+<p><img src="../workbench-roadmap/references/01-supported-inspection.png" alt="R1: Rifle held diagonally above the bench with hands at separated support points"></p>
+<p><strong>Observed:</strong> The rifle occupies a strong diagonal, lifted off the table. The hands support different regions; the sling hangs below. Props remain secondary to the rifle.</p>
+<p><strong>Apply:</strong> Author a lifted inspection pose with two explicit contacts, a bounded rotation range and a small torso response. The support hand should follow its local contact on the rifle, not an arbitrary point in world space. A hanging sling is a later visual enhancement, not a prerequisite for the first interaction.</p>
+<h3>R2 — Working posture and occlusion · 00:30</h3>
+<p><img src="../workbench-roadmap/references/02-shoulder-occlusion.png" alt="R2: Shoulder and extended arm partly obscure a rifle on the bench"></p>
+<p><strong>Observed:</strong> The operator leans into the work. Shoulder and upper arm occupy much of the near side of the frame and obscure some of the object.</p>
+<p><strong>Apply:</strong> Use upper-body involvement to sell effort, but establish an occlusion limit for our interface. Move the camera or elbow target when the active mount disappears behind a shoulder. This is a cautionary reference as well as a pose reference.</p>
+<h3>R3 — Released hand and hanging sling · 00:45</h3>
+<p><img src="../workbench-roadmap/references/03-release-and-secondary-motion.png" alt="R3: One hand supports the rifle while the other is clear of it"></p>
+<p><strong>Observed:</strong> One hand is clear of the rifle while the other remains in contact; the sling extends well below the object.</p>
+<p><strong>Apply:</strong> Give hands separate contact/release intervals. Add open, cupped and gripping hand poses, with a short wrist follow-through after release. The single frame does not prove the sling&#39;s motion curve; any follow-through in Partisan must be authored and reviewed.</p>
+<h3>R4 — Loose part has a place · 01:15</h3>
+<p><img src="../workbench-roadmap/references/04-part-on-table.png" alt="R4: A detached magazine lies separately on the workbench"></p>
+<p><strong>Observed:</strong> A detached magazine occupies a distinct, readable area of the table beside the work.</p>
+<p><strong>Apply:</strong> Define a parts tray region and stable resting transforms. An outgoing part should travel there, remain visible during the action, then be cleared at an intentional transition. Avoid replacement parts appearing from nowhere or intersecting the table.</p>
+<h3>R5 — Rifle, hand and menu coexist · 08:38.08</h3>
+<p><img src="../workbench-roadmap/references/05-rifle-inspection.png" alt="R5: Semi-auto rifle on the bench, magazine beside it, with an upgrade menu"></p>
+<p><strong>Observed:</strong> Rifle, detached magazine and near hand are visible together. The upgrade menu occupies the upper-right portion of the frame.</p>
+<p><strong>Apply:</strong> Reserve separate screen regions for the rifle&#39;s active work area and the option panel. Maintain readable contact points while the panel is open. Inspect and upgrade selection should feel like states of one scene.</p>
+<h3>R6 — Clear working surface · 08:58.08</h3>
+<p><img src="../workbench-roadmap/references/06-clear-work-area.png" alt="R6: Semi-auto rifle and loose magazine laid out under focused bench lighting"></p>
+<p><strong>Observed:</strong> The working surface provides contrast beneath the receiver and a clear area beside the rifle. The sling, magazine and power strip have distinct silhouettes.</p>
+<p><strong>Apply:</strong> Establish bench-local anchors, spacing and lighting before adding complex hand choreography. In our scene, the FIA cloth should remain recognizable but must not hide the active part or cause contact-depth ambiguity.</p>
+<h3>Further reference study</h3>
+<p>Prioritize the <a href="https://www.youtube.com/watch?v=sibhkC6dDJs&t=478s">semi-auto rifle chapter, 07:58–09:46</a> for broad AK-like staging, followed by the <a href="https://www.youtube.com/watch?v=sibhkC6dDJs&t=0s">bolt-action chapter, 00:00–02:11</a> for handling composition. Use the other chapters to compare hand roles and pacing, not as interchangeable mechanism animations. The existing audio README identifies candidate semi-auto upgrade areas around 500, 520, 538 and 556 seconds; those labels still require sequence-level verification.</p>
+<p>For each chosen action, record: start/end frame, hand contacts, contact changes, object supports, camera movement, occlusion and perceived sound onsets. Capture approach/contact/release frames rather than relying on a single attractive pose. Keep measured evidence separate from our chosen animation timing.</p>
+<h2 id="section-9">9. Advanced animation specification</h2>
+<p>This is the target behaviour and design rationale, partially implemented in the prototype described in section 7. Future-tense design instructions below do not imply that every named capability is absent; section 11 is the remaining acceptance backlog. Preserve the low-poly style, radio, camp ambience and FIA cloth while improving contact readability.</p>
+<h3>State and action contract</h3>
+<p>Use explicit states: <code>benchIdle</code>, <code>lifting</code>, <code>inspecting</code>, <code>settingDown</code>, <code>working</code>, <code>recovering</code>. Loading/error state sits outside this action flow. Each action has an ID, duration, tracks, contacts, events, a commit marker and a cleanup function.</p>
+<p>Store committed loadout separately from pending selection. On selection, validate compatibility and prepare the incoming part. Preview stats may display the pending result with a clear label; share links and persisted build state stay committed until the action reaches its commit marker. A failed asset load leaves the previous committed build usable.</p>
+<p>During work, permit camera look only within a safe bounded range. Initially disable conflicting build operations and show a brief “Fitting…” state rather than buffering a long queue. Skip completes the requested valid build instantly, without replaying all omitted sounds. Cancel before commit restores the old build; cancel after commit preserves the new build and restores a stable pose. A rifle switch or navigation uses the same cleanup path.</p>
+<p>Use monotonic time for action progress. Fire each event once when its marker is crossed, including under a slow frame. Interpolation uses clamped normalized time and quaternion rotation interpolation. Keep one owner for each animated transform so idle motion, IK, camera controls and an action do not overwrite one another.</p>
+<h3>First complete interaction</h3>
+<p><strong>Target:</strong> AK-74M, default operator proportions, one compatible optic replacement. Timing below is an initial design target, not measured from TLOU II.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Beat</th>
+<th>Proposed time</th>
+<th>Visible action</th>
+<th>Event / state</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Inspect</td>
+<td>User-controlled</td>
+<td>Rifle raised, both hands support it</td>
+<td>Quiet, bounded look; no orbit-triggered rattle</td>
+</tr>
+<tr>
+<td>Prepare</td>
+<td>0.00–0.25 s</td>
+<td>Small anticipatory weight shift; working hand adjusts</td>
+<td>Capture current transforms; lock competing controls</td>
+</tr>
+<tr>
+<td>Set down</td>
+<td>0.25–0.90 s</td>
+<td>Rifle descends along an arc, slowing before support contact</td>
+<td>Surface-contact event at actual support, then restrained settling</td>
+</tr>
+<tr>
+<td>Reach</td>
+<td>0.90–1.45 s</td>
+<td>One hand stabilizes the rifle; the other approaches the optic</td>
+<td>Blend hand from rifle space to part/tool space</td>
+</tr>
+<tr>
+<td>Remove</td>
+<td>1.45–2.20 s</td>
+<td>Outgoing optic moves clear and is placed in its tray region</td>
+<td>Release and tray-contact events; old state still recoverable</td>
+</tr>
+<tr>
+<td>Fit</td>
+<td>2.20–3.10 s</td>
+<td>Incoming optic approaches, aligns and seats</td>
+<td>Contact-driven slide/click; commit the new loadout once seated</td>
+</tr>
+<tr>
+<td>Verify</td>
+<td>3.10–3.45 s</td>
+<td>Brief hand check and release</td>
+<td>No gratuitous mechanical action unrelated to this part</td>
+</tr>
+<tr>
+<td>Recover</td>
+<td>3.45–4.20 s</td>
+<td>Both hands reacquire support and lift to inspection</td>
+<td>Restore controls and finish status</td>
+</tr>
+</tbody></table></div>
+<p>The default full sequence should be skippable and have a fast mode for repeated tweaking. Reduced motion should apply the result with a short static transition and a single appropriate confirmation cue. Do not force a four-second ceremony for every colour swatch or 10 mm rail step.</p>
+<p><strong>Acceptance:</strong> Ten repeated swaps complete without drift, duplicates, floating parts or stale sounds. At approach, contact, commit and recovery checkpoints, the relevant hand and part remain visible. Skip, cancel, reset, direct hash restore and a second rifle switch all end with consistent geometry, stats and URL state.</p>
+<h3>Hands, support and physical weight</h3>
+<p>First add explicit palm orientation alongside position. The existing <code>solveArm()</code> places the arm toward a target but does not by itself guarantee a natural wrist or finger wrap. Author palm normal, forward axis and elbow pole in a stable coordinate frame. Blend contact changes; never snap a wrist between unrelated orientations.</p>
+<p>Add poseable fingers in the existing low-poly style: open, support/cup, grip and pinch poses are sufficient for the first pass. A simple articulated procedural hand can prove the workflow. A skinned replacement becomes worthwhile if close shots expose rigid joints or repeated pose transitions look mechanical. Keep the wrist attachment compatible with current sleeve/glove variants.</p>
+<p>Define contacts in weapon-local, part-local, tool-local or bench-local space. A held part follows a hand attachment; a seated part follows its slot; a resting part follows a bench anchor. Change parentage while preserving world transforms. Use separate temporary presentation objects so animating an outgoing part does not corrupt the committed rifle instance or its shared materials.</p>
+<p>For each rifle, author a small set of support points and conservative bounds. The bench cloth changes the visual surface height: use a stable support approximation rather than making the rifle follow every cloth vertex. Keep fingertips outside solid surfaces and allow an approach clearance before contact.</p>
+<p>Weight should come from delayed upper-body response, curved paths, deceleration before contact, and a short settling phase. Scale these modestly by illustrative build mass; avoid exaggerated bouncing. Give the support arm a stable elbow plane. Reduce idle breathing influence while fine work is underway.</p>
+<p>Optional secondary motion comes last: a lightweight sling rig, sleeve response, tiny part settling and head-follow. None should move a locked hand off its contact target.</p>
+<h3>Expand by action family</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Distinct visual treatment</th>
+<th>Reuse and limits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Optic / side attachment</td>
+<td>Stabilize, reach, lift or slide, align, seat, release</td>
+<td>Shared rail action with per-part clearances; do not assume every option uses the same fastening motion</td>
+</tr>
+<tr>
+<td>Foregrip</td>
+<td>Reorient rifle to expose the underside, then work</td>
+<td>Separate support contact so the supporting hand does not occupy the destination</td>
+</tr>
+<tr>
+<td>Magazine</td>
+<td>Clear, move to tray, bring replacement, seat</td>
+<td>Adapt to curved, extended and drum silhouettes; game presentation rather than real maintenance instruction</td>
+</tr>
+<tr>
+<td>Stock pose</td>
+<td>Operate the existing hinge/slide and settle</td>
+<td>Keep folding, collapsing and replacement as separate operations</td>
+</tr>
+<tr>
+<td>Muzzle attachment</td>
+<td>Present the muzzle area and move the attachment along its axis</td>
+<td>Stylized turn/seat motion only where visually supported by the model</td>
+</tr>
+<tr>
+<td>Pistol grip</td>
+<td>Bench-supported rifle and close working-hand pose</td>
+<td>Needs access/clearance checks; later than optics</td>
+</tr>
+<tr>
+<td>Finish / camo</td>
+<td>Brief inspection or immediate material transition</td>
+<td>No fake disassembly for a palette change</td>
+</tr>
+<tr>
+<td>Wear</td>
+<td>Immediate preview, optional restrained wipe/inspection</td>
+<td>Avoid repetitive scraping audio while dragging a slider</td>
+</tr>
+<tr>
+<td>Rifle switch</td>
+<td>Put current rifle away; bring the next into the same presentation frame</td>
+<td>Asset load completes before old scene ownership is released</td>
+</tr>
+</tbody></table></div>
+<p>Add metadata such as action family, work pose, contact profile, tray bounds and cue set to the existing registries. Author exceptions in data, not a growing chain of weapon-name conditions. Unsupported actions fall back to a short neutral transition with a correct final state.</p>
+<h3>Audio integration and review</h3>
+<h4>Build on the existing system</h4>
+<p>The sound work on main is valuable and should remain. Keep the seven-class shortlist, synthesis fallback, persistent music and radio/camp crossfade. Add explicit timing and lifetime control to mechanical playback.</p>
+<p>Currently, sampled bank actions tend to call <code>at()</code> internally and compose durations from whichever sample was selected. The synthesized functions expose some timing/panning arguments that their sample counterparts do not consistently honor. Unify those contracts before synchronizing animation; otherwise changing a sample can silently change the action&#39;s rhythm.</p>
+<p>Proposed event payload: action ID, cue ID, audio-clock time, intensity, material, screen pan and optional duration. Playback returns handles for pending/active voices. Cancellation stops or quickly fades those voices; a hidden tab, navigation or skip must not produce an old burst of sound on return.</p>
+<p>Map animation events to small audio units: grip contact, surface contact, release, short slide, seating click and tool contact. Split long recordings when their internal action sequence does not match the animation. Use a seeded take sequence for QA, modest variation during normal use, and no immediate repetition when alternatives exist.</p>
+<h4>Mix and control</h4>
+<p>Keep music preference volume separate from temporary ducking. A handling action may reduce music by a proposed 3–6 dB, with a roughly 60–120 ms attack and 300–600 ms recovery; audition these values rather than treating them as reference measurements. Never persist a ducked volume as the user&#39;s setting.</p>
+<p>Provide clear music, ambience and handling levels, plus an overall mute. Verify how the existing music toggle relates to the separate SFX context before promising that it mutes everything. Keep quiet tactile cues audible without making small parts sound heavier than the rifle. Route sample and synth alternatives through comparable room coloration and level control.</p>
+<h4>Sample quality and provenance</h4>
+<p>Audition the shortlist against the intended actions. Existing <code>sfx/README.txt</code> explicitly says classification was acoustic rather than listening-based, and mentions UI-suspect cuts and source-video chapter times. Conversely, <code>mech.js</code> labels the shipped bank “CC0 foley.” That is a documentation/provenance discrepancy, not a verified licence conclusion. Resolve it with source attribution for the actual deployed files; preserve the distinction between local reference recordings and distributable production assets.</p>
+<p>For each accepted take, record source, permitted use, cue role, trim points, loudness, unwanted background content and alternate takes. Replace unsuitable or unverified production cues with original/cleared recordings while retaining the same event interface. The reference screenshots in this roadmap remain documentary material and are not part of the game&#39;s texture or sound bank.</p>
+<h3>Camera, UI and atmosphere</h3>
+<p>Use three camera states: shoulder overview, inspection, and working close-up. Each needs authored framing for both rifles and the largest supported attachments. Blend from the actual current camera pose, never from an assumed default. Fix near-plane clipping and shoulder occlusion before adding depth of field or camera shake.</p>
+<p>Keep the active contact in the central usable area and reserve space for the menu. On small screens, use a compact bottom panel with a stable action view; a narrow viewport must not push the hands off-screen. Keep frame-relative look input bounded during work and restore free inspection only after recovery.</p>
+<p>The lamp should establish form, with enough fill to read fingers and matte dark parts. Preserve the existing radio and FIA cloth, but lower their visual prominence during close work. Maintain a clear parts tray zone. Do not add bloom, particles or stronger flicker until silhouettes, contacts and exposure already read well.</p>
+<p>Show pending action, completion and errors in a polite status region. Buttons retain descriptive labels and focus visibility. Keyboard and gamepad activation must not leak into the hidden or parked screens. A visible Skip control should have equivalent keyboard access.</p>
+<h2 id="section-10">10. Advanced phase gates and original estimates</h2>
+<p><strong>These are original full-scope estimates, not remaining work estimates.</strong> Estimates are planning ranges for focused engineering/animation work, not calendar commitments. Art creation, sound sourcing and review can add time. The critical path is shared state → contact-aware timeline → complete optic interaction → hand polish → broader action coverage.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Deliverable</th>
+<th>Dependency</th>
+<th>Estimate</th>
+<th>Exit gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P0: baseline and reference</td>
+<td>Current route/state map, approved pose sheet, sound shortlist audit</td>
+<td>Current main</td>
+<td>0.5–1 day</td>
+<td>No stale paths or duplicate “already built” tasks</td>
+</tr>
+<tr>
+<td>P1: reusable state and timeline</td>
+<td>Shared rifle operations, action controller, event markers, skip/cancel</td>
+<td>P0</td>
+<td>2–3 days</td>
+<td>Deterministic final state across interruption cases</td>
+</tr>
+<tr>
+<td>P2: complete optic interaction</td>
+<td>Lift, set down, reach, swap, recover on AK-74M</td>
+<td>P1</td>
+<td>3–5 days</td>
+<td>One convincing interaction with existing coarse hands</td>
+</tr>
+<tr>
+<td>P3: hand/contact quality</td>
+<td>Wrist targets, finger poses, both rifle contact profiles</td>
+<td>P2</td>
+<td>2–4 days</td>
+<td>No conspicuous sliding, wrist flips or penetration in authored views</td>
+</tr>
+<tr>
+<td>P4: synchronized sound</td>
+<td>Timed/cancellable sample and synth playback, mix controls</td>
+<td>P1; final tuning after P3</td>
+<td>1–2 days</td>
+<td>Cues agree with visible contacts and stop correctly</td>
+</tr>
+<tr>
+<td>P5: action coverage</td>
+<td>Remaining families, per-rifle exceptions, repeat-action fast mode</td>
+<td>P3–P4</td>
+<td>3–5 days</td>
+<td>Declared support matrix passes without fallback surprises</td>
+</tr>
+<tr>
+<td>P6: integration and polish</td>
+<td>Bench panel parity, links, mobile, accessibility, performance</td>
+<td>P5</td>
+<td>2–3 days</td>
+<td>Release checklist below passes</td>
+</tr>
+</tbody></table></div>
+<p>Approximate complete scope: <strong>13.5–23 focused days</strong>, excluding externally produced assets. A useful first review build is P0–P2, approximately <strong>5.5–9 days</strong>. Reduce scope by stopping after one complete action, not by building superficial animations for every slot.</p>
+<h2 id="section-11">11. Remaining advanced acceptance work</h2>
+<p>This replaces the old unchecked implementation list, which predated several completed prototype features. Shared loadout validation, wrist/finger prototypes, family actions and cancellable audio exist; their remaining work is quality and coverage, not starting those systems again.</p>
+<ul>
+<li>P0: approve a pose sheet and audition/trace each deployed sound source.</li>
+<li>P1: expand repeated-load, failure, invalid-state and interruption verification beyond the recorded ten tests.</li>
+<li>P2: review continuous optic motion at approach, contact, commit and recovery; repeat ten swaps without drift, duplicates or stale audio.</li>
+<li>P3: refine anatomical silhouettes, per-option finger/wrist profiles, elbow stability, bench support and collision clearance on both rifles and large attachments.</li>
+<li>P4: listen to every active take, resolve provenance discrepancies, tune cue selection/envelopes and mix, verify sample and synth fallback behaviour on real devices.</li>
+<li>P5: review all seven families, option extremes, supported rail limits and stock adjustments; confirm Quick changes/Skip and quiet finish/slider paths.</li>
+<li>P6: complete navigation/storage-failure, input/accessibility, physical-device performance and memory acceptance. Existing responsive layout and reduced-motion controls still need this broader audit.</li>
+</ul>
+<p>When resumed, prioritise optic contact and sound review before extending the roster of advanced actions. No advanced milestone is release-ready simply because its modules exist.</p>
+<h2 id="section-12">12. Acceptance and test matrix</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Required coverage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Models and builds</td>
+<td>Both rifles; default, folded stock, no optic, large scope, extended magazine, drum, extreme supported rail offsets</td>
+</tr>
+<tr>
+<td>Operator proportions</td>
+<td>Default first, then supported short/tall and narrow/wide extremes; glove and sleeve variants used at the bench</td>
+</tr>
+<tr>
+<td>Action lifecycle</td>
+<td>Start, repeated click, invalid selection, skip each beat, cancel before/after commit, reset, rifle switch, navigation</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Geometry, stats, selection and hash agree after completion; pending states never leak into saved links</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>First gesture, mute, volume zero, loaded samples, synthesis fallback, partial failed bank, cancellation, hidden tab/resume</td>
+</tr>
+<tr>
+<td>Navigation</td>
+<td>Shell bench → customiser → Back; <code>?view=customiser</code> plus hash; standalone nested page; copied link after mutation</td>
+</tr>
+<tr>
+<td>Input/accessibility</td>
+<td>Pointer, touch, keyboard, gamepad; reduced motion; visible focus; understandable busy/error feedback</td>
+</tr>
+<tr>
+<td>Visual checks</td>
+<td>Contact points, elbows, wrists, table support, part tray, camera clipping, shoulder/menu occlusion</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Desktop and representative mid-range phone; cold/warm load; repeated actions and asset switches; stable memory</td>
+</tr>
+</tbody></table></div>
+<p>Proposed targets: steady 60 fps desktop and 30 fps on the selected mobile test device, with frame-time percentiles and device/browser recorded. Treat these as acceptance goals, not measured current performance. Reuse vectors in the frame loop and avoid per-frame material/geometry creation. Preload only the next likely assets and a small cue bank after user interaction.</p>
+<p>For synchronization, target visible impacts and cue onsets within approximately one rendered frame, allowing for measured device audio latency. Record a combined video/audio review when possible; separate frame screenshots cannot certify this. Test at reduced frame rate to ensure no duplicated marker events or long catch-up sound bursts.</p>
+<p>Extend the existing smoke test for state transitions and event counts. Keep visual contact review separate: a passing JavaScript test does not prove that a grip looks believable. Parked Operator/Field coverage should use its explicit development mode and should not silently expand the default product scope.</p>
+<h2 id="section-13">13. Risks and release definition</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risk / choice</th>
+<th>Default approach</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Rig fidelity dominates close-ups</td>
+<td>Prototype with procedural fingers; upgrade the hand asset only after judging the first interaction</td>
+</tr>
+<tr>
+<td>Refactoring breaks the functional viewer</td>
+<td>Extract shared operations behind adapters; keep existing routes and fallback available</td>
+</tr>
+<tr>
+<td>One generic action fits every attachment poorly</td>
+<td>Data-driven action families with per-model exceptions and a neutral fallback</td>
+</tr>
+<tr>
+<td>Sound outlasts or precedes its action</td>
+<td>Explicit timestamps, transient markers and cancellable playback handles</td>
+</tr>
+<tr>
+<td>Long animation makes customization tedious</td>
+<td>First-time full sequence, repeat-action fast mode, Skip and reduced-motion behavior</td>
+</tr>
+<tr>
+<td>Existing audio source labels conflict</td>
+<td>Trace the actual active manifest files before calling them production-cleared</td>
+</tr>
+<tr>
+<td>Main continues changing</td>
+<td>Re-fetch before implementation; re-check changes to the modules listed in §5</td>
+</tr>
+</tbody></table></div>
+<p>A workbench release is done when the chosen support matrix has believable contacts, correctly timed audio, safe interruption behavior, preserved saved builds and current navigation, accessible controls and measured acceptable performance. No claim of TLOU II fidelity is required: the result should be coherent and tactile within Partisan&#39;s own art direction.</p>
+<p>Next task only when development is resumed: <strong>review and polish the optic interaction at the contact checkpoints</strong>, then verify the broader family support matrix. The state/timeline foundation and broad prototype coverage now exist, but this does not waive the original visual and audio exit gates.</p>
+<h2 id="section-14">14. Open decisions and maintenance</h2>
+<p>Product decisions still outstanding: Partisan setting/era/tone; existing characters/logos/style guide; audience (team, players or publishers); desktop/mobile priority; art budget and any change to the CC0/CC BY policy; whether to remain a link-only prototype or eventually move to a public product page. The current scene uses Altis/FIA references; that does not settle the broader game&#39;s setting.</p>
+<p>Licensing decisions must concern the actual deployed assets. Keep model credits and source terms; the customiser README records the owner-supplied Duce track as rights-cleared, while the advanced sound-bank metadata discrepancy remains unresolved. Do not treat a source lead, reference screenshot, old music note or acoustic classification as production clearance.</p>
+<p>On each implementation change, update the relevant master status row and acceptance evidence together. Record commit, device/browser and test scope for verification. Fetch current main before resumed work, preserve concurrent changes and run the relevant existing smoke tests before a code push. Do not equate a successful state test with visual/audio acceptance.</p>
+<p>Consolidated sources at <code>042383b</code>: <code>ROADMAP.md</code>, <code>PARTISAN-ROADMAP.md</code> and <code>CONTENT-ROADMAP.md</code> in the nested customiser, plus <code>workbench-roadmap/WORKBENCH-ROADMAP.md</code>. Git history retains their original text. Superseded generic roster suggestions, old music defaults, duplicate completed features and stale unchecked tasks have been reconciled above rather than carried forward as parallel backlogs.</p>
+<p>An older external document, <code>vdn-roadmap/extras/tlouii-style-modding-roadmap.md</code>, was referenced by the workbench README but is not present in this checkout and was not inspected in this consolidation. This master supersedes the four local plans; no claim is made to have ingested that external document. Reconcile any unique requirements from it if it becomes available.</p>
+<p>The six screenshots remain documentary references credited to the linked TLOU II video, not runtime assets. Their existing PNGs, reference board and capture manifest remain at the legacy workbench-roadmap path so established links keep working. Still images do not certify animation timing or sound quality.</p>
+</article></div></body></html>
