@@ -8,7 +8,7 @@ feedback/ on disk via a small /api/comments endpoint. Double-click this
 file (if .py is set to open with Python), or run tools/vTinyShell.sh /
 `python3 tools/vTinyShell.py`.
 
-This is the same tool used in the vdn-roadmap repo (there it powers
+This is the same tool used in the vdn-internal repo (there it powers
 comments on the Ops Wiki). The select-text-and-comment widget itself is
 assets/tinyshell-comments.js, wired up to every page under /docs/. See
 the printed guide below.
@@ -66,7 +66,7 @@ GUIDE = f"""
    A local static file server so any page in this repo can be opened
    over a real http:// origin instead of file://. It also runs a small
    /api/comments endpoint that writes straight to disk, the same
-   backend used by the Ops Wiki's comment feature in vdn-roadmap.
+   backend used by the Ops Wiki's comment feature in vdn-internal.
 
  USING IT FOR COMMENTS
    The backend (GET/POST /api/comments, POST /api/upload-image, POST

@@ -1,7 +1,7 @@
 /*!
  * vTinyShell Comments — select-text-and-comment widget.
  *
- * Drop-in port of the comment engine from vdn-roadmap's ops-wiki/FMP_VA_Wiki.html,
+ * Drop-in port of the comment engine from vdn-internal's ops-wiki/FMP_VA_Wiki.html,
  * generalized to work across many separate pages sharing one comments store
  * instead of many sections inside one page. Filename kept as
  * tinyshell-comments.js (referenced by 32 pages) even though the tool itself

@@ -424,6 +424,6 @@ On each implementation change, update the relevant master status row and accepta
 
 Consolidated sources at `042383b`: `ROADMAP.md`, `PARTISAN-ROADMAP.md` and `CONTENT-ROADMAP.md` in the nested customiser, plus `workbench-roadmap/WORKBENCH-ROADMAP.md`. Git history retains their original text. Superseded generic roster suggestions, old music defaults, duplicate completed features and stale unchecked tasks have been reconciled above rather than carried forward as parallel backlogs.
 
-An older external document, `vdn-roadmap/extras/tlouii-style-modding-roadmap.md`, was referenced by the workbench README but is not present in this checkout and was not inspected in this consolidation. This master supersedes the four local plans; no claim is made to have ingested that external document. Reconcile any unique requirements from it if it becomes available.
+An older external document, `vdn-internal/extras/tlouii-style-modding-roadmap.md`, was referenced by the workbench README but is not present in this checkout and was not inspected in this consolidation. This master supersedes the four local plans; no claim is made to have ingested that external document. Reconcile any unique requirements from it if it becomes available.
 
 The six screenshots remain documentary references credited to the linked TLOU II video, not runtime assets. Their existing PNGs, reference board and capture manifest remain at the legacy workbench-roadmap path so established links keep working. Still images do not certify animation timing or sound quality.

@@ -4,7 +4,7 @@
 # feedback/ on disk. Run via tools/vTinyShell.bat (double-click that instead
 # of this file).
 #
-# This is the same tool used in the vdn-roadmap repo (there it powers
+# This is the same tool used in the vdn-internal repo (there it powers
 # comments on the Ops Wiki). The select-text-and-comment widget itself is
 # assets/tinyshell-comments.js, wired up to every page under /docs/. See
 # the printed guide below.
@@ -66,7 +66,7 @@ Write-Host " WHAT THIS IS"
 Write-Host "   A local static file server so any page in this repo can be opened"
 Write-Host "   over a real http:// origin instead of file://. It also runs a"
 Write-Host "   small /api/comments endpoint that writes straight to disk, the"
-Write-Host "   same backend used by the Ops Wiki's comment feature in vdn-roadmap."
+Write-Host "   same backend used by the Ops Wiki's comment feature in vdn-internal."
 Write-Host ""
 Write-Host " USING IT FOR COMMENTS"
 Write-Host "   The backend (GET/POST /api/comments, POST /api/upload-image, POST"
