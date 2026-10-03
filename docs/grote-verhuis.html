@@ -17,6 +17,9 @@
   .key li{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:12px 14px;font-size:14px}
   .key .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--font-mono);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .key b{display:block;font-family:var(--font-mono);font-size:13.5px;color:var(--accent-strong);margin-bottom:2px}
+  .tip{position:relative;display:inline-block;border-bottom:1px dotted currentColor;cursor:help;outline-offset:2px}
+  .tip::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:5;width:max-content;max-width:260px;background:var(--text);color:var(--flat);font-family:var(--font-sans);font-size:12.5px;font-weight:400;line-height:1.5;padding:8px 10px;border-radius:4px;opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+  .tip:hover::after,.tip:focus::after{opacity:1;visibility:visible}
   @media (max-width:720px){.map-frame iframe{height:340px}}
 </style>
 </head>
@@ -47,7 +50,7 @@
       <p class="map-caption">Google Maps &middot; <a href="https://www.google.com/maps/search/?api=1&amp;query=51.02636%2C4.10263" target="_blank" rel="noopener">open in Google Maps</a></p>
 
       <ol class="key">
-        <li><span class="n">1</span><span><b>Leopoldlaan 9B6</b>The apartment. Pin on the map.</span></li>
+        <li><span class="n">1</span><span><b>Leopoldlaan <span class="tip" tabindex="0" data-tip="Leopoldlaan 9 = the building. B = apartment B. 6 = floor 6.">9B6</span></b>Leopoldlaan 9, apartment B, floor 6. Pin on the map marks the building.</span></li>
         <li><span class="n">2</span><span><b>12 m reserved zone</b>The stretch of kerb directly in front of the apartment, held free for the furniture lift.</span></li>
         <li><span class="n">3</span><span><b>Main entrance</b>Where everything goes in and out.</span></li>
       </ol>
