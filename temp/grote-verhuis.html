@@ -36,6 +36,12 @@
   .zone p{margin:0 0 6px;max-width:none}
   .foto{margin:0 0 14px;line-height:0}
   .foto img{display:block;width:100%;height:auto;border:1px solid var(--line-strong);border-radius:6px}
+  .quote{display:flex;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line-strong);border-left:4px solid var(--accent);border-radius:6px;padding:14px 18px;margin:0 0 36px;max-width:68ch}
+  .quote img{flex:none;width:96px;height:auto;border-radius:6px;border:1px solid var(--line-strong)}
+  .quote blockquote{margin:0}
+  .quote p{margin:0;font-size:17px;line-height:1.5}
+  .quote cite{display:block;margin-top:6px;font-family:var(--font-mono);font-size:12.5px;font-style:normal;color:var(--text-dimmer)}
+  @media (max-width:520px){.quote img{width:72px}}
   .stepgroup{background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:16px 20px;margin:0 0 14px}
   .stepgroup ul{margin:6px 0 0;padding-left:20px}
   .stepgroup li{margin:4px 0}
@@ -125,6 +131,13 @@
       <h2 class="section">Afval / spoor 2</h2>
       <p>Sorteer het afval. Op het einde van de dag laden we het in de camionette van Christophe. Tijdens de week gaat die mee naar het containerpark.</p>
     </section>
+
+    <figure class="quote">
+      <img src="willem.webp" width="410" height="688" alt="Willem, de poes, stapt met de staart recht omhoog door de herfstbladeren">
+      <blockquote>
+        <p>&#x1F408; <b>Willem zegt:</b> &ldquo;Verhuisstress! Dat kan ik maar op een manier kwijt&hellip; sproedelen!&rdquo;</p>
+      </blockquote>
+    </figure>
 
     <section class="sheet-section">
       <h2 class="section">Kaart en parkeerzones</h2>
