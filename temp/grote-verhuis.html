@@ -42,6 +42,11 @@
   .quote p{margin:0;font-size:17px;line-height:1.5}
   .quote cite{display:block;margin-top:6px;font-family:var(--font-mono);font-size:12.5px;font-style:normal;color:var(--text-dimmer)}
   @media (max-width:520px){.quote img{width:72px}}
+  .galerij{display:grid;gap:10px;grid-template-columns:1fr 1fr 0.9fr;grid-template-areas:"a a b" "c c b";margin:0 0 14px}
+  .galerij figure{margin:0;line-height:0;min-width:0}
+  .galerij img{display:block;width:100%;height:100%;object-fit:cover;border:1px solid var(--line-strong);border-radius:6px}
+  .galerij .a{grid-area:a}.galerij .b{grid-area:b}.galerij .c{grid-area:c}
+  @media (max-width:600px){.galerij{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "c c" "b b"}.galerij .b img{max-height:520px}}
   .stepgroup{background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:16px 20px;margin:0 0 14px}
   .stepgroup ul{margin:6px 0 0;padding-left:20px}
   .stepgroup li{margin:4px 0}
@@ -115,6 +120,16 @@
         <li><b>PVC-pijpen:</b> gaan naar het afval.</li>
         <li><b>Boertjes en zakken rijnzand:</b> vrij mee te nemen. Buurman Marc moet er ook nog een paar krijgen.</li>
       </ul></div>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">De kelder en berging van L9 bereiken</h2>
+      <div class="galerij">
+        <figure class="a"><img src="kelder-1.webp" width="1200" height="550" alt="Garagehal op -1 met garagepoorten en een kolom met oranje strepen"></figure>
+        <figure class="b"><img src="kelder-2.webp" width="640" height="1396" alt="Lange gang in de kelder met bergingsdeuren links en rechts"></figure>
+        <figure class="c"><img src="kelder-3.webp" width="1200" height="550" alt="Garagepoorten 29 en 30 in de garagehal"></figure>
+      </div>
+      <div class="stepgroup"><p style="margin:0">Rechts van de lift is een wenteltrap. Trek daar aan de magnetisch gesloten kelderdeur en neem de trap naar beneden. Je komt uit op -1 waar onze berging en garage zich bevinden.</p></div>
     </section>
 
     <section class="sheet-section">
