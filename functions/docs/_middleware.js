@@ -4,17 +4,17 @@
  * Cloudflare Pages middleware scoped to /docs and everything under it. Nothing
  * below /docs/ is served until the password is accepted.
  *
- * The password is NOT in this repo. It is read from the DOCS_PASSWORD
+ * The password is NOT in this repo. It is read from the PASSWORD_LOCK
  * environment variable on the Cloudflare Pages project (Settings ->
  * Environment variables, type Secret, Production and Preview). Local dev: copy
  * .dev.vars.example to .dev.vars (gitignored) and run `npx wrangler pages dev .`
  *
  * Session: on success we set an HttpOnly, Secure, SameSite=Lax cookie (Path
  * /docs) holding an expiry timestamp plus an HMAC-SHA256 signature keyed on
- * DOCS_PASSWORD. Nothing derived from the password is recoverable from the
- * cookie, and changing DOCS_PASSWORD invalidates every session immediately.
+ * PASSWORD_LOCK. Nothing derived from the password is recoverable from the
+ * cookie, and changing PASSWORD_LOCK invalidates every session immediately.
  *
- * Fails closed: if DOCS_PASSWORD is unset, /docs/ returns 500 instead of
+ * Fails closed: if PASSWORD_LOCK is unset, /docs/ returns 500 instead of
  * falling through to the content.
  *
  * Adapted from the archived gate in docs/partisan-ai/_inert-cloudflare-gate/.
@@ -106,11 +106,11 @@ const NO_STORE = {
 
 export async function onRequest(context) {
   const { request, env, next } = context;
-  const secret = env.DOCS_PASSWORD;
+  const secret = env.PASSWORD_LOCK;
 
   if (!secret) {
     return new Response(
-      'DOCS_PASSWORD is not configured on this Pages project. Refusing to serve /docs/.',
+      'PASSWORD_LOCK is not configured on this Pages project. Refusing to serve /docs/.',
       { status: 500, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } }
     );
   }
