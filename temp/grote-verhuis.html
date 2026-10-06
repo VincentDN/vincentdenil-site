@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="nl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="seo_hidden" content="true">
+<title>Grote Verhuis</title>
+<!-- "Blue Sheet" house style, light mode — see assets/blue-sheet.css -->
+<link rel="stylesheet" href="/assets/blue-sheet.css">
+<link rel="stylesheet" href="/assets/leaflet/leaflet.css">
+<style>
+  #kaart{height:520px;width:100%;border:1px solid var(--line-strong);border-radius:4px;background:#e8eef3;margin:0 0 12px;z-index:0}
+  .map-caption{font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);margin:0 0 20px}
+  .map-caption a,.src a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+  .legend{display:grid;gap:8px;padding:0;margin:0 0 20px;list-style:none;max-width:72ch}
+  .legend li{display:flex;gap:12px;align-items:flex-start;font-size:14px}
+  .sw{flex:none;width:34px;height:10px;border-radius:2px;margin-top:8px}
+  .sw.dot{width:14px;height:14px;border-radius:50%;margin:5px 10px 0 10px}
+  .zones{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:0 0 20px}
+  .zone{background:var(--panel);border:1px solid var(--line-strong);border-top:6px solid var(--c);border-radius:4px;padding:16px 18px;font-size:14px;line-height:1.55}
+  .zone h3{margin:0 0 6px;font-family:var(--font-mono);font-size:14px;color:var(--accent-strong)}
+  .zone ul{margin:6px 0 0;padding-left:18px}
+  .zone p{margin:0 0 6px;max-width:none}
+  .stepgroup{background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:16px 20px;margin:0 0 14px}
+  .stepgroup ul{margin:6px 0 0;padding-left:20px}
+  .stepgroup li{margin:4px 0}
+  .plak{font-family:var(--font-mono);font-size:13.5px;background:var(--flat);border:1px solid var(--line-strong);border-radius:3px;padding:2px 7px}
+  .tip{position:relative;display:inline-block;border-bottom:1px dotted currentColor;cursor:help;outline-offset:2px}
+  .tip::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:5;width:max-content;max-width:260px;background:var(--text);color:var(--flat);font-family:var(--font-sans);font-size:12.5px;font-weight:400;line-height:1.5;padding:8px 10px;border-radius:4px;opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+  .tip:hover::after,.tip:focus::after{opacity:1;visibility:visible}
+  details.gm{margin:0 0 20px}
+  details.gm summary{cursor:pointer;font-family:var(--font-mono);font-size:12.5px;color:var(--accent)}
+  details.gm iframe{display:block;width:100%;height:380px;border:1px solid var(--line-strong);border-radius:4px;margin-top:10px}
+  .src{font-size:13px;color:var(--text-dimmer);max-width:72ch}
+  @media (max-width:720px){#kaart{height:400px}main.sheet{padding:28px 18px 60px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="row">
+  <a class="wordmark" href="../index.html"><span class="mark">AVDN</span><span class="name">Atelier Vincent De Nil</span></a>
+  <span class="section-badge">Blue Sheet</span>
+  <span class="top-spacer"></span>
+  <a class="top-back" href="index.html">/temp/</a>
+</div></header>
+
+<main class="sheet">
+  <article>
+    <div class="eyebrow-row">
+      <p class="eyebrow">Verhuisdag &middot; Dendermonde</p>
+    </div>
+    <h1>Grote Verhuis</h1>
+    <p class="lede">Werkindeling voor de verhuis, plus de parkeerzones rond de rotonde van de Leopoldlaan in Dendermonde en de plaats van de verhuislift en de hoofdingang op verhuisdag.</p>
+
+    <section class="sheet-section">
+      <h2 class="section">Demontagewerken</h2>
+      <div class="stepgroup"><ul>
+        <li>Keuken demonteren</li>
+        <li>Bed demonteren</li>
+        <li>Lampen demonteren</li>
+      </ul></div>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Kleine opruimwerken</h2>
+      <div class="stepgroup"><ul>
+        <li>Alle losse materialen in bananendozen steken. Label elke doos met wat erin zit en uit welke ruimte (keuken, living, enz.).</li>
+        <li>Grote bakken klaarzetten met de labels &lsquo;lampen&rsquo; en &lsquo;klein elektro&rsquo;.</li>
+      </ul></div>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Verhuis grote stukken</h2>
+      <p>Lees de plakkers op elk meubel. Wat erop staat, bepaalt waar het meubel naartoe gaat:</p>
+      <div class="stepgroup"><ul>
+        <li><span class="plak">&rarr; L9 SKR</span> betekent: naar Leopoldlaan 9, slaapkamer rechts.</li>
+        <li><span class="plak">&rarr; 137</span> betekent: naar garage 137.</li>
+        <li><span class="plak">&rarr; houden en afplakken</span> betekent: het meubel blijft in huis. Wikkel het in plastic en zet het uit de weg.</li>
+      </ul></div>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Afval / spoor 2</h2>
+      <p>Sorteer het afval. Op het einde van de dag laden we het in de camionette van Christophe. Tijdens de week gaat die mee naar het containerpark.</p>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Kaart en parkeerzones</h2>
+      <div id="kaart" role="region" aria-label="Kaart van de parkeerzones rond Leopoldlaan 9 in Dendermonde">
+        <noscript><p style="padding:16px">Schakel JavaScript in om de kaart met parkeerzones te zien, of open de <a href="https://www.google.com/maps/search/?api=1&amp;query=51.02636%2C4.10263">kaart in Google Maps</a>.</p></noscript>
+      </div>
+      <p class="map-caption">Kaart &copy; OpenStreetMap-bijdragers &middot; <a href="https://www.google.com/maps/search/?api=1&amp;query=51.02636%2C4.10263" target="_blank" rel="noopener">open in Google Maps</a> &middot; de lagen kan je rechtsboven aan- en uitzetten</p>
+
+      <ul class="legend">
+        <li><span class="sw" style="background:#f2b705"></span><span><b>Gele zone</b>: lang parkeren aan de stadsrand (Noordlaan, Leopoldlaan, Zuidlaan, parking Kazerne, parking Olympos). <b>Leopoldlaan 9 ligt in de gele zone.</b></span></li>
+        <li><span class="sw" style="background:#e8761e"></span><span><b>Oranje zone</b>: kort parkeren in de stadskern, binnen de ring (enkel een deel van de straten getekend).</span></li>
+        <li><span class="sw" style="background:#1b4f9c"></span><span><b>Blauwe zone</b>: gratis met parkeerschijf. Getekend: Stationsstraat tussen de rotonde en Statieplein. Ook delen van Geldroplaan en Sint-Gillislaan zijn blauw (zie stadsplan voor de exacte stukken).</span></li>
+        <li><span class="sw dot" style="background:#2e9d57"></span><span><b>Gratis parking</b>: De Bruynkaai en Parking Station (Statieplein).</span></li>
+        <li><span class="sw dot" style="background:#c0392b"></span><span><b>Leopoldlaan 9</b> (gebouw, appartement B, verdieping 6).</span></li>
+      </ul>
+
+      <div class="zones">
+        <div class="zone" style="--c:#f2b705">
+          <h3>Gele zone</h3>
+          <p>Ma-za 9-18 u betalend (niet op zon- en feestdagen en 11 juli).</p>
+          <ul>
+            <li>Max. 1 dag parkeren</li>
+            <li>30 minuten gratis</li>
+            <li>1,50 euro per uur, 6 euro per dag</li>
+            <li>Bewonerskaart en parkeerabonnement mogelijk (parking Olympos: enkel bewonerskaart)</li>
+          </ul>
+        </div>
+        <div class="zone" style="--c:#e8761e">
+          <h3>Oranje zone</h3>
+          <p>Ma-za 9-18 u betalend (niet op zon- en feestdagen en 11 juli).</p>
+          <ul>
+            <li>Max. 4 uur parkeren</li>
+            <li>15 minuten gratis</li>
+            <li>2,20 euro voor het 1e en 2e uur, 2,60 euro voor het 3e, 3 euro voor het 4e</li>
+            <li>Bewonerskaart mogelijk</li>
+          </ul>
+        </div>
+        <div class="zone" style="--c:#1b4f9c">
+          <h3>Blauwe zone</h3>
+          <p>Ma-za 9-18 u, gratis met parkeerschijf.</p>
+          <ul>
+            <li>Max. 2 uur parkeren</li>
+            <li>Kortparkeerzones: 15 of 30 minuten</li>
+            <li>Nieuw Kwartier: max. 5 uur</li>
+          </ul>
+        </div>
+        <div class="zone" style="--c:#2e9d57">
+          <h3>Gratis</h3>
+          <ul>
+            <li>Parking De Bruynkaai (inrit Noordlaan): 24/24 en 7/7</li>
+            <li>Parking Station (inrit Statieplein): 24/24 en 7/7</li>
+            <li>De pendelparkings van de NMBS zijn voorlopig gratis</li>
+            <li>In de betalende zones: gratis ma-za na 18 u en op zon- en feestdagen</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="callout"><b>Betalen kan enkel digitaal.</b> Aan de parkeerautomaat voer je je nummerplaat in en betaal je met bankkaart, of je gebruikt de parkeerapp of sms. Er komt geen ticket meer uit de automaat. De controle gebeurt op nummerplaat.</p>
+      <p class="callout warn"><b>Verhuisdag:</b> de Leopoldlaan is gele zone, dus op een werkdag of zaterdag tussen 9 en 18 u is parkeren daar betalend (max. 1 dag). Voor het vrijhouden van de 12 m voor de verhuislift is waarschijnlijk een vergunning voor inname van het openbaar domein nodig. De stad vermeldt die vergunning voor aannemers en werken, niet specifiek voor verhuizingen. Check dit bij Team wegen &amp; waterlopen, 052 25 11 42, parkeerplan@dendermonde.be.</p>
+      <p class="callout warn"><b>Nog in te vullen:</b> de exacte begin- en eindpunten van de 12 m-zone, de plaats van de hoofdingang, en de datum en uren van de verhuis.</p>
+      <p class="callout"><b>Indicatief.</b> De zones zijn overgenomen uit het parkeerplan van de stad (geldig vanaf woensdag 22 juli 2026) en de tekening in het stadsplan. De straten komen uit OpenStreetMap. Niet elk straatdeel is getekend, dus de officiële regels van de stad gelden.</p>
+
+      <details class="gm">
+        <summary>Toon de gewone Google Maps-kaart (zonder zones)</summary>
+        <iframe
+          title="Google Maps: Leopoldlaan 9, Dendermonde, bij de rotonde"
+          src="https://www.google.com/maps?q=51.02636,4.10263&amp;hl=nl&amp;z=19&amp;output=embed"
+          loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </details>
+
+      <p class="src">Bronnen: <a href="https://www.dendermonde.be/parkerenstadscentrum" target="_blank" rel="noopener">Nieuw parkeerplan vanaf woensdag 22 juli 2026: parkeerzones en -tarieven</a>, <a href="https://www.dendermonde.be/stadsparkings" target="_blank" rel="noopener">Stadsparkings</a> en <a href="https://www.dendermonde.be/faq-parkeerplan2026" target="_blank" rel="noopener">FAQ parkeerplan 2026</a> (Stad Dendermonde, geraadpleegd op 6 oktober 2026). Straten: &copy; OpenStreetMap-bijdragers.</p>
+    </section>
+  </article>
+</main>
+
+<footer class="site"><div class="row">All rights reserved, Atelier Vincent De Nil BV, Belgium. &middot; <a href="index.html">/temp/</a></div></footer>
+
+<script src="/assets/leaflet/leaflet.js"></script>
+<script>
+(function(){
+  var G = {"leopold":[[[51.02804,4.10489],[51.02801,4.10485],[51.02757,4.10446],[51.02696,4.10392],[51.02685,4.10381],[51.02675,4.1037],[51.02673,4.10367],[51.02665,4.10356],[51.02653,4.10337],[51.02626,4.10294],[51.0258,4.10224],[51.02578,4.10219]],[[51.02822,4.10524],[51.02845,4.10544],[51.02857,4.10551],[51.02864,4.10557],[51.02903,4.10592],[51.0293,4.10615],[51.02939,4.10621],[51.02942,4.10623],[51.02948,4.10626],[51.02958,4.10631],[51.02976,4.1064],[51.0302,4.10659],[51.03066,4.10678],[51.03091,4.10683],[51.03101,4.10683],[51.03135,4.10683]],[[51.03101,4.10672],[51.03091,4.10672],[51.03082,4.10671],[51.03068,4.10668],[51.03013,4.10646],[51.02977,4.1063],[51.02962,4.10623],[51.02951,4.10615],[51.02948,4.10613],[51.02943,4.1061],[51.02932,4.10602],[51.02868,4.10545],[51.02855,4.10533]],[[51.02571,4.10228],[51.02575,4.10233],[51.02598,4.10269],[51.02621,4.10306],[51.02662,4.1037],[51.0267,4.1038]],[[51.02751,4.10455],[51.02771,4.10474],[51.0278,4.10486],[51.02795,4.105],[51.02798,4.10502]],[[51.0267,4.1038],[51.02688,4.10398],[51.02712,4.1042]],[[51.02712,4.1042],[51.02736,4.10439],[51.02751,4.10455]],[[51.03176,4.10687],[51.03218,4.10701]],[[51.02855,4.10533],[51.02828,4.10512]],[[51.03222,4.10681],[51.03182,4.10672]],[[51.03218,4.10701],[51.03224,4.10703],[51.03246,4.1071]],[[51.02828,4.10512],[51.02812,4.10497]],[[51.02578,4.10219],[51.02567,4.10206],[51.02565,4.10203]],[[51.02807,4.1051],[51.02822,4.10524]],[[51.03135,4.10683],[51.03155,4.10685],[51.03176,4.10687]],[[51.0256,4.10216],[51.02564,4.10219],[51.02571,4.10228]],[[51.02541,4.10217],[51.02544,4.1022],[51.02548,4.10222],[51.02553,4.10222],[51.02557,4.1022],[51.0256,4.10216]],[[51.03142,4.10669],[51.03101,4.10672]],[[51.02561,4.10182],[51.02557,4.10178],[51.02552,4.10176],[51.02548,4.10176]],[[51.02565,4.10203],[51.02565,4.10195],[51.02563,4.10188],[51.02561,4.10182]],[[51.02798,4.10502],[51.02807,4.1051]],[[51.02541,4.10181],[51.02538,4.10185],[51.02537,4.1019],[51.02536,4.10196]],[[51.02812,4.10497],[51.02804,4.10489]],[[51.03173,4.10671],[51.03158,4.1067],[51.03142,4.10669]],[[51.0256,4.10216],[51.02563,4.1021],[51.02565,4.10203]],[[51.03234,4.10686],[51.03222,4.10681]],[[51.03245,4.10691],[51.03234,4.10686]],[[51.02548,4.10176],[51.02544,4.10178],[51.02541,4.10181]],[[51.02537,4.10208],[51.02538,4.10213],[51.02541,4.10217]],[[51.02536,4.10196],[51.02536,4.10202],[51.02537,4.10208]],[[51.03182,4.10672],[51.03173,4.10671]]],"zuid":[[[51.02558,4.09761],[51.02547,4.09888],[51.02539,4.09971],[51.02536,4.10002],[51.02532,4.10044],[51.02529,4.10073],[51.02528,4.10079],[51.02527,4.10082]],[[51.02515,4.1011],[51.02519,4.10103],[51.02524,4.10094],[51.02527,4.10082]],[[51.02527,4.10082],[51.02521,4.10083],[51.02511,4.10087],[51.02508,4.10091]]],"noord":[[[51.03281,4.10522],[51.0326,4.10587],[51.03253,4.10619],[51.0325,4.10635]]],"stationsstraat":[[[51.02421,4.10166],[51.02427,4.10168],[51.02459,4.10177],[51.02526,4.10194],[51.02528,4.10195],[51.02536,4.10196]]],"oranje":[[[51.02783,4.09943],[51.02777,4.09949],[51.02739,4.10001],[51.02728,4.10015],[51.02712,4.10034],[51.02684,4.10056],[51.0261,4.10126],[51.02568,4.10171],[51.02566,4.10174],[51.02561,4.10182]],[[51.02907,4.09873],[51.029,4.09871],[51.02891,4.09872],[51.02885,4.09873],[51.02857,4.09879],[51.02846,4.09882],[51.02817,4.09897],[51.02811,4.09905],[51.02807,4.09912],[51.02806,4.09918],[51.02805,4.09927]],[[51.02558,4.09761],[51.02568,4.09772],[51.02619,4.09853],[51.02627,4.09865],[51.02641,4.09887],[51.02662,4.09919],[51.02676,4.0994],[51.02678,4.09945],[51.02678,4.09952],[51.0267,4.09996],[51.02669,4.10011],[51.02671,4.10025],[51.02684,4.10056]],[[51.02637,4.09664],[51.02639,4.09672],[51.02658,4.09751],[51.02658,4.09759],[51.02662,4.09777],[51.02665,4.09784],[51.02684,4.09867],[51.02685,4.09874],[51.02685,4.0988],[51.02683,4.09885],[51.02662,4.09919]]],"kazerne":[[51.03303,4.09668],[51.03303,4.09678],[51.03283,4.09678],[51.03281,4.09676],[51.03269,4.09675],[51.03269,4.09678],[51.03248,4.09676],[51.03246,4.09709],[51.03249,4.0971],[51.03245,4.09768],[51.03244,4.09767],[51.03244,4.09776],[51.03243,4.09794],[51.03261,4.09795],[51.03258,4.09857],[51.03266,4.09859],[51.03276,4.09705],[51.03307,4.0971],[51.03298,4.09864],[51.03308,4.09861],[51.03309,4.09853],[51.03311,4.09853],[51.03313,4.09817],[51.03319,4.09818],[51.03323,4.09755],[51.03317,4.09754],[51.03319,4.09718],[51.03325,4.09719],[51.03325,4.09702],[51.03326,4.09695],[51.03327,4.09669],[51.03303,4.09668]],"olympos":[[51.02733,4.10719],[51.02726,4.10738],[51.02718,4.10731],[51.02712,4.1075],[51.02713,4.10751],[51.02711,4.10756],[51.02723,4.10765],[51.02718,4.10782],[51.02716,4.10786],[51.02725,4.10794],[51.02725,4.10796],[51.02733,4.10803],[51.02734,4.10801],[51.02743,4.10809],[51.0275,4.10788],[51.02759,4.10796],[51.0276,4.10793],[51.02761,4.10794],[51.02771,4.10763],[51.02774,4.10754],[51.02769,4.1075],[51.02769,4.10749],[51.02769,4.10745],[51.02768,4.10743],[51.02767,4.10742],[51.02765,4.1074],[51.02763,4.10745],[51.02733,4.10719]]};
+  var map = L.map('kaart',{scrollWheelZoom:false}).setView([51.0262,4.1030],16);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-bijdragers'}).addTo(map);
+  var YEL='#f2b705',ORA='#e8761e',BLU='#1b4f9c',GRN='#2e9d57';
+  function lines(list,color,w,label){
+    var g=L.layerGroup();
+    list.forEach(function(c){L.polyline(c,{color:color,weight:w,opacity:.9,lineCap:'round'}).bindTooltip(label,{sticky:true}).addTo(g)});
+    return g;
+  }
+  var geel=L.layerGroup([
+    lines(G.leopold.concat(G.zuid,G.noord),YEL,8,'Gele zone: Leopoldlaan / Zuidlaan / Noordlaan (30 min gratis, 1,50 euro/u, 6 euro/dag)'),
+    L.polygon(G.kazerne,{color:'#b88b00',weight:2,fillColor:YEL,fillOpacity:.45}).bindTooltip('Parking Kazerne (gele zone, ma-za 9-18 u betalend)',{sticky:true}),
+    L.polygon(G.olympos,{color:'#b88b00',weight:2,fillColor:YEL,fillOpacity:.45}).bindTooltip('Parking Olympos, inrit Leopoldlaan 18 (gele zone, enkel bewonerskaart)',{sticky:true})
+  ]);
+  var oranje=lines(G.oranje,ORA,6,'Oranje zone: Brusselsestraat / Molenstraat (max. 4 uur, 15 min gratis)');
+  var blauw=lines(G.stationsstraat,BLU,6,'Blauwe zone: Stationsstraat (parkeerschijf, max. 2 uur)');
+  function pt(ll,col,txt){return L.circleMarker(ll,{radius:9,color:'#fff',weight:2,fillColor:col,fillOpacity:1}).bindTooltip(txt,{permanent:false})}
+  var gratis=L.layerGroup([
+    pt([51.0334,4.1000],GRN,'Parking De Bruynkaai: gratis, 24/24 en 7/7 (inrit Noordlaan)'),
+    pt([51.0234,4.1010],GRN,'Parking Station: gratis, 24/24 en 7/7 (inrit Statieplein)')
+  ]);
+  var huis=L.layerGroup([pt([51.02636,4.10263],'#c0392b','Leopoldlaan 9 (appartement B, verdieping 6)')]);
+  [geel,oranje,blauw,gratis,huis].forEach(function(l){l.addTo(map)});
+  L.control.layers(null,{'Gele zone':geel,'Oranje zone':oranje,'Blauwe zone':blauw,'Gratis parking':gratis,'Leopoldlaan 9':huis},{collapsed:false}).addTo(map);
+  map.once('focus',function(){map.scrollWheelZoom.enable()});
+})();
+</script>
+</body>
+</html>
