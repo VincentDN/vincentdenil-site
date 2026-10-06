@@ -10,6 +10,18 @@
 <link rel="stylesheet" href="/assets/blue-sheet.css">
 <link rel="stylesheet" href="/assets/leaflet/leaflet.css">
 <style>
+  .hero{position:relative;margin:0 0 28px;border-radius:6px;overflow:hidden;border:1px solid var(--line-strong);background:var(--panel);line-height:0}
+  .hero img{display:block;width:100%;height:auto}
+  .spark{position:absolute;width:var(--s,18px);height:var(--s,18px);margin:calc(var(--s,18px)/-2) 0 0 calc(var(--s,18px)/-2);pointer-events:none;
+    background:radial-gradient(circle,#fff 0 12%,rgba(255,236,150,.95) 30%,rgba(255,215,90,0) 70%);
+    clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+    filter:drop-shadow(0 0 4px rgba(255,230,120,.95));opacity:0;transform:scale(.2) rotate(0deg);
+    animation:twinkle var(--d,2.6s) ease-in-out var(--w,0s) infinite}
+  @keyframes twinkle{0%,100%{opacity:0;transform:scale(.2) rotate(0deg)}45%{opacity:1;transform:scale(1) rotate(90deg)}70%{opacity:.8;transform:scale(.7) rotate(150deg)}}
+  @media (prefers-reduced-motion:reduce){.spark{animation:none;opacity:.85;transform:scale(.8)}}
+  .pnote{display:grid;gap:10px;margin:0 0 20px;max-width:72ch}
+  .pnote div{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:12px 14px;font-size:14px}
+  .pnote .chip{flex:none;width:22px;height:22px;border-radius:4px;margin-top:2px}
   #kaart{height:520px;width:100%;border:1px solid var(--line-strong);border-radius:4px;background:#e8eef3;margin:0 0 12px;z-index:0}
   .map-caption{font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);margin:0 0 20px}
   .map-caption a,.src a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
@@ -46,6 +58,25 @@
 
 <main class="sheet">
   <article>
+    <figure class="hero" aria-label="Onze poes tussen de verhuisdozen">
+    <img src="poes.webp" width="1400" height="1028" alt="Schildpadpoes op een houten tafel voor een bananendoos">
+    <i class="spark" style="left:21%;top:46%;--s:22px;--d:2.4s;--w:0s"></i>
+    <i class="spark" style="left:29%;top:36%;--s:16px;--d:3.0s;--w:0.6s"></i>
+    <i class="spark" style="left:40%;top:33%;--s:24px;--d:2.8s;--w:1.1s"></i>
+    <i class="spark" style="left:53%;top:37%;--s:16px;--d:2.5s;--w:0.3s"></i>
+    <i class="spark" style="left:63%;top:45%;--s:20px;--d:3.2s;--w:1.5s"></i>
+    <i class="spark" style="left:74%;top:58%;--s:24px;--d:2.7s;--w:0.9s"></i>
+    <i class="spark" style="left:71%;top:74%;--s:16px;--d:3.1s;--w:1.9s"></i>
+    <i class="spark" style="left:58%;top:83%;--s:22px;--d:2.6s;--w:0.4s"></i>
+    <i class="spark" style="left:41%;top:86%;--s:16px;--d:2.9s;--w:1.3s"></i>
+    <i class="spark" style="left:24%;top:80%;--s:22px;--d:3.3s;--w:0.8s"></i>
+    <i class="spark" style="left:15%;top:64%;--s:16px;--d:2.7s;--w:1.7s"></i>
+    <i class="spark" style="left:33%;top:55%;--s:14px;--d:2.4s;--w:2.1s"></i>
+    <i class="spark" style="left:51%;top:60%;--s:14px;--d:3.0s;--w:1.0s"></i>
+    <i class="spark" style="left:10%;top:44%;--s:18px;--d:3.4s;--w:0.2s"></i>
+    <i class="spark" style="left:84%;top:40%;--s:18px;--d:2.8s;--w:1.4s"></i>
+    </figure>
+
     <div class="eyebrow-row">
       <p class="eyebrow">Verhuisdag &middot; Dendermonde</p>
     </div>
@@ -93,11 +124,18 @@
 
       <ul class="legend">
         <li><span class="sw" style="background:#f2b705"></span><span><b>Gele zone</b>: lang parkeren aan de stadsrand (Noordlaan, Leopoldlaan, Zuidlaan, parking Kazerne, parking Olympos). <b>Leopoldlaan 9 ligt in de gele zone.</b></span></li>
-        <li><span class="sw" style="background:#e8761e"></span><span><b>Oranje zone</b>: kort parkeren in de stadskern, binnen de ring (enkel een deel van de straten getekend).</span></li>
         <li><span class="sw" style="background:#1b4f9c"></span><span><b>Blauwe zone</b>: gratis met parkeerschijf. Getekend: Stationsstraat tussen de rotonde en Statieplein. Ook delen van Geldroplaan en Sint-Gillislaan zijn blauw (zie stadsplan voor de exacte stukken).</span></li>
+        <li><span class="sw" style="background:#ffee00;border:2px dashed #8a7d00"></span><span><b>Geel vlak</b> (streepjesrand): parkeerschijf, max. 2 uur. Prima om te lossen.</span></li>
+        <li><span class="sw" style="background:#39d353;border:2px solid #1f8f3a"></span><span><b>Groen vlak</b>: gratis, onbeperkt parkeren op de brug en de straat richting station.</span></li>
         <li><span class="sw dot" style="background:#2e9d57"></span><span><b>Gratis parking</b>: De Bruynkaai en Parking Station (Statieplein).</span></li>
         <li><span class="sw dot" style="background:#c0392b"></span><span><b>Leopoldlaan 9</b> (gebouw, appartement B, verdieping 6).</span></li>
       </ul>
+
+      <div class="pnote">
+        <div><span class="chip" style="background:#39d353;border:2px solid #1f8f3a"></span><span><b>Brug en straat richting station:</b> gratis, onbeperkt parkeren. Prime spots als je de auto langer weg wilt.</span></div>
+        <div><span class="chip" style="background:#ffee00;border:2px dashed #8a7d00"></span><span><b>Parkeerschijf, max. 2 u:</b> prima om te lossen.</span></div>
+      </div>
+      <p class="callout">Controleer ter plaatse welke stukken precies gratis zijn: het stadsplan noemt voor een deel van Sint-Gillislaan en Stationsstraat een blauwe zone met parkeerschijf, en de NMBS wil haar pendelparkings op termijn betalend maken.</p>
 
       <div class="zones">
         <div class="zone" style="--c:#f2b705">
@@ -111,7 +149,7 @@
           </ul>
         </div>
         <div class="zone" style="--c:#e8761e">
-          <h3>Oranje zone</h3>
+          <h3>Oranje zone <span style="font-weight:400">(stadskern, niet op de kaart)</span></h3>
           <p>Ma-za 9-18 u betalend (niet op zon- en feestdagen en 11 juli).</p>
           <ul>
             <li>Max. 4 uur parkeren</li>
@@ -163,10 +201,10 @@
 <script src="/assets/leaflet/leaflet.js"></script>
 <script>
 (function(){
-  var G = {"leopold":[[[51.02804,4.10489],[51.02801,4.10485],[51.02757,4.10446],[51.02696,4.10392],[51.02685,4.10381],[51.02675,4.1037],[51.02673,4.10367],[51.02665,4.10356],[51.02653,4.10337],[51.02626,4.10294],[51.0258,4.10224],[51.02578,4.10219]],[[51.02822,4.10524],[51.02845,4.10544],[51.02857,4.10551],[51.02864,4.10557],[51.02903,4.10592],[51.0293,4.10615],[51.02939,4.10621],[51.02942,4.10623],[51.02948,4.10626],[51.02958,4.10631],[51.02976,4.1064],[51.0302,4.10659],[51.03066,4.10678],[51.03091,4.10683],[51.03101,4.10683],[51.03135,4.10683]],[[51.03101,4.10672],[51.03091,4.10672],[51.03082,4.10671],[51.03068,4.10668],[51.03013,4.10646],[51.02977,4.1063],[51.02962,4.10623],[51.02951,4.10615],[51.02948,4.10613],[51.02943,4.1061],[51.02932,4.10602],[51.02868,4.10545],[51.02855,4.10533]],[[51.02571,4.10228],[51.02575,4.10233],[51.02598,4.10269],[51.02621,4.10306],[51.02662,4.1037],[51.0267,4.1038]],[[51.02751,4.10455],[51.02771,4.10474],[51.0278,4.10486],[51.02795,4.105],[51.02798,4.10502]],[[51.0267,4.1038],[51.02688,4.10398],[51.02712,4.1042]],[[51.02712,4.1042],[51.02736,4.10439],[51.02751,4.10455]],[[51.03176,4.10687],[51.03218,4.10701]],[[51.02855,4.10533],[51.02828,4.10512]],[[51.03222,4.10681],[51.03182,4.10672]],[[51.03218,4.10701],[51.03224,4.10703],[51.03246,4.1071]],[[51.02828,4.10512],[51.02812,4.10497]],[[51.02578,4.10219],[51.02567,4.10206],[51.02565,4.10203]],[[51.02807,4.1051],[51.02822,4.10524]],[[51.03135,4.10683],[51.03155,4.10685],[51.03176,4.10687]],[[51.0256,4.10216],[51.02564,4.10219],[51.02571,4.10228]],[[51.02541,4.10217],[51.02544,4.1022],[51.02548,4.10222],[51.02553,4.10222],[51.02557,4.1022],[51.0256,4.10216]],[[51.03142,4.10669],[51.03101,4.10672]],[[51.02561,4.10182],[51.02557,4.10178],[51.02552,4.10176],[51.02548,4.10176]],[[51.02565,4.10203],[51.02565,4.10195],[51.02563,4.10188],[51.02561,4.10182]],[[51.02798,4.10502],[51.02807,4.1051]],[[51.02541,4.10181],[51.02538,4.10185],[51.02537,4.1019],[51.02536,4.10196]],[[51.02812,4.10497],[51.02804,4.10489]],[[51.03173,4.10671],[51.03158,4.1067],[51.03142,4.10669]],[[51.0256,4.10216],[51.02563,4.1021],[51.02565,4.10203]],[[51.03234,4.10686],[51.03222,4.10681]],[[51.03245,4.10691],[51.03234,4.10686]],[[51.02548,4.10176],[51.02544,4.10178],[51.02541,4.10181]],[[51.02537,4.10208],[51.02538,4.10213],[51.02541,4.10217]],[[51.02536,4.10196],[51.02536,4.10202],[51.02537,4.10208]],[[51.03182,4.10672],[51.03173,4.10671]]],"zuid":[[[51.02558,4.09761],[51.02547,4.09888],[51.02539,4.09971],[51.02536,4.10002],[51.02532,4.10044],[51.02529,4.10073],[51.02528,4.10079],[51.02527,4.10082]],[[51.02515,4.1011],[51.02519,4.10103],[51.02524,4.10094],[51.02527,4.10082]],[[51.02527,4.10082],[51.02521,4.10083],[51.02511,4.10087],[51.02508,4.10091]]],"noord":[[[51.03281,4.10522],[51.0326,4.10587],[51.03253,4.10619],[51.0325,4.10635]]],"stationsstraat":[[[51.02421,4.10166],[51.02427,4.10168],[51.02459,4.10177],[51.02526,4.10194],[51.02528,4.10195],[51.02536,4.10196]]],"oranje":[[[51.02783,4.09943],[51.02777,4.09949],[51.02739,4.10001],[51.02728,4.10015],[51.02712,4.10034],[51.02684,4.10056],[51.0261,4.10126],[51.02568,4.10171],[51.02566,4.10174],[51.02561,4.10182]],[[51.02907,4.09873],[51.029,4.09871],[51.02891,4.09872],[51.02885,4.09873],[51.02857,4.09879],[51.02846,4.09882],[51.02817,4.09897],[51.02811,4.09905],[51.02807,4.09912],[51.02806,4.09918],[51.02805,4.09927]],[[51.02558,4.09761],[51.02568,4.09772],[51.02619,4.09853],[51.02627,4.09865],[51.02641,4.09887],[51.02662,4.09919],[51.02676,4.0994],[51.02678,4.09945],[51.02678,4.09952],[51.0267,4.09996],[51.02669,4.10011],[51.02671,4.10025],[51.02684,4.10056]],[[51.02637,4.09664],[51.02639,4.09672],[51.02658,4.09751],[51.02658,4.09759],[51.02662,4.09777],[51.02665,4.09784],[51.02684,4.09867],[51.02685,4.09874],[51.02685,4.0988],[51.02683,4.09885],[51.02662,4.09919]]],"kazerne":[[51.03303,4.09668],[51.03303,4.09678],[51.03283,4.09678],[51.03281,4.09676],[51.03269,4.09675],[51.03269,4.09678],[51.03248,4.09676],[51.03246,4.09709],[51.03249,4.0971],[51.03245,4.09768],[51.03244,4.09767],[51.03244,4.09776],[51.03243,4.09794],[51.03261,4.09795],[51.03258,4.09857],[51.03266,4.09859],[51.03276,4.09705],[51.03307,4.0971],[51.03298,4.09864],[51.03308,4.09861],[51.03309,4.09853],[51.03311,4.09853],[51.03313,4.09817],[51.03319,4.09818],[51.03323,4.09755],[51.03317,4.09754],[51.03319,4.09718],[51.03325,4.09719],[51.03325,4.09702],[51.03326,4.09695],[51.03327,4.09669],[51.03303,4.09668]],"olympos":[[51.02733,4.10719],[51.02726,4.10738],[51.02718,4.10731],[51.02712,4.1075],[51.02713,4.10751],[51.02711,4.10756],[51.02723,4.10765],[51.02718,4.10782],[51.02716,4.10786],[51.02725,4.10794],[51.02725,4.10796],[51.02733,4.10803],[51.02734,4.10801],[51.02743,4.10809],[51.0275,4.10788],[51.02759,4.10796],[51.0276,4.10793],[51.02761,4.10794],[51.02771,4.10763],[51.02774,4.10754],[51.02769,4.1075],[51.02769,4.10749],[51.02769,4.10745],[51.02768,4.10743],[51.02767,4.10742],[51.02765,4.1074],[51.02763,4.10745],[51.02733,4.10719]]};
+  var G = {"leopold":[[[51.02804,4.10489],[51.02801,4.10485],[51.02757,4.10446],[51.02696,4.10392],[51.02685,4.10381],[51.02675,4.1037],[51.02673,4.10367],[51.02665,4.10356],[51.02653,4.10337],[51.02626,4.10294],[51.0258,4.10224],[51.02578,4.10219]],[[51.02822,4.10524],[51.02845,4.10544],[51.02857,4.10551],[51.02864,4.10557],[51.02903,4.10592],[51.0293,4.10615],[51.02939,4.10621],[51.02942,4.10623],[51.02948,4.10626],[51.02958,4.10631],[51.02976,4.1064],[51.0302,4.10659],[51.03066,4.10678],[51.03091,4.10683],[51.03101,4.10683],[51.03135,4.10683]],[[51.03101,4.10672],[51.03091,4.10672],[51.03082,4.10671],[51.03068,4.10668],[51.03013,4.10646],[51.02977,4.1063],[51.02962,4.10623],[51.02951,4.10615],[51.02948,4.10613],[51.02943,4.1061],[51.02932,4.10602],[51.02868,4.10545],[51.02855,4.10533]],[[51.02571,4.10228],[51.02575,4.10233],[51.02598,4.10269],[51.02621,4.10306],[51.02662,4.1037],[51.0267,4.1038]],[[51.02751,4.10455],[51.02771,4.10474],[51.0278,4.10486],[51.02795,4.105],[51.02798,4.10502]],[[51.0267,4.1038],[51.02688,4.10398],[51.02712,4.1042]],[[51.02712,4.1042],[51.02736,4.10439],[51.02751,4.10455]],[[51.03176,4.10687],[51.03218,4.10701]],[[51.02855,4.10533],[51.02828,4.10512]],[[51.03222,4.10681],[51.03182,4.10672]],[[51.03218,4.10701],[51.03224,4.10703],[51.03246,4.1071]],[[51.02828,4.10512],[51.02812,4.10497]],[[51.02578,4.10219],[51.02567,4.10206],[51.02565,4.10203]],[[51.02807,4.1051],[51.02822,4.10524]],[[51.03135,4.10683],[51.03155,4.10685],[51.03176,4.10687]],[[51.0256,4.10216],[51.02564,4.10219],[51.02571,4.10228]],[[51.02541,4.10217],[51.02544,4.1022],[51.02548,4.10222],[51.02553,4.10222],[51.02557,4.1022],[51.0256,4.10216]],[[51.03142,4.10669],[51.03101,4.10672]],[[51.02561,4.10182],[51.02557,4.10178],[51.02552,4.10176],[51.02548,4.10176]],[[51.02565,4.10203],[51.02565,4.10195],[51.02563,4.10188],[51.02561,4.10182]],[[51.02798,4.10502],[51.02807,4.1051]],[[51.02541,4.10181],[51.02538,4.10185],[51.02537,4.1019],[51.02536,4.10196]],[[51.02812,4.10497],[51.02804,4.10489]],[[51.03173,4.10671],[51.03158,4.1067],[51.03142,4.10669]],[[51.0256,4.10216],[51.02563,4.1021],[51.02565,4.10203]],[[51.03234,4.10686],[51.03222,4.10681]],[[51.03245,4.10691],[51.03234,4.10686]],[[51.02548,4.10176],[51.02544,4.10178],[51.02541,4.10181]],[[51.02537,4.10208],[51.02538,4.10213],[51.02541,4.10217]],[[51.02536,4.10196],[51.02536,4.10202],[51.02537,4.10208]],[[51.03182,4.10672],[51.03173,4.10671]]],"zuid":[[[51.02558,4.09761],[51.02547,4.09888],[51.02539,4.09971],[51.02536,4.10002],[51.02532,4.10044],[51.02529,4.10073],[51.02528,4.10079],[51.02527,4.10082]],[[51.02515,4.1011],[51.02519,4.10103],[51.02524,4.10094],[51.02527,4.10082]],[[51.02527,4.10082],[51.02521,4.10083],[51.02511,4.10087],[51.02508,4.10091]]],"noord":[[[51.03281,4.10522],[51.0326,4.10587],[51.03253,4.10619],[51.0325,4.10635]]],"stationsstraat":[[[51.02421,4.10166],[51.02427,4.10168],[51.02459,4.10177],[51.02526,4.10194],[51.02528,4.10195],[51.02536,4.10196]]],"kazerne":[[51.03303,4.09668],[51.03303,4.09678],[51.03283,4.09678],[51.03281,4.09676],[51.03269,4.09675],[51.03269,4.09678],[51.03248,4.09676],[51.03246,4.09709],[51.03249,4.0971],[51.03245,4.09768],[51.03244,4.09767],[51.03244,4.09776],[51.03243,4.09794],[51.03261,4.09795],[51.03258,4.09857],[51.03266,4.09859],[51.03276,4.09705],[51.03307,4.0971],[51.03298,4.09864],[51.03308,4.09861],[51.03309,4.09853],[51.03311,4.09853],[51.03313,4.09817],[51.03319,4.09818],[51.03323,4.09755],[51.03317,4.09754],[51.03319,4.09718],[51.03325,4.09719],[51.03325,4.09702],[51.03326,4.09695],[51.03327,4.09669],[51.03303,4.09668]],"olympos":[[51.02733,4.10719],[51.02726,4.10738],[51.02718,4.10731],[51.02712,4.1075],[51.02713,4.10751],[51.02711,4.10756],[51.02723,4.10765],[51.02718,4.10782],[51.02716,4.10786],[51.02725,4.10794],[51.02725,4.10796],[51.02733,4.10803],[51.02734,4.10801],[51.02743,4.10809],[51.0275,4.10788],[51.02759,4.10796],[51.0276,4.10793],[51.02761,4.10794],[51.02771,4.10763],[51.02774,4.10754],[51.02769,4.1075],[51.02769,4.10749],[51.02769,4.10745],[51.02768,4.10743],[51.02767,4.10742],[51.02765,4.1074],[51.02763,4.10745],[51.02733,4.10719]],"geel2":[[51.025371,4.101902],[51.025343,4.101948],[51.024212,4.101606],[51.024254,4.101571]],"gratis1":[[51.025354,4.101967],[51.025313,4.102018],[51.024205,4.10169],[51.024243,4.101652]],"gratis2":[[51.02534,4.102079],[51.025304,4.102104],[51.024874,4.102692],[51.02485,4.102661]],"focus":[[51.027018,4.102831],[51.026494,4.104433],[51.024512,4.104433],[51.023693,4.105052],[51.023389,4.101657],[51.023416,4.101216],[51.025063,4.101372],[51.025107,4.101173],[51.026244,4.10086]]};
   var map = L.map('kaart',{scrollWheelZoom:false}).setView([51.0262,4.1030],16);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-bijdragers'}).addTo(map);
-  var YEL='#f2b705',ORA='#e8761e',BLU='#1b4f9c',GRN='#2e9d57';
+  var YEL='#f2b705',BLU='#1b4f9c',GRN='#2e9d57';
   function lines(list,color,w,label){
     var g=L.layerGroup();
     list.forEach(function(c){L.polyline(c,{color:color,weight:w,opacity:.9,lineCap:'round'}).bindTooltip(label,{sticky:true}).addTo(g)});
@@ -177,16 +215,24 @@
     L.polygon(G.kazerne,{color:'#b88b00',weight:2,fillColor:YEL,fillOpacity:.45}).bindTooltip('Parking Kazerne (gele zone, ma-za 9-18 u betalend)',{sticky:true}),
     L.polygon(G.olympos,{color:'#b88b00',weight:2,fillColor:YEL,fillOpacity:.45}).bindTooltip('Parking Olympos, inrit Leopoldlaan 18 (gele zone, enkel bewonerskaart)',{sticky:true})
   ]);
-  var oranje=lines(G.oranje,ORA,6,'Oranje zone: Brusselsestraat / Molenstraat (max. 4 uur, 15 min gratis)');
   var blauw=lines(G.stationsstraat,BLU,6,'Blauwe zone: Stationsstraat (parkeerschijf, max. 2 uur)');
   function pt(ll,col,txt){return L.circleMarker(ll,{radius:9,color:'#fff',weight:2,fillColor:col,fillOpacity:1}).bindTooltip(txt,{permanent:false})}
   var gratis=L.layerGroup([
     pt([51.0334,4.1000],GRN,'Parking De Bruynkaai: gratis, 24/24 en 7/7 (inrit Noordlaan)'),
     pt([51.0234,4.1010],GRN,'Parking Station: gratis, 24/24 en 7/7 (inrit Statieplein)')
   ]);
+  var vrij=L.layerGroup([
+    L.polygon(G.gratis1,{color:'#1f8f3a',weight:3,fillColor:'#39d353',fillOpacity:.7}).bindTooltip('Gratis, onbeperkt parkeren: straat richting station. Prime spots voor lang wegblijven.',{sticky:true}),
+    L.polygon(G.gratis2,{color:'#1f8f3a',weight:3,fillColor:'#39d353',fillOpacity:.7}).bindTooltip('Gratis, onbeperkt parkeren: brug en straat richting station. Prime spots voor lang wegblijven.',{sticky:true})
+  ]);
+  var schijf=L.polygon(G.geel2,{color:'#8a7d00',weight:3,dashArray:'6 4',fillColor:'#ffee00',fillOpacity:.75}).bindTooltip('Parkeerschijf, max. 2 u: prima om te lossen.',{sticky:true});
+  // Alles buiten het werkgebied donkerder maken
+  map.createPane('masker'); map.getPane('masker').style.zIndex=450; map.getPane('masker').style.pointerEvents='none';
+  var mask=L.polygon([[[85,-180],[85,180],[-85,180],[-85,-180]],G.focus],{pane:'masker',interactive:false,stroke:false,fillColor:'#061a2b',fillOpacity:.62,fillRule:'evenodd'});
   var huis=L.layerGroup([pt([51.02636,4.10263],'#c0392b','Leopoldlaan 9 (appartement B, verdieping 6)')]);
-  [geel,oranje,blauw,gratis,huis].forEach(function(l){l.addTo(map)});
-  L.control.layers(null,{'Gele zone':geel,'Oranje zone':oranje,'Blauwe zone':blauw,'Gratis parking':gratis,'Leopoldlaan 9':huis},{collapsed:false}).addTo(map);
+  [geel,blauw,gratis,huis,vrij,schijf,mask].forEach(function(l){l.addTo(map)});
+  L.control.layers(null,{'Gele zone':geel,'Gratis, onbeperkt':vrij,'Parkeerschijf max. 2 u':schijf,'Blauwe zone':blauw,'Gratis parking':gratis,'Leopoldlaan 9':huis,'Werkgebied uitlichten':mask},{collapsed:false}).addTo(map);
+  map.fitBounds(L.latLngBounds(G.focus),{padding:[20,20]});
   map.once('focus',function(){map.scrollWheelZoom.enable()});
 })();
 </script>
