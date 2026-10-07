@@ -52,6 +52,8 @@
   .stepgroup{background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:16px 20px;margin:0 0 14px}
   .stepgroup ul{margin:6px 0 0;padding-left:20px}
   .stepgroup li{margin:4px 0}
+  .floorplan-placeholder{display:grid;place-items:center;min-height:300px;margin:0 0 14px;padding:24px;background:var(--panel);border:2px dashed var(--line-strong);border-radius:6px}
+  .floorplan-placeholder p{margin:0;font-family:var(--font-mono);font-size:14px;color:var(--text-dimmer);text-align:center}
   .plak{font-family:var(--font-mono);font-size:13.5px;background:var(--flat);border:1px solid var(--line-strong);border-radius:3px;padding:2px 7px}
   .tip{position:relative;display:inline-block;border-bottom:1px dotted currentColor;cursor:help;outline-offset:2px}
   .tip::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:5;width:max-content;max-width:260px;background:var(--text);color:var(--flat);font-family:var(--font-sans);font-size:12.5px;font-weight:400;line-height:1.5;padding:8px 10px;border-radius:4px;opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
@@ -97,23 +99,31 @@
     <p class="lede">Hieronder wat praktische informatie voor de verhuizers.</p>
 
     <section class="sheet-section">
-      <h2 class="section">Demontagewerken</h2>
-      <div class="stepgroup"><ul>
-        <li>Keuken demonteren</li>
-        <li>Bed demonteren</li>
-        <li>Lampen demonteren</li>
-        <li>Deuren uithalen</li>
-      </ul></div>
-    </section>
-
-    <section class="sheet-section">
-      <h2 class="section">Verhuis grote stukken</h2>
+      <h2 class="section">Wat gaat naar waar?</h2>
       <p>Lees de plakkers op elk meubel. Wat erop staat, bepaalt waar het meubel naartoe gaat:</p>
       <div class="stepgroup"><ul>
         <li><span class="plak">&rarr; L9 SKR</span> betekent: naar Leopoldlaan 9, slaapkamer rechts.</li>
         <li><span class="plak">&rarr; 137</span> betekent: naar garage 137.</li>
         <li><span class="plak">&rarr; houden en afplakken</span> betekent: het meubel blijft in huis. Wikkel het in plastic en zet het uit de weg.</li>
         <li><span class="plak">&#x2715; WEG</span> (een kruis met WEG) betekent: het meubel gaat naar spoor 2, of wordt gedemonteerd en weggesmeten. Gratis hout!</li>
+      </ul></div>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Grondplan van het appartement</h2>
+      <p>Hier komt het grondplan van Leopoldlaan 9 B6. Daarop duiden we aan waar de meubels komen.</p>
+      <div class="floorplan-placeholder">
+        <p>Grondplan volgt</p>
+      </div>
+    </section>
+
+    <section class="sheet-section">
+      <h2 class="section">Demontagewerken</h2>
+      <div class="stepgroup"><ul>
+        <li>Keuken demonteren</li>
+        <li>Bed demonteren</li>
+        <li>Lampen demonteren</li>
+        <li>Deuren uithalen</li>
       </ul></div>
     </section>
 
