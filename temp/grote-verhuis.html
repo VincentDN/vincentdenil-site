@@ -52,8 +52,10 @@
   .stepgroup{background:var(--panel);border:1px solid var(--line-strong);border-radius:4px;padding:16px 20px;margin:0 0 14px}
   .stepgroup ul{margin:6px 0 0;padding-left:20px}
   .stepgroup li{margin:4px 0}
-  .floorplan-placeholder{display:grid;place-items:center;min-height:300px;margin:0 0 14px;padding:24px;background:var(--panel);border:2px dashed var(--line-strong);border-radius:6px}
-  .floorplan-placeholder p{margin:0;font-family:var(--font-mono);font-size:14px;color:var(--text-dimmer);text-align:center}
+  .floorplan{margin:0 0 20px;padding:16px;background:#fff;border:1px solid var(--line-strong);border-radius:6px}
+  .floorplan a{display:block;max-width:560px;margin:0 auto}
+  .floorplan img{display:block;width:100%;height:auto}
+  .floorplan figcaption{margin-top:12px;font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);text-align:center}
   .plak{font-family:var(--font-mono);font-size:13.5px;background:var(--flat);border:1px solid var(--line-strong);border-radius:3px;padding:2px 7px}
   .tip{position:relative;display:inline-block;border-bottom:1px dotted currentColor;cursor:help;outline-offset:2px}
   .tip::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:5;width:max-content;max-width:260px;background:var(--text);color:var(--flat);font-family:var(--font-sans);font-size:12.5px;font-weight:400;line-height:1.5;padding:8px 10px;border-radius:4px;opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
@@ -111,10 +113,13 @@
 
     <section class="sheet-section">
       <h2 class="section">Grondplan van het appartement</h2>
-      <p>Hier komt het grondplan van Leopoldlaan 9 B6. Daarop duiden we aan waar de meubels komen.</p>
-      <div class="floorplan-placeholder">
-        <p>Grondplan volgt</p>
-      </div>
+      <p>Leopoldlaan 9 B6: elke kamer heeft een eigen kleur. Hierop duiden we aan waar de meubels komen.</p>
+      <figure class="floorplan">
+        <a href="grondplan-l9b6.svg" target="_blank" rel="noopener" aria-label="Open het grondplan van L9B6 op volledig formaat">
+          <img src="grondplan-l9b6.svg" width="790" height="1625" alt="Grondplan L9B6: living en keuken bovenaan, inkom en gang in het midden met badkamer, toilet en berging, twee slaapkamers onderaan en balkon aan de onderzijde. De gemeenschappelijke traphal ligt rechts van de inkom.">
+        </a>
+        <figcaption>Vereenvoudigd grondplan L9B6 &middot; Klik op het plan om het groter te openen.</figcaption>
+      </figure>
     </section>
 
     <section class="sheet-section">

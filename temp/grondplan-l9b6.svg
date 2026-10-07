@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="195 20 790 1625" width="790" height="1625" role="img" aria-labelledby="title desc">
+  <title id="title">Vereenvoudigd grondplan van Leopoldlaan 9 B6</title>
+  <desc id="desc">Living linksboven, keuken rechtsboven en inkom daaronder. In het midden liggen badkamer, toilet, gang en berging. Onderaan liggen slaapkamer links en slaapkamer rechts, met het balkon aan de onderzijde. De gemeenschappelijke traphal ligt rechts naast de inkom.</desc>
+  <rect x="195" y="20" width="790" height="1625" rx="12" fill="#fff"/>
+  <g id="kamers">
+    <polygon id="living" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#f9dfa4" points="235,62 695,62 695,400 676,400 608,490 608,728 235,728 235,508 273,508 273,363 235,363"/>
+    <polygon id="keuken" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#bfe5c8" points="711,62 927,62 927,400 711,400"/>
+    <polygon id="inkom" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#dbe4ef" points="677,412 927,412 927,620 709,620 709,881 619,881 619,490"/>
+    <polygon id="badkamer" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#bde6ed" points="235,737 456,737 456,963 467,963 467,1044 235,1044"/>
+    <polygon id="toilet" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#a8d6e4" points="525,737 608,737 608,881 525,881"/>
+    <polygon id="gang" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#dbe4ef" points="467,892 608,892 608,881 709,881 709,892 721,892 721,963 732,963 732,1044 467,1044"/>
+    <polygon id="berging" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#edcdb6" points="732,892 927,892 927,1044 732,1044"/>
+    <polygon id="slaapkamer-links" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#d6c9ee" points="235,1055 585,1055 585,1483 487,1483 487,1506 335,1506 335,1483 235,1483"/>
+    <polygon id="slaapkamer-rechts" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#f1c4d4" points="598,1055 927,1055 927,1483 837,1483 837,1506 701,1506 701,1483 598,1483"/>
+    <polygon id="balkon" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#d8e8b4" points="235,1506 335,1506 335,1566 487,1566 487,1506 685,1506 685,1566 837,1566 837,1506 941,1506 941,1609 235,1609"/>
+  </g>
+  <polygon id="traphal" fill="#f1f3f5" stroke="#94a3b8" stroke-width="4" stroke-dasharray="10 8" points="769,630 941,630 941,881 769,881"/>
+  <path stroke="#fff" stroke-width="9" fill="none" d="M622 471 L660 424 M780 406 H858 M840 620 H919 M608 800 V870 M620 881 H695 M390 963 H455 M732 965 V1032 M488 1050 H557 M630 1050 H701 M335 1506 V1566 M487 1506 V1566 M685 1506 V1566 M837 1506 V1566"/>
+  <path stroke="#64748b" stroke-width="2" stroke-dasharray="5 5" d="M335 1506 V1566 M487 1506 V1566 M685 1506 V1566 M837 1506 V1566"/>
+  <g id="kamerlabels" font-family="Arial,Helvetica,sans-serif" fill="#172b43" text-anchor="middle" font-size="27" font-weight="600">
+    <text x="451" y="386" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Living</text>
+    <text x="819" y="231" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Keuken</text>
+    <text x="788" y="510" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Inkom</text>
+    <text x="345" y="900" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Badkamer</text>
+    <text x="566" y="825" font-size="21" font-weight="400" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43">Toilet</text>
+    <text x="600" y="985" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Gang</text>
+    <text x="829" y="980" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Berging</text>
+    <text x="410" y="1260" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600"><tspan x="410">Slaapkamer</tspan><tspan x="410" dy="35">links</tspan></text>
+    <text x="762" y="1260" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600"><tspan x="762">Slaapkamer</tspan><tspan x="762" dy="35">rechts</tspan></text>
+    <text x="590" y="1578" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43" font-size="27" font-weight="600">Balkon</text>
+    <text x="855" y="780" font-size="21" font-weight="400" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#172b43"><tspan x="855">Traphal</tspan><tspan x="855" dy="28" font-size="17">gemeenschappelijk</tspan></text>
+  </g>
+  <path d="M879 704 V577 M869 590 L879 575 L889 590" fill="none" stroke="#1b4f9c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="857" y="733" font-family="Arial,Helvetica,sans-serif" fill="#172b43" text-anchor="middle" font-size="21" font-weight="400">Ingang</text>
+</svg>
