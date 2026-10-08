@@ -227,7 +227,6 @@
   var mask=L.polygon([[[85,-180],[85,180],[-85,180],[-85,-180]],G.focus],{pane:'masker',interactive:false,stroke:false,fillColor:'#061a2b',fillOpacity:.62,fillRule:'evenodd'});
   var huis=L.layerGroup([pt([51.02636,4.10263],'#c0392b','Leopoldlaan 9 (appartement B, verdieping 6)')]);
   [geel,blauw,gratis,huis,vrij,schijf,mask].forEach(function(l){l.addTo(map)});
-  L.control.layers(null,{'Gele zone':geel,'Gratis, onbeperkt':vrij,'Parkeerschijf max. 2 u':schijf,'Blauwe zone':blauw,'Gratis parking':gratis,'Leopoldlaan 9':huis,'Werkgebied uitlichten':mask},{collapsed:false}).addTo(map);
   map.fitBounds(L.latLngBounds(G.focus),{padding:[20,20]});
   map.once('focus',function(){map.scrollWheelZoom.enable()});
 })();
