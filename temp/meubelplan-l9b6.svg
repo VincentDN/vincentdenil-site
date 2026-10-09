@@ -40,16 +40,16 @@
     <rect x="523" y="563" width="77" height="148" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
     <rect x="544.5" y="564.0" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
     <text x="561.5" y="637.0" transform="rotate(-90 561.5 637.0)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="22" font-weight="700">Stapelzone</text>
-    <rect x="478" y="1142" width="85" height="325" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
-    <rect x="503.5" y="1231.5" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
-    <text x="520.5" y="1304.5" transform="rotate(-90 520.5 1304.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="24" font-weight="700">Stapelzone</text>
+    <rect x="499" y="1142" width="72" height="325" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
+    <rect x="518" y="1231.5" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
+    <text x="535" y="1304.5" transform="rotate(-90 535 1304.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="24" font-weight="700">Stapelzone</text>
     <rect x="613" y="1147" width="92" height="315" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
     <rect x="642.0" y="1231.5" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
     <text x="659.0" y="1304.5" transform="rotate(-90 659.0 1304.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="24" font-weight="700">Stapelzone</text>
-    <rect x="247" y="1139" width="204" height="263" rx="10" fill="#a21caf" stroke="#701a75" stroke-width="3"/>
-    <rect x="263" y="1153" width="80" height="34" rx="8" fill="#f5d0fe"/><rect x="355" y="1153" width="80" height="34" rx="8" fill="#f5d0fe"/>
-    <text x="349" y="1255" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="30" font-weight="700">Bed</text>
-    <text x="349" y="1296" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="21" font-weight="600">+ nachtkastjes</text>
+    <rect x="247" y="1139" width="240" height="186" rx="10" fill="#a21caf" stroke="#701a75" stroke-width="3"/>
+    <rect x="261" y="1153" width="34" height="74" rx="8" fill="#f5d0fe"/><rect x="261" y="1237" width="34" height="74" rx="8" fill="#f5d0fe"/>
+    <text x="391" y="1215" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="30" font-weight="700">Bed</text>
+    <text x="391" y="1256" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="21" font-weight="600">+ nachtkastjes</text>
     <rect x="851" y="1162" width="67" height="123" rx="6" fill="#15803d" stroke="#14532d" stroke-width="3"/>
     <text x="884.5" y="1223.5" transform="rotate(-90 884.5 1223.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="22" font-weight="700">Zitbureau</text>
     <rect x="840" y="1295" width="76" height="170" rx="6" fill="#15803d" stroke="#14532d" stroke-width="3"/>
