@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="195 20 790 1625" width="790" height="1625" role="img" aria-labelledby="title desc">
+  <title id="title">Meubelplan Leopoldlaan 9 B6</title>
+  <desc id="desc">Waar de meubels komen: sofa's, tv-meubel en tv in de living, eetkamer in het onderste deel van de living met een stapelzone ernaast, in de slaapkamer het bed met nachtkastjes en een stapelzone, in het atelier een stapelzone, een zitbureau en een ligbureau.</desc>
+  <rect x="195" y="20" width="790" height="1625" rx="12" fill="#fff"/>
+  <g id="kamers" opacity=".38">
+    <polygon id="living" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#f9dfa4" points="235,62 695,62 695,400 676,400 608,490 608,728 235,728 235,508 273,508 273,363 235,363"/>
+    <polygon id="keuken" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#bfe5c8" points="711,62 927,62 927,400 711,400"/>
+    <polygon id="inkom" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#dbe4ef" points="677,412 927,412 927,620 709,620 709,881 619,881 619,490"/>
+    <polygon id="badkamer" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#bde6ed" points="235,737 456,737 456,963 467,963 467,1044 235,1044"/>
+    <polygon id="toilet" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#a8d6e4" points="525,737 608,737 608,881 525,881"/>
+    <polygon id="gang" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#dbe4ef" points="467,892 608,892 608,881 709,881 709,892 721,892 721,963 732,963 732,1044 467,1044"/>
+    <polygon id="berging" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#edcdb6" points="732,892 927,892 927,1044 732,1044"/>
+    <polygon id="slaapkamer-rechts-straatzicht" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#d6c9ee" points="235,1055 585,1055 585,1483 487,1483 487,1506 335,1506 335,1483 235,1483"/>
+    <polygon id="slaapkamer-links-straatzicht" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#f1c4d4" points="598,1055 927,1055 927,1483 837,1483 837,1506 701,1506 701,1483 598,1483"/>
+    <polygon id="balkon" stroke="#334155" stroke-width="5" stroke-linejoin="round" fill="#d8e8b4" points="235,1506 335,1506 335,1566 487,1566 487,1506 685,1506 685,1566 837,1566 837,1506 941,1506 941,1609 235,1609"/>
+  </g>
+  <polygon id="traphal" fill="#f1f3f5" stroke="#94a3b8" stroke-width="4" stroke-dasharray="10 8" points="769,630 941,630 941,881 769,881"/>
+  <path stroke="#fff" stroke-width="9" fill="none" d="M622 471 L660 424 M780 406 H858 M840 620 H919 M608 800 V870 M620 881 H695 M390 963 H455 M732 965 V1032 M488 1050 H557 M630 1050 H701 M335 1506 V1566 M487 1506 V1566 M685 1506 V1566 M837 1506 V1566"/>
+  <path stroke="#64748b" stroke-width="2" stroke-dasharray="5 5" d="M335 1506 V1566 M487 1506 V1566 M685 1506 V1566 M837 1506 V1566"/>
+    <defs><pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#dbeafe"/><line x1="0" y1="0" x2="0" y2="14" stroke="#93c5fd" stroke-width="5"/></pattern></defs>
+  <g id="kamerlabels">
+    <text x="451" y="386" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Living</text>
+    <text x="819" y="231" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Keuken</text>
+    <text x="788" y="510" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Inkom</text>
+    <text x="566" y="825" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="21" font-weight="600">Toilet</text>
+    <text x="345" y="900" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Badkamer</text>
+    <text x="600" y="985" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Gang</text>
+    <text x="829" y="980" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Berging</text>
+    <text x="410" y="1100" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Slaapkamer</text>
+    <text x="762" y="1100" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#64748b" font-size="26" font-weight="600" letter-spacing=".5">Atelier</text>
+  </g>
+  <g id="eetkamer"><rect x="247" y="440" width="258" height="275" rx="10" fill="none" stroke="#92400e" stroke-width="3.5" stroke-dasharray="12 9"/>
+    <text x="376" y="585" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#92400e" font-size="28" font-weight="700">Eetkamer</text></g>
+  <g id="meubels" stroke-linejoin="round">
+    <polygon points="301,71 589,71 589,332 504,332 504,154 301,154" fill="#a21caf" stroke="#701a75" stroke-width="3"/>
+    <text x="445" y="113" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="26" font-weight="700">Sofa's</text>
+    <rect x="246" y="167" width="73" height="136" rx="6" fill="#334155" stroke="#0f172a" stroke-width="3"/>
+    <rect x="266" y="183" width="14" height="104" rx="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="250" y="333" font-family="Arial,Helvetica,sans-serif" fill="#0f172a" font-size="22" font-weight="700">TV-meubel</text><text x="250" y="357" font-family="Arial,Helvetica,sans-serif" fill="#0f172a" font-size="22" font-weight="700">+ TV</text>
+    <rect x="523" y="563" width="77" height="148" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
+    <rect x="544.5" y="564.0" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
+    <text x="561.5" y="637.0" transform="rotate(-90 561.5 637.0)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="22" font-weight="700">Stapelzone</text>
+    <rect x="478" y="1142" width="85" height="325" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
+    <rect x="503.5" y="1231.5" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
+    <text x="520.5" y="1304.5" transform="rotate(-90 520.5 1304.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="24" font-weight="700">Stapelzone</text>
+    <rect x="613" y="1147" width="92" height="315" rx="8" fill="url(#hatch)" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="14 8"/>
+    <rect x="642.0" y="1231.5" width="34" height="146" rx="6" fill="#eff6ff" fill-opacity=".92"/>
+    <text x="659.0" y="1304.5" transform="rotate(-90 659.0 1304.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#1e3a8a" font-size="24" font-weight="700">Stapelzone</text>
+    <rect x="247" y="1139" width="204" height="263" rx="10" fill="#a21caf" stroke="#701a75" stroke-width="3"/>
+    <rect x="263" y="1153" width="80" height="34" rx="8" fill="#f5d0fe"/><rect x="355" y="1153" width="80" height="34" rx="8" fill="#f5d0fe"/>
+    <text x="349" y="1255" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="30" font-weight="700">Bed</text>
+    <text x="349" y="1296" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="21" font-weight="600">+ nachtkastjes</text>
+    <rect x="851" y="1162" width="67" height="123" rx="6" fill="#15803d" stroke="#14532d" stroke-width="3"/>
+    <text x="884.5" y="1223.5" transform="rotate(-90 884.5 1223.5)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="22" font-weight="700">Zitbureau</text>
+    <rect x="840" y="1295" width="76" height="170" rx="6" fill="#15803d" stroke="#14532d" stroke-width="3"/>
+    <text x="878" y="1380" transform="rotate(-90 878 1380)" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="22" font-weight="700">Ligbureau</text>
+  </g>
+  <path d="M879 704 V577 M869 590 L879 575 L889 590" fill="none" stroke="#1b4f9c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="857" y="733" font-family="Arial,Helvetica,sans-serif" fill="#475569" text-anchor="middle" font-size="21">Ingang</text>
+</svg>
