@@ -20,3 +20,15 @@ Projects, experiments, prototypes, and previews specifically - not documentation
 Before finishing, check that the appropriate index links to the intended page, the page links back to a useful index, the listing counts are correct, and - for hidden/experimental pages only - both the page and any new or edited project index carry `seo_hidden` and `noindex`. Verify the links and metadata locally; verify the published result when deployment access is available.
 
 These indexing rules apply repo-wide. They don't require the public portfolio homepage or contact page to carry a self-referential `/projects/` link back to themselves. Preserve existing project URLs unless the user requests a move.
+
+## Agent instruction files (standing rule)
+
+We run a multi-agent workflow, so `AGENTS.md` is the single source of instructions for every agent. `CLAUDE.md` must always exist, stay blank of instructions, and only defer to this file:
+
+```
+# Claude Code
+
+Read [AGENTS.md](AGENTS.md).
+```
+
+Never add rules, notes or tool preferences to `CLAUDE.md`; put them in this file (mark agent-specific ones clearly). If you find instructions in `CLAUDE.md`, move them here and restore the pointer.
