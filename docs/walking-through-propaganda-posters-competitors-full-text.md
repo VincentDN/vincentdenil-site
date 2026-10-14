@@ -62,6 +62,8 @@ Two other points. First, Propagandopolis sells with a book behind it. The FUEL b
 
 ### Episode 5: Vintage Poster Archives, Incorporated May 2026
 
+*A follow-up deep dive on this shop, covering its company record, catalog and positioning, is in [Walking Through Vintage Poster Archives](walking-through-propaganda-posters-vintage-poster-archives-full-text.md).*
+
 Vintage Poster Archives is the newest shop on our list, and the closest in age to us.
 
 Its website carries the legal name Vintage Poster Archives Ltd and a company number. The UK Companies House record shows a private limited company incorporated on 19 May 2026. That is less than five months before today. [Companies House record](https://find-and-update.company-information.service.gov.uk/company/17229210).
