@@ -18,7 +18,7 @@ We settled on four.
 
 Vintagraph is the established general poster shop with a large propaganda section. Propagandopolis is the specialist: an archive and research project with a print shop attached. Vintage Poster Archives is a very new British company with a war and propaganda collection. The Poster Archive is an adjacent shop that sells public-domain posters next to its own invented ones. It does not specialise in propaganda, so we treat it as a design benchmark, not a rival.
 
-We left out marketplaces such as Etsy, Fine Art America, Redbubble and Amazon. They matter, and the earlier episode covered them, but they are channels with thousands of anonymous sellers, not peers with a founding date and a voice. We also left out original-poster dealers, who are a different customer on a different price scale.
+We treat marketplaces such as Etsy, Fine Art America, Redbubble and Amazon as channels, not peers: thousands of anonymous sellers and no founding date or voice. Original-poster dealers are a different customer on a different price scale. Both groups, and a second tier of shops and institutions, are covered briefly in Episodes 7 and 8.
 
 One more boundary. "Near peer" is our label for shops of a similar kind and size to what we are building. It is not a claim about sales. We have no traffic, order or revenue data for any of these shops. Everything below is about what they list, charge and say about themselves, not what they sell.
 
@@ -82,19 +82,33 @@ Its About page says it focuses on early and mid-twentieth-century design and pre
 
 We found no founding date. We include it for the honesty of its labelling. A shop that separates real from invented in its own About page is giving its customers exactly the kind of clarity that a propaganda shop needs, and we will return to that in the positioning section.
 
-### Episode 7: Others We Saw but Did Not Profile
+### Episode 7: The Wider Field, Second Tier
 
-A few more names appeared in our searches, and it is fair to list them.
+Once the four main shops were down, we widened the search. Several more names turned up. Some are real competitors for a slice of the customer, some are institutions, and some are only adjacent. We sort them here.
 
-Heritage Posters, a UK shop, sells First World War reproductions such as Britain Needs You At Once, with listing prices from 4.50 to 18 pounds and sizes from A4 to A1. We did not read its About page and found no founding date. [Heritage Posters listing](https://www.heritage-posters.co.uk/product/britain-needs-you-at-once-print/).
+Heritage Posters is a UK shop that sells Second World War and First World War reproductions, such as Britain Needs You At Once and Are You With Us in National Service. Its listing pages describe 300 gram silk art paper in A1, 50 by 70, A2, A3 and A4, and say most of its prints are digitally enhanced. Related-product lists show prices from 4.50 to 18 pounds. Its site refused our automated requests with a forbidden response, so everything we know comes from search results and listing pages, and we found no About page or founding date. [Heritage Posters listing](https://www.heritage-posters.co.uk/product/britain-needs-you-at-once-print/).
 
-Authentic Vintage Posters and Collect Russia sell originals, not reproductions, at prices from about 35 dollars to over 1,500. They are a price ceiling, not a rival.
+Magnolia Box is a large UK art-print shop with a general collection. Its About page says it produces every print in its own workshop, works directly with artists and museums, and cuts out middlemen, so its prices are typically 40 percent lower than the high street. It does not state a founding year. Company-registry data aggregated by a third-party site points to its operator, Prodigi (UK) Ltd, being incorporated on 1 April 2014, and we treat 2014 as a likely but unconfirmed start. It runs on Shopify and its public collection list shows huge general categories, with 11,170 flower prints, 5,615 still lifes and 3,099 landscapes, and no propaganda collection that we could find. So it competes with us for the decorator, not the enthusiast. [Magnolia Box About](https://www.magnoliabox.com/pages/about-us), [Endole record via search](https://open.endole.co.uk/insight/brand/112068-magnolia-box).
 
-The Imperial War Museum shop and the Poster House shop are institutions. We covered them on 5 October.
+The National WWII Museum store in New Orleans sells replica Second World War posters. One listing, a 1943 Americans Will Always Fight for Liberty reprint, is 12.50 dollars, and the posters category's price filters run in bands up to about 23 dollars. It is an institution, with a free-shipping offer at 100 dollars, so it is a price reference more than a rival. [National WWII Museum store](https://store.nationalww2museum.org/print-media/posters/).
+
+AllPosters and Art.com are the mass-market poster retailers. AllPosters says on its own about page that it was founded in 1998 in Berkeley, California. Search summaries say the two sites were later combined, that Walmart bought Art.com's assets in December 2018, and that Trends International acquired Art.com and AllPosters in March 2023. The dates and the order of the early mergers conflict across the sources we saw, so we cite only the 1998 founding and the two acquisitions. AllPosters' Second World War propaganda category lists 118 items. [AllPosters about](https://www.allposters.com/help/aboutus), [AllPosters WWII propaganda](https://www.allposters.com/-st/World-War-II-Propaganda-Vintage-Art-Posters_c50710_.htm).
+
+UK Souvenirs and Gifts and Posters.co.uk are minor. The first sells A3 First and Second World War identification posters at 8.75 pounds as part of a souvenir range. The second sells Second World War prints, with listings showing 50 pounds unframed. Neither is a propaganda specialist.
+
+### Episode 8: Original Dealers and the Marketplaces
+
+Two more groups deserve a sentence each, because customers see them in the same search results.
+
+Original dealers sell the real thing. Antique Posters describes itself as one of the longest-established dealers of original antique and vintage advertising posters, says every poster is a certified original and that it carries no reproductions of any kind. It gives no founding year. East Red Gallery sells authentic Chinese propaganda posters from the 1950s to the 1990s and states there are no modern reprints. Its About page is a personal account: the owner's interest began in the mid-1990s and grew while studying in Beijing in the early 2000s, but that is not a founding date for the gallery. DP Vintage Posters also lists originals; we did not capture its prices. Authentic Vintage Posters and Collect Russia are two more such sellers, with listings from about 35 dollars to over 1,500. Originals run from a few hundred to over a thousand dollars, so they set a ceiling. The Imperial War Museum and Poster House shops, covered on 5 October, are the institutional end. [Antique Posters](https://antiqueposters.com/about/), [East Red Gallery](https://eastredgallery.com/en-us/pages/about-us).
+
+Marketplaces and print-on-demand platforms are the long tail. Etsy, Redbubble, Fine Art America, Amazon and eBay all carry Soviet, Chinese Cultural Revolution and war reproductions, usually from anonymous sellers and often as digital downloads. One Etsy listing advertises over 1,600 Cultural Revolution posters as printable files. Fine Art America says it offers Soviet propaganda posters from 175 independent artists. We did not crawl these. They shape the price floor, which is close to zero for digital files, and the buyer's doubt about whether a listing is original or reprint. [Etsy Soviet propaganda poster search](https://www.etsy.com/market/soviet_propaganda_poster), [Fine Art America Soviet propaganda](https://fineartamerica.com/shop/posters/soviet+propaganda).
+
+That brings the field to roughly twenty names across six kinds of seller. Only a handful of them are the same kind of business as ours: Vintagraph, Propagandopolis, Vintage Poster Archives and, in a UK-only way, Heritage Posters. The rest are institutions, a general art retailer, mass-market sites, original dealers and marketplaces.
 
 ## Part Three: How We Size Up
 
-### Episode 8: Where VPP Stands Today
+### Episode 9: Where VPP Stands Today
 
 Now the honest part. Here is what VPP is as of the current repository, and what it is not yet.
 
@@ -106,7 +120,7 @@ That matters for every comparison below. As of 8 October, the compiler reports z
 
 Our own start date is simple. The market research began on 5 October 2026 and the WooCommerce refactor began on 8 October. We are days old.
 
-### Episode 9: Size Compared
+### Episode 10: Size Compared
 
 Here is the catalog comparison in one place. All figures are what the shops list, read on 14 October 2026, except ours.
 
@@ -128,7 +142,7 @@ Second, we are deliberately narrow on formats. Fifteen variants per design is fa
 
 Third, the price ladder. Propagandopolis proves there is a market at the bottom, with prints starting under ten units. Vintagraph proves there is a market at the top, with a single large art print at 250 dollars. We would sit in the middle.
 
-### Episode 10: Price Compared
+### Episode 11: Price Compared
 
 Prices need care because the currencies, sizes and papers differ. We compare on similar sizes where we can, and we say where we cannot.
 
@@ -142,7 +156,7 @@ Framed prints are where the gap is largest. Our proposed black or oak frame pric
 
 What we conclude from the prices: there is room to charge more than the cheapest shop and well below the dearest, but pricing alone will not win. Cost-plus prices say nothing about the value of restoration work, which is the thing we should be selling.
 
-### Episode 11: How the Shops Talk
+### Episode 12: How the Shops Talk
 
 Numbers aside, the shops sound quite different.
 
@@ -160,7 +174,7 @@ The point is that voice is one of the few things a new shop can differentiate on
 
 ## Part Four: Positioning
 
-### Episode 12: Where We Can Win
+### Episode 13: Where We Can Win
 
 Four openings come out of this comparison.
 
@@ -172,7 +186,7 @@ Three, European metric sizing and fulfilment. Vintagraph prices in inches and do
 
 Four, honest labelling. The Poster Archive's separation of real from invented, and our own rule that every print is described as a modern reproduction, are the right instinct for a subject where trust and context matter. The project's instruction to say plainly when an artist or printer is unknown is a strength, not a weakness.
 
-### Episode 13: Where We Are Weak
+### Episode 14: Where We Are Weak
 
 The risks are just as clear.
 
@@ -184,7 +198,7 @@ We are in the category's search results nowhere. We have no backlinks, no review
 
 And the demand data is missing for everyone. We do not know what any of these shops sells. The catalog counts show effort, not revenue. Propagandopolis' slowing product additions, from 162 stamped in 2023 to 38 in 2025, could mean saturation, or just that it chose to stop adding. We should not read it as either.
 
-### Episode 14: What to Do Next
+### Episode 15: What to Do Next
 
 Six steps follow from this.
 
@@ -212,6 +226,9 @@ Thank you for listening.
 | Propagandopolis | 2018 | Own About page | about 707, shop is propaganda-themed | 707 | 2.9 | 9.99 to 109.99, currency unconfirmed | Shopify |
 | Vintage Poster Archives | Ltd incorporated 19 May 2026; brand launch unconfirmed | UK Companies House | 188 | not captured | not captured | not captured | Shopify |
 | The Poster Archive | Not found | None | none, adjacent shop | not captured | not captured | not captured | Not checked |
+| Heritage Posters | Not found | None (site blocked our crawl) | not captured | not captured | not captured | 4.50 to 18 GBP (listing) | Not checked |
+| Magnolia Box | 2014 likely (operator incorporated 1 April 2014) | Third-party registry aggregator | none found | huge general catalog | not captured | not captured | Shopify |
+| AllPosters / Art.com | 1998 (AllPosters) | Own about page | 118 WWII propaganda items | mass market | not captured | not captured | Not checked |
 | VPP (ours) | Project started October 2026 | This repository | 491 curated, plus 4,970 request-only | not live | 15 | Proposed 18 to 94 EUR, pending | WooCommerce |
 
 ## Sources and Dates
@@ -224,7 +241,8 @@ All competitor pages and feeds were read on **14 October 2026**. The Companies H
 - Propagandopolis: [About](https://propagandopolis.com/pages/about), [prints](https://propagandopolis.com/collections/frontpage) and its public product feed (707 products, 2,062 variants); [Poster House shop listing of the FUEL book](https://shop.posterhouse.org/propagandopolis-a-century-of-propaganda-from-aroun.html).
 - Vintage Poster Archives: [homepage](https://vintageposterarchives.com/), [war and propaganda collection](https://vintageposterarchives.com/collections/war-propaganda) (188 products); [Companies House record, number 17229210](https://find-and-update.company-information.service.gov.uk/company/17229210), incorporated 19 May 2026.
 - The Poster Archive: [About](https://theposterarchive.com/pages/about-the-poster-archive).
-- Others mentioned: [Heritage Posters listing](https://www.heritage-posters.co.uk/product/britain-needs-you-at-once-print/), seen as a search result only.
+- Second tier: [Heritage Posters listing](https://www.heritage-posters.co.uk/product/britain-needs-you-at-once-print/), seen as a search result only because the site blocked our crawl; [Magnolia Box About](https://www.magnoliabox.com/pages/about-us) and its public collection list; [Magnolia Box operator record via Endole](https://open.endole.co.uk/insight/brand/112068-magnolia-box), seen as a search summary; [National WWII Museum store](https://store.nationalww2museum.org/print-media/posters/); [AllPosters about](https://www.allposters.com/help/aboutus), with the Walmart and Trends International acquisitions seen only in search summaries; [AllPosters WWII propaganda](https://www.allposters.com/-st/World-War-II-Propaganda-Vintage-Art-Posters_c50710_.htm); [UK Souvenirs and Gifts](https://www.uksouvenirsandgifts.co.uk/collections/wwi-wwii/posters); [Posters.co.uk WWII prints](https://www.posters.co.uk/collections/world-war-ii-prints).
+- Originals dealers and marketplaces: [Antique Posters](https://antiqueposters.com/about/), [East Red Gallery](https://eastredgallery.com/en-us/pages/about-us), [DP Vintage Posters](https://www.dpvintageposters.com/), [Etsy](https://www.etsy.com/market/soviet_propaganda_poster), [Fine Art America](https://fineartamerica.com/shop/posters/soviet+propaganda).
 
 ### Our project and earlier Walking Through scripts
 
