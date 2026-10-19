@@ -6,7 +6,7 @@ const stage=document.querySelector('#stage'),status=document.querySelector('#sta
 const IN=.0254,L=72*IN,FH=24*IN,TAILS=9*IN,POLE_TOP=2.62,TOPY=2.4,FX=.03,POLE_R=.0127;
 const TABS=[[0,6,'#e8b923'],[9,15,'#1d7fc0'],[18,24,'#d62d20']];
 const scene=new T.Scene(),world=new T.Group();scene.add(world);
-scene.fog=new T.Fog('#bcd6e6',28,95);
+scene.fog=new T.Fog('#a9c9e6',7,40);
 const mat=(color,roughness=.85,extra={})=>new T.MeshStandardMaterial({color,roughness,...extra});
 function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646;};}
 const rand=rng(7);
@@ -16,12 +16,8 @@ function canvasTexture(w,h,draw,repeat){const c=document.createElement('canvas')
 const grass=canvasTexture(512,512,(g,w,h)=>{g.fillStyle='#5f8a3f';g.fillRect(0,0,w,h);for(let i=0;i<9000;i++){const s=rand();g.fillStyle=s<.5?'#6f9a48':s<.8?'#527a35':'#7aa353';g.fillRect(rand()*w,rand()*h,2,5);}},[60,60]);
 const ground=add(new T.CircleGeometry(90,64),mat('#ffffff',1,{map:grass}));ground.rotation.x=-Math.PI/2;ground.castShadow=false;
 const dirt=add(new T.CircleGeometry(4.2,48),mat('#8a7655',1));dirt.rotation.x=-Math.PI/2;dirt.position.y=.004;dirt.castShadow=false;
-// Sky dome and distant hills.
-const sky=new T.Mesh(new T.SphereGeometry(120,32,16),new T.MeshBasicMaterial({side:T.BackSide,fog:false,map:canvasTexture(8,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#5d93c8');gr.addColorStop(.55,'#a8cce4');gr.addColorStop(1,'#e4eef0');g.fillStyle=gr;g.fillRect(0,0,w,h);})}));scene.add(sky);
-for(const [x,z,r,c] of [[-60,-70,38,'#5c7a4a'],[30,-85,46,'#6a8754'],[75,-40,34,'#587446'],[-85,-20,40,'#667f50']]){const h=add(new T.SphereGeometry(r,24,12,0,Math.PI*2,0,Math.PI/2),mat(c,1),[x,0,z]);h.scale.y=.45;h.castShadow=false;}
-// Trees.
-function tree(x,z,s=1){const t=add(new T.CylinderGeometry(.18*s,.28*s,2.4*s,8),mat('#5b4330'),[x,1.2*s,z]);for(const [dy,r] of [[3,1.7],[4.1,1.35],[5.1,.95]]){const f=add(new T.IcosahedronGeometry(r*s,1),mat(rand()<.5?'#3f6b34':'#4a7a3a',.95),[x+(rand()-.5)*.3,dy*s,z+(rand()-.5)*.3]);}}
-for(let i=0;i<22;i++){const a=rand()*Math.PI*2,r=17+rand()*28;tree(Math.cos(a)*r,Math.sin(a)*r-6,.9+rand()*.7);}
+// Sky dome.
+const sky=new T.Mesh(new T.SphereGeometry(120,32,16),new T.MeshBasicMaterial({side:T.BackSide,fog:false,map:canvasTexture(8,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#5d93c8');gr.addColorStop(.5,'#a9c9e6');gr.addColorStop(1,'#a9c9e6');g.fillStyle=gr;g.fillRect(0,0,w,h);})}));scene.add(sky);
 // Camp: two wedge tents, a striped pavilion, fire pit, barrels and crates.
 const canvasMat=mat('#d9ceb0',.95,{side:T.DoubleSide});
 function wedgeTent(x,z,rot,w=3.2,h=2.1,d=4.4,color){const s=new T.Shape();s.moveTo(-w/2,0);s.lineTo(w/2,0);s.lineTo(0,h);s.closePath();const g=new T.ExtrudeGeometry(s,{depth:d,bevelEnabled:false});g.translate(0,0,-d/2);const m=add(g,color?mat(color,.95,{side:T.DoubleSide}):canvasMat,[x,0,z]);m.rotation.y=rot;add(new T.CylinderGeometry(.03,.03,d+.5,8),mat('#5b4330'),[0,h+.02,0],m).rotation.x=Math.PI/2;}
