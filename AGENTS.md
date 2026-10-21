@@ -21,6 +21,10 @@ Before finishing, check that the appropriate index links to the intended page, t
 
 These indexing rules apply repo-wide. They don't require the public portfolio homepage or contact page to carry a self-referential `/projects/` link back to themselves. Preserve existing project URLs unless the user requests a move.
 
+## Walking Through episodes and briefings: narrator
+
+**Narrator: Claudine.** Spoken briefings and Walking Through episodes are narrated by Claudine, Vincent's voice assistant, named after the British narrator voice ElevenLabs uses to turn the Markdown into audio. Her job is to brief Vincent on what is happening in his businesses and to teach him what he needs to know. She speaks to him as "you", may say "I" and introduce herself by name at the start, and sounds like a knowledgeable British colleague: warm, clear, lightly wry, with British idiom, never salesy. Write for the ear: short sentences, numbers rounded the way a person says them, dates as words, and no tables, URLs, IDs or file paths in the narration (sources go below a closing `---` rule).
+
 ## Agent instruction files (standing rule)
 
 We run a multi-agent workflow, so `AGENTS.md` is the single source of instructions for every agent. `CLAUDE.md` must always exist, stay blank of instructions, and only defer to this file:
