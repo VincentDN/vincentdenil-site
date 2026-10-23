@@ -37,8 +37,17 @@ Each episode is read fresh on the day it is written, explained in plain words, a
 16. Guardrails
 17. The Use-Case Guides
 
-**Part Four, Claude Code, Properly** (planned)
-How Claude Code works · Memory, CLAUDE.md and the context window · Settings, permissions and sandboxing · Hooks · Skills, plugins and mods · Subagents, agent teams and worktrees · MCP · Cloud sessions, routines and remote work · Code review, GitHub and security · Costs, models and best practices
+**Part Four, Claude Code, Properly** (written 23 Oct 2026)
+18. How Claude Code works
+19. Memory, CLAUDE.md and the context window
+20. Settings, permissions and sandboxing
+21. Hooks
+22. Skills, plugins and mods
+23. Subagents, agent teams and worktrees
+24. MCP
+25. Cloud sessions, scheduled tasks and remote work
+26. Code review, GitHub and security
+27. Costs, models and best practices
 
 **Part Five, Building with Claude, Lightly** (planned)
 Features and tool use · Context, caching and compaction · Agent Skills and the Agent SDK · Managed Agents

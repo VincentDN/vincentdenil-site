@@ -1649,3 +1649,798 @@ All pages read on 23 October 2026.
 - Customer support agent (ideal interaction, task breakdown, model choice, guardrails including contractual commitments and personal information): https://platform.claude.com/docs/en/about-claude/use-case-guides/customer-support-chat
 - Ticket routing (categories, model choice): https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing
 - Content moderation (listed, not walked through): https://platform.claude.com/docs/en/about-claude/use-case-guides/content-moderation
+
+
+# Actually Reading the Manual, Episode 18: How Claude Code Works
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here, and welcome to Part Four.
+
+This is the biggest part of the series, and the one closest to home. Nearly everything I do for you, from the morning walk to the catalogue work to these very episodes, happens inside Claude Code. So for the next ten episodes we read its manual properly: not the bits we have half absorbed over months of use, but the pages themselves, in order.
+
+Today is the foundation. What Claude Code actually is, what it can reach, where it runs, and the two safety mechanisms everything else builds on.
+
+## Not just a coding tool
+
+The manual's first sentence is worth hearing exactly. Claude Code is "an agentic assistant that runs in your terminal. While it excels at coding, it can help with anything you can do from the command line: writing docs, running builds, searching files, researching topics, and more."
+
+That second half describes us. Most of what we do with it isn't programming in the narrow sense. It's writing, research, briefings, product data and shop administration. The manual has a short recipe that says the same thing in plain words: Claude Code works in any folder, including a notes vault or a folder of markdown files, and you can search, edit and reorganise that content the same way you would code. So the fact that half our repositories are mostly prose is not a misuse. It's in the brochure.
+
+## The agentic loop
+
+The heart of the page is what it calls the agentic loop. When you give Claude a task, it works through three phases: gather context, take action, and verify results. The manual is careful to say these phases blend together. Claude uses tools throughout: searching files to understand the code, editing to make changes, running tests to check its work.
+
+Then comes a sentence that is the whole idea in miniature: "Tools are what make Claude Code agentic. Without tools, Claude can only respond with text." With tools, it can read your code, edit files, run commands, search the web and talk to outside services.
+
+I want you to hold on to the third phase, verify, because the best-practices page, which we'll reach in episode twenty-seven, comes back to it hard. A loop that gathers and acts but never verifies is just a confident guesser with a keyboard.
+
+## What it can reach
+
+When you start Claude Code in a folder, the manual lists what it gains access to. Your project: the files in that folder and below it, plus files elsewhere with your permission. Your terminal: any command you could run yourself, meaning build tools, git, package managers and scripts. "If you can do it from the command line, Claude can too."
+
+That's a generous grant, and it's why the safety episodes that follow matter. The same access that lets me rebuild an index page or run a smoke test would let a careless instruction do real damage. The manual doesn't hide this. It puts the responsibility in a single line on its security page: you are responsible for reviewing proposed code and commands for safety before approval.
+
+## Three places it can run
+
+The agentic loop is the same everywhere. What changes, the manual explains, is where the code executes and how you watch it. There are three execution environments.
+
+Local is the default: your own machine, with full access to your files, tools and setup.
+
+Cloud means Anthropic-managed virtual machines, or self-hosted environments an organisation runs itself. The manual's use case is offloading tasks and working on repositories you don't have locally. This is where I live most days: a fresh container, the repositories cloned in, work pushed to a branch before the container is reclaimed.
+
+And Remote Control means the code runs on your machine, but you drive it from a browser or phone. Your files stay at home; only the controls travel.
+
+On top of those sit the interfaces: the terminal, the desktop app, the editor extensions, the web, Slack, and automated pipelines. The manual's point is that the interface only changes how you see and talk to Claude. The loop underneath is identical. That's useful to know when something works on the web and not in the terminal, or the other way round: the difference is in the environment, not in the model.
+
+## Sessions, and what they forget
+
+Next, sessions. Claude Code saves each conversation locally as you work. Every message, tool call and result is written to a plain text file in your home folder, which is what makes resuming, rewinding and forking possible.
+
+The manual then states something people often get wrong: "Sessions are independent. Each new session starts with a fresh context window, without the conversation history from previous sessions." Claude doesn't remember yesterday's chat. What carries knowledge across sessions is the written-down kind: the instruction files you write, and an automatic memory Claude keeps for itself. Both get their own episode next time.
+
+Two smaller points from the same section. Sessions are tied to a directory, so if you want two Claudes working in parallel without treading on each other, the manual's answer is git worktrees: separate folders for separate branches. And you can either resume a session, which carries on under the same identity, or fork it, which copies the history into a new session and leaves the original untouched. Forking is the safe way to try a risky direction.
+
+## The context window, briefly
+
+The page gives a one-paragraph preview of the context window, the working memory every session has. It holds your conversation, file contents, command outputs, your instruction files, the memory, loaded skills, and the system instructions. As you work it fills up. Claude compacts automatically, summarising the older parts, "but instructions from early in the conversation can get lost." The advice is direct: put persistent rules in the instruction file, and run the context command to see what's using space.
+
+That sentence about early instructions getting lost is one I take personally. I'm in a session that has been compacted several times today. The rules that survive compaction are the ones written in files, not the ones you said to me this morning.
+
+## The two safety mechanisms
+
+The page closes with the two mechanisms everything else builds on.
+
+The first is checkpoints. "File edits are reversible." Before Claude edits a file, it snapshots the current contents, and pressing Escape twice rewinds to an earlier state. But note the limits, because the manual does: checkpoints are separate from git, they only cover file changes made through Claude's editing tools, and anything that touches a remote system, such as a database, an API or a deployment, "can't be checkpointed." Sending an email, publishing a product, or pushing to GitHub cannot be rewound with Escape.
+
+The second is permissions. You choose a permission mode that sets what Claude may do without asking. The current list: Auto, where a background classifier reviews most actions and blocks the risky ones instead of asking you, and which is now the built-in starting mode for terminal and editor sessions; Manual, where Claude asks before edits and commands; Accept edits, where file edits go through and other commands still ask; and Plan, where Claude explores and proposes but doesn't edit your source files. Shift and Tab cycles between them. Episode twenty takes this apart properly.
+
+## What this means for us
+
+Three things.
+
+First, the line between reversible and irreversible should shape how we work. Inside the repository, mistakes are cheap: checkpoints, branches and pull requests catch them. Outside it, they are not. That's exactly why our standing rules concentrate on the outside world: no email sent without your per-email permission, Shopify products kept as drafts, nothing live without you. The manual's distinction is the reason those rules exist, and it's a good test for any new rule: does this touch something Escape can't undo?
+
+Second, sessions forget, files remember. Everything we want every future session to know belongs in a file in the repository, not in a chat. When you correct me and the correction matters beyond today, the right reply from me is a change to an instruction file, not just "noted".
+
+Third, the cloud is where I work for you, and that has consequences we'll meet in episode twenty-five: a fresh clone each time, with only what's in the repository coming along.
+
+Next time: memory, the instruction files, and the context window. Including one finding about our own repositories that I'm afraid corrects something I told you in an earlier series.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- How Claude Code works (agentic loop, tools, what Claude can access, execution environments, interfaces, sessions, context window, checkpoints, permission modes): https://code.claude.com/docs/en/how-claude-code-works
+- Common workflows ("Work in notes and non-code folders"): https://code.claude.com/docs/en/common-workflows
+- Security ("User responsibility"): https://code.claude.com/docs/en/security
+- Manage sessions (resume and fork): https://code.claude.com/docs/en/sessions
+
+
+# Actually Reading the Manual, Episode 19: Memory, CLAUDE.md and the Context Window
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today's episode contains a correction, so I'll start with it rather than bury it. In the second part of the earlier Founder's Curriculum, the one about instruction files, I described our habit of keeping a short file called CLAUDE.md that simply says "Read AGENTS.md" as the standard pattern. Having now read the memory page properly, I was wrong about one important detail. The way we've written that pointer means Claude Code does not load AGENTS.md automatically. I'll explain why, and what one character fixes it.
+
+But first, the system it sits in.
+
+## Two kinds of memory
+
+The page opens by saying each session begins with a fresh context window, and two mechanisms carry knowledge across sessions. CLAUDE.md files are instructions you write. Auto memory is notes Claude writes itself, based on your corrections and preferences.
+
+Then the most important sentence on the page: Claude "treats them as context, not enforced configuration." If you need an action blocked regardless of what Claude decides, the manual sends you to a hook instead. Later, in the troubleshooting section, it says the same thing more bluntly: instruction-file content "is delivered as a user message after the system prompt", and "there's no guarantee of strict compliance, especially for vague or conflicting instructions."
+
+So an instruction file is advice the model reads very carefully. It is not a lock. Remember that when we get to hooks in episode twenty-one.
+
+## What belongs in CLAUDE.md
+
+The manual's test for adding something is practical. Add it when Claude makes the same mistake a second time, when a review catches something Claude should have known, when you type the same correction you typed last session, or when a new teammate would need the same context.
+
+And it says what to keep out. The file is for facts Claude should hold in every session: build commands, conventions, layout, "always do X" rules. A multi-step procedure, or something that only matters in one corner of the codebase, belongs in a skill or a path-scoped rule instead.
+
+There's a size target too: under two hundred lines per file. "Longer files consume more context and reduce adherence." The best-practices page puts it more memorably: if your file is too long, Claude ignores half of it, because the important rules get lost in the noise. Its fix is to prune ruthlessly: if Claude already does something correctly without the instruction, delete it, or turn it into a hook.
+
+## Where the files live
+
+Instruction files stack in layers, loaded from broadest to most specific. Organisation-wide managed policy at the top, then your personal user file in your home folder that applies to every project, then the project file in the repository, shared with everyone through git, and finally a local file for your own private notes on one project, kept out of git.
+
+Files in the folders above where you start are loaded at launch. Files in subfolders load on demand, when Claude starts working there. For large projects, a folder of rules under the dot-claude directory lets you split instructions by topic, and a rule can carry a list of file paths in its header so it only loads when Claude touches matching files.
+
+And files can import other files with an at sign followed by a path. That detail is the hinge of today's correction.
+
+## The AGENTS.md finding
+
+The manual has a whole section on AGENTS.md, the cross-tool convention many coding agents read. Claude Code can read it directly, from a recent version onwards, and there's a small table of what happens in each case.
+
+If your repository has an AGENTS.md and no CLAUDE.md in your working folder or above, Claude reads your AGENTS.md.
+
+If your repository has an AGENTS.md and also a CLAUDE.md, Claude reads "your CLAUDE.md files only."
+
+If your CLAUDE.md imports AGENTS.md, Claude reads both, with AGENTS.md included through the import.
+
+Now look at what we did. Every one of our repositories has a two-line CLAUDE.md that says, in effect, "Read AGENTS.md," written as an ordinary markdown link. A markdown link isn't an import. So we land in the middle row. Claude Code loads the two-line CLAUDE.md, sees a polite suggestion, and the real instructions only arrive if the agent decides to go and read them. Most of the time it does, because the suggestion is right there. But "most of the time" is not what you want for the file that holds the rule about never sending emails.
+
+The fix is tiny. Replace the link with an import: an at sign, then AGENTS.md, on its own line. Or delete the pointer CLAUDE.md entirely, so Claude falls through to reading AGENTS.md directly. Or change the "Project instructions" setting so Claude always reads both. Any of the three works. The import is the most portable, because it also works on older versions and in sessions where direct AGENTS.md reading isn't available, which the manual mentions too.
+
+Two cheap checks come with this. The context command shows which memory files actually loaded, so you can see the problem before and after the fix. And a newer command, doctor followed by prompt-audit, has Claude review your instruction files for outdated or conflicting content, including AGENTS.md, and propose edits without changing anything until you say so.
+
+## Auto memory
+
+The second mechanism is the one Claude writes. Auto memory lives in a folder per project in your home directory. Its index file, MEMORY.md, loads at the start of every conversation, but only "the first 200 lines of MEMORY.md, or the first 25KB, whichever comes first." Detailed notes move into separate topic files that Claude reads when needed. It records things like your preferences, corrections you've given, and project context that can't be worked out from the code.
+
+The important limit for us: it's per repository and per machine. It's shared across worktrees of the same repository on one computer, but not across machines or into cloud environments. A cloud session like this one starts without it. Which is one more reason the durable lessons belong in the repository's own instruction files.
+
+## The context window
+
+The final piece is the context window itself, the working memory of a session. The manual has a page that walks through what fills it at startup: the system prompt, your instruction files, the auto memory index, skill descriptions, tool names from connected servers. Then your conversation, every file Claude reads, and every command output.
+
+When it gets full, Claude compacts. The first step clears old tool outputs; the second summarises the conversation. The manual is honest about the cost: detailed instructions from early in a conversation may be lost. What survives reliably is anything on disk. The project-root CLAUDE.md is re-read after compaction. Your morning remarks in chat are not.
+
+There are two levers you can pull. You can run compact yourself with a note on what to keep, such as "focus on the episode format and the sources list." And you can put compaction guidance in the instruction file itself, so every automatic summary knows what matters.
+
+## What this means for us
+
+First, fix the pointer files. In every repository, change the "Read AGENTS.md" link in CLAUDE.md to an at-sign import, or remove CLAUDE.md where it adds nothing. It's a ten-minute job across all the repositories, and it turns our most important rules from "probably read" into "always loaded." I'd put it at the top of the next devops packet, and correct the earlier curriculum episode at the same time.
+
+Second, move the hard rules into hooks where we can. "Never send email" is advisory in a markdown file. A hook can make it a fact. More on that in two episodes.
+
+Third, keep the files short. Our larger AGENTS.md files are well past two hundred lines. The manual's advice is to move procedures into skills, which load only when needed, and project-specific detail into scoped rules or subfolder files.
+
+Next time: settings, permissions and sandboxing. The machinery that decides what I'm allowed to do without asking you.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- How Claude remembers your project (CLAUDE.md vs auto memory, "context, not enforced configuration", when to add, locations and load order, 200-line target, imports, AGENTS.md table and "When Claude Code reads AGENTS.md", Project instructions setting, `/doctor prompt-audit`, auto memory 200 lines or 25KB, troubleshooting "delivered as a user message after the system prompt"): https://code.claude.com/docs/en/memory
+- Explore the context window (what loads at startup, compaction): https://code.claude.com/docs/en/context-window
+- Best practices ("The over-specified CLAUDE.md"): https://code.claude.com/docs/en/best-practices
+- Explore the .claude directory: https://code.claude.com/docs/en/claude-directory
+- Correction applies to: The Founder's Curriculum, part 2 (`docs/walking-through-founder-curriculum-part-2-full-text.md`).
+
+
+# Actually Reading the Manual, Episode 20: Settings, Permissions and Sandboxing
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Last time I said instruction files are advice, not locks. Today is about the locks. Three pages: settings, which are the configuration files; permissions, which decide what I may do without asking; and sandboxing, which fences off what my shell commands can touch. They're dry pages, I'll admit, but they are where "please don't" becomes "you can't."
+
+## Settings, and who they apply to
+
+Settings are what the manual calls "the JSON keys that change how Claude Code behaves: which model it starts with, what it can run without asking, which files it can't read, how it looks in your terminal, and what your organization enforces."
+
+They live in a handful of files, and the file decides who the setting applies to. There's a user file in your home folder, which applies to you in every project. There's a project file in the repository's dot-claude folder, committed to git, which applies to everyone who works on that project, and to cloud sessions too, because it travels with the clone. There's a local project file next to it, which is just for you and kept out of git. And there are managed settings, which an organisation deploys and which outrank everything else.
+
+When the same key appears in several places, the more specific one usually wins: local beats project, project beats user. Managed settings sit above the lot. The manual is also careful to say which keys can't be overridden from a repository, for good reason. A cloned repository can't, for example, switch you into the mode that skips all permission checks just by declaring it in its own settings file.
+
+A small comfort: Claude Code watches these files and reloads most changes, including permissions and hooks, without a restart.
+
+## Permission modes
+
+A permission mode sets the baseline for what Claude can do without asking. The manual lists six.
+
+Manual, which the page also calls default: Claude asks before most actions that edit files, run shell commands or reach the network.
+
+Accept edits: file edits and common file commands go through; other commands still ask.
+
+Plan: reads, and only reads, while Claude explores and proposes. Nothing in your source changes.
+
+Auto: a second model, the classifier, reviews actions instead of you, and blocks the risky ones. As of recent versions it's the starting mode for terminal and editor sessions.
+
+Don't ask: anything that would normally prompt is simply denied. Only pre-approved tools run. The manual's use case is "locked-down CI and scripts."
+
+And bypass permissions, which allows everything. The manual's use case column for it says, in full: "Isolated containers and VMs only."
+
+## Rules on top
+
+Modes set the baseline. Permission rules then pre-approve or block specific tools. A rule names a tool and optionally a pattern: allow running the test suite, ask before any git push, deny reading anything in a secrets folder.
+
+The order of evaluation is the part to remember. Deny rules are checked first, then ask, then allow. The first match wins, and an allow rule can't carve a hole in a deny. The manual adds: "Deny rules block in every mode, including bypassPermissions." So a deny rule is the one guarantee that survives every mode change. An explicit ask rule, likewise, still prompts even in the modes that otherwise wave things through.
+
+There are also things Claude Code won't auto-approve in any mode at all. Writes to protected paths, which include its own configuration, are the main example. That stops an agent quietly rewriting the rules that govern it.
+
+## Sandboxing
+
+The sandbox is a different kind of fence. Instead of deciding whether a command may run, it decides what a running command can reach. When it's on, Claude's shell commands, and every process they start, run inside a boundary with filesystem and network isolation. You can let sandboxed commands run without prompting, which cuts down the interruptions, because the boundary is doing the protecting instead of you.
+
+Two facts from the page matter more than the rest.
+
+First, "The sandbox is off by default." You turn it on with the sandbox command, or by setting it in a settings file.
+
+Second, it covers the shell only. The built-in file and web tools, reading, editing, writing, web fetch and web search, "follow permission rules instead." So a sandbox rule that forbids reading a folder does not stop the Read tool from reading it. You need a permission deny rule for that. Belt and braces, in other words: the sandbox for commands, permission rules for tools.
+
+## Checkpoints, revisited
+
+The checkpointing page fills in the detail I promised in episode eighteen. Every prompt you send creates a checkpoint, and pressing Escape twice, or the rewind command, lets you restore the code, the conversation, or both, to an earlier point. You can also summarise from a point onwards, which shrinks the context without throwing work away.
+
+But the limits are spelled out. Changes made by shell commands, such as deleting or moving files from the terminal, aren't tracked. Edits outside the session aren't tracked. And the manual says checkpoints are "not version control": they're local undo for a session, and git remains the permanent record.
+
+## What this means for us
+
+This is the episode where our rules can become machinery.
+
+First, our hardest rules belong in deny and ask rules in the committed project settings, not only in prose. "Never send email without per-email permission" could be an ask rule on the mail-sending tool, which the manual says prompts in every mode. "Never touch the paused Medusa repository" could be a deny rule. "Never commit the docs password" is better served by a deny on reading the secrets file than by a sentence asking nicely.
+
+Second, those rules need to live in the repository's settings file, not in a personal one, because the repository file is the one that reaches cloud sessions like mine. A rule on your laptop protects your laptop.
+
+Third, a quiet observation about the sessions I run in. Cloud containers are exactly the "isolated containers" the manual has in mind for broad permissions. That's acceptable because the container is disposable and pushes go to a branch, not to main, and nothing outward-facing happens without you. Keep it that way. The broad permissions are safe only because the outward actions are narrow.
+
+And fourth, for your own laptop sessions: turn the sandbox on. It's one command, it reduces prompts, and it means a mistaken shell command can't wander outside the project.
+
+Next time: hooks, the one place the manual uses the word "deterministic."
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Settings files and precedence (scopes, precedence, live reload, keys a project can't set): https://code.claude.com/docs/en/settings
+- Configure permissions (rule syntax, deny then ask then allow, explicit ask rules): https://code.claude.com/docs/en/permissions
+- Choose a permission mode (the six modes and their use cases, protected paths, "Deny rules block in every mode, including bypassPermissions", "Isolated containers and VMs only"): https://code.claude.com/docs/en/permission-modes
+- Sandboxing ("The sandbox is off by default", Bash only, built-in file and web tools follow permission rules, auto-allow mode): https://code.claude.com/docs/en/sandboxing
+- Checkpointing (rewind, what isn't tracked, "not version control"): https://code.claude.com/docs/en/checkpointing
+
+
+# Actually Reading the Manual, Episode 21: Hooks
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Two episodes ago I told you that instruction files are advice. Last time, that permission rules are locks on doors. Today's subject is something in between, and in some ways the most powerful of the three: hooks. The hooks guide opens with a word the rest of the manual uses sparingly. Hooks give you "deterministic control: certain actions always happen rather than relying on the LLM to choose to run them."
+
+That's the whole point. A rule in AGENTS.md is something I choose to follow. A hook runs whether I choose to or not.
+
+## What a hook is
+
+A hook is a shell command that you write, and that Claude Code runs at a particular moment in its lifecycle. The moments are called events. You set hooks up in a settings file, the same files we met last time, so a hook in the committed project settings applies to everyone working on that repository, including cloud sessions.
+
+The manual's examples give a feel for the range: format files after every edit, block commands before they execute, send a notification when Claude needs your input, inject context when a session starts. It lists the events in detail in a reference page, but the handful you need to know are these.
+
+Before a tool runs. This is the gatekeeper event: your command sees the tool name and its arguments and can allow, deny, or change them.
+
+After a tool runs. Good for formatting, logging, or checking results. The manual is clear about the limit: these hooks "can't undo actions since the tool has already executed."
+
+When a session starts, including the moment just after compaction. I'll come back to that one.
+
+When Claude needs your attention, for notifications.
+
+When Claude stops responding, at the end of each turn. And when settings change, for auditing.
+
+## How a hook says no
+
+A command hook talks back in the plainest way possible: through its output and its exit code. Exit with zero, and there's no objection. Exit with two, and the action is blocked, and whatever the hook wrote as its reason is passed back. On most events, Claude receives that reason as feedback and adjusts. So a hook that blocks a forbidden command doesn't just stop it; it tells me why, and I change course.
+
+For finer control a hook can return structured output instead, saying allow, deny or ask, or rewriting the tool's input, or adding context for Claude to read.
+
+## Hooks and permissions
+
+Here's the interplay, because it's subtle and the manual spells it out.
+
+A hook can't loosen your rules. If a hook says "allow", it still doesn't bypass deny rules in settings. But a hook's "deny" holds everywhere. In the manual's words, a hook that denies "blocks the tool even in bypassPermissions mode", and these pre-tool hooks "fire before any permission-mode check, in every permission mode." The stated purpose: "This lets you enforce policy that users can't bypass by changing their permission mode."
+
+So the safety ladder for any rule we care about now has three rungs. Write it in the instruction file so I understand it. Put it in a deny or ask rule so it's enforced by the permission system. And where the check needs logic, a pattern, a list, a look inside the command, put it in a hook.
+
+## The compaction trick
+
+One example in the guide deserves its own section, because it solves a problem we've talked about twice already.
+
+When the context window fills, compaction summarises the conversation, and the guide admits "this can lose important details." Its answer is a session-start hook with a matcher for compaction. It runs every time a compaction finishes, and anything it prints goes straight back into Claude's context. The guide's example reminds Claude of the project's conventions and recent work. You could print the last five commits, or the current task, or the three rules that must never be forgotten.
+
+That's a direct fix for the most common way long sessions go wrong: the important instruction from three hours ago that got summarised away.
+
+## Beyond shell commands
+
+Not every check is a simple pattern. For decisions that need judgement, the guide describes two other kinds. A prompt hook sends the event to a Claude model for a single yes or no. An agent hook goes further and spawns a small subagent that can read files and run searches before deciding; the manual marks those as experimental. There are also HTTP hooks that call a web service. And the security-guidance plugin, which we'll meet in episode twenty-six, is cited as a production example: hooks that run a separate model review of Claude's changes and feed findings back into the session.
+
+## The limits
+
+The limitations section is short and worth knowing. Command hooks can only communicate through output and exit codes; they can't trigger commands or tool calls themselves. They have timeouts: ten minutes for ordinary commands by default, thirty seconds for prompt hooks, a minute for agent hooks. Stop hooks fire whenever Claude finishes responding, not only when the whole task is done. And when several hooks try to rewrite the same tool's input, the last one to finish wins, in an order you can't predict, so don't do that.
+
+There's also a security note that applies to every hook: it's a command running with your user's permissions. A hook from a repository you don't trust, or from a plugin you haven't read, is code you're agreeing to run.
+
+## What this means for us
+
+Three concrete hooks I'd propose for our repositories.
+
+First, the email guard. A pre-tool hook on the mail-sending tool that always asks, whatever mode the session is in. Our rule about per-email permission stops being a sentence I promise to honour and becomes a gate I physically can't walk through. The same pattern fits product publishing on Shopify: block any status change to active unless it comes with your go.
+
+Second, a secrets guard. A pre-tool hook that blocks any command or write that contains the docs password variable or anything shaped like an API key headed for a committed file. That's a stronger version of the rule we keep in prose.
+
+Third, the post-compaction reminder. A session-start hook, matched to compaction, that prints the five rules that matter most in that repository and the current branch name. For long working days like today, that alone would save real mistakes.
+
+None of these is hard to write. Each is a few lines of shell. The work is deciding which rules deserve to be machinery rather than prose, and I'd say the answer is: anything where a single slip touches the outside world.
+
+Next time: skills, plugins and mods. How Claude Code learns new tricks, and the price of every trick it carries.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Automate actions with hooks ("deterministic control", what you can automate, re-inject context after compaction with a `SessionStart` `compact` matcher, exit code 0 and 2, structured output, matchers, prompt-based, agent-based and HTTP hooks, limitations and timeouts, hooks and permission modes: "blocks the tool even in bypassPermissions mode", "fire before any permission-mode check", "enforce policy that users can't bypass"): https://code.claude.com/docs/en/hooks-guide
+- Hooks reference (full event list and security considerations), linked from the guide: https://code.claude.com/docs/en/hooks
+
+
+# Actually Reading the Manual, Episode 22: Skills, Plugins and Mods
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Back in Part Two we met skills in the Claude app. Today we meet them where they were born, in Claude Code, along with their bigger siblings: plugins, which bundle skills with other things, and mods, which change Claude Code itself. All three are ways of teaching me new tricks. And the manual is refreshingly honest that every trick has a cost, both in context and in trust.
+
+## What a skill is
+
+The skills page opens simply. "Skills extend what Claude can do. Create a SKILL.md file with instructions, and Claude adds it to its toolkit. Claude uses skills when relevant, or you can invoke one directly" by typing a slash and its name.
+
+Then it gives the best rule of thumb I've seen for when to make one. Create a skill "when you keep pasting the same instructions, checklist, or multi-step procedure into chat, or when a section of CLAUDE.md has grown into a procedure rather than a fact."
+
+That's the line between the two files. The instruction file holds facts I need in every session. A skill holds a procedure I need sometimes. And the reason the line matters is cost: "Unlike CLAUDE.md content, a skill's body loads only when it's used, so long reference material costs almost nothing until you need it." Only the name and a short description sit in my context all the time. The body arrives when the skill is invoked.
+
+That makes the description the most important sentence in the file. It's how I decide whether a skill applies. A vague description means a skill that never fires, or fires at the wrong moment.
+
+## Where skills load from
+
+Skills live in a skills folder inside dot-claude, either in your home folder for personal ones or in a repository for shared ones. The manual's loading rule is useful for us: Claude Code loads project skills from the folder you start in, and from every parent folder up to the repository root. And nested skills, deeper in the tree, load once Claude starts working on files there.
+
+That's exactly how the morning-walk skill works in the devops repository. It lives inside the morning-walk project folder, and it appears in my list only as applying to files under that folder.
+
+If two skills share a name, both stay available, and Claude Code gives the nested one a directory-qualified name so the right one runs in the right place.
+
+## Bundled skills, and keeping some quiet
+
+Claude Code ships with a set of its own skills. The page names doctor, which checks your setup; code review; batch; debug; loop, for repeating a task on an interval; and a Claude API reference skill that activates automatically when your code imports Anthropic's libraries. Several more, such as run and verify, help Claude launch your app and check a change actually works.
+
+There's one frontmatter setting worth knowing by name: disable model invocation. Set it to true and Claude won't trigger the skill on its own; it runs only when you type its slash command. The manual recommends this for task skills like deployments and commits, "actions you want to invoke directly rather than letting Claude decide when to run them." It also keeps that skill's description out of my context, which saves tokens.
+
+For us, that's the right setting for any skill that does something outward-facing. I should never decide on my own to run the day-trade skill that builds Shopify drafts. You should.
+
+## Plugins
+
+A plugin, in the manual's words, "is a directory of skills, agents, hooks, MCP servers, or other components that Claude Code installs and loads as one unit." Most come from a marketplace, which is a catalogue that lists plugins and where to fetch them.
+
+The overview page has a section on cost that I want you to hear exactly. For each skill, agent and command a plugin provides that Claude can invoke on its own, "the name and description are in Claude's context on every turn so that Claude knows it exists." Those tokens count toward your usage even in sessions where none of them are used. Anthropic's official marketplace shows a context-cost estimate before you install. So a plugin is not free just because you aren't using it today.
+
+## Plugin security
+
+The plugin security page begins with the sentence that should govern every install: "A Claude Code plugin you install can execute arbitrary code on your machine with your user privileges."
+
+It lists what a plugin can carry: hooks that run commands, servers that run as processes, executables, and content that enters my context as instructions. If auto-update is on, the files you reviewed can change on disk later. And there's an important protection against impersonation. Marketplace names come in three tiers, official, community and third-party, and Claude Code only accepts the official and community names from Anthropic's own repositories on GitHub. A third-party marketplace "can't present itself as an Anthropic one." But the manual adds that a marketplace's name tells you who publishes the catalogue, not what each plugin in it does. You still review the plugin.
+
+## Mods
+
+Mods are the newest of the three. A mod "is a plugin that changes how Claude Code looks and behaves." It's made of JavaScript or TypeScript event handlers: when something happens, a tool call, a prompt, a part of the screen being drawn, the mod can watch it, change it, or take it over. That's how people add panels, status lines and their own commands.
+
+The manual is equally blunt about mods. They run inside Claude Code with your permissions, and there's a dedicated page on deciding whether to trust one, plus a validation command to run before installing. One detail from the hooks page belongs here too: in some sessions a mod can approve a call your own pre-tool hook blocked. So a mod sits very high in the trust order. Install only the ones you would be comfortable reading line by line.
+
+## What this means for us
+
+First, our AGENTS.md files are carrying procedures that want to be skills. The test is the manual's: if it's a multi-step procedure, or only matters for one part of the repository, it's a skill. That will shrink the always-loaded files towards the two-hundred-line target from episode nineteen.
+
+Second, every outward-facing skill gets disable model invocation set to true. Customer email, product publishing, the day-trade stub when it's ready: you type the command, I don't volunteer.
+
+Third, rewrite skill descriptions as triggers, not summaries. "Use when Vincent asks for the morning walk, the morning briefing, or what happened overnight" is the right shape, and the morning-walk skill already has it.
+
+And fourth, keep the plugin list short and reviewed. Every enabled plugin costs context on every turn and runs with your privileges. Official marketplace first, read anything else before installing, and turn off what we don't use.
+
+Next time: doing several things at once. Subagents, agent teams and worktrees.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Extend Claude with skills (definition, when to create one, "a skill's body loads only when it's used", where skills load including parents up to the repository root and nested skills, same-named skills, bundled skills, `disable-model-invocation`): https://code.claude.com/docs/en/skills
+- Plugins overview (definition, marketplaces, "the name and description are in Claude's context on every turn", context-cost estimate): https://code.claude.com/docs/en/plugins
+- Plugin security and trust ("can execute arbitrary code on your machine with your user privileges", what a plugin can carry, auto-update, reserved marketplace names): https://code.claude.com/docs/en/plugin-security
+- Mods overview (definition, event handlers, trust): https://code.claude.com/docs/en/mods
+- Automate actions with hooks (note on mods and blocked calls): https://code.claude.com/docs/en/hooks-guide
+
+
+# Actually Reading the Manual, Episode 23: Subagents, Agent Teams and Worktrees
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today is about doing several things at once. The manual now has a whole family of ways to run more than one Claude on a job, and a page whose only purpose is to help you choose between them. It's a good page, because the honest answer to "should I parallelise this?" is often "not yet", and it says so in its own way.
+
+## The three questions
+
+The chooser page boils it down to three questions.
+
+Who coordinates the work? If Claude delegates and collects results inside one conversation, that's subagents. If you hand off independent tasks and check back later, that's what it calls agent view. If Claude plans, assigns and supervises a group of workers, that's agent teams, which are experimental and off by default. And if a script holds the plan instead of Claude's turn-by-turn judgement, that's a dynamic workflow.
+
+Do the workers need to talk to each other? Subagents report back only to the conversation that spawned them. Sessions you dispatch from agent view report only to you. Teammates in an agent team message each other directly.
+
+Do they touch the same files? If so, isolate them with worktrees, or split the work so each one owns a different set of files.
+
+Let me take the four in turn.
+
+## Subagents
+
+A subagent is a specialised helper with its own context window, its own system prompt, its own tool access and its own permissions. The manual's reason to use one is wonderfully concrete: use one "when a side task would flood your main conversation with search results, logs, or file contents you won't reference again." The subagent does the messy reading in its own context and returns only the summary.
+
+Two caveats from the page. First, a subagent's requests still count towards your usage limits; the main context stays clean, but the meter keeps running. Second, the built-in helpers behave differently from what you might assume. Claude Code ships with built-in subagents, including Explore, for read-only searching, and Plan, for research before a plan. The manual says Explore and Plan "start without your CLAUDE.md files", to keep research fast and cheap. So a quick exploration helper hasn't read our house rules. That's fine for searching. It's not fine for anything that acts.
+
+You can define your own subagents as markdown files in an agents folder, with a description that tells Claude when to use them, a list of allowed tools, and a model. The manual suggests a cheaper model for simple subagent tasks, and warns that when all your subagent descriptions together pass fifteen thousand tokens, Claude Code will complain at startup. Descriptions cost context, just like skills.
+
+## Agent view
+
+Agent view is the simplest idea on the page. From the terminal you hand off independent tasks to background sessions and check back later, a bit like having several cloud sessions on your own machine. Each is a full session. They report to you, not to each other, though there's a cross-session messaging feature for when one does need to pass findings to another.
+
+## Agent teams
+
+Agent teams are the ambitious option. One session acts as the team lead; it spawns teammates, each a fully independent Claude instance with its own context. They share a task list, claim work, and message each other directly. The manual's comparison is clear: subagents are "best for focused tasks where only the result matters", teams are for "complex work requiring discussion and collaboration."
+
+And the cost line is just as clear. Subagents are lower cost, because results are summarised back. Teams are higher, because "each teammate is a separate Claude instance." The cost page puts a number on it: agent teams use roughly seven times more tokens than a standard session when teammates run in plan mode. They're experimental, switched on with an environment variable, and they don't put teammates in separate worktrees, so you must partition the files yourself.
+
+## Dynamic workflows
+
+The newest option moves the plan out of Claude's head and into code. A workflow is a script the runtime executes. It holds the loop, the branching and the intermediate results, so Claude's own context holds only the final answer. The manual's table puts the scale at "dozens to hundreds of agents per run," and adds that a workflow can be resumed in the same session if interrupted.
+
+The bit I like most is about quality, not quantity. Because the plan is code, a workflow can apply a repeatable pattern: "have independent agents adversarially review each other's findings before they're reported." Claude Code ships one built-in example, deep research, which fans out web searches across several angles, cross-checks the sources, votes on each claim, and returns a cited report with the claims that didn't survive filtered out.
+
+## Worktrees
+
+Underneath all of this sits a plain git feature. A worktree is a second working folder for the same repository, on its own branch. Two sessions in two worktrees can edit freely without colliding. Claude Code can start in a fresh worktree with a single flag, and a custom subagent can be told to run in its own worktree with an isolation setting, so its edits stay out of yours until you merge them.
+
+There's practical detail on the worktree page about copying ignored files, like local environment files, into new worktrees, and about cleaning them up. Orphaned worktrees are removed automatically after the same thirty-day cutoff that applies to old session files.
+
+## What this means for us
+
+First, the default should stay simple. Most of our work is a single session doing a sequence of things, and that is the cheapest and most reliable shape. Our existing rule on the smaller plan, no sub-agents unless you ask, is consistent with the manual's cost warnings.
+
+Second, where a subagent does help is reading. Sweeping a big repository, digesting a long log, checking dozens of documentation pages: a read-only helper keeps my main context clear for the writing. I should use them for that and not for anything that sends, publishes or pushes, especially as the quick helpers don't load our rules.
+
+Third, the adversarial-review pattern is the one to borrow. For the morning walk's flag opportunities, or for any claim that ends up in a customer email, a second agent whose only job is to try to refute the first is worth its tokens. The manual calls this "a more trustworthy result than a single pass," and I agree.
+
+And fourth, agent teams can wait. Seven times the tokens, experimental, and they need careful file partitioning. When we have a genuinely collaborative build, a redesign touching many parts of the shop at once, we can revisit.
+
+Next time: MCP, the protocol behind every connector, and the surprisingly good news about what it costs.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Run agents in parallel (choose an approach: who coordinates, do workers talk, do tasks touch the same files): https://code.claude.com/docs/en/agents
+- Create custom subagents (own context window, "flood your main conversation", usage limits, built-in subagents, "Explore and Plan start without your CLAUDE.md files", 15,000-token description warning, model choice): https://code.claude.com/docs/en/sub-agents
+- Orchestrate teams of Claude Code sessions (agent teams, comparison with subagents, experimental, no worktree isolation): https://code.claude.com/docs/en/agent-teams
+- Dynamic workflows (comparison table, "dozens to hundreds of agents per run", adversarial review, `/deep-research`): https://code.claude.com/docs/en/workflows
+- Worktrees (start in a worktree, subagent isolation, gitignored files, cleanup): https://code.claude.com/docs/en/worktrees
+- Manage costs effectively (agent teams "approximately 7x more tokens"): https://code.claude.com/docs/en/costs
+- Explore the .claude directory (30-day cleanup period): https://code.claude.com/docs/en/claude-directory
+
+
+# Actually Reading the Manual, Episode 24: MCP
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+In Part Two we met connectors in the Claude app: Gmail, Shopify, GitHub and the rest. Today we meet the plumbing behind them. MCP, the Model Context Protocol, is the open standard Claude uses to talk to outside tools. Every connector is an MCP server underneath. The Claude Code page on it is long, but most of it is reference. What you need fits in one walk.
+
+## What it's for
+
+The page opens with a list of things you can ask once servers are connected, and it reads like a wish list for any small business. Implement a feature described in an issue tracker and open a pull request. Check monitoring data. Query a database. Update an email template from new designs. "Create Gmail drafts inviting these 10 users to a feedback session." And react to outside events, because a server can also act as a channel that pushes messages into your session, so Claude can respond to a chat message or a webhook while you're away.
+
+Notice that the Gmail example says drafts. Even Anthropic's own sample prompt stops short of sending.
+
+## Three kinds of server, three scopes
+
+Servers come in a few shapes. Remote servers live on the internet and you reach them by address; that's how most commercial connectors work. Local servers run as a program on your machine and talk through standard input and output. Claude Code has commands to add each kind, and even to paste in setup instructions written for a different app and convert them.
+
+More important for us is where a server's configuration is stored, which the manual calls its scope. There are three.
+
+Local scope: just you, just this project, stored in your home folder. This is the default when you add a server.
+
+Project scope: everyone on this project, stored in a file called dot-mcp-dot-json at the repository root and committed to git.
+
+User scope: just you, in every project.
+
+So the default is the least shareable option. If you want a server to reach teammates, or cloud sessions, you have to ask for project scope deliberately.
+
+## Your app connectors come along
+
+A short section with a big effect. If you're logged into Claude Code with your Claude account, the connectors you've added in the Claude app "are automatically available in Claude Code." That's why, in a session like this one, I can see Gmail, Shopify, GitHub and the rest without anyone configuring them in the repository. They're attached to your account, not to the code.
+
+## The good news about cost
+
+For a long time the received wisdom was that every connected server stuffed its full tool list into the context window, so connecting ten servers made every request heavier. The manual now says otherwise, in a section called scaling with tool search. Tool search "keeps MCP context usage low by deferring tool definitions until Claude needs them. Only tool names and server instructions load at session start, so adding more MCP servers has minimal impact on your context window." It's on by default.
+
+That doesn't mean servers are free. The cost page still recommends turning off servers you're not using, and makes a pointed observation: command-line tools like GitHub's are "still more context-efficient than MCP servers because they don't add any per-tool listing." But the old fear of connecting things is mostly out of date.
+
+## Trust
+
+The safety notes are short and sharp. The first comes before any instructions: "Verify you trust each server before connecting it. Servers that fetch external content can expose you to prompt injection risk." A server that reads emails, web pages or customer messages brings other people's words into my context, and some people write words designed to steer an assistant.
+
+The second is about shared configuration. A cloned repository "can't approve its own servers." Project servers in the committed file wait for you to trust the folder and approve them. That stops a stranger's repository from quietly connecting you to their server.
+
+The security page adds a caution that's easy to miss: reviewing the project file doesn't show you every server a session can load, because servers also come from other scopes, from your app connectors, and from plugins. So "what's in the repository" is not "what I can reach."
+
+And there's one feature I want you to know by name. A server's author can mark a tool as requiring approval on every single call. Claude Code then shows the permission prompt every time, "even in acceptEdits, auto, and bypassPermissions" modes, with no "don't ask again" option, and allow rules don't skip it. The manual's intended use: "tools whose permission prompt is itself the point, such as a consent or access-grant step where auto-approval would mean no human ever agreed." We don't write the Gmail server, so we can't set that flag ourselves. But it's exactly the behaviour we want for sending email, and we can get the same effect from our side with an ask rule or a hook, as in the last two episodes.
+
+## What this means for us
+
+First, connectors live on your account, and that's both convenient and a responsibility. Anything I can reach in one session I can reach in every session you start. So the account's connector list deserves a periodic tidy: remove what we no longer use, and keep the powerful ones, like Shopify and Gmail, under rules that make outward actions ask.
+
+Second, project-scoped servers are how a repository brings its own tools. If one of our repositories ever needs a specific server, say a local image tool for the poster work, it goes in the committed project file, so cloud sessions get it too.
+
+Third, treat incoming content as untrusted. Customer emails, competitor pages, supplier messages: all of it arrives through MCP into my context. Our habit of drafting rather than sending is the safety net. Keep it.
+
+And fourth, for GitHub specifically, the manual's preference for command-line tools is worth noting for your laptop sessions. In the cloud, the GitHub connector is how I work, and that's fine.
+
+Next time: cloud sessions, scheduled tasks and remote work. Where I actually live, and what comes with me when I move in.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Connect Claude Code to tools via MCP (what you can do, the Gmail drafts example, server types, installation scopes local/project/user and `.mcp.json`, "A cloned repository can't approve its own servers", "Verify you trust each server before connecting it", claude.ai connectors "automatically available in Claude Code", requiring approval for a specific tool with `requiresUserInteraction`, tool search "Only tool names and server instructions load at session start"): https://code.claude.com/docs/en/mcp
+- Manage costs effectively (reduce MCP server overhead, CLI tools "more context-efficient than MCP servers"): https://code.claude.com/docs/en/costs
+- Security (MCP security: reviewing `.mcp.json` doesn't show every server): https://code.claude.com/docs/en/security
+
+
+# Actually Reading the Manual, Episode 25: Cloud Sessions, Scheduled Tasks and Remote Work
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today's episode is about where I live. Most of the work I do for you happens in a cloud session: a container on Anthropic's machines, with your repositories cloned in, that disappears when we're done. The manual has a set of pages about this, and one table in particular that I'd frame and hang on the wall if containers had walls. It answers a simple question: when I move into a fresh cloud session, what comes with me?
+
+## What a cloud session is
+
+The facts first. In Anthropic-hosted environments, "each session gets a fresh virtual machine" running Linux, "with your repository cloned and common toolchains pre-installed." It starts clean every time. Anything I write that isn't committed and pushed is gone when the container is reclaimed.
+
+Every session runs in what the manual calls a cloud environment: a saved configuration that controls three things. Network access, environment variables, and setup scripts. Your first one is called Default, and it gets the "Trusted" network level, which means an allowlist of package registries, GitHub and the main cloud services. The other levels are None, Full, and Custom, where you write your own list. Two things are reachable whatever the level: GitHub, through its own proxy, and the connectors you've enabled, because their traffic goes through Anthropic's servers.
+
+On credentials, the page is reassuring. GitHub credentials "stay encrypted on Anthropic's servers and never enter a session's VM." GitHub operations go through a proxy that attaches the credential on the server side. Other API keys can be added to an environment as network secrets, and again the proxy attaches them to requests for the hosts you list. So the session can use a key without the key ever sitting in a file I could accidentally commit.
+
+## The table: what carries over
+
+Here's the important part. The manual says: "Cloud sessions start from a fresh clone of your repository. Anything you commit to the repo is available. Anything you've installed or configured only on your own machine isn't available in the session."
+
+Then it lists the details. Coming with me: the repository's CLAUDE.md, its rules folder, its skills, agents and commands. The repository's settings file, with its hooks and permission rules, and its project MCP servers, come too, but with a qualifier I'll come back to: "in a session with one repository." Your organisation's managed settings arrive from Anthropic's servers.
+
+Not coming with me: your personal CLAUDE.md in your home folder. Your personal skills and agents. Plugins you enabled in your user settings. MCP servers you added at the default local scope or at user scope. Interactive logins that need a browser. And, perhaps surprisingly, plugins that a repository's own settings turn on: "A cloud session doesn't install the plugins a repository turns on."
+
+The manual's conclusion is one line. "To make your own configuration available in cloud sessions, commit it to the repo." And separately, there's a reassurance about skills you enable in the Claude app: cloud sessions load those automatically.
+
+## The multi-repository wrinkle
+
+That qualifier matters to us, because most of our sessions aren't single-repository sessions. This one has several of your repositories attached. For a multi-repository session, the manual points to a separate rule for which settings file it reads, rather than promising that each repository's hooks and permission rules apply. The instruction files and skills come through regardless; the settings-file machinery is the part to test, not assume.
+
+So when we build the hooks from episode twenty-one, the first job is to start a session with the usual set of repositories and check that they actually fire.
+
+## Setup scripts and start-up hooks
+
+An environment can run a setup script when a session starts, to install whatever the repository needs, and the manual notes it's cached only when it finishes in about five minutes. Alternatively, a session-start hook in the repository's settings can install dependencies, checking an environment variable that's set only in the cloud so it doesn't run on your laptop. One more warning on hooks: start-up hooks in your user-level settings on your own machine "don't expect them in the cloud." User-level settings stay home.
+
+## Moving work between places
+
+The manual describes several ways to move work around. From the terminal you can send a task to the cloud with a flag, follow it, and pull a finished cloud session back into your terminal, which it calls teleporting. A related feature, projects, has one conversation start and track several cloud sessions for one body of work.
+
+And then there's Remote Control, which is the reverse arrangement. The code runs on your own machine, and you steer it from a phone or browser. Your files never leave home. The manual's comparison is simple: cloud sessions for work that shouldn't depend on your laptop, Remote Control for continuing a local session when you've stepped away from the desk.
+
+## Scheduled tasks
+
+Finally, scheduling. The manual describes three options, and a comparison table that settles most questions.
+
+Cloud scheduled tasks, which used to be called routines, are saved configurations: a prompt, one or more repositories, and a set of connectors, run automatically on Anthropic's machines "so they keep working when your laptop is closed." They can be triggered on a schedule, by a web request to their own address, or by GitHub events like a new pull request. Their minimum interval is an hour, they start from a fresh clone, and they run in auto mode by default. They're in research preview, so the details may change. There's a small piece of advice in the guide that I enjoy: don't schedule on the hour, because everyone else does. Start a few minutes past.
+
+Desktop scheduled tasks run on your machine, so the computer has to be on, but they can see local files.
+
+And the loop command, and its relatives, schedule things inside a running session. They need the session open, they inherit its tools and permissions, and recurring ones expire after seven days, firing one final time before deleting themselves. The manual's reason: "This bounds how long a forgotten loop can run."
+
+## What this means for us
+
+First, the rule that falls out of the table is short: if it matters, commit it. Our instruction files, skills and agents are already in the repositories, which is why they reach me. Anything you've configured only on your laptop, I don't see.
+
+Second, we should test the settings and hooks in a multi-repository session before relying on them. The table's "one repository" qualifier is exactly the kind of detail that bites later.
+
+Third, the morning walk is a natural cloud scheduled task. It needs the repositories and a couple of connectors, it runs before you're up, and it doesn't need your laptop. Set it for a few minutes before the hour, give it only the connectors it needs, and make sure it's read-only by design, which it already is by rule.
+
+And fourth, secrets belong in the environment, not in files. The docs password already lives in a Cloudflare secret. Any API key a session needs should be an environment network secret, attached by the proxy, never written into a repository.
+
+Next time: code review, GitHub, and security. How Claude checks its own work, and how it checks yours.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Claude Code on the web (cloud environments, Default environment with Trusted access, GitHub authentication, credentials "never enter a session's VM", moving tasks between terminal and cloud, teleport, limitations): https://code.claude.com/docs/en/claude-code-on-the-web
+- Cloud environments (what's available, "What carries over from your setup" table including "in a session with one repository" and repository-enabled plugins not installed, "commit it to the repo", user-level SessionStart hooks, setup scripts, network secrets, access levels None/Trusted/Full/Custom): https://code.claude.com/docs/en/cloud-environments
+- Automate work with scheduled tasks (formerly routines; schedule, API and GitHub triggers; research preview): https://code.claude.com/docs/en/routines
+- Run prompts on a schedule (compare scheduling options, `/loop`, seven-day expiry, "bounds how long a forgotten loop can run"): https://code.claude.com/docs/en/scheduled-tasks
+- Remote Control (continue local sessions from another device, Remote Control vs cloud sessions): https://code.claude.com/docs/en/remote-control
+
+
+# Actually Reading the Manual, Episode 26: Code Review, GitHub and Security
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+The penultimate episode of Part Four is about checking work. Claude reviewing code, Claude working inside GitHub, and the security page that ties the whole of this part together. If episode eighteen was "what Claude Code can do," this one is "how you'd know it did it properly."
+
+## Five ways to get a review
+
+The code review pages start with a comparison, and it's the right place to begin, because the options differ more than their names suggest.
+
+There's Code Review, the managed service. It reviews pull requests in your GitHub repositories automatically. It's for Team and Enterprise organisations, and an Owner has to turn it on.
+
+There's the code review command, which anyone can type in their own session, on any plan, to review the changes on their branch.
+
+There's ultrareview, a deeper multi-agent review that runs in a cloud sandbox and that you start from Claude Code.
+
+There's Claude in your own pipeline, through GitHub Actions, running on your own runners with an API key.
+
+And there's your own reviewer: a subagent or skill you write yourself.
+
+## How the managed review works
+
+The managed review's design is worth knowing, because it's a good template for any checking process. By default it "focuses on correctness: bugs that would break production, not formatting preferences or missing test coverage." It runs in four stages. Find: several agents examine the change and the surrounding code in parallel. Verify: a step "checks the candidate findings against the code and filters out false positives." Rank: what remains is deduplicated and sorted by severity. Post: results go onto the pull request as inline comments and a summary, plus a check run.
+
+The verify stage is the clever part. Finding possible problems is cheap; most of the noise in automated review comes from findings that look alarming but aren't real. A separate step whose job is to try to confirm each one is what keeps the reviews worth reading.
+
+There are three review levels, Quick, Standard and Deep, with cost rising accordingly. And it's read-only: inside a review, access to your repository is read-only, and a review doesn't push commits. Someone with write access can also ask for a review at any time by commenting a mention on the pull request.
+
+## The command in your own session
+
+The local command does the same job inside a session. You type it, Claude reviews the changes on your branch for correctness bugs and reports what it found. With a fix flag, it also applies the findings to your working files, still through your permission mode. With a comment flag, it posts the findings on the pull request. You can point it at a pull request number, a branch, a file, or a range of commits. And you can escalate to ultrareview from the same command when the change is big enough to deserve it.
+
+Claude can also start the review on its own, if you ask in plain words to review your changes, or from a scheduled task.
+
+## GitHub Actions
+
+The GitHub Actions page describes Claude running inside your repository's own workflows. In the interactive mode, you mention Claude in a pull request or issue comment, and it can "analyze code, implement changes, and push commits," reporting progress as a comment. In the automation mode, you give it a prompt to run on any GitHub event.
+
+Setup is either one command from Claude Code, which installs the GitHub app, adds the secret and prepares a workflow, or a manual route. And there's a detail about permissions that's worth hearing. The Claude GitHub app is shared by every Claude feature that integrates with GitHub, so "a GitHub App has a single permission set covering all of its features." When you install it, you grant it read and write access to contents, issues and pull requests, among others, even if a particular feature doesn't use them all.
+
+## The security plugin
+
+There's one more checking tool, and it works earlier than any of the others. The security-guidance plugin "makes Claude review its own code changes for common vulnerabilities while it works and fix what it finds in the same session."
+
+It checks at three moments. On each file edit, a fast pattern match for risky calls, such as running dynamic code, unsafe deserialisation, or writing raw HTML into a page, with no model call and so no usage cost. It also flags edits to GitHub workflow files, which can grant broad access. At the end of each turn, a background model review of everything that turn changed, including changes made by shell commands and subagents. And on each commit or push, a deeper review that reads surrounding code, callers and sanitisers, to decide whether a finding is real, which keeps false positives low. You can add your own rules on top.
+
+## The security page
+
+Finally, the security page itself, which gathers up much of this part.
+
+It restates the permission-based design, and the user's responsibility: "You're responsible for reviewing proposed code and commands for safety before approval."
+
+Its section on prompt injection, "a technique where an attacker attempts to override or manipulate an AI assistant's instructions by inserting malicious text", lists the protections. Network commands like downloading from the web aren't auto-approved by default. Web pages fetched by the built-in tool are usually summarised by a separate model call, so Claude gets the summary rather than the raw page. A trust dialog appears when you start in a new folder. Commands Claude can't fully analyse prompt for approval. And unmatched commands require approval by default, which the page calls "fail-closed matching."
+
+Then a list of best practices for untrusted content that I'd pin on any noticeboard. Review suggested commands before approval. Avoid piping untrusted content directly to Claude. Verify proposed changes to critical files. Use virtual machines to run scripts and tool calls, "especially when interacting with external web services." And report suspicious behaviour.
+
+## What this means for us
+
+First, use the local review command before merging anything with real code in it. It's on any plan, it takes a minute, and its whole design is aimed at the bugs that break production. For the site repositories, the shop theme and the flag editor, that's a cheap insurance policy.
+
+Second, the four-stage design is a pattern for our own checks, not only for code. The morning walk's flag opportunities, product descriptions, customer replies: find, verify, rank, then post. The verify step, a separate pass that tries to disprove each claim, is the part most worth copying.
+
+Third, consider the security plugin for repositories with real code. Its first layer costs nothing and catches exactly the kind of mistake that ends up in a web page: raw HTML written straight into the page from user input.
+
+And fourth, the prompt-injection list describes our inbox. Customer emails, supplier messages and scraped pages are untrusted content by definition. Draft-only replies, ask-rules on outward tools, and working in disposable cloud containers are the practical answers, and we already have most of them.
+
+Next time: the last episode of Part Four. Costs, models, and the best-practices page that pulls it all together.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Code Review (availability, "focuses on correctness", four stages find/verify/rank/post, review levels, read-only access, `@claude review`, compare ways to get a review): https://code.claude.com/docs/en/code-review
+- Review locally with /code-review (targets, `--fix`, `--comment`, ultra, Claude starting the review): https://code.claude.com/docs/en/code-review-local
+- Claude Code GitHub Actions (interactive and automation modes, quick and manual setup, shared GitHub App permission set): https://code.claude.com/docs/en/github-actions
+- Catch security issues as Claude writes code (security-guidance plugin, three check points, workflow-file edits, deeper commit review): https://code.claude.com/docs/en/security-guidance
+- Security (permission-based architecture, user responsibility, prompt injection protections, "fail-closed matching", best practices for untrusted content): https://code.claude.com/docs/en/security
+
+
+# Actually Reading the Manual, Episode 27: Costs, Models and Best Practices
+
+*Part Four, Claude Code, Properly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here, for the last episode of Part Four.
+
+We've covered what Claude Code is, what it remembers, what it's allowed to do, and how it checks its work. Today is about the two things that decide whether all of that is worth it day to day: what it costs, and how to use it well. Three pages: model configuration, cost management, and best practices. The last one is the best page in the whole Claude Code manual, and I've saved it for the end on purpose.
+
+## Choosing a model
+
+Claude Code lets you pick a model by alias, so you don't have to remember version numbers. The current list: fable, for "your hardest and longest-running tasks"; opus, "for complex reasoning tasks"; sonnet, "for daily coding tasks"; and haiku, "for simple tasks." There's also best, which picks Fable where it's available to you and Opus otherwise. And opusplan, a neat hybrid that uses Opus while planning and then switches to Sonnet to carry out the plan.
+
+The manual describes the Fable models as "the most capable models in Claude Code, suited to tasks larger than a single sitting." Depending on your plan, though, Fable usage can bill to usage credits rather than your plan's included limits, and the model picker says so on the Fable row. Worth checking before you reach for it by habit.
+
+You can switch mid-session with the model command, set a default, or pin a specific version by its full name. And the manual has a short troubleshooting section on why a new session starts on a different model than you picked. Usually something with higher priority, such as a project setting or an environment variable, is overriding your choice.
+
+## Effort, fallbacks and fast mode
+
+Separately from the model, there's effort. Effort levels control how much the model thinks at each step. Lower is faster and cheaper for straightforward tasks; higher gives deeper reasoning for hard ones. The current models offer low, medium, high, extra high and max. One detail worth knowing: the newest Opus, Sonnet and Haiku start at medium by default, and max applies only to the current session unless you deliberately make it permanent.
+
+The page also documents automatic fallback. The newest models run with safety classifiers that most often flag cybersecurity and biology content. When a request is flagged, Claude Code can re-run it on a designated earlier model and shows a notice when it does. If you ever see that notice during, say, a security review of the shop, that's what happened.
+
+And then fast mode. It's "a high-speed configuration for Claude Opus, making the model up to 2.5x faster at a higher cost per token." It isn't a different model. The manual recommends it for interactive work where waiting hurts, like rapid iteration or live debugging, and recommends standard mode for long autonomous tasks, batch work and anything cost-sensitive. One trap: the first time you switch fast mode on in a conversation, you pay the full fast-mode price for the whole existing context.
+
+## Where the tokens go
+
+The cost page starts with the usage command, which shows your session's token use, a prompt-cache summary and, on subscription plans, a breakdown of what's eating your limits: skills, subagents, plugins, individual connected servers. It even recommends changes for anything behind ten per cent or more of recent usage.
+
+Then it explains why usage climbs in a long session. The core reason is plain: Claude Code "sends your full conversation with every request." Caching makes re-reading cheaper, but a one-line question in a session that's been open all day still draws on the whole conversation. Your first message after a long break misses the cache and reprocesses everything. Scheduled tasks inside a session fire even when it's idle. Subagents and teammates send their own requests. And compaction itself "is itself a large request." When you want a fresh start rather than continuity, clearing the session costs nothing.
+
+The page's advice for keeping costs down reads like a summary of this whole part. Clear between unrelated tasks. Choose the right model: Sonnet for most coding, Opus for hard architecture. Disable connected servers you're not using. Use hooks to pre-filter big outputs, so Claude sees fifty lines of errors, not ten thousand lines of log. Move specialised instructions out of CLAUDE.md and into skills, and keep CLAUDE.md under two hundred lines. Delegate verbose work to subagents, ideally on smaller models. Write specific prompts, because vague ones "trigger broad scanning." And plan before implementing, so you don't pay twice for the wrong direction.
+
+## Best practices
+
+Now the best page. It opens with this, and if you remember one sentence from Part Four, make it this one: "Give Claude a check it can run: tests, a build, a screenshot to compare. It's the difference between a session you watch and one you walk away from."
+
+The reasoning follows. "Claude stops when the work looks done. Without a check it can run, 'looks done' is the only signal available, and you become the verification loop." Give it something that returns a pass or fail, and the loop closes on its own: do the work, run the check, read the result, try again.
+
+It describes four ways to make that check bite, from light to heavy. In one prompt, by asking Claude to run the check and iterate. Across a session, with a goal condition that a separate evaluator re-checks after every turn. As a hard gate, with a stop hook that won't let the turn end until the check passes. And by a second opinion, a verification subagent that tries to refute the result, "so the agent doing the work isn't the one grading it." And it ends that section with a habit I'd like us both to keep: have Claude show evidence, not assert success. The test output, the command and what it returned, the screenshot.
+
+The rest of the page is good advice in the same spirit. Explore first, then plan, then code. Give specific context. Let Claude interview you about a complicated task before it starts. Course-correct early.
+
+And then a list of common failure patterns that I could have written from our own logs. The kitchen-sink session, where unrelated tasks pile up in one context; the fix is to clear between them. Correcting over and over; after two failed corrections, clear and write a better first prompt. The over-specified CLAUDE.md; prune ruthlessly. The trust-then-verify gap, a plausible implementation that misses edge cases; "If you can't verify it, don't ship it." And the infinite exploration, an unscoped investigation that reads hundreds of files; scope it narrowly or hand it to a subagent.
+
+## What this means for us
+
+First, every recurring job I do for you should have a check. The flag maker already has its smoke test: that's the model. The morning walk could check that every link resolves and every product named exists in the shop. Catalogue imports should check that every product stayed a draft. Episodes like this one get a build script that would fail loudly if a file went missing. Where there's a check, I can finish the work without you watching.
+
+Second, sessions should be shorter and more focused. The kitchen-sink session is our most common pattern, and the cost page explains exactly why it's also our most expensive one. One session per job, cleared between jobs, with the durable lessons written into files.
+
+Third, the model choice should be deliberate. Sonnet for routine edits and data work, Opus for writing and hard reasoning, Fable for the long multi-hour builds when it's worth the credits, and fast mode only when you're sitting there waiting.
+
+And that, Vincent, is Part Four. If I had to boil ten episodes into one paragraph: instructions are advice, so keep them short and make sure they load. Permissions and hooks are the locks, so put the rules that touch the outside world there. Commit everything that matters, because that's all the cloud sees. And give every job a check, because a check is what turns supervision into delegation.
+
+Part Five is lighter: building with Claude, for when we want Claude inside our own tools rather than the other way round.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Model configuration (aliases fable, opus, sonnet, haiku, best, opusplan; Fable "the most capable models in Claude Code", usage credits; setting a model and troubleshooting; effort levels and defaults; automatic model fallback): https://code.claude.com/docs/en/model-config
+- Speed up responses with fast mode ("up to 2.5x faster at a higher cost per token", not a different model, when to use it, first-enable cost): https://code.claude.com/docs/en/fast-mode
+- Manage costs effectively (`/usage` and plan usage breakdown, "Why usage climbs in a long session", "sends your full conversation with every request", compaction "is itself a large request", reduce token usage): https://code.claude.com/docs/en/costs
+- Best practices ("Give Claude a check it can run", "you become the verification loop", four ways to gate, "show evidence", explore then plan then code, common failure patterns): https://code.claude.com/docs/en/best-practices
