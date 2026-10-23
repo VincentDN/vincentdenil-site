@@ -30,8 +30,12 @@ Each episode is read fresh on the day it is written, explained in plain words, a
 11. Cowork
 12. Chrome, Design and Voice
 
-**Part Three, Talking to Claude** (planned)
-The prompting guide · Prompting the current models · Defining success and building evaluations · Guardrails: hallucinations, consistency, jailbreaks and prompt leaks · The use-case guides: commerce agent, customer support, moderation and ticket routing
+**Part Three, Talking to Claude** (written 23 Oct 2026)
+13. The Prompting Guide
+14. Prompting the Current Models
+15. Defining Success and Building Evaluations
+16. Guardrails
+17. The Use-Case Guides
 
 **Part Four, Claude Code, Properly** (planned)
 How Claude Code works · Memory, CLAUDE.md and the context window · Settings, permissions and sandboxing · Hooks · Skills, plugins and mods · Subagents, agent teams and worktrees · MCP · Cloud sessions, routines and remote work · Code review, GitHub and security · Costs, models and best practices
