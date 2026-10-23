@@ -20,8 +20,15 @@ Each episode is read fresh on the day it is written, explained in plain words, a
 3. Plans, Limits and Money
 4. How to Read the Manual
 
-**Part Two, Using Claude Well** (planned)
-Projects and retrieval · Artifacts, files and visual content · Memory, chat search and incognito · Connectors and MCP in the app · Web search, research and thinking · Skills and plugins in Claude · Cowork · Claude in Chrome, Design and mobile
+**Part Two, Using Claude Well** (written 23 Oct 2026)
+5. Projects
+6. Artifacts, Files and Visuals
+7. Memory and Personalisation
+8. Connectors
+9. Search, Research and Thinking
+10. Skills and Plugins
+11. Cowork
+12. Chrome, Design and Voice
 
 **Part Three, Talking to Claude** (planned)
 The prompting guide · Prompting the current models · Defining success and building evaluations · Guardrails: hallucinations, consistency, jailbreaks and prompt leaks · The use-case guides: commerce agent, customer support, moderation and ticket routing
