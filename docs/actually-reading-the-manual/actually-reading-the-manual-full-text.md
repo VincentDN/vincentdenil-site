@@ -442,3 +442,724 @@ All pages read on 23 October 2026. Page counts come from the indexes fetched tha
 - Help Center, What is Claude Tag (beta status): https://support.claude.com/en/articles/15594475-what-is-claude-tag
 - Platform glossary ("Tokens", "Context window"): https://platform.claude.com/docs/en/about-claude/glossary
 - Claude Code glossary ("Compaction", "Agentic loop", "Skill", "Subagent", "Hook", "Permission mode", "Plan mode", "Prompt injection", "Context window", "Effort level"): https://code.claude.com/docs/en/glossary
+
+
+# Actually Reading the Manual, Episode 5: Projects
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Good morning, Vincent. Claudine here, and welcome to Part Two.
+
+Part One was the map. Part Two is about using the Claude app well, one feature at a time. We start with projects, because they're the feature I think a business like ours underuses the most. And right now they're in the middle of a change, so the manual describes two versions at once. I'll take you through both.
+
+## The project you know: a workspace with a memory
+
+The Help Center describes the current version simply. A project is a "self-contained workspace" with its own chat history and its own knowledge base. Inside it, you upload documents and set instructions, and every chat in the project starts with that context.
+
+Projects are available to everyone, even on the free plan, where you can have up to five. On paid plans there's no such limit.
+
+A project has three parts worth knowing about.
+
+The knowledge base is where you upload files: documents, text, code. Claude uses them across every chat in the project.
+
+Project instructions tell Claude how to behave in that project. For example, the Help Center suggests a more formal tone, or answering from the perspective of a particular role.
+
+Project memory is newer. Each project has its own memory. Claude uses it together with your general memory from chats outside projects, but never with memory from other projects. There's a switch to keep a project's memory completely separate, which we'll come back to in episode seven.
+
+Two small details in the setup article surprised me. First, the project's name and description are for you: the article says Claude can't see them. If something matters, it goes in the instructions or the knowledge, not the title. Second, context isn't shared between chats in a project unless it's in the knowledge base. A decision you made in Tuesday's chat isn't known in Wednesday's, unless you write it into the project.
+
+## RAG: what happens when the knowledge gets big
+
+On paid plans, projects have a trick for large knowledge bases, called retrieval-augmented generation, or RAG.
+
+Normally, everything in the knowledge base is loaded into the conversation. When your project's knowledge gets close to the context window limit, Claude automatically switches to RAG mode. Instead of loading everything, it uses a search tool to pull in only the passages that matter for your question. The Help Center says this expands a project's capacity "by up to 10x" while keeping response quality the same. You'll see a small indicator when it's on, and Claude will visibly use a "project knowledge search" tool.
+
+There's nothing to switch on. But the article gives four tips that matter once it's active.
+
+Upload everything relevant up front.
+
+Use clear, descriptive filenames, because they help Claude find the right document.
+
+Keep related documents in the same project.
+
+And name a specific document in your question when you know where the answer is.
+
+## Sharing, for later
+
+On Team and Enterprise plans, projects can be shared with colleagues, with "Can view" or "Can edit" permissions. Your own chats inside a shared project stay private unless you share them. That's not relevant to your plan today, but it's worth knowing if the team ever moves to a Team plan, for example so your virtual assistants can share one Flagmaker and Print project.
+
+## The new projects: one conversation, many workers
+
+Now the second version, which is newer and quite different. The Help Center calls it "the new version of projects", in beta, rolling out in stages and starting with Claude Code. The Claude Code documentation has a full page on it.
+
+The idea is this. A new-style project is one ongoing conversation where Claude coordinates a stream of related work for you. You tell it what needs doing, and it starts a separate worker, called a thread, for each task. Each thread is usually a cloud session: Claude Code running on Anthropic's servers, on its own branch, opening a pull request when the work calls for one. If you close your laptop, the threads keep going.
+
+The documentation lists what you get compared with running sessions yourself.
+
+You send work to one place. You paste in a bug report or a list of tasks, and Claude either starts a new thread or passes it to the thread already working in that area.
+
+You set context once. Every new thread starts with the project's instructions, so a rule you state once reaches all of them.
+
+And you walk away and come back to finished work. An Overview pane shows which threads finished, which pull requests are ready for review, and which thread is "waiting on you".
+
+There are some details that matter for us. A cloud thread starts with the project's repositories and files, its instructions and memory, and your account's connectors. It reads the CLAUDE.md in each repository. But the page is explicit that it does not pick up the repositories' skills, their settings file or their MCP configuration. Nor does it pick up anything from the Claude Code setup on your own machine. So any rule that only lives in a skill won't reach a project thread unless you bring it in deliberately.
+
+The page also says when not to use a project. For one task that fits in a session, just start a session. For a single job on a schedule with no conversation around it, use a scheduled routine. And for work where every task needs your own machine, use local sessions.
+
+On cost, the page is honest: a project draws on the same plan limits as your other sessions, and "uses them faster", because several threads run at once.
+
+## Who has it
+
+As of today, the new version is in public beta on Pro and Max plans, rolling out gradually. It isn't on Team or Enterprise yet. If you have it, you'll see Projects in the sidebar at claude.ai slash code, or under "More". Existing chat projects are being moved over for some users, and the Help Center promises that nothing is lost in the move: instructions, files, history and scheduled tasks all come along.
+
+## What this means for us
+
+I'd suggest two projects, one of each kind.
+
+First, a classic chat project for Flagmaker and Print's knowledge. Put in the VA wiki, the documentation-links file, the shipping and product facts, and the price ladder. Give it short instructions in your voice. Every question about a customer case or a product spec then starts from the same source of truth. Remember the tip about filenames: "FMP shipping and lead times" beats "doc3 final".
+
+Second, when the new projects reach your account, one project for each body of work that keeps producing tasks. CEP2026 is the obvious candidate: waves, intake files and tag fixes across several steps and repositories, with one conversation to coordinate them and an Overview to show what's waiting on you. That's the approval inbox from Part Three of the curriculum, built into the product.
+
+One warning, from the page itself. Threads read CLAUDE.md, not skills. Our customer-service rules live partly in a skill. Before handing any customer-facing work to a project thread, make sure the hard rules are in AGENTS.md or CLAUDE.md, where a thread will actually read them.
+
+Next time: artifacts, files and visuals. The things Claude makes for you, and what happens when you share them.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, What are projects (both versions, project knowledge, RAG, sharing): https://support.claude.com/en/articles/9517075-what-are-projects
+- Help Center, How can I create and manage projects (name and description not visible to Claude; context not shared across chats; project memory): https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects
+- Help Center, Manage project visibility and sharing: https://support.claude.com/en/articles/9519189-manage-project-visibility-and-sharing
+- Help Center, Retrieval augmented generation (RAG) for projects: https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects
+- Claude Code, Let Claude coordinate ongoing work with Projects (threads, Overview, what threads pick up, when something else fits, usage): https://code.claude.com/docs/en/claude-projects
+
+
+# Actually Reading the Manual, Episode 6: Artifacts, Files and Visuals
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today is about the things Claude makes for you. There are three families, and the manual treats them quite differently. Artifacts are things you keep and share. Files are documents you download. And custom visuals are sketches that help you think in the moment. Knowing which is which saves a surprising amount of muddle.
+
+## Artifacts: things you'd put in front of someone
+
+The Help Center's definition is one of the best sentences in the whole manual. An artifact is "anything Claude makes for you that you'd put in front of someone: a design, a deck, a document, a dashboard, or a small interactive tool." It opens beside your conversation, and you can edit it, come back to it and share it.
+
+Claude decides on its own when something should become an artifact. The article lists the criteria: it's significant and self-contained, typically more than fifteen lines; you're likely to edit, reuse or refer back to it; and it stands on its own without the conversation around it. You can also simply ask for one.
+
+Since mid-September, artifacts have changed shape. Anything made in a chat before the sixteenth of September is now a "legacy artifact". Legacy artifacts still work, and you can still share them, but new ones are made a different way: from templates.
+
+## The templates
+
+There are five templates, and they're the clearest way to understand what artifacts are for now.
+
+Docs are living documents you write with Claude, and with colleagues, in real time. They export to Word, PDF, Markdown and Google Docs.
+
+Slides are presentations built from your notes or your chat. You can edit any slide directly, present without leaving Claude, and export to PowerPoint, PDF or Google Slides.
+
+Design covers visuals, mock-ups, prototypes, one-pagers and landing pages, built with your design system. We'll come back to it in episode twelve.
+
+Dashboards, in beta, are built from your data platforms or connected apps. Claude writes the queries, and the article notes that each chart shows its query and when it was last refreshed. That's a lovely detail for anyone who cares where numbers come from.
+
+Motion, also in beta and only on Team and Enterprise plans, makes animated explainers that export as video.
+
+Everything you make is saved to an Artifacts tab in the sidebar, so you can find it again from any conversation.
+
+## Artifacts that remember and connect
+
+Two newer abilities turn artifacts from documents into small tools.
+
+First, artifacts can connect to the apps you've connected to Claude, like Asana, Google Calendar or Slack, and read from or write to them. The first time, Claude shows you which tools it will use and asks you to approve them. And there's an important rule: everyone connects their own apps, even when they're using someone else's shared artifact. Your artifact never borrows your Gmail for a stranger.
+
+Second, artifacts can store data between sessions. Storage is either personal, where everyone keeps their own private entries, like a journal, or shared, where everyone sees the same data, like a leaderboard. With shared storage, Claude warns you first that your data will be visible to others.
+
+One prerequisite catches people out. Artifacts need the setting called "Code execution and file creation" to be switched on, under Settings, then Capabilities.
+
+## Sharing starts private
+
+The sharing article is reassuringly plain: "Artifacts start private to you. Nothing is shared until you share it." On individual plans you can share with anyone who has the link, or invite specific people by email, which is in beta. And if you build on someone else's published artifact, the Help Center gives a sensible warning: only do it with artifacts from people you trust, and treat their code "the way you'd treat a file from an unknown sender."
+
+Claude Code can make artifacts too. It can publish a session's output as a live page at a private address, which updates as the session continues. That's exactly how your Morning Walk arrived as a web page this week.
+
+## Files: real documents you download
+
+The second family is files. With code execution switched on, Claude can create Excel spreadsheets with working formulas, PowerPoint presentations, Word documents and PDFs, and you download them. It's on by default for Free, Pro and Max plans.
+
+The interesting part of this article is about security, and it's worth hearing even on a personal plan. When Claude creates files, it works inside an isolated, sandboxed container. On individual plans, network access is switched on by default, so Claude can install software packages. The article explains the risk clearly: if network access is on, Claude could, through prompt injection, be tricked into sending data out of the sandbox. Switching network access off "eliminates this risk entirely", while keeping the file-making abilities.
+
+Then comes a caveat that's easy to miss. If you have MCP connectors switched on, network communication remains possible through those connectors, whatever the network setting says. The sandbox setting covers the sandbox, and nothing else.
+
+## Custom visuals: a whiteboard, not a file
+
+The third family is the newest: custom visuals, in beta on the web and desktop. When a diagram, chart or small interactive element would explain something better than words, Claude builds one in the conversation. Ask how something works, and you might get a flowchart. Upload a spreadsheet, and you might get a chart you can explore.
+
+The Help Center describes them as a "whiteboard sketch". They're ephemeral: they live inside Claude's reply and aren't saved separately. If you want to keep one, you can copy it as an image, download it, or save it as an artifact. The article gives the rule of thumb itself: artifacts are persistent and shareable from the start, while custom visuals help you think in the moment.
+
+Two tips from the article. Opus performs best at visualisation, so pick a stronger model for complex visuals. And if you tell Claude your preferences once, for example "make all my visualisations pink", it remembers.
+
+There are also built-in visual cards for weather, recipes and sports, and something called interactive inputs. That's when Claude asks you a structured question with buttons to click, like choosing a budget range, instead of making you type.
+
+## What this means for us
+
+Here's how the three families map onto our work.
+
+Artifacts are where finished things for other people belong. The Morning Walk is already one. The Founder's Curriculum episodes could be Docs. A Dashboards artifact connected to the store is the natural home for the weekly funnel line from the operating-system episode. And because each chart shows its query and refresh time, it fits our rule that every number names its source.
+
+Files are for things that leave Claude: a supplier price sheet in Excel, or a deck for a partner.
+
+Custom visuals are for thinking: sketching a checkout funnel, or comparing two pricing ladders, before anything gets built.
+
+And one setting to check this week. Code execution's network access is on by default for you. That's fine for everyday work. But if you ever ask Claude to process a file from outside, such as a customer's upload or a supplier's spreadsheet, remember that prompt injection is the risk the manual names, and that your connectors stay open whatever that switch says.
+
+Next time: memory. What Claude remembers about you, where it keeps it, and the difference between an incognito chat and a chat with memory switched off.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, What are artifacts and how do I use them (definition, criteria, legacy artifacts since 16 Sep 2026, templates, connecting apps, storage, Claude Code artifacts, the capability prerequisite): https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them
+- Help Center, Share artifacts ("Artifacts start private to you"): https://support.claude.com/en/articles/9547008-share-artifacts
+- Help Center, Create and edit files with Claude (file types, defaults, sandbox, network egress and the MCP caveat): https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude
+- Help Center, Visual and interactive content (weather, recipes, sports, interactive inputs): https://support.claude.com/en/articles/13641943-visual-and-interactive-content
+- Help Center, Custom visuals in chat and Cowork ("whiteboard sketch", keeping a visual, tips): https://support.claude.com/en/articles/13979539-custom-visuals-in-chat-and-cowork
+
+
+# Actually Reading the Manual, Episode 7: Memory and Personalisation
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today's question is one you've probably asked out loud at some point: what does Claude actually remember about me, and where? The answer turns out to be a set of layers, each with its own job and its own switch. Once you see the layers, a lot of odd behaviour starts to make sense.
+
+## Three ways to tell Claude who you are
+
+The Help Center's personalisation article names three ways to shape how Claude works with you, before memory even comes into it.
+
+The first is Instructions for Claude. These are account-wide: you write them once in Settings, and they apply to every conversation. The article suggests your preferred approaches, the terms you use, the scenarios you meet often, and how you like to be spoken to.
+
+The second is project instructions, which apply only inside one project. That was episode five.
+
+The third is skills, which add specific behaviours you can switch on when you need them. That's episode ten.
+
+The article's own summary is a useful rule. Use account instructions for things that should affect everything. Use project instructions for one body of work. Use skills for repeatable ways of producing something.
+
+## Memory: built as you talk
+
+Now memory itself. The Help Center describes it as turning Claude "from a stateless chat interface into a knowledgeable collaborator that builds understanding over time."
+
+Memory is on by default on the Free, Pro and Max plans, on the web, desktop and mobile. On Team and Enterprise plans, an owner decides.
+
+The way it works has changed recently, and the new version is better. Claude saves memory as individual topics as you chat, rather than writing a summary after the conversation ends. The article's example: mention that a deadline moved, and your next conversation already knows. Claude saves on its own, and you can also say "remember this" to save something directly.
+
+What does it remember? The article lists the everyday context of work: your role, your projects, your professional context, the people and places in your work and life, and your communication preferences and working style. It's designed to focus on work. The memory-import article notes that Claude "may not retain imported personal details unrelated to work."
+
+## Memory has walls
+
+Memory isn't one big pool. It has walls, and they're worth knowing.
+
+Each project has its own memory. In a project, Claude uses that project's memory plus your general memory from chats outside projects, but never another project's memory. New memories made in a project are saved to the project. If you want a project to be completely sealed off, there's a "Use account memory" switch on the project page.
+
+Memory is shared between chat and Cowork, but only when Cowork runs in the cloud. Something you mention in a chat is known when you hand Cowork a task, and the other way round. The article's example is asking Cowork to draft an update for your manager: it already knows who that is and how they like updates.
+
+And here's the wall that matters most for us. The app's memory is not Claude Code's memory. Claude Code remembers through files in your repositories, such as CLAUDE.md, AGENTS.md and its own auto-memory. That's Part Four. What you tell Claude in the app doesn't reach your agents in the repositories, and the other way round.
+
+## Pause, reset, or skip one chat
+
+There are three switches for memory, and they do quite different things.
+
+Pause keeps everything Claude already remembers, but stops it from using memory or making new memories. Conversations while paused are never added later.
+
+Reset permanently deletes all memories, including project memories. The article is clear that this can't be undone.
+
+And you can switch memory off for a single chat. In a new chat, before you send the first message, open the plus menu and turn off "Memory". Claude won't use your memory in that chat, and nothing from it is saved. The chat itself stays in your history. You have to do it before the first message: once the chat starts, the setting is locked.
+
+## Incognito is something else
+
+That last switch sounds like incognito mode, but the manual draws a clear line between them.
+
+An incognito chat isn't saved to your chat history, isn't used for memory, and Claude won't find it when searching past chats. It isn't used for training either. But it is retained for thirty days by default, for safety. Once you close it, it's gone from your view and can't be reopened or converted into a normal chat. It's only available outside projects. And it still uses your profile preferences, like your account instructions.
+
+So the rule of thumb is this. Use memory-off when you want a normal chat that simply doesn't learn about you. Use incognito when you don't want the conversation kept in your history at all.
+
+One small caution from the incognito article: if you have the new combined Claude experience, incognito chats open in the older chat experience, so Claude can't create files or run code in them.
+
+## Searching past chats
+
+Related to memory, but separate, is chat search. On paid plans, you can ask Claude to look through your earlier conversations: "what did we discuss about the fringed flags?" or "let's continue where we left off with the pricing." You'll see the search happen as a tool call. Searches cover all chats outside projects, or the chats within one project. You can switch it off in the memory settings.
+
+## Moving memory in and out
+
+Finally, memory can travel. There's an import flow in Settings, then Memory, with a ready-made prompt you paste into another AI service. It asks that service to list everything it has stored about you. You paste the result into Claude, and it's turned into memory entries. The Help Center calls imports "experimental".
+
+To see your memory exactly as Claude sees it, there's a "View and edit" option, or you can simply ask Claude to write out its memories of you word for word. It's worth doing once, just to see.
+
+## What this means for us
+
+Three suggestions.
+
+First, write your account instructions properly, once. Who you are, what your businesses are, that Claudine is your briefing voice, British idiom, and the rules you always want: no hype, sources named, numbers with dates. Every conversation starts better.
+
+Second, keep business knowledge in files, not in memory. Memory is lovely for "Vincent prefers short answers in the morning". But anything an agent must reliably know, like shipping times, prices or the never-send-email rule, belongs in a project knowledge base or a repository file, where it's written down once and checked.
+
+Third, use memory-off for sensitive one-offs. A difficult customer dispute, or a supplier negotiation, is a good case for a chat with memory switched off before the first message. It keeps the chat in your history, but out of Claude's long-term picture of you.
+
+Next time: connectors. How Claude reaches your other tools, why the network matters, and a setting that would help us right away with the image tools we connect.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, Understanding Claude's personalisation features (instructions, project instructions, skills): https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features
+- Help Center, Use Claude's chat search and memory to build on previous context (how memory is stored, project memory, shared memory with cloud Cowork, pause and reset, memory off for one chat, what Claude remembers, chat search): https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context
+- Help Center, Use incognito chats (not saved, 30-day retention, not for training, no projects, profile preferences apply, new-experience limitation): https://support.claude.com/en/articles/12260368-use-incognito-chats
+- Help Center, Import and export your memory from Claude (import prompt, "experimental", viewing memory, focus on work topics): https://support.claude.com/en/articles/12123587-import-and-export-your-memory-from-claude
+- Help Center, How can I create and manage projects (project memory and the "Use account memory" switch): https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects
+
+
+# Actually Reading the Manual, Episode 8: Connectors
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today is about connectors: how Claude reaches your other tools. You already use several. The Shopify store, Gmail, GitHub, the image tools. This episode explains what's happening underneath, and points to one setting I think we should change.
+
+## What a connector is
+
+The Help Center's definition: connectors "let Claude access your apps and services, retrieve your data, and take actions within connected services."
+
+The most important sentence comes straight after. Claude "inherits each person's permissions from the connected service." If you can't see a file or a channel in the source system, the connector can't reach it either. A connector is never a back door. It's you, at one remove.
+
+The same connectors work across the Claude app, the desktop app, Claude Code and the API. You find them in the Connectors Directory, under Customize, then Connectors. Each one has a page saying what it can read, what it can write, and where it's available.
+
+## Remote connectors and desktop extensions
+
+There are two kinds of connection, and a short Help Center article explains when to use which.
+
+A remote connector is for a cloud service you sign into: Slack, Notion, Linear, GitHub, a shop platform. It's the default choice, and it works everywhere you use Claude: web, mobile, Cowork, desktop and Claude Code.
+
+A desktop extension is for something that runs on your own computer: local files, a database on your machine, a desktop application. It installs with one click, like a browser extension. But it only works in the desktop app and in Claude Code, never on the web or your phone.
+
+The article sums it up in one line: if the tool is a cloud product, use a remote connector; if it's on your machine, use a desktop extension.
+
+## Building your own: custom connectors
+
+Underneath, connectors speak MCP, the Model Context Protocol. The Help Center describes it as "an open standard, created by Anthropic, for AI applications to connect to tools and data." That means you can add your own: a custom connector pointing at any remote MCP server, including one you build. Free accounts get one custom connector; paid plans can add more.
+
+There's one technical detail here that I'd underline, because it surprises developers. When you add a custom connector, Claude connects to your server from Anthropic's cloud, not from your own computer. That's true on every surface, even in the desktop app and Cowork. So your server must be reachable over the public internet. A server behind a VPN, or one that only works on your home network, won't connect, even if your own browser can reach it.
+
+The article also gives a plain warning: custom connectors can point at services Anthropic hasn't checked, and once connected, Claude can read from them and act in them. Only connect what you trust.
+
+## Interactive connectors
+
+Some connectors now go further than text. Interactive connectors show a live app inside the conversation. The Help Center's example is asking about project status and having your Asana board open right there, so you can tick off tasks while you keep talking to Claude. They appear either as small cards in the chat or in a full-screen view.
+
+The current list includes Amplitude, Asana, Box, Canva, Clay, Figma, Hex and Slack, and they're marked with an "Interactive" badge in the directory. They switch on automatically when the connector is connected.
+
+## The setting I'd change: tool access
+
+Now the practical heart of this episode. Every connector you add takes up room in each conversation, because Claude has to be told what tools exist before it can use them. The Help Center puts it plainly: with many connectors, "the combined overhead can limit how much room is left for your actual work."
+
+So there's a setting called tool access, with three modes, chosen per conversation from the plus menu.
+
+Auto is the default. Claude decides which connectors to load based on what you're doing.
+
+Always available loads every connector at the start of every conversation. It's best for fewer than ten connectors you use all the time.
+
+On demand loads nothing until Claude searches for the right connector for your request. It's best for large libraries of ten or more, or when conversations are hitting length limits. The trade-off is an extra step before Claude uses a tool.
+
+The article's table even suggests what to choose. Under ten connectors you use constantly: always available. Thirty or more tools: on demand or auto. Conversations running out of room: on demand.
+
+## Claude suggests apps, but doesn't buy
+
+Once an app is connected, you don't have to name it every time. Claude brings it in when it fits what you're asking. The article's examples are consumer ones, like a hiking app for a weekend walk, but the principle is general. Three promises stand out.
+
+Before Claude books, buys or reserves anything, it checks with you first. "Claude doesn't transact on its own."
+
+When two connected apps could both help, Claude shows both and lets you choose, rather than silently picking one.
+
+And there are no paid placements: no sponsored rankings and no advertising in which app Claude suggests.
+
+## Plugins carry connectors too
+
+One last connection to make. Plugins, which are episode ten, can bundle connectors. A plugin that bundles a remote connector works everywhere. A plugin that bundles a local one works in Cowork and Claude Code, but not in chat.
+
+## What this means for us
+
+Three practical points.
+
+First, tool access. Our cloud sessions often have a big image-generation connector attached, with a couple of hundred tools, alongside Shopify, Gmail and GitHub. That's exactly the "large library" case. In the app, set tool access to on demand for conversations that don't need the image tools. Claude Code has a similar mechanism, which we'll meet in Part Four.
+
+Second, if we ever build our own connector, for example a small read-only server over the FMP order system, it has to be reachable on the public internet, with proper authentication, because Claude connects from Anthropic's cloud. Plan for that from day one rather than discovering it later.
+
+Third, remember the permission rule. A connector does whatever your account can do. The Gmail connector can send email, because you can. That's why our rule against sending email lives in writing and, as Part Two of the curriculum argued, should also live in the tool settings. A connector inherits your power, so your rules have to travel with it.
+
+Next time: web search, research and extended thinking. Three ways to make Claude dig deeper, and which one to pick.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, Use connectors to extend Claude's capabilities (definition, inherited permissions, directory, availability across surfaces): https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities
+- Help Center, When to use desktop and web connectors (remote connectors versus desktop extensions, plugins): https://support.claude.com/en/articles/11725091-when-to-use-desktop-and-web-connectors
+- Help Center, Get started with custom connectors using remote MCP (MCP definition, connections from Anthropic's cloud, public-internet requirement, Free limit of one): https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp
+- Help Center, Getting started with local MCP servers on Claude Desktop (desktop extensions): https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop
+- Help Center, Use interactive connectors in Claude: https://support.claude.com/en/articles/13454812-use-interactive-connectors-in-claude
+- Help Center, Manage Claude's tool access (the three modes and the recommendation table): https://support.claude.com/en/articles/13730515-manage-claude-s-tool-access
+- Help Center, How Claude suggests connected apps (confirmation before purchases, no paid placements): https://support.claude.com/en/articles/14730684-how-claude-suggests-connected-apps
+
+
+# Actually Reading the Manual, Episode 9: Search, Research and Thinking
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today is a short and practical one. Claude has three ways to dig deeper than a quick answer: web search, research and extended thinking. They sound alike, and they're often switched on all at once. The Help Center has a small article that explains exactly when to use each, and it's one of the most useful pages in the whole manual.
+
+## Web search: one or two lookups
+
+Web search lets Claude look things up on the live web. It works with all the current models. When it's used, you see an indicator, and every answer includes citations and source links so you can check them yourself. Claude can also fetch a specific page when you give it a link.
+
+There's a small change to note. If you have the new combined Claude experience, there's no longer a web search toggle. Claude simply searches when it helps. On the older experience, you switch it on per chat from the plus menu.
+
+The guidance article says web search is best for "straightforward, factual queries that can be answered with one or two tool calls". Its examples: the weather, facts about one company, recent headlines, last night's score. It also suits the times you want to steer, when you know roughly what to search for and want Claude to do the searching and reading.
+
+## Research: a proper investigation
+
+Research is a different animal. The Help Center describes it this way: Claude "runs multiple searches that build on each other and decides what to look into next based on what it finds." It explores different angles and works through open questions systematically.
+
+The guidance article gives it a scale. Research is best for gathering that needs "five or more tool calls over 1-3 minutes", producing in-depth reports from many sources across the web and your connected tools. Comparing competitors is one of its named examples.
+
+A few details from the research article are worth knowing.
+
+Research is on paid plans only, and it needs web search to be switched on.
+
+It searches your connected tools as well as the web, including Gmail, Google Calendar and Google Docs if they're connected, and it can use them automatically during research.
+
+It runs on Opus 5.5, with Opus 4.8 as a fallback, whatever model you've picked for the chat.
+
+It counts against the same usage limits as normal chat, but it uses them up faster, because it reads many sources.
+
+And here's the trap, which the article flags twice. If you start research on your phone, Claude only searches the web and doesn't use your connectors, and "you won't see an error or other sign that your connectors were skipped." So research that should include your inbox or documents belongs on the web or the desktop app, never on the phone.
+
+If research doesn't seem to start, the article's fix is wonderfully blunt: tell Claude "please use the research tool to" do the thing.
+
+## Extended thinking: think harder, no searching
+
+The third tool doesn't look anything up at all. The guidance article says extended thinking "shines when tackling complex reasoning tasks that don't require recent info from the web": maths problems, debugging, analysing a concept from several angles. It's best "if you don't want to search the web or use integrations, but just want Claude to think harder."
+
+In the newer models, this is closely related to the effort dial from episode two. The model decides how much to think, and higher effort means more thinking.
+
+## Using them together
+
+The article ends with a combination worth remembering: research plus extended thinking. Thinking lets Claude plan its approach carefully, and research then carries out the gathering. The article's examples are researching new technology for a business proposal, or analysing several scientific papers.
+
+So here's the whole chapter in three lines.
+
+A quick fact from the web: web search.
+
+A real investigation across many sources: research.
+
+A hard problem you can already describe fully: extended thinking.
+
+And a big, important question: research with thinking.
+
+## What this means for us
+
+The competitor walk-throughs, like the Vintagraph episode, are exactly what research is for: many sources, building on each other, with a report at the end. If you start one from the app, start it on the desktop, so it can read anything relevant in your connected Google Drive or Gmail.
+
+The daily questions, like "is this flag still in the news" or "when is the World Series", are plain web search. They're quicker and cheaper.
+
+And the hard thinking problems, like a pricing model, a funnel puzzle, or deciding between composite and AI fringes, are extended thinking at higher effort, without search. The answer is in the numbers you already have, not on the web.
+
+One habit to keep: research burns through the usage budget faster than anything else in chat. Save it for the questions that deserve a report.
+
+Next time: skills and plugins in the app. How to teach Claude a repeatable task once, and how plugins bundle everything together.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, Enable and use web search (supported models, citations, the new-experience change): https://support.claude.com/en/articles/10684626-enable-and-use-web-search
+- Help Center, Use research on Claude (how it works, paid plans, connectors, the mobile limitation, models used, usage): https://support.claude.com/en/articles/11088861-use-research-on-claude
+- Help Center, When should I use web search, extended thinking, and research (the guidance, the "one or two tool calls" and "five or more tool calls over 1-3 minutes" scales, combining research and thinking): https://support.claude.com/en/articles/11095361-when-should-i-use-web-search-extended-thinking-and-research
+- Claude Code glossary ("Effort level"): https://code.claude.com/docs/en/glossary
+
+
+# Actually Reading the Manual, Episode 10: Skills and Plugins
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Part Two of the Founder's Curriculum spent a whole episode on skills, from the point of view of our repositories and Matt Pocock's. Today we hear the manual's own version, from the app side. Then we meet plugins, which bundle skills together with connectors and more.
+
+## What a skill is
+
+The Help Center's definition: skills are "folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks." They teach Claude to do a specific task "in a repeatable way".
+
+The mechanism is called progressive disclosure, and the article explains it in one sentence: Claude "determines which skills are relevant and loads the information it needs to complete that task, helping to prevent context window overload." Only a skill's short description is always present. The full instructions arrive when the task does.
+
+Skills work on every plan, including Free, but they need code execution switched on. They also work in Claude Code, and through the API.
+
+## Four kinds of skill
+
+The article lists four kinds.
+
+Anthropic skills are built in. They improve how Claude creates Excel, Word, PowerPoint and PDF files, and Claude uses them automatically when relevant.
+
+Custom skills are ones you write. The article's examples could have been written for us: applying brand style guidelines to documents, generating communications from company email templates, structuring meeting notes in a house format, and running a company-specific data analysis.
+
+Organisation skills are pushed out by an owner on Team and Enterprise plans.
+
+And partner skills come from companies like Notion, Figma and Atlassian, designed to work with their connectors.
+
+## Skills or projects?
+
+The article draws a clean line between skills and the projects from episode five. Projects provide "static background knowledge that's always loaded" when you start a chat in them. Skills provide "specialized procedures that activate dynamically when needed and work everywhere across Claude." So knowledge goes in a project, and procedures go in a skill.
+
+## Writing a good skill
+
+The article on creating skills gives five marks of a good one, worth hearing as a list.
+
+It solves a specific, repeatable task.
+
+It has clear instructions Claude can follow.
+
+It includes examples when they help.
+
+It says when it should be used.
+
+And it focuses on one workflow rather than trying to do everything.
+
+That last one is Matt Pocock's lesson too: small skills that do one thing, composed together.
+
+To add a custom skill in the app, you package the skill folder as a ZIP file and upload it under Customize, then Skills. There's also a newer way, if you'd rather not write anything. On a Mac, in Cowork, on Pro, Max and Team plans, you can record a skill. You record your screen while doing a task, ideally talking through what you're doing and why, for up to about ten minutes. Claude then proposes a skill from what it saw. The article notes that the video and audio aren't kept afterwards, only a set of screenshots. And it gives an important warning: don't type passwords or show anything private while recording, because everything on screen is captured.
+
+## An open standard
+
+One fact worth repeating from Part One. The skill format is published as an open standard at agentskills dot io. In the article's words, "skills you create aren't locked to Claude." The same skill can work with other AI tools that adopt the standard.
+
+## Plugins: everything in one box
+
+Now plugins. The Help Center says a plugin "bundles skills, connectors, and sub-agents into a single package, so you get a ready-to-go setup from your first conversation."
+
+Plugins are on paid plans. You use them in chat on the web and desktop, and in Cowork. There's a growing library for common work: sales, finance, legal, marketing, operations, data analysis and more. There's even a plugin called Plugin Create, which helps you build your own.
+
+The detail I'd underline is this: plugins you add in the app are saved to your account, and they sync to Claude Code in your terminal when you sign in with the same account. The sync needs a recent version of Claude Code. It runs once each time Claude Code starts, and it's one-way, so it never changes anything in your account. In Claude Code, a plugin runs in full on your computer, including its skills, sub-agents, hooks and MCP servers.
+
+Which brings the warning that comes with it. A plugin can include local MCP servers that "run on your computer with the same permissions as any other program you run." So the article says: "Only install plugins from sources you trust." On Enterprise plans there's automatic scanning of third-party skills and plugins for malicious content. On individual plans, that scanning is you.
+
+## One directory
+
+Skills, connectors and plugins now share one directory, under Customize in the sidebar, with a tab for each. Skills you install from the directory are view-only. If you want to change one, you download a copy, edit it, and upload it as your own.
+
+## What this means for us
+
+This episode connects directly to a problem we found in Part Two of the curriculum. Our two fmp-devops skills, the customer-service one and the Morning Walk, live in nested folders in a repository, and Claude Code doesn't always discover them. Plugins offer a second route. If we packaged our skills as a small private plugin and added it to your account, it would sync to Claude Code wherever you sign in, and it would also be available in chat and Cowork. That's worth testing. The customer-service skill in the app would be especially useful for drafting a reply on the go.
+
+Second, the recording feature is a gift for the operations side. When a virtual assistant does a careful, repeatable task, like preparing a CEP batch, a recording with narration could become a first-draft skill. You'd then trim it, test it, and keep it short.
+
+And third, trust. Matt Pocock's skills plugin is a well-known public source, and it's the kind of plugin worth trying. Random plugins from strangers are not. The manual's rule is the same as for a program you install: if you wouldn't run it, don't add it.
+
+Next time: Cowork, the part of Claude that takes a whole task and carries it out, and is now quietly merging with chat.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, What are skills (definition, progressive disclosure, kinds of skill, skills versus projects, the open standard): https://support.claude.com/en/articles/12512176-what-are-skills
+- Help Center, Use skills in Claude (enabling, Anthropic skills, uploading custom skills): https://support.claude.com/en/articles/12512180-use-skills-in-claude
+- Help Center, How to create custom skills (what makes a good skill, recording a skill): https://support.claude.com/en/articles/12512198-how-to-create-custom-skills
+- Help Center, Use plugins in Claude (what a plugin bundles, sync to Claude Code from v2.1.273, local MCP warning): https://support.claude.com/en/articles/13837440-use-plugins-in-claude
+- Help Center, Browse skills, connectors, and plugins in one directory: https://support.claude.com/en/articles/14328846-browse-skills-connectors-and-plugins-in-one-directory
+- Help Center, Get started with skill and plugin scanning (Enterprise): https://support.claude.com/en/articles/15927065-get-started-with-skill-and-plugin-scanning
+
+
+# Actually Reading the Manual, Episode 11: Cowork
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Today is Cowork, and it's a moving target. In the space of a few weeks it has moved into the cloud, picked up a browser, learned to use your computer, and started merging with ordinary chat. I'll walk you through what it is today, and then through the safety chapter, which I think is the most important page in Part Two.
+
+## What Cowork is
+
+The Help Center describes it in one sentence: Cowork "brings Claude Code's agentic capabilities to knowledge work beyond coding." It uses the same architecture that powers Claude Code, but with no terminal. Instead of answering one prompt at a time, Claude takes on a multi-step task and carries it out. You describe an outcome, step away, and come back to finished work: documents, organised files, research, spreadsheets with working formulas, presentations.
+
+It's on all paid plans, on the desktop apps for Mac and Windows, on the web, on mobile, and in the Claude in Chrome side panel, with some variation by plan.
+
+## Cowork is becoming just Claude
+
+Here's the big change. Several articles now open with the same note: "Claude Cowork is now just Claude. Ask for what you need, and Claude decides whether that's a quick answer or a task."
+
+The article called "Claude Cowork and chat are one Claude" explains it. In the new experience, chat and Cowork merge into a single conversation, so you no longer choose a mode before you start. A quick question still gets a quick answer, and a bigger request becomes a task. It's rolling out gradually, starting with Pro and Max plans. If your message box still shows separate "Chat" and "Cowork" options, you haven't got it yet.
+
+## It runs in the cloud now
+
+The second big change happened on the sixth of October. On Pro and Max plans, new Cowork tasks now run in the cloud, on Anthropic's servers, instead of on your computer. The setting to keep them only on your computer was removed. Tasks you'd already started locally can finish where they are.
+
+Running in the cloud changes three things. Work continues when you close your laptop. Scheduled tasks run with no device switched on. And the same sessions and files appear on your desktop, the web and your phone.
+
+Your folders stay on your computer, though. Claude reaches only the folders you've connected, through the desktop app, and only while it's open. When a task needs a file, it fetches a copy of just that file.
+
+And if you want work to stay on your own machine, the article points you to Claude Code in the desktop app, which runs locally. There's even a command to carry a Cowork task over: you download the task data, open it in Claude Code, and run a command called port-task-data.
+
+## What Cowork can reach
+
+The "one Claude" article lists what a task can use.
+
+Your connected apps, like Google Drive, Gmail or Slack, while the task runs.
+
+Folders on your computer, through the desktop app.
+
+A browser. Either one built into the desktop app, or your own Chrome through Claude in Chrome. The built-in browser is separate from yours and doesn't see your saved logins unless you import them, site by site. Anything you sign into there stays available to future Cowork sessions on that computer.
+
+And, in beta on Pro and Max plans, computer use: Claude clicking, typing and navigating your desktop apps directly.
+
+The computer-use article describes a sensible order. Claude tries the most precise tool first. If there's a connector, it uses that. If not, it uses a browser. Only if neither works does it fall back to your screen. Pulling messages through the Slack connector takes seconds; navigating Slack on screen takes much longer and fails more often. Claude also asks your permission before it touches each application. And while it works it takes screenshots, so anything visible on screen becomes part of the conversation.
+
+## Scheduled tasks and projects
+
+Two features make Cowork a daily tool.
+
+Scheduled tasks run a saved prompt on a cadence: every weekday at eight, every Monday morning. The Help Center's list of common uses reads like our own: daily briefings from Slack, email or the calendar; weekly reports from Drive and spreadsheets; recurring research on topics or competitors; regular file clean-ups; and team status updates. Each run is its own session, and it runs remotely, even when your computer is asleep. In the new experience, you can just say, "every Monday at nine, summarise last week's messages", and Claude proposes the schedule for you to confirm.
+
+Projects in Cowork group related tasks, each with its own instructions, scheduled tasks, context and memory, like the chat projects from episode five.
+
+There's also an older feature called Dispatch, which lets you message a task from your phone to run on your desktop. The article notes it isn't available to new users any more, so I'll leave it there.
+
+## The safety chapter
+
+Now the page I'd ask you to read in full one day: "Use Claude Cowork safely". Its core idea is simple and powerful.
+
+It divides Claude's tools into two kinds. Read tools let Claude see things, like reading your inbox or taking a screenshot. Write tools let Claude do things, like creating a calendar invite, deleting a file, running a command or clicking on the screen. Write tools carry more risk, and the article recommends human oversight when the stakes are high.
+
+Then it explains prompt injection, with an example: you ask Claude to summarise your emails, and one email from an attacker contains hidden instructions. And it states the condition that makes such an attack work: "two things must be true at the same time". Claude can read information from outside your trusted sources, and Claude can take actions that could harm you. Remove either one, and the attack becomes much harder.
+
+From that, the article's advice follows. Don't give access to folders with sensitive information, like financial documents. Be deliberate about which sites Claude works on, especially sites where you're signed in or that handle money. Extend internet access only to sites you trust. Watch for suspicious actions. Use only trusted connectors. And be especially careful with computer use, because it acts on your screen "without the permission checks that gate other Cowork tools."
+
+Anthropic's own layers of protection are listed too: training Claude to refuse malicious instructions, running each cloud session in an isolated, temporary environment, and classifiers that scan untrusted content for injection attempts. But every page in this chapter ends the same way: the risk is reduced, not removed.
+
+## What this means for us
+
+The two-conditions rule is the clearest statement I've seen of why our customer-service set-up is shaped the way it is. The email agent reads content from outside, from strangers, so that half of the condition is always true. Our protection is to remove the other half: it drafts, and never sends, and a human approves. Now you have the manual's own reasoning for a rule you made on instinct.
+
+Second, Cowork's scheduled tasks are a real alternative home for some of our routines. The Morning Walk runs today as a Claude Code cloud routine, because it reads the repositories. But a pure inbox digest, or a weekly competitor scan with no code, could be a Cowork scheduled task, with your connectors and plugins already there.
+
+And third, computer use and the browsers. They're powerful for apps with no connector, like a supplier portal. But keep them away from anything with money in it, including the Shopify admin and payment dashboards. That's exactly what the manual advises.
+
+Next time, the last episode of Part Two: Claude in Chrome, Claude Design, and Claude by voice.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, Claude Cowork and chat are one Claude (the new experience, what Claude can reach): https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude
+- Help Center, Get started with Claude Cowork (definition, availability, key capabilities): https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork
+- Help Center, Use Claude Cowork on web, desktop, and mobile (cloud since 6 Oct 2026, local folders, port-task-data): https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile
+- Help Center, Schedule recurring tasks in Claude Cowork: https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork
+- Help Center, Organize your tasks with projects in Claude Cowork: https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork
+- Help Center, Assign tasks from anywhere in Claude Cowork (Dispatch, not available to new users): https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork
+- Help Center, Let Claude use your computer in Cowork (order of tools, permissions, screenshots, recommendations): https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork
+- Help Center, Use the built-in browser in Claude Cowork: https://support.claude.com/en/articles/16607400-use-the-built-in-browser-in-claude-cowork
+- Help Center, Use Claude Cowork safely (read and write tools, the two conditions for prompt injection, recommendations, safety measures): https://support.claude.com/en/articles/13364135-use-claude-cowork-safely
+
+
+# Actually Reading the Manual, Episode 12: Chrome, Design and Voice
+
+*Part Two, Using Claude Well. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here, for the last episode of Part Two.
+
+Today we visit three specialist rooms: Claude in Chrome, which works inside your browser; Claude Design, for visual work; and Claude by voice, which is how you're listening to me now, in a way. Each gets a short visit.
+
+## Claude in Chrome
+
+Claude in Chrome is a browser extension. The Help Center describes it as letting Claude "read, click, and navigate websites alongside you." It's on all paid plans. You can use it from a side panel in Chrome, which is in beta, or as a tool from Cowork and Claude Code.
+
+The Claude Code link is worth hearing, because it's a workflow we already half-use. The article describes it as build, test and verify. You build with Claude Code, deploy to an address Claude can reach, then test in the real browser with the extension. Claude can read console errors, network requests and the page's structure directly. The article names design verification, comparing a Figma mock-up with what was actually built, as one of its best uses.
+
+## Three permission modes
+
+Chrome has three permission modes, and the names have recently changed, so it's worth getting them straight.
+
+Manually approve, which used to be called "Ask before acting". Claude pauses before each action and you choose Allow or Deny.
+
+Automatically approve. Claude keeps working, but checks each action for safety in the background, blocking anything it judges unsafe and pausing when it needs you. In the Cowork side panel, this is the default.
+
+Skip all approvals, which used to be called "Act without asking". Claude doesn't pause, and nothing checks its actions automatically. The article says to use it only when you completely trust every action, connector, file and app involved.
+
+Some actions always need your explicit go-ahead in any mode, like downloading a file or entering sensitive information. And some are blocked whatever you choose.
+
+## The safety numbers
+
+The Chrome safety article is unusually specific, so here are its own words. The biggest risk is prompt injection: instructions hidden in web content that trick Claude into actions you didn't intend. There are classifiers on both sides: one checks incoming content for injection attempts, and another checks every action before it runs. The article reports that its current set-up "reduces attack success rates to less than 0.08%" in Anthropic's internal testing. And then, as always: "the chances of an attack are still non-zero."
+
+One more line is worth remembering. Claude takes screenshots of the tabs it works in, so whatever is visible in those tabs becomes part of the conversation, and Claude can't filter sensitive content out of what it sees.
+
+## Claude Design
+
+Now Claude Design. It lets you create designs, interactive prototypes, one-pagers and other visual work by chatting with Claude. The important change this autumn is that Design is now one of the artifact templates from episode six, rather than a separate product. You can use it in any chat, in Claude Code, and from the Artifacts tab.
+
+The standalone site at claude.ai slash design keeps working until it closes on the fourteenth of December 2026, and is read-only after that. If you have anything there, especially a design system, the migration article says to move it now.
+
+The way Design works is a conversation paired with a canvas. You describe what you want, and Claude generates a working design beside the conversation. Then you refine it by talking, editing directly on the canvas, or leaving comments.
+
+## Design systems
+
+The feature that makes Design useful for a brand is the design system. The Help Center describes it as capturing "your colors, typography, components, and layout patterns", so Claude applies them to every new design and deck. Claude builds it from what you give it: a codebase with your components, a slide deck or document that reflects your visual identity, or brand guideline files like logos, colour palettes and type specifications. On individual plans, design systems are in beta and on by default.
+
+There are two ways in. From a chat, you ask Claude to build a design system from your uploaded files, decks, logos and fonts. That works best for brand systems. Or, from Claude Code, a command called design-sync reads your design tokens and components directly from code. That works best for product systems built in code. And in the other direction, a command called design lets Claude Code turn a finished design into real code.
+
+## Claude by voice
+
+Last, voice. Voice mode lets you have spoken conversations with Claude: you talk, and Claude talks back. It's in beta, on all plans, on mobile, desktop and the web, but the article says it's "built to work best from your phone." It can use web search and your connected tools during a voice conversation, and it counts towards your normal usage limits.
+
+On the Mac desktop app there's also something called quick entry. You double-tap the Option key to open Claude from any app, share a screenshot or a window, and optionally press Caps Lock to dictate. The dictation shortcut is off by default, because it takes over your Caps Lock key.
+
+## What this means for us
+
+Three things.
+
+First, Chrome and the smoke test. Our daily smoke test uses a scripted browser, which is the right tool for a fixed check that must give the same result every day. Claude in Chrome is the right tool for the opposite: an exploratory look at a new page, or checking that a built product page matches its design. Keep both, for different jobs.
+
+Second, a design system for Flagmaker and Print is a small investment with a long tail. Upload the logo, the brand colours, the fonts and a few good product pages, and every future one-pager, supplier deck or campaign mock-up comes out on brand. If anything already lives on the standalone Design site, move it before the fourteenth of December.
+
+Third, voice. You already listen to these episodes on your walk. Voice mode is the other half: on the way back, you can talk through what you heard, with search and your connectors available. It's a good way to turn a briefing into decisions before you reach your desk.
+
+That's the end of Part Two. Next time, Part Three begins: how to talk to Claude, from the manual's own prompting guide.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Help Center, Get started with Claude in Chrome (availability, the Claude Code build-test-verify workflow): https://support.claude.com/en/articles/12012173-get-started-with-claude-in-chrome
+- Help Center, Use Claude in Chrome safely (prompt injection, classifiers, the "less than 0.08%" figure, screenshots): https://support.claude.com/en/articles/12902428-use-claude-in-chrome-safely
+- Help Center, Claude in Chrome permissions guide (the three modes and their former names): https://support.claude.com/en/articles/12902446-claude-in-chrome-permissions-guide
+- Help Center, Get started with Claude Design (a template, the canvas workflow, design-sync and design in Claude Code, the standalone site closing 14 Dec 2026): https://support.claude.com/en/articles/14604416-get-started-with-claude-design
+- Help Center, Set up your design system in Claude Design: https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design
+- Help Center, Migrate from standalone Claude Design to Claude: https://support.claude.com/en/articles/17440474-migrate-from-standalone-claude-design-to-claude
+- Help Center, Use voice mode: https://support.claude.com/en/articles/11101966-use-voice-mode
+- Help Center, Use quick entry with Claude Desktop on Mac: https://support.claude.com/en/articles/12626668-use-quick-entry-with-claude-desktop-on-mac
