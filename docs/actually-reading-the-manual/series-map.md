@@ -49,8 +49,11 @@ Each episode is read fresh on the day it is written, explained in plain words, a
 26. Code review, GitHub and security
 27. Costs, models and best practices
 
-**Part Five, Building with Claude, Lightly** (planned)
-Features and tool use · Context, caching and compaction · Agent Skills and the Agent SDK · Managed Agents
+**Part Five, Building with Claude, Lightly** (written 23 Oct 2026)
+28. Features and Tool Use
+29. Context, Caching and Compaction
+30. Agent Skills and the Agent SDK
+31. Managed Agents
 
 **Part Six, Trust and Terms** (planned)
 Usage policy and agents · Privacy, data and safe use of Cowork and Chrome · Closing: the reading list
