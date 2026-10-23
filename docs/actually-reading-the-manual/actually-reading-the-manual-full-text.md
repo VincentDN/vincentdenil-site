@@ -2444,3 +2444,317 @@ All pages read on 23 October 2026.
 - Speed up responses with fast mode ("up to 2.5x faster at a higher cost per token", not a different model, when to use it, first-enable cost): https://code.claude.com/docs/en/fast-mode
 - Manage costs effectively (`/usage` and plan usage breakdown, "Why usage climbs in a long session", "sends your full conversation with every request", compaction "is itself a large request", reduce token usage): https://code.claude.com/docs/en/costs
 - Best practices ("Give Claude a check it can run", "you become the verification loop", four ways to gate, "show evidence", explore then plan then code, common failure patterns): https://code.claude.com/docs/en/best-practices
+
+
+# Actually Reading the Manual, Episode 28: Features and Tool Use
+
+*Part Five, Building with Claude, Lightly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here, and welcome to Part Five.
+
+Until now we've been reading the manual for things Anthropic built: the app, the prompting guide, Claude Code. Part Five turns the telescope round. It's about building with Claude, which means putting Claude inside your own tools: a product-description generator wired into the shop, a support assistant on the site, a nightly job that checks the catalogue. You decided we'd keep this light, and we will. Four episodes, no code read aloud, just enough to know what's on the shelf and what it costs to take it down.
+
+Today: the map of features, and the one idea everything else rests on, tool use.
+
+## The five areas
+
+The developer platform's features page organises everything into five areas, and the list is a good mental map.
+
+Model capabilities: ways to control how Claude reasons and formats its answers. Tools: ways to let Claude take actions. Tool infrastructure: discovery and orchestration at scale. Context management: keeping long sessions efficient. And files and assets: managing the documents you give Claude.
+
+The page's advice for newcomers is short: "If you're new, start with model capabilities and tools. Return to the other sections when you're ready to optimize cost, latency, or scale." That's our plan too.
+
+## What's on the shelf
+
+A quick walk along the model-capabilities shelf, picking out what matters to us.
+
+Context windows of up to a million tokens, enough for a whole catalogue export or a long contract. Adaptive thinking, where Claude decides how much to think, controlled by an effort setting. Batch processing, where you send lots of requests to be handled when convenient, and the page states the saving plainly: "Batch API calls cost 50% less than standard API calls." Citations, so Claude can point at "the exact sentences and passages it uses," which makes answers checkable. PDF support. And structured outputs, which "guarantee schema conformance": when you need a product record with exactly these fields, not a paragraph that happens to contain them.
+
+On the tools shelf there are two kinds. Server-side tools, run by Anthropic: web search, web fetch, code execution in a sandbox, and an advisor tool that pairs a fast model with a smarter one for guidance on long jobs. And client-side tools, run by you: bash, a text editor, computer use, browser use, and memory.
+
+The infrastructure shelf has Agent Skills, which get their own episode; an MCP connector that lets a plain API call reach remote MCP servers; tool search, for scaling to thousands of tools; and programmatic tool calling, where Claude calls your tools from inside code, saving round trips. And the context shelf has compaction, context editing, prompt caching and token counting, which are next episode's subject.
+
+Many of these come with a label: stable, beta, deprecated. Beta, the page says, means preview features that "may change significantly." Worth checking before we build anything that needs to last.
+
+## The tool-use contract
+
+Now the important idea. The tool-use page describes it as a contract. "You specify what operations are available and what shape their inputs and outputs take; Claude determines when and how to call them." And then the sentence that makes it safe to build with: "The model never runs anything on its own. It emits a structured request, your code (or Anthropic's servers) runs the operation, and the result flows back into the conversation."
+
+So when people say an AI "did" something, through the API it really asked. Your code decides whether to do it.
+
+## Where tools run
+
+The page sorts tools into three buckets by where the code runs.
+
+User-defined tools: you write the description, you run the code, you return the result. "The vast majority of tool-use traffic" is this kind. A tool that looks up an order, checks stock, or drafts a reply in the help desk would all be ours.
+
+Anthropic-schema tools: Anthropic publishes the description but you run the code. These are memory, bash, text editor, computer and browser. Why use them rather than write your own? Because "these schemas are trained-in." Claude has practised on thousands of successful runs with exactly these tools, so it uses them more reliably.
+
+Server-executed tools: web search, web fetch, code execution and tool search. Anthropic runs them; you switch them on and read the result.
+
+## The loop
+
+For tools you run, your application drives what the page calls the agentic loop, the same loop we met in Claude Code but now written by you. Send the request with the list of tools. Claude replies that it wants to use one. Your code runs it and sends back the result. Repeat until Claude says it's finished. Server tools run their own version of the loop inside Anthropic's infrastructure, with an iteration limit; if they hit it, the answer comes back paused, and you send it again to let Claude carry on.
+
+## When to use tools, and when not
+
+This section is pure good sense. Tools fit when the task needs something text alone can't provide. Actions with side effects: "Sending an email, writing a file, updating a record. The model can describe these actions, but only a tool can perform them." Fresh or external data, such as current prices or stock. Guaranteed-shape outputs. And calling into existing systems.
+
+There's a lovely rule of thumb: "if you're writing a regex to extract a decision from model output, that decision should have been a tool call."
+
+And tools don't fit when the model can answer from what it knows, when there are no side effects, or when the extra round trip would cost more than the work.
+
+## Steering when Claude reaches for a tool
+
+By default Claude decides each turn whether to call a tool or just answer. The page says that boundary is steerable with plain instructions in the system prompt, such as "Use the tools to investigate before responding", and that you can require a tool call outright with a setting. Adding strict mode to a tool makes Claude's calls always match the schema exactly.
+
+And a warning worth repeating for anyone building a shop assistant. If the user hasn't supplied a required detail, Opus is "much more likely to recognize that a parameter is missing and ask for it." Sonnet "might also infer a reasonable value." In other words, it might guess. For an order lookup, a guessed order number is a bad answer delivered confidently.
+
+## What this means for us
+
+First, the contract is our safety model. Through the API, Claude only ever asks; our code acts. That means the guardrails we put in Claude Code, ask before sending, never publish without you, can be written straight into our own tools as code, not prompts. A send-email tool can simply not exist, and a draft-email tool can exist in its place.
+
+Second, structured outputs and strict tools are made for catalogue work. Product titles, tags, descriptions and metafields with a fixed shape, validated before anything touches Shopify.
+
+Third, the batch discount changes the economics of big catalogue jobs. Rewriting thousands of product descriptions doesn't need an instant answer. Sent as a batch, it costs half as much.
+
+And fourth, for anything customer-facing that looks things up, require the missing details to be asked for, not guessed. That's one sentence in a system prompt and one required field in a tool.
+
+Next time: context, caching and compaction, which is where the money is saved.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Features overview (five areas, "If you're new, start with model capabilities and tools", feature tables, batch "cost 50% less", citations, structured outputs, server-side and client-side tools, tool infrastructure, context management, availability labels): https://platform.claude.com/docs/en/build-with-claude/overview
+- How tool use works (the tool-use contract, "The model never runs anything on its own", three buckets, "these schemas are trained-in", the agentic loop, server-side loop and `pause_turn`, when to use tools and when not, the regex rule of thumb): https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works
+- Tool use with Claude (when Claude uses tools, steering with the system prompt, `tool_choice`, strict tool use, Opus vs Sonnet on missing parameters): https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview
+
+
+# Actually Reading the Manual, Episode 29: Context, Caching and Compaction
+
+*Part Five, Building with Claude, Lightly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Last time I promised this was where the money is saved. It is. Today's four pages, context windows, prompt caching, compaction and batch processing, are the difference between an assistant that costs pennies a day and one that quietly costs a fortune. You've already met the ideas inside Claude Code. Today we see them as dials you can turn yourself.
+
+## The context window is working memory
+
+The context-window page starts with a definition I like. The context window is "all the text a language model can reference when generating a response, including the response itself." It's not what the model learned in training. It's "a 'working memory' for the model."
+
+And straight after, the important caveat: "more context isn't automatically better. As token count grows, accuracy and recall degrade." A bigger desk doesn't help if you can't find anything on it.
+
+The page lists what counts against the window: the system prompt, every message including tool results, images and documents, your tool definitions, and the answer Claude writes, thinking included. Most current models have a million-token window, and that's the default, with no special switch. A single request can include up to six hundred images or PDF pages, though you may hit size limits first.
+
+The basic behaviour is accumulation. Each turn, your message and Claude's reply are added, and "previous turns are preserved completely." Through the API, nothing is forgotten until you or a feature removes it. That's why long agent tasks need a strategy.
+
+## Prompt caching
+
+The first strategy saves money without changing anything Claude sees. Prompt caching lets the API reuse the beginning of a request that it has seen recently. If your system prompt, examples and product catalogue are the same every time, they're processed once, and later requests read them from cache.
+
+The pricing is set out as simple multipliers. Writing to the cache costs a little more than normal input: one and a quarter times for the standard five-minute cache, twice for a one-hour cache. Reading from it costs a tenth of normal input. So anything you send more than once or twice comes out far cheaper. These multipliers also stack with other discounts, such as batching.
+
+There are two ways to use it. Automatic caching is a single setting on your request: the system moves the cache point forward as the conversation grows, which is "best for multi-turn conversations." Or you place explicit cache markers on particular blocks for finer control.
+
+Two details are worth carrying around. The cache lives five minutes by default, refreshed free each time it's used, and the clock runs from the start of a request, not the end, so a slow answer eats into the window. And the cache covers the whole prefix, in order: tools, then system prompt, then messages. Change something early, such as a tool description, and everything after it is a cache miss. The practical rule: put what never changes at the front, and what changes at the end.
+
+## Compaction
+
+The second strategy changes what Claude sees. Compaction "replaces the older turns of a conversation with a summary that Claude writes on the server, so you need no summarization code of your own." The context-window page calls it "the primary strategy for context management" in long conversations and agent work. Its reason is not only staying under the limit. It also "keeps the active context small, because response quality degrades as a conversation grows."
+
+There are two flavours, both in beta. Compaction on demand: you ask for a summary when you choose and swap it in. And compaction at a token threshold: one setting on ordinary requests, and the API summarises automatically when input passes your trigger. The page recommends on-demand "wherever it is available," because it gives more control: it can keep recent turns word for word, run in the background so the conversation doesn't pause, and use your own summarising prompt "when the default summary drops something a later turn needs."
+
+That last option is the API version of what we discussed in the Claude Code episodes: tell the summariser what matters, so it doesn't lose the rule from the first page.
+
+## Context editing
+
+A finer tool sits alongside. Context editing clears particular content from the history by rule rather than summarising it. Its two main strategies are clearing old tool results, "best for agentic workflows with heavy tool use where old tool results are no longer needed," and clearing old thinking blocks. The page's framing is that context is "a finite resource with diminishing returns, and irrelevant content degrades model focus." An agent that has read fifty product pages doesn't need all fifty still in front of it to write the summary.
+
+## Batch processing
+
+And the last money-saver, which isn't about context at all. The Message Batches API takes a large set of requests and processes them asynchronously, "with most batches finishing in less than 1 hour while reducing costs by 50%." Each request is handled independently; you check back and collect the results. The page lists the obvious uses: large volumes of data, evaluations, analyses, anything where nobody is waiting at the other end.
+
+## What this means for us
+
+First, structure every prompt we build with the stable part first. House style, brand rules, the category list, examples: all at the front, cached. The specific product or customer message at the end. That one habit can cut the input bill for repeated jobs to a fraction.
+
+Second, anything without a waiting human goes in a batch. Description rewrites, tag clean-ups, translation passes, nightly catalogue checks. Half price, and it stacks with caching.
+
+Third, for any long-running assistant we build, plan the context strategy from day one. Clear old tool results as a matter of course, and compact with a custom summary prompt that names what must survive: the customer's order number, the agreed refund, the rule about never promising delivery dates.
+
+And fourth, remember the warning that more context isn't better. The temptation with a million-token window is to paste the whole catalogue in. The better pattern is a tool that looks up the five products that matter.
+
+Next time: Agent Skills and the Agent SDK. The same skills you know from Claude Code, now on the API, and Claude Code itself as a library.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Context windows ("working memory", "more context isn't automatically better", what counts, 1M-token default, 600 images or PDF pages, accumulation, compaction as "the primary strategy"): https://platform.claude.com/docs/en/build-with-claude/context-windows
+- Prompt caching (automatic and explicit caching, 5-minute default lifetime and refresh, lifetime measured from request start, 1-hour option, multipliers 1.25x and 2x for writes and 0.1x for reads, stacking with batch, full-prefix order tools/system/messages): https://platform.claude.com/docs/en/build-with-claude/prompt-caching
+- Compaction (definition, on demand vs at a token threshold, beta, keep recent turns, background, custom summarisation prompt): https://platform.claude.com/docs/en/build-with-claude/compaction
+- Context editing (tool result clearing, thinking block clearing, "finite resource with diminishing returns"): https://platform.claude.com/docs/en/build-with-claude/context-editing
+- Batch processing (Message Batches API, "most batches finishing in less than 1 hour while reducing costs by 50%"): https://platform.claude.com/docs/en/build-with-claude/batch-processing
+
+
+# Actually Reading the Manual, Episode 30: Agent Skills and the Agent SDK
+
+*Part Five, Building with Claude, Lightly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here.
+
+Two subjects today that connect the developer platform back to everything we already use. Agent Skills, which are the same skill folders you know from Claude Code and the Claude app, explained from the inside. And the Agent SDK, which is Claude Code itself, packaged as a library you can build into your own software.
+
+## Why skills exist
+
+The Agent Skills overview describes skills as "reusable, filesystem-based resources that give Claude domain-specific expertise: workflows, context, and best practices that turn a general-purpose agent into a specialist." And it draws the line with ordinary prompts neatly: prompts are "conversation-level instructions for one-off tasks," while skills "load on demand, so you don't have to repeat the same guidance across conversations."
+
+Anthropic ships pre-built skills for the four office formats: PowerPoint, Excel, Word and PDF. You can write your own. Either way, once a skill is available, Claude uses it when it's relevant.
+
+## Three levels of loading
+
+The heart of the page is how skills load, which it calls progressive disclosure. There are three levels, and the page gives each a rough cost.
+
+Level one is metadata: the skill's name and description, from the header at the top of the file. It's always loaded, at about a hundred tokens per skill. "The description is what Claude matches your request against when determining whether to trigger the Skill, so it must say both what the Skill does and when to use it." Because this is all that sits in context, "you can install many Skills without context penalty."
+
+Level two is instructions: the body of the SKILL.md file. It loads only when the skill is triggered, and the page suggests keeping it under about five thousand tokens.
+
+Level three is resources and code: extra reference files, templates, and scripts in the skill's folder. These cost nothing until used. Reference files enter context only when read. And scripts are the clever part: Claude runs them, and "only their output enters context." The script's code itself never does.
+
+That's a principle worth saying twice. A script inside a skill gives you a deterministic step, done the same way every time, and it's cheap, because Claude only sees the result.
+
+## Writing good skills
+
+The best-practices page adds craft. "Concise is key": once a skill loads, every token in it competes with the conversation. Keep the SKILL.md body under five hundred lines, and split longer material into separate files that the main one points to, but don't nest those references too deeply.
+
+Write descriptions in the third person, because the description is injected into the system prompt. "Processes Excel files and generates reports" is good. "I can help you process Excel files" is to be avoided.
+
+And my favourite section, on degrees of freedom. Match how specific you are to how fragile the task is. The page's analogy is a robot exploring a path. On "a narrow bridge with cliffs on both sides," there's one safe way forward, so give exact instructions or a script, low freedom; its example is database migrations that must run in sequence. In "an open field with no hazards," give general direction and trust Claude, high freedom; its example is code review. Everything else sits in between.
+
+## Skills don't travel by themselves
+
+Two practical warnings from the overview.
+
+The first is about security. "Use Skills only from trusted sources: those you created yourself or obtained from Anthropic." A skill carries instructions and code, so a malicious one "can direct Claude to call tools or run code in ways that don't match the Skill's stated purpose." Skills that fetch from outside addresses are riskier still, because what they fetch can change.
+
+The second is about where skills live. "Custom Skills do not sync across surfaces." A skill uploaded to the Claude app isn't on the API. One uploaded to the API isn't in the app. And Claude Code skills are just folders, separate from both. Sharing differs too: in the Claude app a skill is per person, on the API it's shared across a workspace, and in Claude Code it's either personal or in the project's folder.
+
+## The Agent SDK
+
+Now the second subject. The Agent SDK overview starts with a definition: an agent is "an application that completes a task by planning its own steps and calling tools that read files, run commands, or edit code." Then: "The Agent SDK gives you the same tools, agent loop, and context management that power Claude Code, programmable in Python and TypeScript."
+
+In other words, everything in Part Four, the built-in tools, hooks, subagents, MCP, permissions, sessions, skills, memory, plugins, is available as a library. The SDK even loads skills and instructions from the same dot-claude folders that Claude Code does.
+
+The page includes a comparison that settles which tool to reach for. Want to embed Claude Code's agent in your own application, in a process you run? The Agent SDK. Want interactive work from a terminal? The Claude Code command line. Want to call the API directly and write the loop yourself? The client SDK. Want Anthropic to host the agent entirely? Managed Agents, which is next episode.
+
+## Two rules for builders
+
+The SDK page ends with two rules that matter if we ever ship something.
+
+First, authentication. "Unless previously approved, Anthropic does not allow third party developers to offer claude.ai login or rate limits for their products, including agents built on the Claude Agent SDK." Products built on the SDK use API keys, billed through the developer console. Your Claude subscription is for you, not for powering a product.
+
+Second, branding. You may call your product something "Powered by Claude", or use "Claude Agent" in a menu. You may not call it "Claude Code" or dress it up to look like Claude Code. "Your product should maintain its own branding and not appear to be Claude Code or any Anthropic product." And use is governed by the commercial terms, including when you put it in front of customers.
+
+## What this means for us
+
+First, our skills are already in the right shape: a folder with a SKILL.md and, ideally, scripts for the fragile steps. The best-practices page suggests three upgrades: third-person descriptions that say what and when; bodies under five hundred lines, with detail split out; and scripts for anything on a narrow bridge, such as a Shopify import that must keep products as drafts.
+
+Second, if we want a skill in more than one place, we have to put it there ourselves. A skill in the devops repository is not in your Claude app until it's uploaded there.
+
+Third, the Agent SDK is the natural route if we ever build an internal tool that needs Claude Code's powers without a person at the keyboard: a nightly catalogue checker, say, or a supplier-feed importer. It would run on an API key, with its own budget, and with hooks enforcing the same rules we use now.
+
+And fourth, if anything we build ever faces customers, it carries our brand, not Anthropic's, and it runs on the API, not on your subscription.
+
+Next time: the last episode of Part Five. Managed Agents, where Anthropic runs the whole thing for you.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Agent Skills overview ("reusable, filesystem-based resources", skills vs prompts, pre-built skills, progressive disclosure: level 1 metadata about 100 tokens, level 2 instructions under 5k tokens, level 3 resources, scripts' "only their output enters context", security considerations "Use Skills only from trusted sources", "Custom Skills do not sync across surfaces", sharing scope): https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+- Skill authoring best practices ("Concise is key", degrees of freedom and the narrow-bridge analogy, third-person descriptions, SKILL.md body under 500 lines, avoid deeply nested references): https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+- Agent SDK overview (definition of an agent, "the same tools, agent loop, and context management that power Claude Code", comparison table, capabilities, claude.ai login and rate limits not allowed for third-party products, branding guidelines, Commercial Terms): https://code.claude.com/docs/en/agent-sdk
+
+
+# Actually Reading the Manual, Episode 31: Managed Agents
+
+*Part Five, Building with Claude, Lightly. Narrated by Claudine. Written on 23 October 2026 from Anthropic's own documentation, read that day. Sources are listed below the closing rule.*
+
+Hello, Vincent. Claudine here, for the last episode of Part Five.
+
+We've now seen three ways to build with Claude. Call the API and write the loop yourself. Use the Agent SDK and get Claude Code's loop as a library. Today's is the third: Managed Agents, where Anthropic runs the whole thing. You describe the agent, Anthropic hosts it, gives it a sandbox, keeps its history, and you talk to it from your own software. It's in beta, but it's the most direct route from "we have an idea for an assistant" to "it's running."
+
+## What it is
+
+The overview puts it in a two-column comparison. The Messages API is "direct model prompting access," best for "custom agent loops and fine-grained control." Managed Agents is a "pre-built, configurable agent harness that runs in managed infrastructure," best for "long-running tasks and asynchronous work."
+
+And in a sentence: "Instead of building your own agent loop, tool execution, and runtime, you get a fully managed environment where Claude can read files, run commands, browse the web, and run code securely." The page adds that the harness has prompt caching and compaction built in, the two money-savers from episode twenty-nine, so you don't have to wire them up yourself.
+
+## Four concepts
+
+Managed Agents is built on four ideas, and they map neatly onto things we already know.
+
+An agent: "the model, system prompt, tools, MCP servers, and skills." You create it once and refer to it by name.
+
+An environment: where its sessions run. Either an Anthropic-managed cloud sandbox or a self-hosted sandbox on your own machines. Several sessions can share one environment, but "each session gets its own isolated sandbox (a fresh Linux container)." That's the same arrangement as the cloud sessions I live in.
+
+A session: "a running agent instance within an environment, performing a specific task."
+
+And events: the messages back and forth between your application and the agent: your turns, tool results, status updates. They stream back as they happen, and the full history is kept on Anthropic's servers so you can fetch it later. You can also send more messages while the agent is working, to steer it, or interrupt it.
+
+## The toolset
+
+The built-in tools will sound familiar after Part Four: bash, read, write, edit, glob and grep for files, plus web fetch and web search. You can switch individual tools off, and each one can carry a permission policy that decides whether its calls run without confirmation, require confirmation, or are judged one by one by the server. You can add your own tools too, which your application runs and answers, and MCP servers for outside services.
+
+Two practical details. If a tool's output is very large, over about a hundred thousand characters, it's written to a file in the sandbox and Claude gets a preview with the path, rather than a flood in its context. And for MCP servers that need you to log in, credentials go in what the docs call a vault, where Anthropic stores the OAuth credentials and handles refreshing them. So, as with network secrets in our cloud sessions, the keys don't sit inside the agent's sandbox.
+
+## When to use it
+
+The page lists the workloads it's built for. Long-running execution, "tasks that run for minutes or hours with multiple tool calls." Cloud infrastructure, with sandboxes that already have packages and network access. Self-hosted execution, for compliance or data-residency needs. Minimal infrastructure, with no need to build your own loop or sandbox. Stateful sessions, with files and history that persist across interactions. And scheduled execution, recurring runs on a timetable.
+
+## What it costs
+
+The pricing page is short and clear. Managed Agents is billed on two things: tokens and session runtime. Tokens are billed at the normal model rates, with the usual caching discounts. Runtime is eight US cents per session-hour, measured to the millisecond, and it only counts while the session is actually running. Time spent idle, "waiting for your next message or a tool confirmation," doesn't count. You aren't separately charged for container hours.
+
+One modifier that does not apply: the batch discount. "Sessions are stateful and interactive. There is no batch mode." So the half-price trick from episode twenty-nine belongs to the plain API.
+
+And there's a feature I'd insist on: a session budget. You can give each session a hard ceiling on its cost at public list prices, and once the running total reaches it, the session "stops issuing new model requests." An agent that loops forever can't run up a bill past the number you set.
+
+## The fine print
+
+Two things worth knowing before building anything real.
+
+First, it's beta. Every request needs a beta header, and "behaviors may be refined between releases." A couple of features, such as MCP tunnels, are in an even earlier research preview.
+
+Second, data. Because it's stateful by design, storing "conversation history, sandbox state, and outputs server-side," Managed Agents "is not currently eligible for Zero Data Retention or HIPAA Business Associate Agreement coverage." You can delete sessions and files whenever you like through the API. For a shop handling customer names and addresses, that's a point to weigh: keep personal data in the session only where it's needed, and delete sessions when the job is done.
+
+## What this means for us
+
+First, Managed Agents is the obvious home for the assistants we keep sketching. A supplier-feed importer, a nightly catalogue auditor, a customer-service drafter that reads the inbox and writes drafts: each is a long-running, tool-using job that doesn't need a person watching, which is exactly the workload the page describes. We'd write the agent once, with its rules in the system prompt and its outward tools set to require confirmation.
+
+Second, the session budget is the cost guardrail we've wanted. Give every session a ceiling and the worst case is known before it starts.
+
+Third, keep using the plain API with batching for the big, dumb, bulk jobs. Rewriting five thousand descriptions doesn't need a sandbox or a session. It needs a batch at half price.
+
+And fourth, we're not in a hurry. Everything in this part is something to reach for when a real need appears. For now, Claude Code in the cloud does most of what we'd want a managed agent to do, with you in the loop. When the day comes that a job should run without either of us, this is the page to come back to.
+
+That's Part Five. The last part is short: Trust and Terms. The rules about what Claude may be used for, what happens to your data, and a closing reading list.
+
+---
+
+## Sources (not read aloud)
+
+All pages read on 23 October 2026.
+
+- Claude Managed Agents overview (Messages API vs Managed Agents, "pre-built, configurable agent harness", built-in caching and compaction, four concepts agent/environment/session/events, how it works, when to use it, supported tools, beta header, research-preview features, not eligible for ZDR or HIPAA BAA, deleting sessions and files): https://platform.claude.com/docs/en/managed-agents/overview
+- Environments ("each session gets its own isolated sandbox (a fresh Linux container)"): https://platform.claude.com/docs/en/managed-agents/environments
+- Tools (agent toolset, permission policies, custom tools, large outputs written to the sandbox): https://platform.claude.com/docs/en/managed-agents/tools
+- Sessions (session budget as a hard ceiling on list cost, MCP authentication through vaults): https://platform.claude.com/docs/en/managed-agents/sessions
+- Pricing, Claude Managed Agents section (tokens and session runtime, $0.08 per session-hour while running, batch discount not applicable): https://platform.claude.com/docs/en/about-claude/pricing
