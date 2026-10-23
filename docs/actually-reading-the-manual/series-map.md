@@ -55,5 +55,7 @@ Each episode is read fresh on the day it is written, explained in plain words, a
 30. Agent Skills and the Agent SDK
 31. Managed Agents
 
-**Part Six, Trust and Terms** (planned)
-Usage policy and agents · Privacy, data and safe use of Cowork and Chrome · Closing: the reading list
+**Part Six, Trust and Terms** (written 23 Oct 2026)
+32. The Usage Policy and Agents
+33. Privacy, Data and Safe Use
+34. Closing, and the Reading List
