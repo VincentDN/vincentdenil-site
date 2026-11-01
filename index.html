@@ -970,6 +970,7 @@
         secretUnlocking = false;
         clearTimeout(secretTipTimer);
         navLinks.forEach(function(a){ a.classList.remove('tip-open', 'secret-tap', 'secret-unlocked'); });
+        tipArmed = null;
       }
 
       nav.addEventListener('click', function(e){
@@ -997,6 +998,29 @@
         showSecretTip(a, '🔓 Level unlocked!', 5000);
         var dest = a.getAttribute('href');
         setTimeout(function(){ window.location.href = dest; }, 1200);
+      });
+
+      /* ---------------- touch: first tap shows the tooltip, second tap follows the link ---------------- */
+      var noHover = window.matchMedia ? window.matchMedia('(hover: none)') : { matches: false };
+      var tipArmed = null;
+
+      function disarmTip(){
+        if(tipArmed){ tipArmed.classList.remove('tip-open'); tipArmed = null; }
+      }
+
+      nav.addEventListener('click', function(e){
+        var a = e.target.closest && e.target.closest('.btn');
+        if(!a || !noHover.matches || !a.getAttribute('data-tooltip')) return;
+        if(nerdMode && a.classList.contains('secret-btn')) return; // the secret button has its own tap logic
+        if(tipArmed === a){ tipArmed = null; return; }              // second tap: let the link open
+        e.preventDefault();
+        disarmTip();
+        a.classList.add('tip-open');
+        tipArmed = a;
+      });
+
+      document.addEventListener('click', function(e){
+        if(tipArmed && !tipArmed.contains(e.target)) disarmTip();
       });
 
       /* ---------------- nerd mode toggle ---------------- */
