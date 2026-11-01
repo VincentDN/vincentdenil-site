@@ -25,6 +25,10 @@ These indexing rules apply repo-wide. They don't require the public portfolio ho
 
 **Narrator: Claudine.** Spoken briefings and Walking Through episodes are narrated by Claudine, Vincent's voice assistant, named after the British narrator voice ElevenLabs uses to turn the Markdown into audio. Her job is to brief Vincent on what is happening in his businesses and to teach him what he needs to know. She speaks to him as "you", may say "I" and introduce herself by name at the start, and sounds like a knowledgeable British colleague: warm, clear, lightly wry, with British idiom, never salesy. Write for the ear: short sentences, numbers rounded the way a person says them, dates as words, and no tables, URLs, IDs or file paths in the narration (sources go below a closing `---` rule).
 
+## Narrated audio delivery (standing rule)
+
+Narrated MP3s of Walking Through episodes and briefings are delivered to `outbound/audio/` (series in a subfolder), named after the MD they narrate, for Vincent to download from the repo. They are not site content: do not link them from `/projects/`, `/docs/` or any index, and do not put them next to the MD in `docs/`. `functions/outbound/` keeps `/outbound/` off the live site; the indexing rules above do not apply to `outbound/`. (Vincent, 1 Nov 2026.)
+
 ## Agent instruction files (standing rule)
 
 We run a multi-agent workflow, so `AGENTS.md` is the single source of instructions for every agent. `CLAUDE.md` must always exist, stay blank of instructions, and only defer to this file:
