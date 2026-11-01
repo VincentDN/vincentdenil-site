@@ -12,13 +12,10 @@ for p in eps:
     date = re.search(r'Written on (\d+ \w+ \d{4})', s)
     rows.append((p.name, title.replace('Actually Reading the Manual, ', ''), date.group(1) if date else ''))
 (here / 'actually-reading-the-manual-full-text.md').write_text(''.join(full))
-tr = lambda tag, href, label, date, size='&#8212;': f'            <tr>\n              <td><span class="tag">[{tag}]</span><a href="{href}">{html.escape(label)}</a></td>\n              <td>{date}</td><td>{size}</td>\n            </tr>\n'
+tr = lambda tag, href, label, date: f'            <tr>\n              <td><span class="tag">[{tag}]</span><a href="{href}">{html.escape(label)}</a></td>\n              <td>{date}</td><td>&#8212;</td>\n            </tr>\n'
 body = tr('UP', '../', '../', '&#8212;') + tr('TXT', 'series-map.md', 'series-map.md', '') + tr('TXT', 'actually-reading-the-manual-full-text.md', 'actually-reading-the-manual-full-text.md', '')
 for name, title, date in rows:
     body += tr('TXT', name, f'{name}  ({title})', date)
-    mp3 = here / name.replace('.md', '.mp3')
-    if mp3.exists():  # narrated audio (Claudine, Sonia voice) for offline listening
-        body += tr('MP3', mp3.name, f'{mp3.name}  (audio)', date, f'{mp3.stat().st_size / 1e6:.1f} MB')
 page = f'''<!doctype html>
 <html lang="en">
 <head>
