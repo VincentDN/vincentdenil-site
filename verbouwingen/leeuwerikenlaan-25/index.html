@@ -23,7 +23,7 @@
   .foto figcaption{margin-top:8px;font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer)}
   .note{max-width:62ch}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  .ba{position:relative;aspect-ratio:3/4;max-width:420px;margin:0 0 8px;border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--panel);--pos:50%;touch-action:pan-y}
+  .ba{position:relative;aspect-ratio:3/4;max-width:420px;margin:0 0 8px;border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--panel);--pos:50%;touch-action:pan-y;cursor:ew-resize;-webkit-user-select:none;user-select:none}
   .foto.smal img{max-width:340px}
   .ba.wide{aspect-ratio:2000/1203;max-width:none}
   .ba.tall{aspect-ratio:9/20;max-width:340px}
@@ -33,7 +33,7 @@
   .ba .knob{position:absolute;top:50%;left:var(--pos);width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;background:#fff;border:2px solid var(--accent);color:var(--accent-strong);display:flex;align-items:center;justify-content:center;font-size:14px;pointer-events:none;box-shadow:0 1px 6px rgba(0,0,0,.35)}
   .ba .lbl{position:absolute;top:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,43,67,.8);color:#fff;padding:3px 8px;border-radius:3px;pointer-events:none}
   .ba .lbl.l{left:10px}.ba .lbl.r{right:10px}
-  .ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+  .ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
   .ba input:focus-visible~.knob{outline:3px solid var(--accent-strong);outline-offset:2px}
   .car{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin:0 0 6px;padding:0 0 8px}
   .car figure{flex:0 0 86%;scroll-snap-align:center;margin:0;min-width:0}
@@ -192,8 +192,33 @@
 
 <footer class="site"><div class="row">All rights reserved, Atelier Vincent De Nil BV, Belgium. &middot; <a href="/verbouwingen/">/verbouwingen/</a></div></footer>
 <script>
-document.querySelectorAll('.ba').forEach(function(b){var r=b.querySelector('input');
-function s(){b.style.setProperty('--pos',r.value+'%')}r.addEventListener('input',s);s();});
+document.querySelectorAll('.ba').forEach(function(b){
+  var r=b.querySelector('input'),id=null,x0=0,y0=0,drag=false,imgs=b.querySelectorAll('img');
+  function set(v){v=Math.max(0,Math.min(100,v));r.value=v;b.style.setProperty('--pos',v+'%')}
+  function fromX(x){var a=b.getBoundingClientRect();set((x-a.left)/a.width*100)}
+  r.addEventListener('input',function(){set(+r.value)});
+  b.addEventListener('pointerdown',function(e){
+    id=e.pointerId;x0=e.clientX;y0=e.clientY;
+    if(e.pointerType==='mouse'){drag=true;b.setPointerCapture(id);fromX(e.clientX);e.preventDefault()}
+    else drag=false;
+  });
+  b.addEventListener('pointermove',function(e){
+    if(e.pointerId!==id)return;
+    if(!drag){
+      var dx=Math.abs(e.clientX-x0),dy=Math.abs(e.clientY-y0);
+      if(dx>8&&dx>dy){drag=true;try{b.setPointerCapture(id)}catch(_){}}
+    }
+    if(drag)fromX(e.clientX);
+  });
+  function end(e){
+    if(e.pointerId!==id)return;
+    if(!drag&&e.type==='pointerup'&&Math.abs(e.clientX-x0)<8&&Math.abs(e.clientY-y0)<8)fromX(e.clientX);
+    id=null;drag=false;
+  }
+  b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end);
+  imgs.forEach(function(i){i.draggable=false});
+  set(+r.value);
+});
 </script>
 </body>
 </html>
