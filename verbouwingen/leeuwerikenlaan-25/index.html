@@ -24,6 +24,7 @@
   .note{max-width:62ch}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   .ba{position:relative;aspect-ratio:3/4;max-width:420px;margin:0 0 8px;border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--panel);--pos:50%;touch-action:pan-y}
+  .ba.tall{aspect-ratio:9/20;max-width:340px}
   .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .ba .voor{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
   .ba .line{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 4px rgba(0,0,0,.4);pointer-events:none}
@@ -81,7 +82,7 @@
     </section>
     <section class="sheet-section" id="gastentoilet">
       <h2 class="section">Gastentoilet</h2>
-      <div class="ba" id="ba">
+      <div class="ba">
         <img src="gastentoilet-na.webp" width="1501" height="2000" alt="Gastentoilet na de verbouwing: groene accenttegels, houten tabletje, gepleisterde muren en hangtoilet">
         <img class="voor" src="gastentoilet-voor.webp" width="1134" height="1510" alt="Gastentoilet voor de verbouwing: oude bloemetjestegels en toilet met opbouwreservoir">
         <span class="lbl l">Voor</span><span class="lbl r">Na</span>
@@ -91,14 +92,24 @@
       <p class="map-caption" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);margin:0 0 18px">Schuif om voor en na te vergelijken</p>
       <p class="note">Strijd met Heleen verloren. Ik had dit liever volledig uitgetegeld gezien, maar ze wil een accenttegel met gipsmuren &#129335;</p>
       <p class="note">Bij verdere vragen gelieve u te wenden tot de bouwheer (Heleen).</p>
+
+      <h3>Mockup met verlichte spiegel</h3>
+      <div class="ba tall">
+        <img src="gastentoilet-mockup.webp" width="858" height="2000" alt="AI-mockup van het gastentoilet met groene accenttegels, houten tabletje en een rond verlicht spiegeltje">
+        <img class="voor" src="gastentoilet-voor-2.webp" width="912" height="1994" alt="Gastentoilet voor de verbouwing: oude bloemetjestegels, toilet met opbouwreservoir en een spiegeltje">
+        <span class="lbl l">Voor</span><span class="lbl r">Mockup</span>
+        <span class="line"></span><span class="knob" aria-hidden="true">&#8596;</span>
+        <input type="range" min="0" max="100" value="50" aria-label="Schuif tussen voor en mockup">
+      </div>
+      <p class="note">Nota: die verlichte spiegel gaan we niet doen, zegt Heleen. Ik vond hem wel ferm, maar dat was een uitvinding van de AI.</p>
     </section>
   </article>
 </main>
 
 <footer class="site"><div class="row">All rights reserved, Atelier Vincent De Nil BV, Belgium. &middot; <a href="/verbouwingen/">/verbouwingen/</a></div></footer>
 <script>
-(function(){var b=document.getElementById('ba');if(!b)return;var r=b.querySelector('input');
-function s(){b.style.setProperty('--pos',r.value+'%')}r.addEventListener('input',s);s();})();
+document.querySelectorAll('.ba').forEach(function(b){var r=b.querySelector('input');
+function s(){b.style.setProperty('--pos',r.value+'%')}r.addEventListener('input',s);s();});
 </script>
 </body>
 </html>
