@@ -27,7 +27,7 @@ These indexing rules apply repo-wide. They don't require the public portfolio ho
 
 ## Narrated audio delivery (standing rule)
 
-Narrated MP3s of Walking Through episodes and briefings are delivered to `outbound/audio/` (series in a subfolder), named after the MD they narrate, for Vincent to download from the repo. They are not site content: do not link them from `/projects/`, `/docs/` or any index, and do not put them next to the MD in `docs/`. `functions/outbound/` keeps `/outbound/` off the live site; the indexing rules above do not apply to `outbound/`. (Vincent, 1 Nov 2026.)
+Narrated MP3s of Walking Through episodes and briefings are delivered to `outbound/audio/` (series in a subfolder), named after the MD they narrate, for Vincent to download from the repo. They are not site content: do not link them from `/projects/`, `/docs/` or any index, and do not put them next to the MD in `docs/`. `functions/outbound/` keeps `/outbound/` off the live site; the indexing rules above do not apply to `outbound/`. (Vincent, 1 Nov 2026.) How to make the MP3s (free Microsoft Edge voice `en-GB-SoniaNeural`, scripts and checks): [tools/narration/README.md](tools/narration/README.md).
 
 ## Agent instruction files (standing rule)
 
