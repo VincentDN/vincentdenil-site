@@ -42,6 +42,8 @@
   .car figcaption{margin-top:6px;font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer)}
   .car:focus-visible{outline:3px solid var(--accent-strong);outline-offset:2px}
   @media (min-width:721px){.car figure{flex-basis:56%}}
+  .flappy{display:block;width:100%;max-width:340px;aspect-ratio:2/3;border:1px solid var(--line-strong);border-radius:6px;background:#cfe3f3;touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .flappy:focus-visible{outline:3px solid var(--accent-strong);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -180,6 +182,11 @@
       <p class="note">Oude ontwerpen van de living, niet meer haalbaar door het wegvallen van de schouw.</p>
       <p class="note">Maar eens bespreken met Tom: latere toevoeging van een inbouwcassette en de schouwmantel aftegelen, haalbaar?</p>
     </section>
+    <section class="sheet-section" id="flappy">
+      <h2 class="section">Pauze</h2>
+      <canvas class="flappy" id="flappy-c" width="320" height="480" tabindex="0" role="img" aria-label="Flappy Bird: tik of druk op spatie om te vliegen"></canvas>
+      <p class="map-caption" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);margin:8px 0 0">Tik of spatie om te vliegen</p>
+    </section>
   </article>
 </main>
 
@@ -212,6 +219,26 @@ document.querySelectorAll('.ba').forEach(function(b){
   imgs.forEach(function(i){i.draggable=false});
   set(+r.value);
 });
+</script>
+<script>
+(function(){var c=document.getElementById('flappy-c'),x=c.getContext('2d'),W=320,H=480,G=130,best=0,st,b,v,pipes,t,sc,raf;
+function reset(){b=200;v=0;pipes=[];t=0;sc=0;st='idle'}
+function flap(){if(st==='dead'){if(t>25)reset();return}st='play';v=-6.2}
+function step(){if(st==='play'){v+=.42;b+=v;t++;if(t%90===1)pipes.push({x:W,y:80+Math.random()*(H-G-160),p:0});
+ pipes.forEach(function(p){p.x-=2.2;if(!p.p&&p.x+44<60){p.p=1;sc++}if(60+12>p.x&&60-12<p.x+44&&(b-12<p.y||b+12>p.y+G))die()});
+ pipes=pipes.filter(function(p){return p.x>-50});if(b>H-30||b<0)die()}else if(st==='dead')t++}
+function die(){st='dead';t=0;best=Math.max(best,sc)}
+function draw(){x.fillStyle='#cfe3f3';x.fillRect(0,0,W,H);x.fillStyle='#0f4a70';pipes.forEach(function(p){x.fillRect(p.x,0,44,p.y);x.fillRect(p.x,p.y+G,44,H);});
+ x.fillStyle='#d9c9a3';x.fillRect(0,H-30,W,30);x.fillStyle='#e5a742';x.beginPath();x.arc(60,b,12,0,7);x.fill();x.fillStyle='#002b43';x.beginPath();x.arc(65,b-3,2.5,0,7);x.fill();
+ x.fillStyle='#002b43';x.font='bold 28px ui-monospace,monospace';x.textAlign='center';x.fillText(sc,W/2,50);
+ if(st!=='play'){x.font='16px ui-monospace,monospace';x.fillText(st==='dead'?'Game over, best '+best:'Tik om te starten',W/2,H/2)}}
+function loop(){step();draw();raf=requestAnimationFrame(loop)}
+function act(e){e.preventDefault();flap()}
+c.addEventListener('pointerdown',act);
+c.addEventListener('keydown',function(e){if(e.code==='Space'||e.key===' '||e.key==='ArrowUp')act(e)});
+reset();draw();
+if('IntersectionObserver' in window)new IntersectionObserver(function(en){if(en[0].isIntersecting){if(!raf)loop()}else{cancelAnimationFrame(raf);raf=0}}).observe(c);else loop();
+})();
 </script>
 </body>
 </html>
