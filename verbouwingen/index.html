@@ -21,7 +21,8 @@
   /* Light mode (Blue Sheet palette) on top of the shared FTP look */
   :root{--flat:#eaf3fa;--term-bg:#ffffff;--term-line:rgba(0,43,67,.22);--text:#002b43;--text-dim:#2f5f84;--link:#0b5a91}
   .term{box-shadow:0 12px 36px rgba(0,43,67,.12)}
-  .tunnel{text-shadow:none}
+  /* the tunnel stays in the original dark look */
+  .tunnel{background:#04141f;color:#9fe0ff;text-shadow:0 0 6px rgba(140,210,255,.35);border-bottom-color:rgba(160,210,255,.25)}
   table.listing td{border-bottom-color:rgba(0,43,67,.12)}
   table.listing a:hover,table.listing a:focus-visible{color:#06406b}
 </style>
