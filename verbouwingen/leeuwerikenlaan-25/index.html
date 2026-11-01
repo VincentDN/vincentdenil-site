@@ -23,6 +23,15 @@
   .foto figcaption{margin-top:8px;font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer)}
   .note{max-width:62ch}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  .ba{position:relative;aspect-ratio:3/4;max-width:420px;margin:0 0 8px;border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--panel);--pos:50%;touch-action:pan-y}
+  .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .ba .voor{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+  .ba .line{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 4px rgba(0,0,0,.4);pointer-events:none}
+  .ba .knob{position:absolute;top:50%;left:var(--pos);width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;background:#fff;border:2px solid var(--accent);color:var(--accent-strong);display:flex;align-items:center;justify-content:center;font-size:14px;pointer-events:none;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+  .ba .lbl{position:absolute;top:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,43,67,.8);color:#fff;padding:3px 8px;border-radius:3px;pointer-events:none}
+  .ba .lbl.l{left:10px}.ba .lbl.r{right:10px}
+  .ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+  .ba input:focus-visible~.knob{outline:3px solid var(--accent-strong);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -41,6 +50,7 @@
 
     <nav aria-label="Ruimtes"><ul class="anchors">
       <li><a href="#badkamer">Badkamer</a></li>
+      <li><a href="#gastentoilet">Gastentoilet</a></li>
     </ul></nav>
 
     <section class="sheet-section" id="badkamer">
@@ -69,9 +79,26 @@
       <p class="note">Het douchescherm installeren we als laatste. Ik ga proberen om deze maand nog een geribbelde glaswand in de juiste maat te vinden. Ik denk dat dat heel ferm staat bij de klassiekere, simpele badkamerlook.</p>
       <p class="note">Momenteel is er een gewone glasplaat besteld bij DESCO. Die kunnen we teruggeven als we het juiste stuk vinden.</p>
     </section>
+    <section class="sheet-section" id="gastentoilet">
+      <h2 class="section">Gastentoilet</h2>
+      <div class="ba" id="ba">
+        <img src="gastentoilet-na.webp" width="1501" height="2000" alt="Gastentoilet na de verbouwing: groene accenttegels, houten tabletje, gepleisterde muren en hangtoilet">
+        <img class="voor" src="gastentoilet-voor.webp" width="1134" height="1510" alt="Gastentoilet voor de verbouwing: oude bloemetjestegels en toilet met opbouwreservoir">
+        <span class="lbl l">Voor</span><span class="lbl r">Na</span>
+        <span class="line"></span><span class="knob" aria-hidden="true">&#8596;</span>
+        <input type="range" min="0" max="100" value="50" aria-label="Schuif tussen voor en na">
+      </div>
+      <p class="map-caption" style="font-family:var(--font-mono);font-size:12px;color:var(--text-dimmer);margin:0 0 18px">Schuif om voor en na te vergelijken</p>
+      <p class="note">Strijd met Heleen verloren. Ik had dit liever volledig uitgetegeld gezien, maar ze wil een accenttegel met gipsmuren &#129335;</p>
+      <p class="note">Bij verdere vragen gelieve u te wenden tot de bouwheer (Heleen).</p>
+    </section>
   </article>
 </main>
 
 <footer class="site"><div class="row">All rights reserved, Atelier Vincent De Nil BV, Belgium. &middot; <a href="/verbouwingen/">/verbouwingen/</a></div></footer>
+<script>
+(function(){var b=document.getElementById('ba');if(!b)return;var r=b.querySelector('input');
+function s(){b.style.setProperty('--pos',r.value+'%')}r.addEventListener('input',s);s();})();
+</script>
 </body>
 </html>
