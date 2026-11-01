@@ -17,6 +17,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/ftp.css">
+<style>
+  /* Light mode (Blue Sheet palette) on top of the shared FTP look */
+  :root{--flat:#eaf3fa;--term-bg:#ffffff;--term-line:rgba(0,43,67,.22);--text:#002b43;--text-dim:#2f5f84;--link:#0b5a91}
+  .term{box-shadow:0 12px 36px rgba(0,43,67,.12)}
+  .tunnel{text-shadow:none}
+  table.listing td{border-bottom-color:rgba(0,43,67,.12)}
+  table.listing a:hover,table.listing a:focus-visible{color:#06406b}
+</style>
 </head>
 
 <body>
@@ -25,9 +33,10 @@
     <a class="brand" href="/">🦌 AVDN - EXPERIMENTS AND PROJECTS</a>
 
     <section class="term">
+      <pre id="tunnel" class="tunnel" aria-hidden="true"></pre>
+
       <div class="term-body">
         <p class="line dim"><strong>/verbouwingen/</strong></p>
-        <p class="line dim">Verbouwingen en verhuis: interieur en planning per adres.</p>
 
         <table class="listing">
           <thead>
@@ -39,15 +48,15 @@
               <td>&#8212;</td><td>&#8212;</td>
             </tr>
             <tr>
-              <td><span class="tag">[DIR]</span><a href="leeuwerikenlaan-25/">leeuwerikenlaan-25/  (Leeuwerikenlaan 25 – interieur en planning)</a></td>
+              <td><span class="tag">[DIR]</span><a href="leeuwerikenlaan-25/">Leeuwerikenlaan 25: Interieur en planning</a></td>
               <td>2026-11-01</td><td>&#8212;</td>
             </tr>
             <tr>
-              <td><span class="tag">[DIR]</span><a href="leopoldlaan-9/">leopoldlaan-9/  (Leopoldlaan 9 – interieur en planning)</a></td>
+              <td><span class="tag">[DIR]</span><a href="leopoldlaan-9/">Leopoldlaan 9: interieur en planning</a></td>
               <td>2026-11-01</td><td>&#8212;</td>
             </tr>
             <tr>
-              <td><span class="tag">[DIR]</span><a href="verhuisdagen/">verhuisdagen/  (Verhuisdagen – planning, De Grote Verhuis)</a></td>
+              <td><span class="tag">[DIR]</span><a href="verhuisdagen/">Verhuis en Logistiek</a></td>
               <td>2026-11-01</td><td>&#8212;</td>
             </tr>
           </tbody>
@@ -66,5 +75,6 @@
 
   </main>
   <script src="/assets/ftp-size.js" defer></script>
+  <script src="/assets/ftp-tunnel.js" defer></script>
 </body>
 </html>
