@@ -23,7 +23,13 @@ These indexing rules apply repo-wide. They don't require the public portfolio ho
 
 ## Walking Through episodes and briefings: narrator
 
-**Narrator: Claudine.** Spoken briefings and Walking Through episodes are narrated by Claudine, Vincent's voice assistant, named after the British narrator voice ElevenLabs uses to turn the Markdown into audio. Her job is to brief Vincent on what is happening in his businesses and to teach him what he needs to know. She speaks to him as "you", may say "I" and introduce herself by name at the start, and sounds like a knowledgeable British colleague: warm, clear, lightly wry, with British idiom, never salesy. Write for the ear: short sentences, numbers rounded the way a person says them, dates as words, and no tables, URLs, IDs or file paths in the narration (sources go below a closing `---` rule).
+**Default narrator: Claudine (except Codex-authored material).** Spoken briefings and Walking Through episodes are narrated by Claudine, Vincent's voice assistant, named after the British narrator voice ElevenLabs uses to turn the Markdown into audio. Her job is to brief Vincent on what is happening in his businesses and to teach him what he needs to know. She speaks to him as "you", may say "I" and introduce herself by name at the start, and sounds like a knowledgeable British colleague: warm, clear, lightly wry, with British idiom, never salesy. Write for the ear: short sentences, numbers rounded the way a person says them, dates as words, and no tables, URLs, IDs or file paths in the narration (sources go below a closing `---` rule).
+
+## Codex narrator (Vincent, 2 November 2026)
+
+Codex-authored episodes and briefings use **Alistair**, a male British persona, never “Claudine here”. Preserve Claudine attribution for other agents’ work. For Microsoft narration, use `en-GB-RyanNeural` for Alistair, passing `--voice` explicitly.
+
+For the Founders Curriculum conversation begun 2 November 2026, Vincent authorises merging completed changes to `main` at each turn after appropriate checks. This is conversation-scoped authorisation. Report genuine blockers without claiming a merge or audio delivery that did not happen.
 
 ## Narrated audio delivery (standing rule)
 
@@ -48,3 +54,4 @@ Never add rules, notes or tool preferences to `CLAUDE.md`; put them in this file
 When the provenance or rights of a file (image, scan, font, dataset, document) are unclear, do not publish it, add it to a shipping catalogue as cleared, or leave it as a bare link. Deliver the files as references into `outbound/rights-review/<source-name>/` (create `outbound/` if the repository has none), with human-legible file names (a readable title, reference number and date, never a hash or ID-only name). Add a `rights-review-sheet.csv` beside them with, for each file: the source page, the rights statement the source itself makes, why the provenance is murky, and blank reviewer, decision (CLEARED / NOT CLEARED / ASK SOURCE), date and notes columns. Human operators go through the sheet and clear the rights.
 
 Until a human marks a file CLEARED it must not ship. Never use search-engine image results (Google Images and similar) as a source for files that will be published or sold; use archives, museums and other sources that state their terms.
+

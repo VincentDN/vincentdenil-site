@@ -66,3 +66,15 @@ python3 -c "import sys; sys.path.insert(0,'tools/narration'); from md_to_narrati
 python3 -m piper -m en_GB-jenny_dioco-medium -f ep.wav < ep.txt
 ffmpeg -i ep.wav -ac 1 -b:a 64k EPISODE.mp3
 ```
+
+
+## Alistair: Codex-authored narration
+
+Codex-written episodes use Alistair, a male British persona. Use `--voice en-GB-RyanNeural` explicitly; the default Sonia voice remains for Claudine. For the new Founder’s Curriculum Part Four:
+
+```bash
+mkdir -p outbound/audio/founder-curriculum
+python3 tools/narration/narrate.py docs/walking-through-founder-curriculum-part-4-full-text.md outbound/audio/founder-curriculum/walking-through-founder-curriculum-part-4-full-text.mp3 --voice en-GB-RyanNeural
+```
+
+Apply the duration/word-count and completeness checks above before delivery. The narration ends at the first horizontal rule, before the reader’s companion and sources.
