@@ -1,0 +1,4 @@
+{
+  "retention_days": null,
+  "note": "Monthly cleanup is wired up, but deletion waits for Vincent's retention choice. Only ledger-managed MP3s expire; source scripts and validation reports remain. Git history is never rewritten."
+}
