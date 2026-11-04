@@ -93,7 +93,7 @@ Delivered request IDs are immutable and are not regenerated after retention clea
 
 ### Cleanup and retention
 
-The workflow runs cleanup monthly (first day, 06:17 UTC) and after delivery. `tools/narration/retention.json` controls retention. `null` disables deletion pending Vincent's choice; an integer of at least seven sets the number of days from generation. Only completed ledger-managed MP3s whose stored hashes still match can expire. Sources, validation reports and receipts stay. Legacy untracked MP3s are never swept automatically.
+Vincent selected **only clean up when asked** on 4 November 2026. There is no scheduled cleanup, and `tools/narration/retention.json` stays `null` to disable automatic deletion. For a specific age-based cleanup request, preview the affected files, temporarily set the requested number of days (at least seven), run `deliver.py --cleanup-only`, then restore `null` before committing. Do not merge a non-null retention setting as a standing policy unless Vincent explicitly changes this preference. Only completed ledger-managed MP3s whose stored hashes still match can expire. Sources, validation reports and receipts stay. Legacy untracked MP3s are never swept automatically.
 
 Cleanup commits deletions to main, so normal GitHub sync removes those MP3s locally too. Copy anything to keep outside the checkout. Deletion does not shrink Git history; no history rewriting is performed.
 

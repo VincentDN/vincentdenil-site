@@ -6,8 +6,6 @@ on:
     paths:
       - 'tools/narration/requests.json'
       - 'tools/narration/retention.json'
-  schedule:
-    - cron: '17 6 1 * *'
 permissions:
   contents: write
 concurrency:
