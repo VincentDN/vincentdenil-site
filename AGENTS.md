@@ -58,3 +58,9 @@ Until a human marks a file CLEARED it must not ship. Never use search-engine ima
 
 
 Vincent, 3 November 2026: MP3 delivery must include committing the verified MP3 to `outbound/audio/` in the repository and merging it to `main` in this conversation. Temporary download artifacts alone do not complete delivery. Include the validation report when available and verify the committed file before reporting completion.
+
+## Reliable TTS repository delivery (Vincent, 4 November 2026)
+
+For every requested TTS delivery, append an explicit request to `tools/narration/requests.json` with a new unique ID, source SHA-256, source Markdown path, output directory under `outbound/audio/`, and the appropriate voice. Merge the request to `main`; the repository delivery workflow renders, validates and commits the MP3, validation report and delivery receipt to `main` for Vincent's local GitHub sync. This persistent repository-write workflow is authorised by Vincent's request to make delivery work every time. Do not treat temporary artifacts as final delivery. Check the run result and the MP3 on `main` before claiming success. Service failures must be reported; rerun the failed workflow after resolving them.
+
+Codex uses Alistair / `en-GB-RyanNeural`. Read `tools/narration/README.md` for the queue and retention procedure. Keep scripts permanently. Cleanup applies only to ledger-managed audio under the selected retention policy; never rewrite Git history or silently delete untracked legacy audio. Vincent selected **only clean up when asked** on 4 November 2026. Automatic deletion stays disabled; no scheduled cleanup. For an explicit cleanup request, preview the affected ledger-managed files and apply only the requested scope. Git cleanup also removes files from a synced working copy, so offline keepsakes must be copied outside that checkout.

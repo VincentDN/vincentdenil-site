@@ -78,3 +78,23 @@ python3 tools/narration/narrate.py docs/walking-through-founder-curriculum-part-
 ```
 
 Apply the duration/word-count and completeness checks above before delivery. The narration ends at the first horizontal rule, before the reader’s companion and sources.
+
+## Standard delivery through GitHub sync
+
+Every TTS request must finish with its MP3 committed under `outbound/audio/` on `main`. The `Narration repository delivery` workflow has repository write permission specifically to commit validated audio and its JSON records. Temporary Actions artifacts are not delivery.
+
+1. Commit the narration script. Append an object to `tools/narration/requests.json` with a unique `id`, `source` under `docs/`, exact `source_sha256`, `output_dir` under `outbound/audio/`, and `voice`. Use Ryan for Alistair and Sonia for Claudine.
+2. Merge the request to main. The workflow runs for request/policy changes or a manual dispatch; it never runs on untrusted pull requests.
+3. The existing chunk renderer checks duration and full decoding, retries failed chunks up to three times, and writes the MP3 and report. The delivery worker records completed request IDs in `outbound/audio/deliveries.json`.
+4. The workflow commits only audio/JSON under `outbound/audio/`. It rejects concurrent changes to sources, requests or narration code, and never force-pushes. If that check or a service call fails, inspect the log and rerun the failed job. A successful rerun reads the latest main.
+5. Verify the completed workflow and the file on main, then return its repository link. The user's normal GitHub sync downloads it.
+
+Delivered request IDs are immutable and are not regenerated after retention cleanup. For an intentional regeneration or voice change, append a new ID. MP3 names follow their source Markdown stem. Supported British voices: Ryan, Sonia and Libby. The shared renderer currently lives in `render_founder_part_four.py`; `deliver.py` sets its source, voice and output for each request.
+
+### Cleanup and retention
+
+Vincent selected **only clean up when asked** on 4 November 2026. There is no scheduled cleanup, and `tools/narration/retention.json` stays `null` to disable automatic deletion. For a specific age-based cleanup request, preview the affected files, temporarily set the requested number of days (at least seven), run `deliver.py --cleanup-only`, then restore `null` before committing. Do not merge a non-null retention setting as a standing policy unless Vincent explicitly changes this preference. Only completed ledger-managed MP3s whose stored hashes still match can expire. Sources, validation reports and receipts stay. Legacy untracked MP3s are never swept automatically.
+
+Cleanup commits deletions to main, so normal GitHub sync removes those MP3s locally too. Copy anything to keep outside the checkout. Deletion does not shrink Git history; no history rewriting is performed.
+
+Run `python3 -m unittest discover -s tools/narration -p test_delivery.py -v` to check path restrictions, immutable receipts and cleanup behavior.

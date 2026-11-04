@@ -1,0 +1,9 @@
+[
+  {
+    "id": "founder-part-four-alistair-2026-11-04",
+    "source": "docs/walking-through-founder-curriculum-part-4-full-text.md",
+    "source_sha256": "c519c05d989b711b51d80bf971c00053a190b107a1384c3de9a31799d0707733",
+    "output_dir": "outbound/audio/founder-curriculum",
+    "voice": "en-GB-RyanNeural"
+  }
+]
