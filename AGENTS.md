@@ -55,3 +55,6 @@ When the provenance or rights of a file (image, scan, font, dataset, document) a
 
 Until a human marks a file CLEARED it must not ship. Never use search-engine image results (Google Images and similar) as a source for files that will be published or sold; use archives, museums and other sources that state their terms.
 
+
+
+Vincent, 3 November 2026: MP3 delivery must include committing the verified MP3 to `outbound/audio/` in the repository and merging it to `main` in this conversation. Temporary download artifacts alone do not complete delivery. Include the validation report when available and verify the committed file before reporting completion.
