@@ -1,0 +1,108 @@
+{
+  "source": "docs/walking-through-founder-curriculum-part-4-full-text.md",
+  "source_sha256": "c519c05d989b711b51d80bf971c00053a190b107a1384c3de9a31799d0707733",
+  "voice": "en-GB-RyanNeural",
+  "words": 2524,
+  "duration_seconds": 1018.08,
+  "words_per_second": 2.4791764890774792,
+  "chunks": [
+    {
+      "chunk": 0,
+      "words": 150,
+      "duration": 62.232,
+      "words_per_second": 2.4103355187042035
+    },
+    {
+      "chunk": 1,
+      "words": 149,
+      "duration": 56.088,
+      "words_per_second": 2.65653972329197
+    },
+    {
+      "chunk": 2,
+      "words": 166,
+      "duration": 64.08,
+      "words_per_second": 2.5905118601747814
+    },
+    {
+      "chunk": 3,
+      "words": 148,
+      "duration": 61.2,
+      "words_per_second": 2.418300653594771
+    },
+    {
+      "chunk": 4,
+      "words": 163,
+      "duration": 66.408,
+      "words_per_second": 2.454523551379352
+    },
+    {
+      "chunk": 5,
+      "words": 161,
+      "duration": 62.232,
+      "words_per_second": 2.587093456742512
+    },
+    {
+      "chunk": 6,
+      "words": 156,
+      "duration": 65.64,
+      "words_per_second": 2.376599634369287
+    },
+    {
+      "chunk": 7,
+      "words": 146,
+      "duration": 58.44,
+      "words_per_second": 2.4982888432580426
+    },
+    {
+      "chunk": 8,
+      "words": 161,
+      "duration": 64.536,
+      "words_per_second": 2.4947316226602205
+    },
+    {
+      "chunk": 9,
+      "words": 152,
+      "duration": 62.88,
+      "words_per_second": 2.4173027989821882
+    },
+    {
+      "chunk": 10,
+      "words": 154,
+      "duration": 61.008,
+      "words_per_second": 2.524259113558877
+    },
+    {
+      "chunk": 11,
+      "words": 152,
+      "duration": 65.352,
+      "words_per_second": 2.3258660790794465
+    },
+    {
+      "chunk": 12,
+      "words": 181,
+      "duration": 72.24,
+      "words_per_second": 2.5055370985603544
+    },
+    {
+      "chunk": 13,
+      "words": 175,
+      "duration": 71.352,
+      "words_per_second": 2.452629218522256
+    },
+    {
+      "chunk": 14,
+      "words": 158,
+      "duration": 64.704,
+      "words_per_second": 2.4418892185954504
+    },
+    {
+      "chunk": 15,
+      "words": 152,
+      "duration": 59.688,
+      "words_per_second": 2.5465755260688914
+    }
+  ],
+  "mp3_sha256": "6579d08583e3f040365d8e8eb09fab92c59200447b49f1f04b81c73cf18e96f2",
+  "checks": "Per-chunk and combined duration plus full decoding; no human listening check"
+}

@@ -1,0 +1,17 @@
+{
+  "founder-part-four-alistair-2026-11-04": {
+    "request": {
+      "id": "founder-part-four-alistair-2026-11-04",
+      "source": "docs/walking-through-founder-curriculum-part-4-full-text.md",
+      "source_sha256": "c519c05d989b711b51d80bf971c00053a190b107a1384c3de9a31799d0707733",
+      "output_dir": "outbound/audio/founder-curriculum",
+      "voice": "en-GB-RyanNeural"
+    },
+    "generated_at": "2026-11-04T10:12:07.486833+00:00",
+    "mp3": "outbound/audio/founder-curriculum/walking-through-founder-curriculum-part-4-full-text.mp3",
+    "report": "outbound/audio/founder-curriculum/walking-through-founder-curriculum-part-4-full-text.validation.json",
+    "mp3_sha256": "6579d08583e3f040365d8e8eb09fab92c59200447b49f1f04b81c73cf18e96f2",
+    "duration_seconds": 1018.08,
+    "status": "delivered"
+  }
+}
