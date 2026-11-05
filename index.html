@@ -12,8 +12,8 @@
     }catch(e){}
   })();
 </script>
-<title>Atelier Vincent De Nil, Art Director &amp; Founder</title>
-<meta name="description" content="Belgian founder and art director. I build alt-history worlds (The Divided States, WW2044, American Kingdoms) and the ventures that make them real: the Kaiser Cat Collective and Flagmaker &amp; Print.">
+<title>Atelier Vincent De Nil, Creative Director &amp; Founder</title>
+<meta name="description" content="Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I call: 'designing for human creativity in the agentic age'. Occasional video game modder.">
 <link rel="canonical" href="https://vincentdenil.com/">
 <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicons/favicon_16x16.png">
@@ -26,8 +26,8 @@
 <link rel="apple-touch-icon" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
 
 <meta property="og:type" content="profile">
-<meta property="og:title" content="Atelier Vincent De Nil, Art Director &amp; Founder">
-<meta property="og:description" content="I build worlds and the infrastructure that makes them real.">
+<meta property="og:title" content="Atelier Vincent De Nil, Creative Director &amp; Founder">
+<meta property="og:description" content="Designing for human creativity in the agentic age">
 <meta property="og:url" content="https://vincentdenil.com/">
 <meta property="og:image" content="https://vincentdenil.com/assets/background.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -51,7 +51,7 @@
       "@type": "ProfilePage",
       "@id": "https://vincentdenil.com/#profilepage",
       "url": "https://vincentdenil.com/",
-      "name": "Vincent De Nil, Founder and Art Director",
+      "name": "Vincent De Nil, Founder and Creative Director",
       "isPartOf": {
         "@id": "https://vincentdenil.com/#website"
       },
@@ -79,14 +79,14 @@
       "alternateName": "VincentDN",
       "jobTitle": [
         "Founder",
-        "Art Director"
+        "Creative Director"
       ],
       "image": {
         "@type": "ImageObject",
         "url": "https://vincentdenil.com/assets/vincent.jpg",
         "caption": "Vincent De Nil giving his talk 'Creating the World of Kaiserreich' at PDX-CON Berlin, 2019"
       },
-      "description": "Belgian founder and art director working between Stockholm and Raleigh, North Carolina. Creator of alternate-history worlds and founder of companies that develop, publish and support them.",
+      "description": "Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I call: 'designing for human creativity in the agentic age'. Occasional video game modder.",
       "nationality": {
         "@type": "Country",
         "name": "Belgium"
@@ -318,19 +318,17 @@
     font-size:1.34rem; font-weight:700; line-height:1.22;
     margin:.1rem 0 .7rem; letter-spacing:-.01em;
   }
-  /* typewriter rotator: caret only appears once JS starts typing */
-  .hero-rotate{ white-space:pre-wrap; }
-  .bio h1.typing .hero-rotate::after{
+  /* Static tagline with a blinking caret. */
+  .bio h1 .hero-tagline::after{
     content:""; display:inline-block; width:.1em; height:1em;
     margin-left:3px; vertical-align:-.12em; background:#7FB2D8;
     animation:caret-blink 1s steps(1,end) infinite;
   }
   @keyframes caret-blink{ 50%{ opacity:0; } }
   @media (prefers-reduced-motion:reduce){
-    .bio h1.typing .hero-rotate::after{ display:none; animation:none; }
+    .bio h1 .hero-tagline::after{ display:none; animation:none; }
   }
   .bio p{ font-size:1rem; color:var(--body-copy); margin:0; }
-  .bio p .proj{ font-style:italic; }
 
   .divider{
     border:0; height:1px; width:100%;
@@ -646,8 +644,8 @@
         <img src="assets/vincent.jpg" alt="Vincent De Nil giving his talk 'Creating the World of Kaiserreich' at PDX-CON Berlin, 2019">
       </div>
       <div class="bio">
-        <h1 aria-label="I build worlds and the infrastructure that makes them real."><span aria-hidden="true">I build <span class="hero-rotate">worlds and the infrastructure that makes them real.</span></span></h1>
-        <p>Belgian founder and art director, working between Stockholm and Raleigh, NC. I create alt-history worlds (<span class="proj">The Divided States, WW2044, American Kingdoms</span>) and build the companies that fund and make them grow: the Kaiser Cat Collective and Flagmaker &amp; Print. Occasional video game modder.</p>
+        <h1><span class="hero-tagline">Designing for human creativity in the agentic age</span></h1>
+        <p>Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I call: 'designing for human creativity in the agentic age'. Occasional video game modder.</p>
       </div>
     </section>
 
@@ -718,56 +716,6 @@
     </footer>
 
   </main>
-
-  <script>
-    (function(){
-      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var rotate = document.querySelector('.hero-rotate');
-      if(!rotate) return;
-      var h1 = rotate.closest('h1');
-      var phrases = [
-        "worlds and the infrastructure that makes them real.",
-        "teams and the projects that make them shine.",
-        "ideas and the infrastructure to make them real."
-      ];
-
-      // Reserve the tallest height so the line never reflows as words change.
-      function reserve(){
-        var keep = rotate.textContent, max = 0;
-        h1.style.minHeight = '';
-        phrases.forEach(function(p){ rotate.textContent = p; if(h1.offsetHeight > max) max = h1.offsetHeight; });
-        rotate.textContent = keep;
-        h1.style.minHeight = max + 'px';
-      }
-      reserve();
-      if(document.fonts && document.fonts.ready){ document.fonts.ready.then(reserve); }
-      var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(reserve, 150); });
-
-      // Respect reduced motion: leave the canonical line, no typing.
-      if(reduce) return;
-
-      h1.classList.add('typing');
-      var TYPE = 55, DEL = 30, HOLD = 30000, GAP = 320;
-      var i = 0, txt = phrases[0], deleting = false;
-
-      function tick(){
-        var full = phrases[i];
-        if(!deleting){
-          txt = full.slice(0, txt.length + 1);
-          rotate.textContent = txt;
-          if(txt === full){ deleting = true; return setTimeout(tick, HOLD); }
-          return setTimeout(tick, TYPE);
-        } else {
-          txt = full.slice(0, txt.length - 1);
-          rotate.textContent = txt;
-          if(txt === ''){ deleting = false; i = (i + 1) % phrases.length; return setTimeout(tick, GAP); }
-          return setTimeout(tick, DEL);
-        }
-      }
-      // Start from the canonical line already shown: hold, then delete into the cycle.
-      setTimeout(function(){ deleting = true; tick(); }, HOLD);
-    })();
-  </script>
 
   <!-- Hidden feature: click the space invader, top right, for nerd mode. -->
   <script>
