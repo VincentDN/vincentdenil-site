@@ -29,7 +29,7 @@ def export_glb(path):
 
 def export_fbx(path):
     bpy.ops.export_scene.fbx(filepath=path, use_visible=True, object_types={"EMPTY", "MESH"},
-                             bake_anim=False, path_mode="COPY", embed_textures=False,
+                             bake_anim=False, path_mode="AUTO", embed_textures=False,
                              axis_forward="Y", axis_up="Z", global_scale=1.0, apply_unit_scale=True,
                              mesh_smooth_type="FACE")
 

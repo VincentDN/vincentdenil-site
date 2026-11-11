@@ -605,6 +605,7 @@ def build_ramp():
         outer = outer[::-1]
     mb.slab(outer, T, INTERIOR, side_mat=CAMO, offset=-T)             # body of the door (inner face = interior)
     mb.poly(outer, CAMO)
+    mb.poly([p + V((T + 0.001, 0, 0)) for p in reversed(outer)], INTERIOR)       # inner face
     q = [rp(W, Z0), rp(-W, Z0), rp(-W, Z1), rp(W, Z1)]                # seen from behind: u left->right
     n = quad_normal(q)
     applique(mb, q, 0.05, 0.95, 0.42, 0.95, bolts=(4, 3), chamfer=0.03)

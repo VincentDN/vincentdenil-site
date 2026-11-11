@@ -359,7 +359,7 @@ def paint(passes, sname):
 
     # painted armour
     k = sel(vh.CAMO)
-    cc = cam * (0.88 + 0.24 * med)[:, None]
+    cc = cam * (0.80 + 0.20 * med)[:, None]
     cc = mix(cc, col(0.07, 0.05, 0.04), chips * 0.85)
     c[k] = cc[k]
     gloss[k] = (0.20 + 0.10 * fine + 0.25 * chips)[k]
@@ -568,7 +568,7 @@ def make_textures(parts, out_dir, res, dds_dir=None):
     images = {}
     for sname in SETS:
         diff, gloss, height, cover, ao = paint(passes[sname], sname)
-        nrm = height_to_normal(height, strength=1.6)
+        nrm = height_to_normal(height, strength=0.55)
         d_srgb = linear_to_srgb(diff)
         rough = np.clip(1.0 - gloss, 0.04, 1.0)
         metal = np.zeros_like(rough)

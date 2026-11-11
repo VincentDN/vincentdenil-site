@@ -1,0 +1,33 @@
+{
+ "mesh_objects": 30,
+ "triangles_without_tracks": 43357,
+ "triangles": 56789,
+ "track_links_per_side": 73,
+ "texture_size": 2048,
+ "clips": {
+  "drive": {
+   "frames": 60,
+   "nodes": 164
+  },
+  "steer": {
+   "frames": 60,
+   "nodes": 2
+  },
+  "turret": {
+   "frames": 150,
+   "nodes": 3
+  },
+  "fire": {
+   "frames": 24,
+   "nodes": 2
+  },
+  "ramp": {
+   "frames": 45,
+   "nodes": 1
+  },
+  "hatches": {
+   "frames": 30,
+   "nodes": 2
+  }
+ }
+}
