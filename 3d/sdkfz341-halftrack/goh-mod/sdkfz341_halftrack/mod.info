@@ -1,0 +1,8 @@
+{mod
+	{name "Sd.Kfz.341 MRAP half-track (WW2044)"}
+	{desc "Adds the WW2044 Sd.Kfz.341 half-track IFV by Vincent De Nil as an editor-placeable vehicle. Work in progress."}
+	; Set these two to the game version you are running (shown in the main menu),
+	; otherwise the mod is flagged as outdated in the mod list.
+	{minGameVersion "0.0.0"}
+	{maxGameVersion "9.9.9"}
+}

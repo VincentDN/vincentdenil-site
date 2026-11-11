@@ -1,0 +1,4 @@
+; Merge these two lines into your language's localization/desc.lng (or the equivalent
+; file the stock game uses for entity names) - key format follows the stock entries.
+{"entity/sdkfz341" "Sd.Kfz.341"}
+{"entity/sdkfz341/desc" "MRAP half-track IFV with unmanned 30 mm turret. Crew 2 + 8 dismounts."}

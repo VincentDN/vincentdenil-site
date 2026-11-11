@@ -1,0 +1,6 @@
+{material bump
+	{diffuse "sdkfz341_body" {MipMap 1}}
+	{bump "sdkfz341_body_bp"}
+	{specular "sdkfz341_body_sp"}
+	{blend none}
+}

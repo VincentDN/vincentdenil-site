@@ -1,0 +1,6 @@
+{material bump
+	{diffuse "sdkfz341_turret" {MipMap 1}}
+	{bump "sdkfz341_turret_bp"}
+	{specular "sdkfz341_turret_sp"}
+	{blend none}
+}
