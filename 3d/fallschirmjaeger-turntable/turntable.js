@@ -72,22 +72,57 @@ addEventListener('resize', sizeCode);
 sizeCode();
 
 // ---------------------------------------------------------------------------
-// sound: browsers only allow audio after a click, so it starts from the button
+// sound: enabled on launch; retry on interaction if audible autoplay is blocked
 // ---------------------------------------------------------------------------
 const track = document.getElementById('track');
 const soundBtn = document.getElementById('sound');
 track.volume = 0.6;
-track.addEventListener('error', () => {
-  soundBtn.disabled = true;
-  soundBtn.textContent = 'Sound unavailable';
-  soundBtn.setAttribute('aria-pressed', 'false');
+track.muted = false;
+
+function stopAudioUnlock() {
+  document.removeEventListener('pointerup', unlockAudio);
+  document.removeEventListener('keydown', unlockAudio);
+}
+function showSound(on, label = on ? 'Sound on' : 'Sound off') {
+  soundBtn.textContent = label;
+  soundBtn.setAttribute('aria-pressed', String(on));
+}
+async function playSound() {
+  try {
+    await track.play();
+  } catch (error) {
+    // Autoplay denial is recoverable: keep the button and gesture retry active.
+    if (!soundBtn.disabled && track.paused) showSound(false, 'Enable sound');
+  }
+}
+function unlockAudio(event) {
+  // The sound button handles its own click, including keyboard activation.
+  if (soundBtn.contains(event.target)) return;
+  if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
+  if (!soundBtn.disabled && track.paused) void playSound();
+}
+track.addEventListener('playing', () => {
+  stopAudioUnlock();
+  showSound(true);
 });
-soundBtn.onclick = async () => {
+track.addEventListener('pause', () => showSound(false));
+track.addEventListener('error', () => {
+  stopAudioUnlock();
+  soundBtn.disabled = true;
+  showSound(false, 'Sound unavailable');
+});
+soundBtn.onclick = () => {
   if (track.paused) {
-    try { await track.play(); soundBtn.textContent = 'Sound on'; soundBtn.setAttribute('aria-pressed', 'true'); }
-    catch (e) { soundBtn.textContent = 'Sound unavailable'; soundBtn.disabled = true; }
-  } else { track.pause(); soundBtn.textContent = 'Sound off'; soundBtn.setAttribute('aria-pressed', 'false'); }
+    void playSound();
+  } else {
+    // Once explicitly turned off, later gestures must not restart playback.
+    stopAudioUnlock();
+    track.pause();
+  }
 };
+document.addEventListener('pointerup', unlockAudio);
+document.addEventListener('keydown', unlockAudio);
+void playSound();
 
 // ---------------------------------------------------------------------------
 // turntable
