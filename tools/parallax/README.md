@@ -2,7 +2,7 @@
 
 Turns a layered PSD illustration into a 10 s, 24 fps, 1920x1080 slow-motion 2.5D
 parallax clip for an animatic. Finished clips go to `outbound/animatics/<shot>/`
-(delivery folder, kept off the live site; not linked from any index).
+which also has the newer vKeyframer editor (`projects/vKeyframer/`).
 
 ## Pipeline
 
