@@ -173,6 +173,20 @@ html[data-theme="dark"] .vdn-viewer{
 .vdn-viewer #stage:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
 .vdn-viewer #stage.split::before{content:"";position:absolute;inset:0 auto 0 50%;border-left:1px solid var(--line-strong);z-index:2;pointer-events:none}
 .vdn-viewer #status{position:absolute;inset:46% 10% auto;text-align:center;font-family:var(--font-mono);font-size:12px;color:var(--ink-dim);z-index:4;background:var(--panel);padding:8px}
+.vdn-viewer #status:not([hidden]):not([data-state="error"])::after{
+  content:"";
+  display:block;
+  height:4px;
+  max-width:18rem;
+  margin:8px auto 0;
+  border-radius:2px;
+  background:linear-gradient(var(--ink),var(--ink)) left center / 30% 100% no-repeat var(--panel-2);
+  animation:vdn-viewer-load 1s ease-in-out infinite alternate;
+}
+@keyframes vdn-viewer-load{to{background-position:right center}}
+@media (prefers-reduced-motion:reduce){
+  .vdn-viewer #status:not([hidden]):not([data-state="error"])::after{animation:none;background-position:center}
+}
 .vdn-viewer .help{position:absolute;bottom:14px;left:0;right:0;text-align:center;font:11px var(--font-mono);letter-spacing:.08em;color:var(--ink-dimmer);pointer-events:none}
 .vdn-viewer #stage[data-bg="studio"] .help{color:#8e979f}
 .vdn-viewer aside{padding:24px 22px 48px;overflow-wrap:anywhere}
