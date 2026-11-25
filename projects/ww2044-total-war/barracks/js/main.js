@@ -56,6 +56,7 @@ function placeCamera(t) {
   const tx = innerWidth < 760 ? 0 : 0.1, d = cam.d * Math.max(1, Math.min(2.5, 1.15 / camera.aspect));
   camera.position.set(tx + Math.sin(cam.a) * d * Math.cos(cam.p), 1.0 + Math.sin(cam.p) * d, Math.cos(cam.a) * d * Math.cos(cam.p) - 0.2);
   camera.lookAt(tx, 0.95, -0.2);
+  scene.fog.near = d + 0.9; scene.fog.far = d + 18; // fog starts just behind the squad, whatever the camera distance
 }
 const cv = renderer.domElement; let drag = null, moved = false;
 cv.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, a: cam.ta, p: cam.tp }; moved = false; cv.setPointerCapture(e.pointerId); });

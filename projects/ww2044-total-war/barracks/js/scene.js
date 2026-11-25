@@ -37,7 +37,7 @@ const smoke = (ctx, w) => { const g = ctx.createRadialGradient(w / 2, w / 2, 0, 
 
 export function buildScene(renderer) {
   const scene = new T.Scene();
-  scene.fog = new T.Fog(FOG, 9, 42);
+  scene.fog = new T.Fog(FOG, 6.5, 24); // soldiers (about 5.6 m away) stay crisp; the walls and ruins fade into haze behind them
 
   // sky dome: hazy overcast gradient, also used as the environment map
   const skyMat = new T.ShaderMaterial({ side: T.BackSide, depthWrite: false, fog: false,
