@@ -1,69 +1,35 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Index of /projects/ww2044-total-war/ | Atelier Vincent De Nil</title>
-<meta name="robots" content="noindex">
-<meta name="seo_hidden" content="true">
-<link rel="canonical" href="https://vincentdenil.com/projects/ww2044-total-war/">
-
-<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon_32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
-<link rel="apple-touch-icon" sizes="192x192" href="/assets/favicons/favicon_256x256.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/ftp.css">
-</head>
-
-<body>
-  <main class="wrap">
-
-    <a class="brand" href="/">🦌 AVDN - EXPERIMENTS AND PROJECTS</a>
-
-    <section class="term">
-      <div class="term-body">
-        <p class="line dim"><strong>/projects/ww2044-total-war/</strong></p>
-
-        <table class="listing">
-          <thead>
-            <tr><th>Name</th><th>Last modified</th><th>Size</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="tag">[UP]</span><a href="/projects/">../</a></td>
-              <td>&#8212;</td><td>&#8212;</td>
-            </tr>
-            <tr>
-              <td><span class="tag">[DIR]</span><a href="/projects/ww2044-total-war/gdd/">gdd/ — WW2044: Total War game design document</a></td>
-              <td>2026-11-25</td><td>&#8212;</td>
-            </tr>
-            <tr>
-              <td><span class="tag">[DIR]</span><a href="/projects/ww2044-total-war/strategic-map/">strategic-map/ — vertical slice: painted strategic map (zoom, pan, select units, music and ambience)</a></td>
-              <td>2026-11-25</td><td>&#8212;</td>
-            </tr>
-            <tr>
-              <td><span class="tag">[DIR]</span><a href="/projects/ww2044-total-war/barracks/">barracks/ — vertical slice: unit kit customisation and veterancy (three soldiers in a ruined town square)</a></td>
-              <td>2026-11-25</td><td>&#8212;</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="line dim">3 directories, 0 files.</p>
-      </div>
-    </section>
-
-    <a class="back" href="/projects/">projects</a>
-
-    <footer>
-      All rights reserved, Atelier Vincent De Nil BV, Belgium.<br>
-      <span class="mot">Luctor et Emergo</span>
-    </footer>
-
-  </main>
-  <script src="/assets/ftp-size.js" defer></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="seo_hidden" content="true"><title>WW2044: Total War · Main menu</title><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://vincentdenil.com/projects/ww2044-total-war/">
+<!-- Main menu: copied from the Partisan workbench opener (vincentdenil-site
+     /3d/partisan-project/ak15-workbench-intro/bench.html) with a map on the table. Scene: main-menu/menu.js. -->
+<style>
+:root{color-scheme:dark;--bg:#07090a;--text:#eceeea;--dim:#9aa9b0;--line:#b4c4cc26;--accent:#ef8f39}*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,sans-serif;overflow:hidden}
+header{position:absolute;inset:0 0 auto 0;z-index:4;padding:15px 22px;display:flex;justify-content:space-between;gap:16px;font:11px/1.5 ui-monospace,monospace;letter-spacing:.06em;background:linear-gradient(#000a,transparent)}header span{color:var(--dim)}a{color:#a9d4e5}#stage{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
+.prompt{position:absolute;left:clamp(16px,5vw,64px);bottom:clamp(40px,10vh,96px);z-index:4;max-width:420px}h1{font-size:clamp(18px,2.2vw,23px);line-height:1.2;font-weight:600;letter-spacing:.04em;margin:0 0 10px;text-shadow:0 2px 12px #000}p{color:var(--dim);margin:0 0 18px;text-shadow:0 1px 8px #000}
+.menu{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0;padding:0;list-style:none}
+.menu a{display:inline-block;font:600 12px/1 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--text);background:#101a1ddd;border:1px solid #a9d4e544;border-radius:3px;padding:12px 16px}
+.menu a:hover,.menu a:focus-visible{border-color:var(--accent);color:#ffcf91;outline:none}
+.menu .primary{color:#1a1208;background:var(--accent);border:0;padding:14px 20px;font-size:13px;box-shadow:0 0 0 1px #ffc18a55,0 8px 24px #0008}.menu .primary:hover,.menu .primary:focus-visible{background:#ffb068;color:#1a1208;outline:2px solid #ffc18a;outline-offset:3px}
+.menu small{display:block;margin-top:4px;font:11px/1.3 system-ui;letter-spacing:0;text-transform:none;color:var(--dim)}.menu .primary small{color:#3a2810}
+.key{display:inline-block;margin-left:8px;padding:1px 6px;border:1px solid #1a120866;border-radius:3px;font-size:10px}
+.prompt,header{transition:opacity .5s}.leaving .prompt,.leaving header{opacity:0}#fade{position:fixed;inset:0;z-index:10;background:#000;opacity:1;pointer-events:none;transition:opacity 1.2s ease}#fade.clear{opacity:0}
+#status{position:fixed;inset:50% auto auto 50%;transform:translate(-50%,-50%);z-index:11;color:var(--dim);font:11px ui-monospace,monospace;letter-spacing:.12em}[hidden]{display:none!important}
+@media(max-width:600px){.prompt{left:10px;right:10px;bottom:16px;max-width:none;padding:14px 16px;background:#07090ad9;border-radius:6px}.addr{display:none}header{padding:12px 16px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head><body>
+<header><span class="addr">WW2044 · TOTAL WAR · VERTICAL SLICE</span><span>14 · III · 2044</span><a href="/projects/">← Back to /projects/</a></header>
+<div id="stage" aria-label="Over-the-shoulder view of a commander leaning over a map of Yantis on a table under a lamp. Move the mouse to look around."></div>
+<div id="status" role="status" aria-live="polite">Setting up the map table…</div>
+<div class="prompt">
+ <h1>WW2044 · TOTAL WAR</h1>
+ <p>Yantis, spring 2044. The island is split three ways and the front is moving. Plan the war on the map, then raise the men to fight it.</p>
+ <ul class="menu">
+  <li><a class="primary" href="./strategic-map/">Strategic map<span class="key">E</span><small>Grand strategy: zoom, pan and move armies</small></a></li>
+  <li><a href="./barracks/">Barracks<small>Kit out three soldiers and their veterancy</small></a></li>
+  <li><a href="./gdd/">Game design document<small>What the full game is meant to be</small></a></li>
+ </ul>
+</div>
+<div id="fade"></div>
+<script type="module" src="./main-menu/menu.js"></script>
+</body></html>
