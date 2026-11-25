@@ -4,8 +4,8 @@ import * as T from 'three';
 import {WORLD, PROVINCES, NATIONS, bake, provinceAt, sampleGrid} from './world.js';
 import {buildMap} from './map.js';
 import {buildOverlay} from './overlay.js';
-import {UNITS, PLAYER, buildUnits, setSelected, order, updateUnits} from './units.js';
-import {startAudio, toggle, sfx} from './audio.js';
+import {UNITS, PLAYER, buildUnits, setSelected, order, updateUnits, pickables} from './units.js';
+import {startAudio, toggle, sfx, setMarching, acknowledge} from './audio.js';
 
 const $ = id => document.getElementById(id);
 const stage = $('stage');
@@ -14,7 +14,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 stage.append(renderer.domElement);
 const scene = new T.Scene();
-scene.background = new T.Color('#3b2a1c');
+scene.background = new T.Color('#0c0e0e');
 const camera = new T.PerspectiveCamera(32, innerWidth / innerHeight, 10, 20000);
 const cam = {x: 20, z: 60, dist: 2000, want: 1500};
 
@@ -44,7 +44,7 @@ function groundAt(cx, cy) {
 function unitAt(cx, cy) {
   ndc.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1);
   ray.setFromCamera(ndc, camera);
-  const hit = ray.intersectObjects(UNITS.map(u => u.sprite))[0];
+  const hit = ray.intersectObjects(pickables(), true).find(h => h.object.userData.unit);
   return hit ? hit.object.userData.unit : null;
 }
 
@@ -85,7 +85,8 @@ cv.addEventListener('pointerdown', e => {
     if (own.length && p) {
       own.forEach((u, i) => { const a = (i / own.length) * 6.28; order(u, p.x + (own.length > 1 ? Math.cos(a) * 26 : 0), p.z + (own.length > 1 ? Math.sin(a) * 26 : 0)); });
       sfx('order');
-    } else if (selected.size) say('Only your own armies take orders');
+      acknowledge();
+    } else if (selected.size) say('ONLY YOUR OWN ARMIES TAKE ORDERS STOP');
     return;
   }
   drag = {x: e.clientX, y: e.clientY, cx: cam.x, cz: cam.z, start: groundAt(e.clientX, e.clientY), box: e.shiftKey, moved: false};
@@ -113,7 +114,7 @@ cv.addEventListener('pointerup', e => {
   if (!drag) return;
   if (drag.box && drag.moved) {
     const x0 = Math.min(drag.x, e.clientX), x1 = Math.max(drag.x, e.clientX), y0 = Math.min(drag.y, e.clientY), y1 = Math.max(drag.y, e.clientY);
-    const inBox = UNITS.filter(u => { const v = u.sprite.position.clone().project(camera), sx = ((v.x + 1) / 2) * innerWidth, sy = ((1 - v.y) / 2) * innerHeight; return sx >= x0 && sx <= x1 && sy >= y0 && sy <= y1; });
+    const inBox = UNITS.filter(u => { const v = u.obj.position.clone().project(camera), sx = ((v.x + 1) / 2) * innerWidth, sy = ((1 - v.y) / 2) * innerHeight; return sx >= x0 && sx <= x1 && sy >= y0 && sy <= y1; });
     select(inBox, true);
     $('box').hidden = true;
   } else if (!drag.moved) {
@@ -167,7 +168,7 @@ let speed = 0, lastSpeed = 1, day = new Date(Date.UTC(2044, 2, 14)), acc = 0;
 function setSpeed(s) {
   if (s) lastSpeed = s;
   speed = s;
-  $('state').textContent = s ? ['', 'Normal', 'Fast', 'Fastest'][s] : 'Paused';
+  $('state').textContent = s ? ['', 'Run ×1', 'Run ×3', 'Run ×8'][s] : 'Paused';
   $('state').classList.toggle('run', !!s);
   [...$('speed').children].forEach((i, n) => i.classList.toggle('on', n < (s || 0)));
   $('pause').querySelector('use').setAttribute('href', `img/icons.svg#i-${s ? 'pause' : 'play'}-button`);
@@ -178,11 +179,22 @@ $('music').onclick = e => { e.currentTarget.setAttribute('aria-pressed', toggle(
 $('amb').onclick = e => { e.currentTarget.setAttribute('aria-pressed', toggle('amb')); };
 $('credits-btn').onclick = () => $('credits').showModal();
 let toastT;
-function say(text) { const t = $('toast'); t.querySelector('span').textContent = text; t.classList.remove('hide'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.add('hide'), 4200); }
-const GRID = ['crown', 'dove', 'person', 'castle', 'scroll-unfurled', 'quill-ink', 'helmet', 'shield', 'cannon', 'trophy-cup', 'radar-dish', 'two-coins', 'book-cover', 'treasure-map', 'gears', 'flag-objective', 'chess-knight', 'factory', 'wheat', 'oil-drum', 'ship-wheel', 'anchor', 'globe', 'compass', 'jet-fighter', 'rocket', 'radio-tower', 'walkie-talkie', 'satellite-communication', 'missile-launcher', 'bulldozer', 'barbed-wire'];
+function say(text) {
+  const t = $('toast'), span = t.querySelector('span');
+  t.classList.remove('hide'); clearTimeout(toastT); clearInterval(typeT);
+  let n = 0; span.textContent = '';
+  typeT = setInterval(() => { span.textContent = text.slice(0, ++n); if (n % 2) sfx('type'); if (n >= text.length) { clearInterval(typeT); toastT = setTimeout(() => t.classList.add('hide'), 4500); } }, 28);
+}
+let typeT;
+const GRID = ['capitol', 'dove', 'person', 'factory', 'money-stack', 'spy', 'helmet', 'shield', 'field-gun', 'medal', 'radar-dish', 'two-coins', 'book-cover', 'tank', 'gears', 'flag-objective', 'rifle', 'factory', 'wheat', 'oil-drum', 'ship-wheel', 'anchor', 'globe', 'compass', 'jet-fighter', 'rocket', 'radio-tower', 'walkie-talkie', 'satellite-communication', 'missile-launcher', 'bulldozer', 'barbed-wire'];
 $('grid').innerHTML = GRID.map(n => `<button class="rb" title="${n.replace(/-/g, ' ')}"><svg><use href="img/icons.svg#i-${n}"/></svg></button>`).join('');
-document.querySelectorAll('.topbar .rb:not(#music):not(#amb), .emblem, .sub-left .rb, .actions .rb').forEach(b => b.addEventListener('click', () => { sfx('click'); say(`${b.title[0].toUpperCase() + b.title.slice(1)}: not in this slice yet`); }));
+document.querySelectorAll('.topbar .rb:not(#music):not(#amb), .emblem, .sub-left .rb, .actions .rb').forEach(b => b.addEventListener('click', () => { sfx('click'); say(`${b.title.toUpperCase()} NOT IN THIS SLICE YET STOP`); }));
 setSpeed(0);
+
+// projector grain: four pre-made noise tiles, swapped and shifted a dozen times a second
+const tiles = [0, 1, 2, 3].map(() => { const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d'), im = g.createImageData(256, 256); for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; } g.putImageData(im, 0, 0); return `url(${c.toDataURL()})`; });
+const grain = $('grain');
+setInterval(() => { grain.style.backgroundImage = tiles[(Math.random() * 4) | 0]; grain.style.backgroundPosition = `${(Math.random() * 256) | 0}px ${(Math.random() * 256) | 0}px`; }, 80);
 
 // ---------- loop ----------
 const clock = new T.Clock();
@@ -204,8 +216,8 @@ function frame() {
   placeCamera();
   const gameDt = dt * [0, 1, 3, 8][speed];
   acc += gameDt;
-  if (acc > 1) { acc -= 1; day = new Date(day.getTime() + 86400000); $('date').textContent = `${day.getUTCDate()}/${day.getUTCMonth() + 1}/${day.getUTCFullYear()}`; if (day.getUTCDate() === 1) { const g = $('gold'); g.textContent = (parseInt(g.textContent.replace(/,/g, '')) + 135).toLocaleString('en-GB'); } }
-  updateUnits(gameDt || (speed ? 0 : 0), Math.max(24, Math.min(80, cam.dist * 0.065)), t);
+  if (acc > 1) { acc -= 1; day = new Date(day.getTime() + 86400000); $('date').textContent = `${day.getUTCDate()} ${'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')[day.getUTCMonth()]} ${day.getUTCFullYear()}`; if (day.getUTCDate() === 1) { const g = $('gold'); g.textContent = (parseInt(g.textContent.replace(/,/g, '')) + 135).toLocaleString('en-GB'); } }
+  setMarching(updateUnits(gameDt, Math.max(1.3, Math.min(3, cam.dist / 650)), t));
   // armies march only while the clock runs; ordering while paused queues the move
   map.uniforms.uTime.value = t;
   renderer.render(scene, camera);
@@ -213,7 +225,7 @@ function frame() {
 }
 frame();
 window.__map = {cam, UNITS, select, setSpeed}; // for tests
-window.__screen = i => { const v = UNITS[i].sprite.position.clone().project(camera); return {x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight - 20}; };
+window.__screen = i => { const v = UNITS[i].obj.position.clone().project(camera); return {x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight - 20}; };
 
 // ---------- start screen ----------
 $('start-msg').textContent = 'Fourteenth of March, 2044. The island waits.';
@@ -222,6 +234,6 @@ $('go').onclick = () => {
   startAudio();
   $('start').classList.add('gone');
   cam.want = 1750;
-  setTimeout(() => say('Coalition formed'), 900);
+  setTimeout(() => say('COALITION FORMED WITH NEUTRAL CANTONS STOP OCCUPATION FORCES MOBILISING STOP'), 900);
   setSpeed(1);
 };

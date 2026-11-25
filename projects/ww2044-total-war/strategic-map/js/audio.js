@@ -77,36 +77,39 @@ function schedule() {
   }
 }
 
-// ---------- ambience ----------
+// ---------- ambience: the PARTISAN campaign map soundscape (CC0 Freesound recordings, see the Credits dialog) ----------
+// A countryside bed, marching feet while armies move, distant radio chatter now and then, and a murmur of voices
+// acknowledging each order.
+const FILES = {country: 'amb-countryside', feet: 'march-gravel', walla: 'voices', r1: 'radio-chatter-1', r2: 'radio-chatter-2', r3: 'radio-chatter-3', r4: 'radio-chatter-4'};
+const buffers = {}, loops = {};
+let marching = false, ackAt = -9;
+function play(key, level, {loop = false, duration = 0, offset = 0, lp = 5500} = {}) {
+  if (!buffers[key]) return null;
+  const s = ctx.createBufferSource(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+  s.buffer = buffers[key]; s.loop = loop; f.type = 'lowpass'; f.frequency.value = lp;
+  g.gain.setValueAtTime(0, ctx.currentTime); g.gain.linearRampToValueAtTime(level, ctx.currentTime + (loop ? 1.5 : 0.08));
+  s.connect(f).connect(g).connect(ambBus);
+  s.start(0, offset % s.buffer.duration);
+  if (duration) { g.gain.setTargetAtTime(0, ctx.currentTime + Math.max(0.1, duration - 0.2), 0.07); s.stop(ctx.currentTime + duration); }
+  s.gain = g;
+  return s;
+}
 function ambience() {
-  const sea = ctx.createBufferSource(); sea.buffer = makeNoise(); sea.loop = true;
-  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 520;
-  const swell = ctx.createGain(); swell.gain.value = 0.55;
-  const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 0.085; lg.gain.value = 0.35; lfo.connect(lg).connect(swell.gain); lfo.start();
-  sea.connect(lp).connect(swell).connect(ambBus); sea.start();
-  const wind = noise(), bp = ctx.createBiquadFilter(), wg = ctx.createGain(); bp.type = 'bandpass'; bp.Q.value = 1.4; bp.frequency.value = 420; wg.gain.value = 0.05;
-  const wl = ctx.createOscillator(), wlg = ctx.createGain(); wl.frequency.value = 0.05; wlg.gain.value = 220; wl.connect(wlg).connect(bp.frequency); wl.start();
-  wind.connect(bp).connect(wg).connect(ambBus); wind.start();
-  let gullAt = ctx.currentTime + 3, hornAt = ctx.currentTime + 25;
+  makeNoise();
+  for (const [k, f] of Object.entries(FILES))
+    fetch(new URL(`../audio/${f}.mp3`, import.meta.url)).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b)).then(buf => { buffers[k] = buf; }).catch(() => {});
+  let radioAt = ctx.currentTime + 8;
   return () => {
-    const t = ctx.currentTime;
-    if (t > gullAt) { gull(t, Math.random() * 1.6 - 0.8); if (Math.random() < 0.5) gull(t + 0.35, Math.random() - 0.5); gullAt = t + 5 + Math.random() * 9; }
-    if (t > hornAt) { horn(t); hornAt = t + 40 + Math.random() * 30; }
+    if (!loops.country && buffers.country) loops.country = play('country', 0.45, {loop: true});
+    if (marching && !loops.feet && buffers.feet) loops.feet = play('feet', 0.32, {loop: true});
+    if (!marching && loops.feet) { loops.feet.gain.gain.setTargetAtTime(0, ctx.currentTime, 0.15); loops.feet.stop(ctx.currentTime + 0.6); loops.feet = null; }
+    if (ctx.currentTime > radioAt) { play('r' + (1 + Math.floor(Math.random() * 4)), 0.22, {duration: 4, lp: 1700}); radioAt = ctx.currentTime + 24 + Math.random() * 16; }
   };
 }
-function gull(t, panv) {
-  const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter(), p = ctx.createStereoPanner(); p.pan.value = panv;
-  f.type = 'bandpass'; f.frequency.value = 1700; f.Q.value = 2; o.type = 'sawtooth';
-  const v = ctx.createOscillator(), vg = ctx.createGain(); v.frequency.value = 24; vg.gain.value = 60; v.connect(vg).connect(o.frequency);
-  o.frequency.setValueAtTime(1450, t); o.frequency.linearRampToValueAtTime(1900, t + 0.08); o.frequency.exponentialRampToValueAtTime(1150, t + 0.4);
-  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
-  o.connect(f).connect(g).connect(p).connect(ambBus); o.start(t); v.start(t); o.stop(t + 0.5); v.stop(t + 0.5);
-}
-function horn(t) {
-  const g = ctx.createGain(), lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 380;
-  for (const f of [98, 98.6, 147]) { const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.connect(lp); o.start(t); o.stop(t + 2.6); }
-  g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.06, t + 0.4); g.gain.setValueAtTime(0.06, t + 1.9); g.gain.linearRampToValueAtTime(0.0001, t + 2.5);
-  lp.connect(g).connect(ambBus);
+export function setMarching(on) { marching = on; }
+export function acknowledge() {
+  if (!ctx || ctx.currentTime - ackAt < 2) return;
+  if (play('walla', 0.4, {duration: 1.3, offset: Math.random() * 20, lp: 1000})) ackAt = ctx.currentTime;
 }
 
 // ---------- interface sounds ----------
@@ -118,6 +121,7 @@ export function sfx(kind) {
     const n = noise(), f = ctx.createBiquadFilter(), g = ctx.createGain(); f.type = 'bandpass'; f.frequency.value = 2200; f.Q.value = 1.5; env(g, t, 0.002, 0.12, 0.12); n.connect(f).connect(g).connect(sfxBus); n.start(t, Math.random()); n.stop(t + 0.15);
     for (const [fq, dt] of [[660, 0.12], [990, 0.22]]) { const o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'square'; o.frequency.value = fq; env(og, t + dt, 0.002, 0.05, 0.08); o.connect(og).connect(sfxBus); o.start(t + dt); o.stop(t + dt + 0.12); }
   }
+  if (kind === 'type') { const n = noise(), f = ctx.createBiquadFilter(), g = ctx.createGain(); f.type = 'bandpass'; f.frequency.value = 2400 + Math.random() * 1200; f.Q.value = 3; env(g, t, 0.001, 0.07, 0.025); n.connect(f).connect(g).connect(sfxBus); n.start(t, Math.random()); n.stop(t + 0.04); }
   if (kind === 'click') { const n = noise(), f = ctx.createBiquadFilter(), g = ctx.createGain(); f.type = 'highpass'; f.frequency.value = 3000; env(g, t, 0.001, 0.1, 0.03); n.connect(f).connect(g).connect(sfxBus); n.start(t); n.stop(t + 0.05); }
 }
 

@@ -63,16 +63,16 @@ void main(){
     int n1=int(uSeeds[i1].z),n2=int(uSeeds[i2].z);
     vec3 nat=uNat[n1];
     // hill shade from the height field
-    float hx=texture2D(tData,uv+vec2(uCell.x,0)).r-texture2D(tData,uv-vec2(uCell.x,0)).r;
-    float hz=texture2D(tData,uv+vec2(0,uCell.y)).r-texture2D(tData,uv-vec2(0,uCell.y)).r;
+    float hx=(texture2D(tData,uv+vec2(uCell.x*2.,0)).r-texture2D(tData,uv-vec2(uCell.x*2.,0)).r)*.5;
+    float hz=(texture2D(tData,uv+vec2(0,uCell.y*2.)).r-texture2D(tData,uv-vec2(0,uCell.y*2.)).r)*.5;
     vec3 N=normalize(vec3(-hx*.55,3.,-hz*.55));float sh=dot(N,normalize(vec3(-.8,1.2,-.6)));
     float g=fbm(vP*.21);float g2=vn(vP*1.3);
-    vec3 paper=vec3(.87,.83,.71);
-    vec3 nd=mix(vec3(dot(nat,vec3(.3,.59,.11))),nat,.78);col=mix(nd,paper,.3)*(.93+.1*g+.04*g2);
-    col*=.76+.32*sh;
+    vec3 paper=vec3(.74,.75,.68);
+    vec3 nd=mix(vec3(dot(nat,vec3(.3,.59,.11))),nat,.78);col=mix(nd,paper,.24)*(.9+.12*g+.05*g2);
+    col*=.86+.2*sh;
     float mtn=smoothstep(20.,46.,h+(g-.5)*10.);
-    col=mix(col,mix(col,vec3(.9,.9,.86),.5),mtn*mtn*(.3+.6*fbm3(vP*.07)));
-    col*=1.-.35*mtn*smoothstep(.15,.0,sh-.55);
+    col=mix(col,mix(col,vec3(.86,.88,.84),.4),mtn*mtn*(.35+.3*fbm3(vP*.05)));
+    col*=1.-.15*mtn*smoothstep(.15,.0,sh-.55);
     // forest marks: small conifers in clusters
     float forest=smoothstep(.5,.62,fbm3(vP*.011+3.))*(1.-mtn)*smoothstep(4.,12.,sd);
     vec2 c=vP/vec2(5.5,6.5);vec2 ci=floor(c);vec2 f=fract(c)-.5-(vec2(h21(ci),h21(ci+7.))-.5)*.4;
@@ -91,7 +91,7 @@ void main(){
   }else{
     float dep=-s;
     float m=fbm(vP*.0035+3.)*.6+fbm3(vP*.013)*.4;
-    vec3 deep=vec3(.13,.2,.28),mid=vec3(.23,.33,.43),shal=vec3(.43,.53,.6);
+    vec3 deep=vec3(.07,.11,.14),mid=vec3(.13,.2,.24),shal=vec3(.32,.4,.42);
     col=mix(mid,deep,smoothstep(.15,1.,dep/230.+(m-.5)*.9));
     col+=vec3(.06,.08,.1)*smoothstep(.55,.85,fbm(vP*.005+9.));
     // textured shallows: pale, broken, frothy
@@ -112,11 +112,17 @@ void main(){
     float stroke=(1.-smoothstep(.04,.04+px*.2,abs(wf.y-sq)))*step(.12,wf.x)*step(wf.x,.88)*step(.62,h21(wi+11.));
     col=mix(col,col*.62,stroke*band*.7*(1.-smoothstep(1.,2.5,px)));
   }
+  // graticule: a fine 100-unit grid and a stronger 400-unit grid, as on a staff map
+  vec2 gq=abs(fract(vP/100.+.5)-.5)*100.,gQ=abs(fract(vP/400.+.5)-.5)*400.;
+  float gl=max(line(min(gq.x,gq.y),.5+px*.2,px)*.07,line(min(gQ.x,gQ.y),1.+px*.4,px)*.16);
+  col=mix(col,vec3(.85,.92,.9),gl);
   vec4 o=texture2D(tOver,uv);col=mix(col,o.rgb,o.a);
+  // projected light: a slight cyan-white lift and gentle channel fringing toward the edges
+  col=col*vec3(.96,1.,1.02)+vec3(.012,.02,.024);
   // the sheet: darker towards its edges, a thin lighter border
   vec2 e=min(uv,1.-uv)*uWorld;float ed=min(e.x,e.y);
   col*=.82+.18*smoothstep(0.,120.,ed);
-  col=mix(col,vec3(.75,.7,.58),line(ed-6.,1.5,px)*.5);
+  col=mix(col,vec3(.8,.86,.82),line(ed-6.,1.2,px)*.35);
   gl_FragColor=vec4(col,1.);
 }`,
   });
@@ -129,8 +135,8 @@ void main(){
     vertexShader: `varying vec2 vP;void main(){vP=position.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
     fragmentShader: `varying vec2 vP;${GLSL_NOISE}
 void main(){vec2 p=vP*vec2(.004,.04);float g=fbm(vec2(p.x+fbm(p*2.)*1.5,p.y));float r=fract(g*9.+vP.y*.004);
-vec3 a=vec3(.36,.25,.15),b=vec3(.55,.4,.26);vec3 c=mix(a,b,smoothstep(.2,.8,r))*(.8+.3*vn(vP*vec2(.05,.6)));
-c*=.75+.25*smoothstep(-1500.,-300.,-length(vP));gl_FragColor=vec4(c,1.);}`,
+vec3 c=vec3(.055,.065,.06)*(.85+.3*fbm(vP*.02))+vec3(.02)*vn(vP*vec2(.3,.03));
+c*=.7+.3*smoothstep(-1800.,-500.,-length(vP));gl_FragColor=vec4(c,1.);}`,
   });
   tmat.extensions = {derivatives: true};
   const table = new T.Mesh(new T.PlaneGeometry(9000, 7000).rotateX(-Math.PI / 2), tmat);
