@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><meta name="seo_hidden" content="true">
+<title>WW2044: Total War · Game design</title>
+<meta name="description" content="WW2044: Total War, a grand strategy, RTS and 4X hybrid. The public game design overview, with screenshots from the vertical slice.">
+<link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://vincentdenil.com/projects/ww2044-total-war/about/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<!-- Public game design overview (picture/text alternating rows). The internal one-page GDD stays at ../gdd/.
+     Screenshots in img/ are headless renders of the slice pages in this folder (25 November 2026). -->
+<style>
+:root{color-scheme:dark;--bg:#0b0e0f;--band:#12181a;--paper:#ecebe4;--ink:#1b2224;--text:#e9ebe6;--dim:#9aa9b0;--line:#b4c4cc26;--accent:#ef8f39;--accent2:#ffcf91;--red:#b8402f;--max:1180px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:18px/1.65 Barlow,system-ui,sans-serif}
+img{max-width:100%;height:auto;display:block}a{color:#a9d4e5}
+h1,h2,h3{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:600;letter-spacing:.02em;line-height:1.08;margin:0}
+.mono,.kicker,.topbar,.tag{font-family:ui-monospace,"IBM Plex Mono",monospace}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+/* top bar, as on the main menu */
+.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;gap:16px;padding:12px clamp(16px,3vw,24px);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#07090ae6;backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topbar span{color:var(--dim)}.topbar nav{display:flex;gap:18px}.topbar a{color:var(--text);text-decoration:none}.topbar a:hover{color:var(--accent2)}
+/* hero */
+.hero{position:relative;min-height:min(92vh,860px);display:flex;align-items:flex-end;overflow:hidden;background:#000}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#07090af2 0%,#07090ab0 38%,transparent 70%),linear-gradient(0deg,var(--bg) 0%,transparent 35%)}
+.hero .wrap{position:relative;z-index:2;width:100%;padding-bottom:clamp(40px,9vh,96px)}
+.kicker{display:block;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.hero h1{font-size:clamp(46px,8vw,104px);text-transform:uppercase;letter-spacing:.04em;text-shadow:0 4px 30px #000}
+.hero p{max-width:560px;font-size:clamp(18px,1.7vw,21px);color:#d4dad8;margin:18px 0 28px}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;font:600 12px/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--text);background:#101a1ddd;border:1px solid #a9d4e544;border-radius:3px;padding:14px 18px}
+.btn:hover{border-color:var(--accent);color:var(--accent2)}
+.btn.primary{background:var(--accent);color:#1a1208;border:0;box-shadow:0 8px 24px #0008}.btn.primary:hover{background:#ffb068;color:#1a1208}
+/* section heads */
+section{padding:clamp(64px,10vw,120px) 0}
+.band{background:var(--band)}
+.paper{background:var(--paper);color:var(--ink)}.paper a{color:#1f5f7a}.paper .dim{color:#5d6a6c}
+.head{max-width:720px;margin-bottom:clamp(36px,6vw,64px)}
+.head h2{font-size:clamp(34px,4.6vw,54px)}
+.head p{color:var(--dim);margin:14px 0 0;font-size:19px}.paper .head p{color:#5d6a6c}
+.head::after{content:"";display:block;width:56px;height:3px;background:var(--accent);margin-top:22px}
+/* alternating picture/text rows */
+.row{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.row+.row{margin-top:clamp(56px,9vw,110px)}
+.row.flip .pic{order:2}
+.pic{position:relative;margin:0}
+.pic img{width:100%;border-radius:4px;box-shadow:0 24px 60px #000a,0 0 0 1px #ffffff14}
+.paper .pic img{box-shadow:0 20px 50px #0004,0 0 0 1px #0000001a}
+.pic .inset{position:absolute;width:44%;right:-4%;bottom:-10%;border:1px solid #ffffff2a;border-radius:4px;box-shadow:0 18px 40px #000c}
+.row.flip .pic .inset{right:auto;left:-4%}
+.pic:has(.inset) figcaption{max-width:50%}.row.flip .pic:has(.inset) figcaption{margin-left:auto;text-align:right}
+.pic figcaption{font:12px/1.5 ui-monospace,monospace;color:var(--dim);margin-top:12px;letter-spacing:.02em}
+.paper .pic figcaption{color:#6a7577}
+.txt .tag{display:inline-block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.paper .txt .tag{color:#b05a14}
+.txt h3{font-size:clamp(28px,3.2vw,40px);margin-bottom:16px}
+.txt p{margin:0 0 14px}
+.txt ul{margin:8px 0 0;padding:0;list-style:none}
+.txt li{padding:9px 0 9px 26px;position:relative;border-top:1px solid var(--line)}
+.paper .txt li{border-color:#0000001a}
+.txt li::before{content:"";position:absolute;left:2px;top:18px;width:10px;height:10px;background:var(--accent);transform:rotate(45deg)}
+.telegram{font-family:"Special Elite",ui-monospace,monospace;background:#1a1d1b;border:1px solid #ffffff1f;border-left:3px solid var(--accent);padding:14px 18px;margin:18px 0 0;font-size:16px;color:#e6e1d2}
+/* loop diagram */
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:step}
+.step{position:relative;background:#171e20;border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:4px;padding:22px 20px 20px}
+.step::before{counter-increment:step;content:"0" counter(step);font:600 12px ui-monospace,monospace;letter-spacing:.14em;color:var(--accent)}
+.step h3{font-size:22px;margin:8px 0 8px}.step p{margin:0;color:var(--dim);font-size:16px;line-height:1.5}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);z-index:2;color:var(--accent);font:700 20px Oswald}
+.back-arrow{margin-top:14px;text-align:center;font:12px ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border:1px dashed var(--line);border-radius:4px;padding:10px}
+/* pillars + scenario cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.card{border-top:3px solid var(--accent);padding:18px 0 0}
+.card h3{font-size:22px;margin-bottom:8px}.card p{margin:0;font-size:16px;line-height:1.55}
+.paper .card p{color:#3d484a}
+.scen{background:#171e20;border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex;flex-direction:column}
+.scen .art{aspect-ratio:16/9;background-size:cover;background-position:center;position:relative}
+.scen .art.blank{background:repeating-linear-gradient(135deg,#1b2325 0 14px,#182022 14px 28px);display:grid;place-items:center;font:12px ui-monospace,monospace;letter-spacing:.18em;color:#6f7f85;text-transform:uppercase}
+.scen .body{padding:20px 22px 24px}.scen h3{font-size:24px;margin:6px 0 8px}.scen p{margin:0;color:var(--dim);font-size:16px;line-height:1.55}
+.badge{display:inline-block;font:600 10px ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;padding:4px 8px;border-radius:2px;background:#ffffff14;color:var(--dim)}
+.badge.live{background:var(--accent);color:#1a1208}
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:2px solid #0000002a;margin-top:8px}
+.road div{padding:18px 16px 0 0;position:relative}
+.road div::before{content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;border-radius:50%;background:var(--paper);border:2px solid #9aa4a6}
+.road .done::before{background:var(--accent);border-color:var(--accent)}
+.road b{display:block;font:600 12px ui-monospace,monospace;letter-spacing:.12em;color:#b05a14}
+.road h3{font-size:20px;margin:6px 0 6px}.road p{margin:0;font-size:15px;line-height:1.5;color:#4a5557}
+/* credits + cta */
+.cta{text-align:center}.cta h2{font-size:clamp(34px,5vw,60px);text-transform:uppercase;letter-spacing:.04em}.cta p{color:var(--dim);max-width:560px;margin:14px auto 28px}.cta .btns{justify-content:center}
+.credits{font-size:14px;line-height:1.6;color:var(--dim);columns:2 320px;column-gap:40px}.credits p{margin:0 0 10px;break-inside:avoid}.credits b{color:var(--text)}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;font:12px ui-monospace,monospace;color:var(--dim)}
+@media(max-width:860px){
+ .pic:has(.inset) figcaption{max-width:none}.row.flip .pic:has(.inset) figcaption{text-align:left}
+ .row{grid-template-columns:1fr}.row.flip .pic{order:0}
+ .pic .inset{position:static;width:60%;margin:-14% 0 0 auto}.row.flip .pic .inset{margin:-14% 0 0 auto}
+ .loop{grid-template-columns:1fr 1fr}.step:nth-child(2)::after{display:none}
+ .road{grid-template-columns:1fr;border-top:0;border-left:2px solid #0000002a;padding-left:20px}.road div{padding:0 0 22px}.road div::before{top:4px;left:-29px}
+ .topbar nav a.opt{display:none}
+}
+@media(max-width:520px){.loop{grid-template-columns:1fr}.step::after{display:none}.topbar>span{display:none}}
+</style></head>
+<body>
+<header class="topbar"><span>WW2044 · Total War · Game design</span><nav><a class="opt" href="#layers">Layers</a><a class="opt" href="#scenarios">Scenarios</a><a class="opt" href="#roadmap">Roadmap</a><a href="../">Main menu</a></nav></header>
+
+<div class="hero">
+ <img src="img/main-menu.webp" alt="The WW2044: Total War main menu: a commander in camouflage leans over a lamp-lit map table with wooden markers and a field radio." width="1600" height="900" fetchpriority="high">
+ <div class="wrap">
+  <span class="kicker">Grand strategy · RTS · 4X</span>
+  <h1>WW2044<br>Total War</h1>
+  <p>Shape (alt)history. Run a nation on a painted world map, then take command on the battlefield when the war comes to you. Pick a scenario and a timeline, and make history go your way.</p>
+  <div class="btns"><a class="btn primary" href="../strategic-map/">Play the strategic map</a><a class="btn" href="../barracks/">Visit the barracks</a></div>
+ </div>
+</div>
+
+<section class="paper" id="pitch">
+ <div class="wrap">
+  <div class="head"><span class="kicker" style="color:#b05a14">The pitch</span><h2>One war, two ways to fight it</h2><p>A turn-by-turn world map where you run a nation, and real-time battles where you win or lose it.</p></div>
+  <div class="row">
+   <figure class="pic"><img src="img/intro-card.webp" alt="The scenario title card 'Poland Is Not Yet Lost!' over a darkened map of Central Europe, with a Take command button." width="1600" height="900" loading="lazy"><figcaption>Scenario opener, Poland 1936</figcaption></figure>
+   <div class="txt"><span class="tag">What it is</span><h3>History as a sandbox</h3>
+    <p>Every scenario starts from a moment you'd recognise, then hands you the pen. Drive the Ottoman Empire to its height in a Cold War that never ended, reunify Germany in a near sci-fi 2044, or hold Poland against two empires with tomorrow's weapons.</p>
+    <p>Every war declared on the map is decided on a battlefield you command: build a forward base, hold the supply lines, upgrade your squads and take the objective. Win and the map changes. Lose and the front moves against you.</p>
+    <div class="telegram">POLAND IS NOT YET LOST STOP 2039 PATTERN ARMOUR AT THE FRONTIER STOP</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="layers">
+ <div class="wrap">
+  <div class="head"><span class="kicker">The layers</span><h2>From the war room to the front line</h2><p>Two games stitched into one campaign, each readable at a glance.</p></div>
+
+  <div class="row flip">
+   <figure class="pic"><img src="img/strategic-map.webp" alt="The strategic map of Central Europe in 1936: Poland in rose, Germany in slate blue, the Soviet Union in brown, with tank army markers and a war-room interface." width="1400" height="788" loading="lazy"><img class="inset" src="img/detail-command.webp" alt="Close-up of the Command panel, a grid of order icons." width="330" height="200" loading="lazy"><figcaption>Strategic map, Poland 1936 scenario</figcaption></figure>
+   <div class="txt"><span class="tag">Layer one · Grand strategy and 4X</span><h3>Paint the map</h3>
+    <p>A political map of real 1936 frontiers, lettered by hand and lit like a war-room projector table. Time runs by the day; pause whenever you need to think.</p>
+    <ul><li>Provinces to own, build in and garrison</li><li>Treasury and industry, shown in one slim top bar</li><li>Research that unlocks battle upgrades</li><li>Events and telegrams that push history off its rails</li></ul>
+   </div>
+  </div>
+
+  <div class="row">
+   <figure class="pic"><img src="img/unit-selected.webp" alt="An armoured army, Armia Prusy, selected on the map with a tooltip and a unit file card showing its strength, morale and veterancy." width="1400" height="788" loading="lazy"><img class="inset" src="img/detail-unit-file.webp" alt="Close-up of the unit file card for Armia Prusy, stamped Confidential." width="340" height="240" loading="lazy"><figcaption>Selecting an army: the unit file opens bottom left</figcaption></figure>
+   <div class="txt"><span class="tag">Armies</span><h3>Every army is a roster</h3>
+    <p>Select an army and its file slides open: strength, morale, veterancy and the province it holds. Drag to pan, scroll to zoom, box-select a whole front and right-click to march.</p>
+    <p>Behind every marker sits a real roster of squads and vehicles. When it meets the enemy, you choose: fight the battle yourself, or let the numbers decide.</p>
+   </div>
+  </div>
+
+  <div class="row flip">
+   <figure class="pic"><img src="img/map-close.webp" alt="Zoomed in on central Poland: Warszawa, Łódź, Radom and smaller towns, with a province highlighted and an armoured army marker." width="1400" height="788" loading="lazy"><figcaption>Zoomed in on central Poland</figcaption></figure>
+   <div class="txt"><span class="tag">Readable at a glance</span><h3>Few numbers, all of them meaningful</h3>
+    <p>Zoom in and the map fills with towns, rivers and province lines; zoom out and it falls back to nations and fronts. A province, an army or a city shows its state without opening a single panel.</p>
+    <p>Chrome stays at the edges, so the map is always the star.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="band" id="loop">
+ <div class="wrap">
+  <div class="head"><span class="kicker">Core loop</span><h2>Every battle matters on the map</h2><p>Battles aren't side missions. Their result writes straight back to the campaign.</p></div>
+  <div class="loop">
+   <div class="step"><h3>Campaign turn</h3><p>Collect income, set research, build in provinces, move armies, make deals.</p></div>
+   <div class="step"><h3>Contact</h3><p>An army crosses into hostile ground. Fight it yourself or auto-resolve.</p></div>
+   <div class="step"><h3>Battle</h3><p>Real time with pause: build a base, hold sectors, upgrade squads, take the objective.</p></div>
+   <div class="step"><h3>Aftermath</h3><p>Survivors keep their veterancy, losses come off the roster, the province changes hands.</p></div>
+  </div>
+  <div class="back-arrow">↺ and back to the map, one season later</div>
+ </div>
+</section>
+
+<section class="paper" id="troops">
+ <div class="wrap">
+  <div class="head"><span class="kicker" style="color:#b05a14">Troops and upgrades</span><h2>Small, deep rosters</h2><p>A handful of unit types per side, each with a clear path to get better.</p></div>
+  <div class="row">
+   <figure class="pic"><img src="img/barracks.webp" alt="The barracks screen: three soldiers in tan camouflage with rifles in a town square, a kit locker on the left and a soldier card with level and stats on the right." width="1400" height="788" loading="lazy"><img class="inset" src="img/detail-soldier-card.webp" alt="Close-up of a soldier card: Private T. Vale, level 2, with marksmanship, morale and endurance bars and a Train button." width="320" height="260" loading="lazy"><figcaption>The barracks, between battles</figcaption></figure>
+   <div class="txt"><span class="tag">The barracks</span><h3>Meet the men who hold the line</h3>
+    <p>Between battles your section stands in the square, large and in 3D. Pick a soldier and you see who he is: his level, his veterancy and how good a shot he has become.</p>
+    <ul><li>Veterancy earned in battle and kept on the campaign map</li><li>Merit to train soldiers, war bonds to buy kit</li><li>Sections grouped by role: infantry, weapon teams, vehicles</li></ul>
+   </div>
+  </div>
+  <div class="row flip">
+   <figure class="pic"><img src="img/barracks-kit.webp" alt="The same three soldiers, the middle one now wearing the Desert Rats kit, with the kit locker listing field and veteran sets." width="1400" height="788" loading="lazy"><figcaption>Issuing the Desert Rats field set</figcaption></figure>
+   <div class="txt"><span class="tag">Kit locker</span><h3>Dress for the theatre</h3>
+    <p>Standard issue, field sets for desert, hedgerow and winter, and veteran sets you only earn. Kit is about looks and loadout: swap rifles for assault rifles, add a rocket launcher, bring a light machine gun.</p>
+    <p>Research on the campaign map opens up the rest: body armour, smoke, reactive armour for the half-tracks.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="battle">
+ <div class="wrap">
+  <div class="head"><span class="kicker">Layer two · Real-time strategy</span><h2>The front line is the economy</h2><p>Classic base building and resource management, tuned for battles of ten to twenty minutes.</p></div>
+  <div class="grid">
+   <div class="card"><h3>Manpower</h3><p>A steady trickle from your HQ, more for every sector you hold. Spent on squads and reinforcements.</p></div>
+   <div class="card"><h3>Supply</h3><p>From depots on captured supply points. Spent on buildings, weapons and upgrades.</p></div>
+   <div class="card"><h3>Fuel</h3><p>Scarce and fought over. Spent on vehicles, armour and the next tier.</p></div>
+   <div class="card"><h3>Sectors</h3><p>A resource point only pays while a chain of sectors links it back to your HQ. Cut the chain, starve the enemy.</p></div>
+  </div>
+  <p class="dim" style="margin-top:36px;color:var(--dim)">Build an HQ, barracks, motor pool and depots; dig in with sandbags, wire and machine-gun nests. Destroy the enemy HQ, or hold more victory points when the clock runs out. The battle layer is the next milestone, so there's no screenshot yet.</p>
+ </div>
+</section>
+
+<section class="band" id="scenarios">
+ <div class="wrap">
+  <div class="head"><span class="kicker">Scenarios and timelines</span><h2>Pick a moment, then rewrite it</h2><p>A scenario is a start date, a region, a few playable nations and a deck of events. The timeline sets the technology and the tone.</p></div>
+  <div class="grid">
+   <article class="scen"><div class="art" style="background-image:url(img/strategic-map.webp)"></div><div class="body"><span class="badge live">Playable slice</span><h3>Poland Is Not Yet Lost!</h3><p>First of January, 1936. Real interwar borders, 2039 technology. Can you defeat the USSR and Germany?</p></div></article>
+   <article class="scen"><div class="art blank">Cold War · 1960s</div><div class="body"><span class="badge">Planned</span><h3>Sublime Porte</h3><p>The Ottoman Empire never fell. Push it back to its height between two superpower blocs, from the Balkans to the Levant.</p></div></article>
+   <article class="scen"><div class="art blank">Near future · 2044</div><div class="body"><span class="badge">Planned</span><h3>Einheit 2044</h3><p>A divided Germany in 2044. Reunify it by diplomacy or by force, with modernised mid-century hardware and drones overhead.</p></div></article>
+  </div>
+  <p style="margin-top:28px;color:var(--dim);font-size:15px">Scenarios are fiction inspired by history, not reconstructions of it. Nations, leaders and events are invented or alternate versions.</p>
+ </div>
+</section>
+
+<section class="paper" id="pillars">
+ <div class="wrap">
+  <div class="head"><span class="kicker" style="color:#b05a14">Design pillars</span><h2>What we won't compromise on</h2></div>
+  <div class="grid">
+   <div class="card"><h3>Every battle matters</h3><p>Territory, losses and veterancy from a battle write straight back to the campaign.</p></div>
+   <div class="card"><h3>History as a sandbox</h3><p>No fixed script, only events and pressures. The player makes the history.</p></div>
+   <div class="card"><h3>Readable at a glance</h3><p>A province, a squad or a building shows its state without opening a panel.</p></div>
+   <div class="card"><h3>Small, deep rosters</h3><p>A few unit types with clear upgrade paths, not dozens of near-identical ones.</p></div>
+   <div class="card"><h3>Built lean</h3><p>A static browser game, no install and no server, grown by one developer with AI help.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="look">
+ <div class="wrap">
+  <div class="head"><span class="kicker">Look and sound</span><h2>1940s shapes, 2040s kit</h2></div>
+  <div class="row">
+   <figure class="pic"><img src="../gdd/references/ref-01-strategic-world-map.jpg" alt="Inspiration reference: a strategy game's political world map with coloured kingdoms and a slim top bar." width="1600" height="900" loading="lazy"><figcaption>Inspiration reference. Credit: in-game screenshot from a third-party grand strategy game, © its developer and publisher; rights cleared by Vincent De Nil, 25 November 2026.</figcaption></figure>
+   <div class="txt"><span class="tag">Art direction</span><h3>A painted war room</h3>
+    <p>Muted terrain under strong nation colours, hand-lettered names, and a projector glow over the table. Interface panels look like field telegrams and unit files, typed and stamped.</p>
+    <p>Battles in a top-down three-quarter view with readable silhouettes, built from the WW2044 model gallery.</p>
+   </div>
+  </div>
+  <div class="row flip">
+   <figure class="pic"><img src="../gdd/references/ref-02-rts-layer-troop-upgrades.jpg" alt="Inspiration reference: a WW2 RTS army screen with three soldiers in winter gear and a squad list." width="1293" height="708" loading="lazy"><figcaption>Inspiration reference. Credit: in-game screenshot from a third-party WW2 real-time strategy game, © its developer and publisher; rights cleared by Vincent De Nil, 25 November 2026.</figcaption></figure>
+   <div class="txt"><span class="tag">Music and sound</span><h3>Industrial marches and radio static</h3>
+    <p>An original score in the spirit of late-nineties RTS soundtracks: heavy synth bass, chugging guitars, military snares and sampled radio chatter. Tense beds on the map, high-energy tracks in battle.</p>
+    <p>Short, radio-filtered unit responses: "Moving out." "Contact front."</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="paper" id="roadmap">
+ <div class="wrap">
+  <div class="head"><span class="kicker" style="color:#b05a14">Roadmap</span><h2>Where it stands</h2><p>A vertical slice first: one scenario that proves both layers and the link between them.</p></div>
+  <div class="road">
+   <div class="done"><b>M0 · done</b><h3>Design</h3><p>Scope agreed, main menu, strategic map and barracks prototypes.</p></div>
+   <div><b>M1</b><h3>Battle prototype</h3><p>One battle map, squads, sectors, resources, one building.</p></div>
+   <div><b>M2</b><h3>Base and upgrades</h3><p>Four buildings, six units, loadouts, veterancy, enemy AI.</p></div>
+   <div><b>M3</b><h3>Campaign</h3><p>Provinces, turns, income, research, events, auto-resolve.</p></div>
+   <div><b>M4</b><h3>Link and polish</h3><p>Map to battle and back, music, the full slice online.</p></div>
+  </div>
+  <p class="dim" style="margin-top:36px;font-size:16px">Later: OpenGSG, an open alt-history engine where players describe the history they want and an AI assistant writes the mod.</p>
+ </div>
+</section>
+
+<section class="cta">
+ <div class="wrap">
+  <span class="kicker">Vertical slice · in your browser</span><h2>Take command</h2>
+  <p>No install, no account. Open the war room and see where the front is today.</p>
+  <div class="btns"><a class="btn primary" href="../strategic-map/">Strategic map</a><a class="btn" href="../barracks/">Barracks</a><a class="btn" href="../">Main menu</a><a class="btn" href="../gdd/">Full design document</a></div>
+ </div>
+</section>
+
+<section class="band" style="padding:56px 0">
+ <div class="wrap">
+  <h2 style="font-size:24px;margin-bottom:18px">Credits</h2>
+  <div class="credits">
+   <p><b>Screenshots</b> are renders of the WW2044: Total War vertical slice, 25 November 2026. The two inspiration references are credited under each image; WW2044's own map, art, interface and music are original.</p>
+   <p><b>Map:</b> Natural Earth (public domain) with hand-digitised 1936 frontiers; relief from Terrain Tiles on AWS (Mapzen; SRTM, ETOPO1, contains Copernicus EU-DEM data).</p>
+   <p><b>Units and soldiers:</b> the WW2044 model gallery by Vincent De Nil; posed soldiers from Escape From Claudov (Riposte: Frontline engine by BenDBSS, MIT; StG 44 from Partisan Project).</p>
+   <p><b>Icons:</b> game-icons.net by Lorc, Delapouite and contributors, CC BY 3.0, recoloured. <b>Fonts:</b> Oswald, Barlow, Special Elite (SIL OFL / Apache 2.0). <b>Engine:</b> three.js, MIT.</p>
+  </div>
+ </div>
+</section>
+<footer><div class="wrap">WW2044: Total War · game design overview · <a href="../">Back to the main menu</a> · <a href="../../">/projects/</a></div></footer>
+</body></html>
