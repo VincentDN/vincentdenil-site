@@ -1,0 +1,159 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="seo_hidden" content="true"><title>WW2044: Total War — Game design document</title><link rel="icon" href="/favicon.ico">
+<!-- Page styles: the Partisan master-roadmap sheet (vincentdenil-site /3d/partisan-project/roadmap/), unchanged, plus the
+     WW2044 additions below it (figures, and the main-menu mockup that copies the Partisan bench opener). -->
+<style>:root{color-scheme:light;--ink:#1f3032;--muted:#566563;--line:#d7ded9;--accent:#915324}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f2f2e9;color:var(--ink);font:17px/1.72 Georgia,serif}header{background:#112024;color:#eee9db;padding:42px max(24px,calc((100vw - 1260px)/2));font:14px/1.6 system-ui}header strong{font-size:24px;letter-spacing:.06em}header a{color:#c8dddb}header p{margin:10px 0 0;color:#c3cecb}.layout{max-width:1320px;margin:auto;display:grid;grid-template-columns:245px minmax(0,1fr);gap:45px;padding:36px 30px 70px}nav{position:sticky;top:24px;align-self:start;max-height:92vh;overflow:auto;font:13px/1.5 system-ui}nav a{display:block;color:#47625e;padding:7px 0;text-decoration:none;border-bottom:1px solid var(--line)}nav a:hover{color:var(--accent)}article{min-width:0;background:#fffef8;padding:36px 46px;border:1px solid var(--line)}h1,h2,h3,h4{font-family:system-ui,sans-serif;line-height:1.25;color:#203c3d}h1{font-size:38px;margin-top:0;letter-spacing:-.04em}h2{font-size:26px;border-top:2px solid #9aae9f;margin-top:55px;padding-top:25px;scroll-margin-top:24px}h3{font-size:20px;margin-top:32px}p{margin:16px 0}a{color:#885026;text-underline-offset:3px}code{font:13px/1.55 ui-monospace,monospace;background:#eaf0e9;padding:2px 4px;overflow-wrap:anywhere}.table-wrap{overflow-x:auto;margin:24px 0}table{width:100%;border-collapse:collapse;font:13px/1.5 system-ui}td,th{text-align:left;vertical-align:top;padding:11px 12px;border:1px solid var(--line);min-width:105px}th{background:#173439;color:#f5f4e9}tr:nth-child(even){background:#f0f3ed}article img{display:block;max-width:100%;height:auto;margin:22px auto;border:1px solid var(--line)}li{margin:6px 0}strong{font-weight:700}footer{font:13px/1.5 system-ui;color:var(--muted);margin-top:45px;border-top:1px solid var(--line);padding-top:20px}@media(max-width:950px){.layout{display:block;padding:20px 14px}nav{position:static;max-height:none;margin-bottom:24px;columns:2}article{padding:25px}h1{font-size:30px}}@media(max-width:520px){body{font-size:16px}nav{columns:1}article{padding:18px}header{padding:24px}h2{font-size:23px}}@media print{body{background:white;font-size:11pt}header,nav{display:none}.layout{display:block;padding:0}article{border:0;padding:0}h2{break-after:avoid}img,table{break-inside:avoid}a{color:inherit}h1{font-size:25pt}}
+/* WW2044 additions */
+.lede{font-size:20px;line-height:1.6;color:#203c3d}figure{margin:26px 0}figure img{margin:0 auto 8px!important}figcaption{font:13px/1.5 system-ui;color:var(--muted)}.ref-missing{display:grid;place-items:center;aspect-ratio:16/9;background:#e7ebe4;border:1px dashed #9aae9f;font:13px/1.5 system-ui;color:var(--muted);padding:20px;text-align:center;margin-bottom:8px}
+.menu-mock{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid #0b1214;background:radial-gradient(120% 90% at 70% 35%,#3a3a2c 0,#1b211f 45%,#07090a 100%);color:#eceeea;font:14px/1.5 system-ui,sans-serif;margin:24px 0 8px}
+.menu-mock::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 4px),radial-gradient(40% 30% at 72% 40%,#ef8f3922,transparent)}
+.menu-mock .bar{position:absolute;inset:0 0 auto 0;padding:12px 18px;display:flex;justify-content:space-between;gap:16px;font:11px/1.5 ui-monospace,monospace;background:linear-gradient(#000a,transparent);color:#9aa9b0}.menu-mock .bar b{color:#eceeea;font-weight:500;letter-spacing:.12em}
+.menu-mock .prompt{position:absolute;left:5%;bottom:9%;max-width:360px}.menu-mock h4{color:#eceeea;font-size:clamp(15px,2vw,21px);letter-spacing:.06em;margin:0 0 8px;text-shadow:0 2px 12px #000}.menu-mock p{color:#9aa9b0;font-size:13px;margin:0 0 12px}
+.menu-mock .start{display:inline-block;font:600 12px/1 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#1a1208;background:#ef8f39;border-radius:3px;padding:12px 16px}.menu-mock ul{list-style:none;padding:0;margin:12px 0 0;font:12px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.menu-mock li{margin:5px 0;color:#c8d3d6}
+.menu-mock .note{position:absolute;right:14px;bottom:10px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#161d21cc;border:1px solid #b4c4cc26}
+@media(max-width:620px){.menu-mock{aspect-ratio:3/4}.menu-mock .bar span:first-child{display:none}}
+</style></head><body><header><strong>WW2044: TOTAL WAR / GAME DESIGN DOCUMENT</strong><p>25 November 2026 · Pre-production · One-page design for the vertical slice</p><p><a href="/projects/ww2044-total-war/">Back to Total War project</a> · <a href="#section-10">Vertical slice scope</a> · <a href="#section-12">Inspiration references</a></p></header><div class="layout"><nav aria-label="Contents"><a href="#section-1">1. Pitch</a><a href="#section-2">2. Design pillars</a><a href="#section-3">3. Core loop</a><a href="#section-4">4. Strategic layer</a><a href="#section-5">5. Battle layer (RTS)</a><a href="#section-6">6. Troops and upgrades</a><a href="#section-7">7. Scenarios and timelines</a><a href="#section-8">8. Main menu and UI</a><a href="#section-9">9. Art and music direction</a><a href="#section-10">10. Vertical slice scope</a><a href="#section-11">11. Tech and budget</a><a href="#section-12">12. Inspiration references</a><a href="#section-13">13. Open decisions</a></nav><article><h1>WW2044: Total War</h1>
+<p class="lede">Shape (alt)history in a genre-bending mix of grand strategy, real-time strategy and 4X. Control any nation in a series of fictional scenarios inspired by history. Pick your scenario and your timeline and relive history's events in your own way: drive the Ottoman Empire to its height in a Cold War setting, reunify Germany in a modern, near sci-fi 2044, or rewrite a crisis of your own choosing.</p>
+
+<h2 id="section-1">1. Pitch</h2>
+<p>A turn-based world map where you run a nation, and real-time battles where you fight for it. Every war declared on the map is decided on a battlefield you command directly: build a forward base, gather resources, train and upgrade squads, and take the objective. Win and the map changes; lose and the front moves against you.</p>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Answer</th></tr></thead><tbody>
+<tr><td>Genre</td><td>Grand strategy + 4X campaign layer, RTS battle layer with base building</td></tr>
+<tr><td>Platform</td><td>Browser, static files, keyboard and mouse first (desktop). No install, no server.</td></tr>
+<tr><td>Player</td><td>Strategy players who like both the map-painting campaign and hands-on battles, in short sessions (20–40 minutes per scenario chapter)</td></tr>
+<tr><td>Setting</td><td>The WW2044 universe: alternate timelines from the 1940s to 2044, with familiar mid-century hardware modernised (see the Fallschirmjäger, Sd.Kfz.341 and StG 44 2044 models in this repository)</td></tr>
+<tr><td>Hook</td><td>Pick a nation and a timeline. The same map plays out differently in a Cold War year and in 2044.</td></tr>
+</tbody></table></div>
+
+<h2 id="section-2">2. Design pillars</h2>
+<ol>
+<li><strong>Every battle matters on the map.</strong> Battles are not side missions: their result (territory, losses, veterancy) writes straight back to the campaign.</li>
+<li><strong>History as a sandbox.</strong> Scenarios start from a recognisable moment, then the player makes the history. No fixed script, only events and pressures.</li>
+<li><strong>Readable at a glance.</strong> Few, meaningful numbers. A province, a squad or a building shows its state without opening a panel.</li>
+<li><strong>Small, deep rosters.</strong> A handful of unit types per faction, each with a clear upgrade path, rather than dozens of near-identical units.</li>
+<li><strong>Built lean.</strong> A static, browser-based game a single developer can grow with AI help on modest plans (see section 11).</li>
+</ol>
+
+<h2 id="section-3">3. Core loop</h2>
+<ol>
+<li><strong>Campaign turn (1 turn = 1 season):</strong> collect income, set research, build in provinces, move armies, make deals.</li>
+<li><strong>Contact:</strong> an army moves into a hostile province, or is attacked. Choose to <em>fight</em> (play the RTS battle) or <em>auto-resolve</em> (quick calculation from army strength, terrain and veterancy).</li>
+<li><strong>Battle:</strong> deploy from the army's roster, build a forward base, capture resource points, upgrade troops, destroy the enemy HQ or hold the objective until the timer ends.</li>
+<li><strong>Aftermath:</strong> survivors keep veterancy, losses are deducted, the province changes hands, events and timeline pressure update.</li>
+</ol>
+
+<h2 id="section-4">4. Strategic layer (grand strategy + 4X)</h2>
+<p>A stylised political map, painted in nation colours on a terrain base, split into provinces. Inspiration: reference 1 (section 12) for the readable, coloured-territory map and the slim top bar of resources and date.</p>
+<div class="table-wrap"><table><thead><tr><th>System</th><th>What the player does</th><th>Slice scope</th></tr></thead><tbody>
+<tr><td>Provinces</td><td>Own, build in (1 slot: factory, barracks, depot or radar) and garrison</td><td>About 12 provinces in one region</td></tr>
+<tr><td>Economy</td><td>National income from provinces: <strong>Treasury</strong> (money) and <strong>Industry</strong> (production points)</td><td>Both, per-turn yield shown in the top bar</td></tr>
+<tr><td>Armies</td><td>Recruit, merge, move; each army is a roster of RTS squads and vehicles</td><td>Up to 3 armies per side</td></tr>
+<tr><td>Research</td><td>One project at a time on a short tree (infantry, armour, doctrine)</td><td>6 projects that unlock battle upgrades</td></tr>
+<tr><td>Diplomacy</td><td>War, peace, non-aggression, alliance; opinion from events</td><td>War and peace only</td></tr>
+<tr><td>Events and timeline</td><td>Scenario events with 2–3 choices that shift stability, money or relations</td><td>5 scripted events in the slice scenario</td></tr>
+<tr><td>AI</td><td>Opponent nations expand, defend and declare war by simple priorities</td><td>One opponent AI</td></tr>
+</tbody></table></div>
+
+<h2 id="section-5">5. Battle layer (RTS)</h2>
+<p>A top-down 3/4 battlefield in real time with pause. Classic RTS base building and resource management, tuned for short battles (10–20 minutes).</p>
+<h3>Resources</h3>
+<div class="table-wrap"><table><thead><tr><th>Resource</th><th>Source</th><th>Spent on</th></tr></thead><tbody>
+<tr><td><strong>Manpower</strong></td><td>Steady trickle from your HQ, more for each captured sector</td><td>Infantry squads, reinforcing losses</td></tr>
+<tr><td><strong>Supply</strong></td><td>Supply depots on captured supply points</td><td>Buildings, weapons, upgrades</td></tr>
+<tr><td><strong>Fuel</strong></td><td>Fuel points, fewer and contested</td><td>Vehicles, armour upgrades, tier unlocks</td></tr>
+</tbody></table></div>
+<p>The map is divided into sectors. Holding a connected chain of sectors back to your HQ is what makes a resource point pay out, so the front line is the economy.</p>
+<h3>Base building</h3>
+<ul>
+<li><strong>HQ</strong>: free, trains engineers, losing it loses the battle.</li>
+<li><strong>Barracks</strong>: infantry squads and infantry upgrades.</li>
+<li><strong>Motor pool</strong>: light and heavy vehicles (tier 2, needs fuel).</li>
+<li><strong>Depot</strong>: built on a resource point to raise its yield; also a reinforcement point.</li>
+<li><strong>Defences</strong>: sandbags, wire, MG nest, built by engineers.</li>
+</ul>
+<h3>Win conditions</h3>
+<p>Destroy the enemy HQ, or hold more victory points than the enemy when the timer runs out. Attackers and defenders get different starting positions and income, set by the campaign.</p>
+
+<h2 id="section-6">6. Troops and upgrades</h2>
+<p>Squads are the unit of play. Each squad has a role, a loadout and a veterancy level. Inspiration: reference 2 (section 12) for presenting a squad in full 3D with its roster beside it.</p>
+<div class="table-wrap"><table><thead><tr><th>Upgrade type</th><th>Where</th><th>Example</th></tr></thead><tbody>
+<tr><td>Loadout</td><td>In battle, at a barracks or near a depot (supply)</td><td>Swap rifles for assault rifles; add a rocket launcher; add a light MG</td></tr>
+<tr><td>Veterancy</td><td>Earned in battle, kept on the campaign map</td><td>3 ranks: accuracy, then health, then a squad ability</td></tr>
+<tr><td>Research unlock</td><td>Campaign research</td><td>Body armour, smoke grenades, vehicle reactive armour</td></tr>
+<tr><td>Look</td><td>Army screen between battles</td><td>Camo sets per season and theatre (winter, desert, urban)</td></tr>
+</tbody></table></div>
+<p>Slice roster (one faction mirrored with a palette swap for the opponent): engineers, rifle squad, paratrooper squad (Fallschirmjäger model), MG team, anti-tank team, half-track (Sd.Kfz.341 model). Six unit types, each with one loadout upgrade and three veterancy ranks.</p>
+
+<h2 id="section-7">7. Scenarios and timelines</h2>
+<p>A scenario is a start date, a map region, a set of playable nations and a deck of events. The <strong>timeline</strong> picks the era of technology and the tone: the same region in a different timeline brings different units, research and events.</p>
+<div class="table-wrap"><table><thead><tr><th>Scenario</th><th>Timeline</th><th>Premise</th></tr></thead><tbody>
+<tr><td><strong>Sublime Porte</strong></td><td>Cold War (1960s)</td><td>The Ottoman Empire never fell. Push it back to its height between two superpower blocs, in the Balkans, the Caucasus and the Levant.</td></tr>
+<tr><td><strong>Einheit 2044</strong> (slice)</td><td>Near future, near sci-fi (2044)</td><td>A divided Germany in 2044. Reunify it by diplomacy or by force, with modernised mid-century hardware, drones and powered armour on the horizon.</td></tr>
+<tr><td><em>Open slot</em></td><td>Any</td><td>Further scenarios follow the same template: one region, 2–4 nations, 10–20 events.</td></tr>
+</tbody></table></div>
+<p>Scenarios are fiction inspired by history, not reconstructions of it. Nations, leaders and events are invented or alternate versions.</p>
+
+<h2 id="section-8">8. Main menu and UI</h2>
+<p>The main menu reuses the Partisan opener look: a full-screen scene, a thin top bar with small monospace headers, and the menu in the bottom-left corner with one orange call to action. Music toggle bottom-right. The mockup below is drawn in CSS, as a layout target.</p>
+<div class="menu-mock" role="img" aria-label="Main menu mockup: thin top bar with small monospace headers, title and menu bottom left, orange New campaign button, music toggle bottom right.">
+ <div class="bar"><span>//vincentdenil.com/projects/ww2044-total-war/</span><span><b>WW2044</b> · TOTAL WAR · v0.1 slice</span><span>← Back to /projects/</span></div>
+ <div class="prompt"><h4>WW2044 · TOTAL WAR</h4><p>Shape (alt)history. Pick a nation, a scenario and a timeline.</p><span class="start">New campaign</span><ul><li>Continue</li><li>Scenarios</li><li>Skirmish battle</li><li>Settings</li></ul></div>
+ <div class="note">♪</div>
+</div>
+<p style="font:13px/1.5 system-ui;color:var(--muted)">Flow: Main menu → Scenario select (scenario, timeline, nation) → Campaign map → Battle → back to the campaign map.</p>
+<h3>In-game UI</h3>
+<ul>
+<li><strong>Campaign map:</strong> the same thin top bar (nation, date and turn, Treasury, Industry, research), end-turn button bottom-right, province panel bottom-left.</li>
+<li><strong>Battle:</strong> top bar with Manpower, Supply, Fuel and the battle timer; selected squad card and build menu bottom-left; minimap bottom-right.</li>
+<li>Same palette and type as the Partisan opener: near-black background, off-white text, grey-blue secondary text, orange accent for the one action that matters.</li>
+</ul>
+
+<h2 id="section-9">9. Art and music direction</h2>
+<h3>Art</h3>
+<p>Painted political map for the campaign: muted terrain, strong nation colours, hand-lettered province names. Battles in a top-down 3/4 view with readable silhouettes, reusing the WW2044 models (low-poly, baked into sprites or rendered with three.js; decided in the tech spike). Modernised mid-century hardware: 1940s shapes, 2040s kit.</p>
+<h3>Music</h3>
+<p>An original score in the spirit of late-1990s RTS soundtracks: driving industrial rock and electronic marches, heavy synth bass, chugging guitars, militaristic snares and sampled radio chatter. Tense ambient beds on the campaign map, high-energy tracks in battle, a stinger for victory and defeat. All music is composed or generated for this game; no existing tracks or melodies are used.</p>
+<h3>Sound</h3>
+<p>Short, punchy unit responses ("Moving out", "Contact front"), radio-filtered. A shared sound layer keeps menu music playing across screens, as in Partisan.</p>
+
+<h2 id="section-10">10. Vertical slice scope</h2>
+<p>The slice proves both layers and the link between them, in one scenario. Everything else waits.</p>
+<div class="table-wrap"><table><thead><tr><th>In the slice</th><th>Not in the slice</th></tr></thead><tbody>
+<tr><td>Main menu, scenario select (one scenario, one timeline, two nations)</td><td>More scenarios and timelines</td></tr>
+<tr><td>Campaign map: 12 provinces, 2 resources, 3 armies a side, 6 research projects, 5 events, war and peace</td><td>Full diplomacy, trade, espionage, multiple AIs</td></tr>
+<tr><td>One battle map with sectors, 3 resources, 4 building types, 6 unit types, loadout upgrades, 3 veterancy ranks</td><td>Naval and air battles, more maps, multiplayer</td></tr>
+<tr><td>Auto-resolve as an alternative to fighting</td><td>Save files beyond one browser autosave</td></tr>
+<tr><td>Basic enemy AI on both layers</td><td>Difficulty levels, modding</td></tr>
+<tr><td>2 music tracks (menu/map, battle) and a basic sound set</td><td>Voice acting, full soundtrack</td></tr>
+</tbody></table></div>
+<h3>Milestones</h3>
+<ol>
+<li><strong>M0, this document.</strong> Scope agreed.</li>
+<li><strong>M1, battle prototype.</strong> One battle map, select and move squads, capture sectors, resources tick, one building, one unit.</li>
+<li><strong>M2, base and upgrades.</strong> All 4 buildings, 6 units, loadouts, veterancy, enemy AI, win and loss.</li>
+<li><strong>M3, campaign map.</strong> Provinces, turns, income, armies, research, events, auto-resolve.</li>
+<li><strong>M4, link and polish.</strong> Map → battle → map with results carried over, main menu, music, deploy to vincentdenil.com/projects/.</li>
+</ol>
+
+<h2 id="section-11">11. Tech and budget</h2>
+<ul>
+<li><strong>Static and buildless.</strong> Plain HTML, CSS and JavaScript modules, served as files. No framework, no bundler for game code. Libraries (three.js, if used) load from a pinned CDN version, as Partisan does.</li>
+<li><strong>Rendering.</strong> Canvas 2D for the campaign map and battle by default; three.js only if the M1 spike shows sprites are not enough.</li>
+<li><strong>Data-driven.</strong> Units, buildings, research, provinces and events live in small JSON or JS data files, so balancing is an edit to data, not to code.</li>
+<li><strong>Repositories.</strong> Source in <code>vdn-ww2044</code> under <code>projects/total-war/</code>. Releases are copied as a static folder to <code>vincentdenil-site</code> under <code>/projects/ww2044-total-war/</code>, link-only and <code>noindex</code>.</li>
+<li><strong>Budget.</strong> Built on a $20 Claude plan and a $20 ChatGPT plan. Keep each task small (one system or one screen per pull request), keep files short so they fit in context, reuse existing WW2044 models and Partisan styles, and prefer data edits over code rewrites. Use one assistant for code and the other for review, naming, event writing and concept images.</li>
+</ul>
+
+<h2 id="section-12">12. Inspiration references</h2>
+<p>Mood and readability references only. WW2044: Total War is an original game: its map, art, UI, names and music are its own, and nothing below is to be copied.</p>
+<figure><div class="ref-missing">Third-party screenshot, held back from the public site pending a rights review. It is in the private vdn-ww2044 repository.</div><figcaption><strong>Reference 1, strategic world map.</strong> Painted terrain under strong nation colours, names lettered across territories, a slim top bar with the date and treasury. Takeaway: the campaign map should read at a glance and keep chrome to the edges.</figcaption></figure>
+<figure><div class="ref-missing">Third-party screenshot, held back from the public site pending a rights review. It is in the private vdn-ww2044 repository.</div><figcaption><strong>Reference 2, RTS layer and upgrading troops.</strong> A squad shown large in 3D in the middle, the roster grouped by role (infantry, weapon teams, vehicles) beside it. Takeaway: the army screen between battles is where loadouts and looks are chosen.</figcaption></figure>
+
+<h2 id="section-13">13. Open decisions</h2>
+<div class="table-wrap"><table><thead><tr><th>Decision</th><th>Options</th><th>Proposed</th></tr></thead><tbody>
+<tr><td>Battle rendering</td><td>Canvas 2D sprites / three.js 3D</td><td>Canvas 2D, decide after the M1 spike</td></tr>
+<tr><td>Campaign time</td><td>Turn-based seasons / real-time with pause</td><td>Turn-based seasons (simpler AI, clear battle hand-off)</td></tr>
+<tr><td>Slice scenario</td><td>Einheit 2044 / Sublime Porte</td><td>Einheit 2044 (fits the existing WW2044 models)</td></tr>
+<tr><td>Music source</td><td>Composed / AI-generated / licensed library</td><td>AI-generated or composed original tracks, rights checked before release</td></tr>
+</tbody></table></div>
+<footer>WW2044: Total War · game design document v0.1 · 25 November 2026. Page styles from the Partisan master roadmap. Reference screenshots are not published here; they stay in the private vdn-ww2044 repository.</footer>
+</article></div></body></html>
