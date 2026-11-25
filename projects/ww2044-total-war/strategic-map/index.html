@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WW2044: Total War | Strategic map</title>
+<meta name="robots" content="noindex">
+<meta name="seo_hidden" content="true">
+<meta name="description" content="WW2044: Total War strategic map vertical slice: painted political map, zoom, pan, unit selection, music and ambience.">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<div id="stage" role="application" aria-label="Strategic map. Drag to pan, scroll to zoom, click a unit to select it, shift-drag to box select, right-click to move."></div>
+<div id="box" hidden></div>
+<div id="tip" hidden></div>
+
+<header class="topbar">
+  <div class="tb-left">
+    <button class="emblem" title="Nation: Free Yantis"><svg><use href="img/icons.svg#i-flag-objective"/></svg></button>
+    <button class="rb" title="Military"><svg><use href="img/icons.svg#i-crossed-swords"/></svg></button>
+    <button class="rb" title="Economy"><svg><use href="img/icons.svg#i-factory"/></svg></button>
+    <button class="rb" title="Government"><svg><use href="img/icons.svg#i-capitol"/></svg></button>
+    <button class="rb" title="Population"><svg><use href="img/icons.svg#i-person"/></svg></button>
+    <button class="rb" title="Decisions"><svg><use href="img/icons.svg#i-scroll-unfurled"/></svg></button>
+    <button class="rb" title="Research"><svg><use href="img/icons.svg#i-atom"/></svg></button>
+    <button class="rb" title="Intelligence"><svg><use href="img/icons.svg#i-spy"/></svg></button>
+    <button class="rb" title="Diplomacy"><svg><use href="img/icons.svg#i-dove"/></svg></button>
+  </div>
+  <div class="tb-centre">
+    <button id="pause" class="mini" title="Pause (Space)"><svg><use href="img/icons.svg#i-pause-button"/></svg></button>
+    <button id="speed" class="mini speed" title="Speed (1–3)"><i></i><i></i><i></i></button>
+    <span class="res" title="Industry"><svg><use href="img/icons.svg#i-gears"/></svg><svg class="r2"><use href="img/icons.svg#i-oil-drum"/></svg></span>
+    <span id="date" class="date">14/3/2044</span>
+    <span id="state" class="state">Paused</span>
+  </div>
+  <div class="tb-right">
+    <button class="rb" title="Ledger"><svg><use href="img/icons.svg#i-book-cover"/></svg></button>
+    <button class="rb" title="Treasury"><svg><use href="img/icons.svg#i-bank"/></svg></button>
+    <button class="rb" title="Missions"><svg><use href="img/icons.svg#i-medal"/></svg></button>
+    <button class="rb" title="Victory"><svg><use href="img/icons.svg#i-laurels-trophy"/></svg></button>
+    <button class="rb" title="Find"><svg><use href="img/icons.svg#i-magnifying-glass"/></svg></button>
+    <button class="rb" id="music" title="Music on/off (M)" aria-pressed="true"><svg><use href="img/icons.svg#i-musical-notes"/></svg></button>
+    <button class="rb" id="amb" title="Ambience on/off (N)" aria-pressed="true"><svg><use href="img/icons.svg#i-speaker"/></svg></button>
+    <span class="gold" title="Treasury: income per month"><svg><use href="img/icons.svg#i-two-coins"/></svg><b id="gold">4,623</b><em id="income">+135</em></span>
+  </div>
+  <div class="portrait" title="Commander, Free Yantis"><img src="img/portrait.webp" alt="Commander portrait"></div>
+</header>
+<div class="sub-left">
+  <button class="rb sm" title="Armies"><svg><use href="img/icons.svg#i-tank"/></svg></button>
+  <button class="rb sm" title="Fleets"><svg><use href="img/icons.svg#i-battleship"/></svg></button>
+</div>
+<div id="toast" class="toast" role="status"><svg><use href="img/icons.svg#i-scroll-unfurled"/></svg><span>Coalition formed</span></div>
+
+<aside id="card" class="card" hidden aria-live="polite">
+  <div class="card-head"><img id="card-img" alt=""><div><h2 id="card-name"></h2><p id="card-sub"></p></div></div>
+  <dl id="card-rows"></dl>
+  <p class="card-hint">Right-click land or sea to move. Shift-click or shift-drag to add units.</p>
+</aside>
+
+<nav class="actions" aria-label="Actions">
+  <div class="act-top">
+    <button class="rb gold-b" title="Favourites"><svg><use href="img/icons.svg#i-ribbon-medal"/></svg></button>
+    <button class="rb gold-b" title="Recruit"><svg><use href="img/icons.svg#i-rifle"/></svg></button>
+    <button class="rb gold-b" title="Build"><svg><use href="img/icons.svg#i-hammer-nails"/></svg></button>
+  </div>
+  <div class="act-grid" id="grid"></div>
+</nav>
+
+<p class="hint">Drag to pan · scroll to zoom · click a unit to select · shift-drag to box select · right-click to move · Space pauses · <button id="credits-btn" class="link">Credits</button></p>
+
+<dialog id="credits">
+  <h2>WW2044: Total War · Strategic map slice</h2>
+  <p>An original vertical slice. Map, interface layout and code are drawn for WW2044; nothing is copied from the reference game.</p>
+  <ul>
+    <li><b>Map:</b> the Yantis island heightfield and settlements from PARTISAN (Vincent De Nil), set in placeholder seas and nations.</li>
+    <li><b>Unit and portrait art:</b> rendered from the WW2044 model gallery (Sherman M4 v2, Sd.Kfz. 251, Fallschirmjäger), Vincent De Nil.</li>
+    <li><b>Icons:</b> <a href="https://game-icons.net" target="_blank" rel="noopener">game-icons.net</a> by Lorc, Delapouite and contributors, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured.</li>
+    <li><b>Fonts:</b> Cinzel (Natanael Gama) and EB Garamond (Georg Duffner, Octavio Pardo), SIL Open Font License, via Google Fonts.</li>
+    <li><b>Music and ambience:</b> original, synthesised live in the browser (Web Audio), WW2044.</li>
+    <li><b>Engine:</b> <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> r169, MIT licence.</li>
+  </ul>
+  <form method="dialog"><button>Close</button></form>
+</dialog>
+
+<div id="start" class="start">
+  <div>
+    <p class="kicker">WW2044 · Total War · vertical slice</p>
+    <h1>Strategic Map</h1>
+    <p id="start-msg">Painting the map…</p>
+    <button id="go" disabled>Take command</button>
+    <p class="back"><a href="../">← Back to Total War</a></p>
+  </div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
