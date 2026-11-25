@@ -24,7 +24,7 @@ kbd{display:inline-block;min-width:16px;padding:0 4px;border:1px solid var(--lin
 .pool em{font-style:normal;font:600 13px Oswald,sans-serif;width:28px;text-align:center}
 #clock{font:600 16px Oswald,sans-serif;color:var(--gold2);min-width:44px;text-align:center}
 .mode{color:var(--dim);font-size:13px;margin-left:auto}
-#pause{width:30px;height:30px;padding:5px;background:#0006;border:1px solid var(--line);border-radius:3px}
+#pause,#mute{width:30px;height:30px;padding:5px;background:#0006;border:1px solid var(--line);border-radius:3px}
 
 #plates{position:fixed;inset:0;pointer-events:none;z-index:3}
 .plate{position:absolute;left:-22px;top:-12px;display:flex;align-items:center;gap:3px;padding:1px 4px;border-radius:3px;background:#000a;border-bottom:2px solid var(--us);pointer-events:auto;cursor:pointer;will-change:transform}

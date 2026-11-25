@@ -11,8 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1">
-<script type="importmap">{"imports":{"three":"../strategic-map/vendor/three.module.min.js","three/addons/":"../strategic-map/vendor/addons/"}}</script>
+<link rel="stylesheet" href="style.css?v=2">
+<script type="importmap">{"imports":{"three":"../strategic-map/vendor/three.module.min.js","three/addons/":"../strategic-map/vendor/addons/","./js/ai.js":"./js/ai.js?v=2","./js/audio.js":"./js/audio.js?v=2","./js/bridge.js":"./js/bridge.js?v=2","./js/build.js":"./js/build.js?v=2","./js/combat.js":"./js/combat.js?v=2","./js/economy.js":"./js/economy.js?v=2","./js/input.js":"./js/input.js?v=2","./js/main.js":"./js/main.js?v=2","./js/render.js":"./js/render.js?v=2","./js/save.js":"./js/save.js?v=2","./js/sim.js":"./js/sim.js?v=2","./js/ui.js":"./js/ui.js?v=2","./js/veterancy.js":"./js/veterancy.js?v=2"}}</script>
 </head>
 <body>
 <div id="stage" role="application" aria-label="Battle. Select squads with the left button, order them with the right button."><canvas></canvas></div>
@@ -29,6 +29,7 @@
     <span class="pool them"><em id="poolv1">500</em><i><b id="pool1"></b></i></span>
   </div>
   <span id="mode" class="mode">Skirmish · Town square</span>
+  <button id="mute" title="Sound on/off (M)"><svg><use href="../strategic-map/img/icons.svg#i-speaker"/></svg></button>
   <button id="pause" title="Pause (P)"><svg><use href="../strategic-map/img/icons.svg#i-pause-button"/></svg></button>
 </header>
 <div id="toasts"></div>
@@ -41,6 +42,6 @@
 </section>
 <div id="paused" class="paused" hidden>Paused · press P</div>
 <div id="end" class="end" hidden><div><h1 id="end-title"></h1><p id="end-sub"></p><ul id="end-list"></ul><p><a class="btn" href="../strategic-map/index.html">Strategic map</a> <a class="btn" href="index.html">Fight again</a></p></div></div>
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>

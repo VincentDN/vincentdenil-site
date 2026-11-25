@@ -129,12 +129,13 @@
   "command-post": {
    "name": "Command Post",
    "cost": {},
-   "hp": 2000,
+   "hp": 3000,
    "size": [
     5,
     5
    ],
-   "tier": 0
+   "tier": 0,
+   "weapon": "hmg"
   },
   "rifle-depot": {
    "name": "Rifle Depot",

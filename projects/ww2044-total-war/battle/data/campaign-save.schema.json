@@ -21,6 +21,8 @@
           "kind": {"enum": ["armour", "mech", "infantry"]},
           "nation": {"type": "integer", "description": "Index into NATIONS in strategic-map/js/world.js"},
           "at": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2, "description": "lon, lat"},
+          "pos": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2, "description": "Strategic map world x, z where the army last stood"},
+          "destroyed": {"type": "boolean"},
           "str": {"type": "integer", "minimum": 0, "description": "Campaign strength; battle losses scale it"},
           "mor": {"type": "integer", "minimum": 0, "maximum": 100},
           "vet": {"type": "integer", "minimum": 0, "maximum": 3, "description": "Derived: strength-weighted mean of section stars"},

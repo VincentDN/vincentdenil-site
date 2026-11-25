@@ -13,7 +13,8 @@ export function bindInput(canvas, view, world, ui, side = 0) {
     if (e.button === 0) drag = {x: e.clientX, y: e.clientY};
     if (e.button === 2 && sel.size) {
       const p = view.pick(e.clientX, e.clientY); if (!p) return;
-      const enemy = near(p, world.squads.filter((s) => s.side !== side), 5) || near(p, world.buildings.filter((b) => b.side !== side), 9);
+      const seen = (o) => { const k = world.grid.idx(o.x, o.z); return k >= 0 && (o.kind === 'building' ? world.seen[side][k] : world.vis[side][k]); };
+      const enemy = near(p, world.squads.filter((s) => s.side !== side && seen(s)), 5) || near(p, world.buildings.filter((b) => b.side !== side && seen(b)), 9);
       const ids = [...sel].filter((id) => mine().some((s) => s.id === id));
       if (enemy) order(world, side, {kind: 'attack', ids, target: enemy.id}); else order(world, side, {kind: 'move', ids, x: p.x, z: p.z});
       view.marker(p.x, p.z); ui.ack(enemy ? 'attack' : 'move');
@@ -42,6 +43,7 @@ export function bindInput(canvas, view, world, ui, side = 0) {
     else if (k === 'g' && ids.length) order(world, side, {kind: 'reinforce', ids});
     else if (k === 'x' && ids.length) order(world, side, {kind: 'stop', ids});
     else if (k === 'p') ui.togglePause();
+    else if (k === 'm') ui.toggleMute();
     else if (k === 'escape') { sel.clear(); ui.refresh(); }
     else if (k === ' ') { const s = mine().find((s) => sel.has(s.id)) || world.buildings.find((b) => b.side === side); if (s) { view.cam.x = s.x; view.cam.z = s.z + 20; } e.preventDefault(); }
     else if (/^[1-9]$/.test(k)) { if (e.ctrlKey || e.metaKey) { groups[k] = ids; e.preventDefault(); } else if (groups[k]) { sel.clear(); groups[k].forEach((id) => mine().some((s) => s.id === id) && sel.add(id)); ui.refresh(); } }

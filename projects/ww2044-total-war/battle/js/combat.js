@@ -1,5 +1,5 @@
 // Targeting, hit chance (accuracy band x cover x moving x veterancy x suppression), damage, armour facing, suppression, deaths.
-import {dist, byId} from './sim.js';
+import {dist, byId, sees} from './sim.js';
 import {award} from './veterancy.js';
 
 const COVER = [1, 0.65, 0.4];
@@ -14,16 +14,34 @@ function weaponsOf(w, s) {
 
 function pickTarget(w, s, range) {
   const forced = s.attack && byId(w, s.attack);
-  if (forced && dist(s, forced) <= range && (forced.men ? forced.men.length : forced.hp > 0)) return forced;
+  if (forced && dist(s, forced) <= range && (forced.men ? forced.men.length : forced.hp > 0) && sees(w, s.side, forced.x, forced.z)) return forced;
   let best = null, bd = range;
-  for (const o of w.squads) if (o.side !== s.side && o.men.length) { const d = dist(s, o); if (d < bd && (!o.camo || d < range * 0.5)) { bd = d; best = o; } }
+  for (const o of w.squads) if (o.side !== s.side && o.men.length && sees(w, s.side, o.x, o.z)) { const d = dist(s, o); const camo = w.data.units[o.type].camo && !o.moving; if (d < bd && (!camo || d < range * 0.5)) { bd = d; best = o; } }
   if (!best && s.attack) return null;
-  if (!best) for (const b of w.buildings) if (b.side !== s.side && dist(s, b) < range * 0.7) return b;
+  if (!best) for (const b of w.buildings) if (b.side !== s.side && dist(s, b) < range * 0.7 && sees(w, s.side, b.x, b.z)) return b;
   return best;
+}
+
+// Buildings with a weapon (the Command Post's MG) shoot the nearest enemy squad they can see.
+function buildingFire(w, dt) {
+  for (const b of w.buildings) {
+    const wid = w.data.buildings[b.type].weapon; if (!wid || b.done < 1) continue;
+    b.cool = (b.cool ?? 0) - dt; if (b.cool > 0) continue;
+    const wpn = w.data.weapons[wid]; b.cool = 1 / wpn.rof;
+    let t = null, bd = wpn.range;
+    for (const o of w.squads) if (o.side !== b.side && o.men.length && sees(w, b.side, o.x, o.z)) { const d = dist(b, o); if (d < bd) { bd = d; t = o; } }
+    if (!t) { b.cool = 0.5; continue; }
+    const victim = t.men[Math.floor(w.rand() * t.men.length)], cell = w.grid.idx(victim.x, victim.z), band = bd < wpn.range / 3 ? 0 : bd < wpn.range * 2 / 3 ? 1 : 2;
+    const hit = !t.vehicle && w.rand() < wpn.acc[band] * COVER[cell >= 0 ? w.grid.cover[cell] : 0];
+    w.events.push({kind: 'shot', w: wid, from: {x: b.x, z: b.z}, to: victim, hit});
+    if (!t.vehicle) t.supp = Math.min(1, t.supp + wpn.supp * 0.035 / t.vet.suppResist);
+    if (hit) { victim.hp -= wpn.dmg; if (victim.hp <= 0) { t.men.splice(t.men.indexOf(victim), 1); w.events.push({kind: 'death', side: t.side, at: {x: victim.x, z: victim.z}}); if (!t.men.length) { w.squads.splice(w.squads.indexOf(t), 1); (w.fallen ||= []).push(t); w.events.push({kind: 'wiped', side: t.side, type: t.type}); } } }
+  }
 }
 
 export function combatSystem(w, dt) {
   const rules = w.data.veterancy;
+  buildingFire(w, dt);
   for (const s of w.squads) {
     if (!s.men.length || s.state === 'retreat') continue;
     const ws = weaponsOf(w, s), u = w.data.units[s.type];

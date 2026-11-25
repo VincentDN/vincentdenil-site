@@ -11,8 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
-<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/","./js/main.js":"./js/main.js?v=6","./js/world.js":"./js/world.js?v=6","./js/map.js":"./js/map.js?v=6","./js/overlay.js":"./js/overlay.js?v=6","./js/units.js":"./js/units.js?v=6","./js/audio.js":"./js/audio.js?v=6"}}</script>
+<link rel="stylesheet" href="style.css?v=7">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/","./js/main.js":"./js/main.js?v=7","./js/world.js":"./js/world.js?v=7","./js/map.js":"./js/map.js?v=7","./js/overlay.js":"./js/overlay.js?v=7","./js/units.js":"./js/units.js?v=7","./js/audio.js":"./js/audio.js?v=7","../battle/js/save.js":"../battle/js/save.js?v=2","../battle/js/veterancy.js":"../battle/js/veterancy.js?v=2"}}</script>
 </head>
 <body>
 <div id="projector" aria-hidden="true"><div id="grain"></div></div>
@@ -62,6 +62,7 @@
 <aside id="card" class="card" hidden aria-live="polite">
   <div class="card-head"><img id="card-img" alt=""><div><h2 id="card-name"></h2><p id="card-sub"></p></div></div>
   <dl id="card-rows"></dl>
+  <button id="engage" class="engage" hidden>Engage</button>
   <p class="card-hint">Right-click land or sea to move. Shift-click or shift-drag to add units.</p>
 </aside>
 
@@ -100,6 +101,6 @@
     <p class="back"><a href="../">← Back to Total War</a></p>
   </div>
 </div>
-<script type="module" src="js/main.js?v=6"></script>
+<script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>
