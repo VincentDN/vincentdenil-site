@@ -1,25 +1,21 @@
-// The overlay sheet, drawn once on a canvas: rivers traced downhill from the mountains, dashed sea trade routes,
-// settlement names, and the nations' names lettered along gentle arcs across their land.
+// The overlay sheet, drawn once on a canvas: the real rivers (Natural Earth), dashed Baltic shipping lanes, town names,
+// and the nations' names lettered along gentle arcs across their land.
 import * as T from 'three';
-import {WORLD, PROVINCES, NATIONS, provinceAt, sampleGrid} from './world.js';
+import {WORLD, PROVINCES, NATIONS, RIVERS, nationAt, lonlat, sampleGrid} from './world.js';
 
 const W = 4096, H = Math.round((W * WORLD.d) / WORLD.w), K = W / WORLD.w;
 const px = x => (x + WORLD.w / 2) * K, pz = z => (z + WORLD.d / 2) * K;
 
-// Sea lanes (map units): ports and the waypoints between them, chosen to stay over water.
-export const ROUTES = [
-  [[-250, -130], [-420, -330], [-560, -470]],
-  [[30, -200], [120, -330], [160, -430]],
-  [[420, 60], [600, -60], [760, -200], [900, -280]],
-  [[480, 240], [700, 230], [830, 300]],
-  [[-140, 430], [-190, 540]],
-  [[120, 470], [60, 610]],
-  [[330, 420], [430, 500]],
-  [[-500, 160], [-760, 200], [-1100, 260], [-1260, 300]],
-  [[60, 610], [100, 800]], [[-190, 600], [-300, 820]], [[440, 520], [700, 620], [900, 820]],
-  [[-640, -170], [-470, -40], [-420, 40]],
-  [[900, -280], [1100, -200], [1260, -230]],
-];
+// Baltic shipping lanes in 1936 (lon, lat): Gdynia and Danzig to the Sound, to Stockholm and to Königsberg, Stettin and Memel.
+const LANES = [
+  [[18.62, 54.6], [18.9, 54.9], [17.6, 55.25], [15.8, 55.3], [14.4, 55.15], [13.2, 55.1], [12.75, 55.45], [12.7, 55.9]],
+  [[18.9, 54.9], [19.1, 55.6], [18.9, 56.4], [18.9, 57.4]],
+  [[18.9, 54.9], [19.6, 54.9], [19.88, 54.66]],
+  [[14.27, 53.95], [14.4, 54.4], [14.9, 54.75], [15.8, 55.3]],
+  [[21.08, 55.72], [20.4, 55.75], [19.6, 55.5], [19.1, 55.6]],
+  [[10.2, 54.42], [10.9, 54.5], [11.6, 54.5], [12.4, 54.55], [13.3, 54.75], [14.4, 55.15]],
+  [[21.0, 56.52], [20.4, 56.4], [19.4, 55.9]],
+].map(l => l.map(([lo, la]) => lonlat(lo, la)));
 
 function curve(g, pts, tension = 0.5) {
   g.moveTo(px(pts[0][0]), pz(pts[0][1]));
@@ -31,40 +27,14 @@ function curve(g, pts, tension = 0.5) {
   }
 }
 
-function rivers(g, grid) {
-  const {cols, rows, h} = grid, starts = [];
-  for (let j = 4; j < rows - 4; j += 6) for (let i = 4; i < cols - 4; i += 6) {
-    const k = j * cols + i;
-    if (h[k] > 30 && starts.every(([a, b]) => Math.hypot(a - i, b - j) > 26)) starts.push([i, j]);
-  }
+function rivers(g) {
   g.lineCap = g.lineJoin = 'round';
-  for (const [si, sj] of starts) {
-    let i = si, j = sj;
-    const path = [[i, j]], seen = new Set([j * cols + i]);
-    for (let step = 0; step < 400; step++) {
-      let best = null, bh = h[j * cols + i];
-      for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) {
-        const ni = i + di, nj = j + dj;
-        if (ni < 0 || nj < 0 || ni >= cols || nj >= rows) continue;
-        const k = nj * cols + ni;
-        if (!seen.has(k) && h[k] < bh + 0.15) { bh = h[k]; best = [ni, nj]; }
-      }
-      if (!best) break;
-      [i, j] = best;
-      seen.add(j * cols + i);
-      path.push(best);
-      if (h[j * cols + i] <= 0) break;
-    }
-    if (path.length < 22 || h[j * cols + i] > 0) continue;
-    const toW = ([a, b]) => [-WORLD.w / 2 + a * grid.sx + Math.sin(b * 0.9) * 1.2, -WORLD.d / 2 + b * grid.sz + Math.cos(a * 0.8) * 1.2];
-    const pts = path.filter((_, n) => n % 3 === 0 || n === path.length - 1).map(toW);
-    for (let n = 1; n < pts.length; n++) {
-      g.beginPath();
-      curve(g, pts.slice(n - 1, n + 1));
-      g.strokeStyle = 'rgba(48,82,104,.75)';
-      g.lineWidth = 1.2 + (n / pts.length) * 2.6;
-      g.stroke();
-    }
+  for (const [w, pts] of RIVERS) {
+    g.beginPath();
+    for (let k = 0; k < pts.length; k += 2) (k ? g.lineTo : g.moveTo).call(g, px(pts[k]), pz(pts[k + 1]));
+    g.strokeStyle = 'rgba(40,74,96,.8)';
+    g.lineWidth = 1.2 + Math.min(4, w * 1.6);
+    g.stroke();
   }
 }
 
@@ -102,7 +72,7 @@ function nationLabels(g, grid) {
   const at = (i, j) => [-WORLD.w / 2 + ((i + 0.5) * WORLD.w) / C, -WORLD.d / 2 + ((j + 0.5) * WORLD.d) / R];
   for (let j = 0; j < R; j++) for (let i = 0; i < C; i++) {
     const [x, z] = at(i, j);
-    if (sampleGrid(grid, grid.sd, x, z) > 2) owner[j * C + i] = PROVINCES[provinceAt(x, z)].nation;
+    if (sampleGrid(grid, grid.sd, x, z) > 2) owner[j * C + i] = nationAt(x, z);
   }
   const seen = new Uint8Array(C * R), best = {};
   for (let s = 0; s < C * R; s++) {
@@ -131,8 +101,8 @@ function nationLabels(g, grid) {
       let ang = 0.5 * Math.atan2(2 * sxz, sxx - szz);
       if (ang > Math.PI / 2) ang -= Math.PI; if (ang < -Math.PI / 2) ang += Math.PI;
       const len = 2.4 * Math.sqrt((sxx * Math.cos(ang) ** 2 + szz * Math.sin(ang) ** 2 + 2 * sxz * Math.sin(ang) * Math.cos(ang)) / cells.length);
-      const name = NATIONS[n].name.toUpperCase();
-      const size = Math.max(30, Math.min(96, ((len * K) / name.length) * 1.15));
+      const name = (+n === 1 && mx > 0 ? 'East Prussia' : NATIONS[n].name).toUpperCase();
+      const size = Math.max(26, Math.min(120, ((len * K) / name.length) * 1.15));
       arcText(g, name, px(mx), pz(mz), ang, size, 0.12);
     }
   }
@@ -143,26 +113,27 @@ export async function buildOverlay(grid) {
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
   const g = cv.getContext('2d');
-  rivers(g, grid);
+  rivers(g);
   // trade routes
   g.setLineDash([18, 13]);
   g.lineCap = 'round';
-  for (const r of ROUTES) {
+  for (const r of LANES) {
     g.beginPath(); curve(g, r);
     g.strokeStyle = 'rgba(20,28,36,.3)'; g.lineWidth = 6; g.stroke();
     g.strokeStyle = 'rgba(238,240,234,.85)'; g.lineWidth = 3.4; g.stroke();
   }
   g.setLineDash([]);
-  // settlements on Yantis: a dot and an italic name
+  // towns: a square marker and a typed name; capitals larger
   g.textAlign = 'left';
   g.textBaseline = 'middle';
-  for (const p of PROVINCES.filter(p => p.seat)) {
-    const x = px(p.x), y = pz(p.z);
-    g.fillStyle = '#efe9d8'; g.fillRect(x - 5, y - 5, 10, 10);
-    g.lineWidth = 2; g.strokeStyle = '#1a1d1b'; g.strokeRect(x - 5, y - 5, 10, 10);
-    g.font = '22px "Special Elite", monospace';
-    g.lineWidth = 4; g.strokeStyle = 'rgba(15,18,17,.6)'; g.strokeText(p.name.toUpperCase(), x + 10, y - 2);
-    g.fillStyle = '#efe9d8'; g.fillText(p.name.toUpperCase(), x + 10, y - 2);
+  const CAPITALS = ['Warszawa', 'Berlin', 'Kaunas', 'Rīga', 'Praha', 'Wien', 'Budapest', 'København', 'Danzig', 'Minsk', 'Kiev'];
+  for (const p of PROVINCES.filter(p => p.seat && Math.abs(p.x) < WORLD.w / 2 - 20 && Math.abs(p.z) < WORLD.d / 2 - 20)) {
+    const x = px(p.x), y = pz(p.z), cap = CAPITALS.includes(p.name), r = cap ? 7 : 4;
+    g.fillStyle = cap ? '#f2c46b' : '#efe9d8'; g.fillRect(x - r, y - r, r * 2, r * 2);
+    g.lineWidth = 2; g.strokeStyle = '#1a1d1b'; g.strokeRect(x - r, y - r, r * 2, r * 2);
+    g.font = `${cap ? 26 : 17}px "Special Elite", monospace`;
+    g.lineWidth = 4; g.strokeStyle = 'rgba(15,18,17,.6)'; g.strokeText(p.name.toUpperCase(), x + r + 4, y - 1);
+    g.fillStyle = '#efe9d8'; g.fillText(p.name.toUpperCase(), x + r + 4, y - 1);
   }
   nationLabels(g, grid);
   const tex = new T.CanvasTexture(cv);

@@ -3,8 +3,6 @@
 // with a canvas overlay for rivers, trade routes and lettering. Below it, the wooden table the map lies on.
 import * as T from 'three';
 import {WORLD, PROVINCES, NATIONS} from './world.js';
-
-const NP = PROVINCES.length;
 const GLSL_NOISE = `
 float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 float vn(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(h21(i),h21(i+vec2(1,0)),u.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),u.x),u.y);}
@@ -13,21 +11,31 @@ float fbm3(vec2 p){float s=0.,a=.5;for(int i=0;i<3;i++){s+=vn(p)*a;p=p*2.03+17.1
 `;
 
 export function buildMap(scene, grid, overlayTex) {
-  // data texture: r = height, g = signed distance to the coast (map units)
+  // data texture: r = height, g = signed distance to the coast, b = distance to a province border, a = to a nation border
   const data = new Float32Array(grid.cols * grid.rows * 4);
-  for (let k = 0; k < grid.cols * grid.rows; k++) { data[k * 4] = grid.h[k]; data[k * 4 + 1] = grid.sd[k]; }
+  for (let k = 0; k < grid.cols * grid.rows; k++) { data[k * 4] = grid.h[k]; data[k * 4 + 1] = grid.sd[k]; data[k * 4 + 2] = Math.min(grid.dp[k], 60); data[k * 4 + 3] = Math.min(grid.dn[k], 60); }
   const half = new Uint16Array(data.length);
   for (let i = 0; i < data.length; i++) half[i] = T.DataUtils.toHalfFloat(data[i]);
   const tData = new T.DataTexture(half, grid.cols, grid.rows, T.RGBAFormat, T.HalfFloatType);
   tData.magFilter = tData.minFilter = T.LinearFilter;
   tData.needsUpdate = true;
 
-  const seeds = PROVINCES.map(p => new T.Vector4(p.x, p.z, p.nation, 0));
-  const nat = NATIONS.map(n => new T.Color(n.color));
+  // province ids per cell (nearest), and each province's nation colour
+  const ids = new Uint8Array(grid.cols * grid.rows * 4);
+  for (let k = 0; k < grid.cols * grid.rows; k++) { const p = grid.pid[k] < 0 ? 511 : grid.pid[k]; ids[k * 4] = p & 255; ids[k * 4 + 1] = p >> 8; }
+  const tId = new T.DataTexture(ids, grid.cols, grid.rows);
+  tId.needsUpdate = true;
+  // each cell's nation colour, filtered, so fills meet smoothly under the border line
+  const natRGB = NATIONS.map(n => { const c = new T.Color(n.color); return [c.r * 255, c.g * 255, c.b * 255]; });
+  const cols = new Uint8Array(grid.cols * grid.rows * 4);
+  for (let k = 0; k < grid.cols * grid.rows; k++) { const p = grid.pid[k]; if (p >= 0) cols.set(natRGB[PROVINCES[p].nation], k * 4); cols[k * 4 + 3] = 255; }
+  const tPal = new T.DataTexture(cols, grid.cols, grid.rows);
+  tPal.magFilter = tPal.minFilter = T.LinearFilter;
+  tPal.needsUpdate = true;
   const uniforms = {
-    tData: {value: tData}, tOver: {value: overlayTex},
+    tData: {value: tData}, tOver: {value: overlayTex}, tId: {value: tId}, tPal: {value: tPal},
     uWorld: {value: new T.Vector2(WORLD.w, WORLD.d)}, uCell: {value: new T.Vector2(1 / grid.cols, 1 / grid.rows)},
-    uSeeds: {value: seeds}, uNat: {value: nat}, uHover: {value: -1}, uSel: {value: -1}, uTime: {value: 0},
+    uHover: {value: -1}, uSel: {value: -1}, uTime: {value: 0},
   };
   const geo = new T.PlaneGeometry(WORLD.w, WORLD.d, 480, 320);
   geo.rotateX(-Math.PI / 2);
@@ -42,11 +50,9 @@ export function buildMap(scene, grid, overlayTex) {
     vertexShader: `varying vec2 vP;void main(){vP=position.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
     fragmentShader: `
 precision highp float;
-#define NP ${NP}
-uniform sampler2D tData,tOver;uniform vec2 uWorld,uCell;uniform vec4 uSeeds[NP];uniform vec3 uNat[${NATIONS.length}];
+uniform sampler2D tData,tOver,tId,tPal;uniform vec2 uWorld,uCell;
 uniform int uHover,uSel;uniform float uTime;varying vec2 vP;
 ${GLSL_NOISE}
-vec2 warp(vec2 p){return vec2(p.x+14.*sin(p.y*.045+1.7)+7.*sin(p.y*.13+p.x*.05),p.y+14.*sin(p.x*.041+.3)+7.*sin(p.x*.12-p.y*.04));}
 float line(float d,float w,float px){return 1.-smoothstep(w*.5,w*.5+px,abs(d));}
 void main(){
   vec2 uv=(vP+uWorld*.5)/uWorld;
@@ -56,12 +62,11 @@ void main(){
   float s=sd+wob;
   vec3 col;
   if(s>0.){
-    // provinces: nearest two seeds after the warp
-    vec2 w=warp(vP);float d1=1e12,d2=1e12;int i1=0,i2=0;
-    for(int i=0;i<NP;i++){vec2 q=uSeeds[i].xy-w;float dd=dot(q,q);if(dd<d1){d2=d1;i2=i1;d1=dd;i1=i;}else if(dd<d2){d2=dd;i2=i;}}
-    vec2 A=uSeeds[i1].xy,B=uSeeds[i2].xy;float edge=abs(dot(w-(A+B)*.5,normalize(B-A)));
-    int n1=int(uSeeds[i1].z),n2=int(uSeeds[i2].z);
-    vec3 nat=uNat[n1];
+    // provinces: the baked id under this point, and the distances to the nearest province and nation borders
+    vec4 I=texelFetch(tId,ivec2(uv*vec2(textureSize(tId,0)-1)+.5),0);
+    int i1=int(I.r*255.+.5)+256*int(I.g*255.+.5);
+    vec3 nat=texture2D(tPal,uv).rgb;
+    float edge=D.b,nedge=D.a;
     // hill shade from the height field
     float hx=(texture2D(tData,uv+vec2(uCell.x*2.,0)).r-texture2D(tData,uv-vec2(uCell.x*2.,0)).r)*.5;
     float hz=(texture2D(tData,uv+vec2(0,uCell.y*2.)).r-texture2D(tData,uv-vec2(0,uCell.y*2.)).r)*.5;
@@ -82,9 +87,9 @@ void main(){
     // provinces and nations
     if(i1==uHover)col=mix(col,vec3(1.,.97,.86),.14);
     if(i1==uSel)col=mix(col,vec3(1.,.95,.75),.22);
-    float nb=n1!=n2?1.:0.;
-    col=mix(col,col*.55,line(edge,mix(.9,2.2,nb)+px*.6,px)*(.55+.4*nb));
-    if(nb>0.)col=mix(col,col*.85+vec3(.04),smoothstep(10.,0.,edge)*.5);
+    col=mix(col,col*.6,line(edge,.7+px*.6,px)*.5);
+    col=mix(col,col*.85+vec3(.04),smoothstep(12.,0.,nedge)*.5);
+    col=mix(col,col*.4,line(nedge,1.8+px*.6,px)*.95);
     // coast: dark rim with a light inner edge
     col=mix(col,vec3(.12,.2,.2),line(s-.9,2.0+px*.5,px)*.95);
     col=mix(col,col*1.08,smoothstep(5.,2.,s)*.4);
