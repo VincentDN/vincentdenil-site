@@ -72,8 +72,8 @@ function arcText(g, text, x, y, angle, size, bend) {
   g.save();
   g.translate(x, y);
   g.rotate(angle);
-  g.font = `${size}px "Stardos Stencil", Impact, sans-serif`;
-  const spacing = size * 0.3;
+  g.font = `600 ${size}px Oswald, "Arial Narrow", sans-serif`;
+  const spacing = size * 0.22;
   const widths = [...text].map(ch => g.measureText(ch).width + spacing);
   const total = widths.reduce((a, b) => a + b, 0) - spacing;
   const R = total / Math.max(0.05, bend); // the arc's radius: a wider name bends less
@@ -139,7 +139,7 @@ function nationLabels(g, grid) {
 }
 
 export async function buildOverlay(grid) {
-  try { await Promise.all([document.fonts.load('40px "Stardos Stencil"'), document.fonts.load('20px "Special Elite"'), document.fonts.load('30px "Special Elite"')]); } catch {}
+  try { await Promise.all([document.fonts.load('600 40px Oswald'), document.fonts.load('20px "Special Elite"'), document.fonts.load('30px "Special Elite"')]); } catch {}
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
   const g = cv.getContext('2d');

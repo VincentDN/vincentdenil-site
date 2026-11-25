@@ -7,6 +7,7 @@ import * as T from 'three';
 import {DEFAULT_OPERATOR,buildOperator} from './operator.js';
 import {solveArm} from './field.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+try { await Promise.all([document.fonts.load('600 54px Oswald'), document.fonts.load('500 22px Barlow')]); } catch {} // the map sheet's lettering
 
 const TABLE={top:.86,x:[-.95,.95],z:[.24,1.04]};
 const MAP={x:-.1,z:.56,w:.72,d:.5,yaw:.8};
@@ -98,11 +99,11 @@ function mapTexture(){
  g.strokeStyle='#2c2418';g.lineWidth=4;island();g.stroke();
  // Grid, labels, front line, compass rose and title block.
  g.strokeStyle='rgba(40,30,20,.25)';g.lineWidth=1;for(let x=40;x<w-40;x+=120){g.beginPath();g.moveTo(x,40);g.lineTo(x,h-40);g.stroke();}for(let y=40;y<h-40;y+=120){g.beginPath();g.moveTo(40,y);g.lineTo(w-40,y);g.stroke();}
- const label=(text,x,y,size,angle=0,color='#2a2016')=>{g.save();g.translate(x,y);g.rotate(angle);g.font=`600 ${size}px Georgia,serif`;g.fillStyle=color;g.textAlign='center';g.letterSpacing=size*.25+'px';g.fillText(text,0,0);g.restore();};
+ const label=(text,x,y,size,angle=0,color='#2a2016')=>{g.save();g.translate(x,y);g.rotate(angle);g.font=`600 ${size}px Oswald,'Arial Narrow',sans-serif`;g.fillStyle=color;g.textAlign='center';g.letterSpacing=size*.25+'px';g.fillText(text,0,0);g.restore();};
  label('FREE YANTIS',cx-w*.05,cy-h*.2,54,-.08);
  label('OCCUPATION AUTHORITY',cx+w*.17,cy+h*.06,32,-.25);
  label('NEUTRAL CANTONS',cx-w*.19,cy+h*.27,30,-.12);
- for(const [x,y,n] of [[.38,.36,'Arida'],[.58,.34,'Pyrgos'],[.78,.62,'Agravia'],[.44,.72,'Selakano'],[.62,.7,'Chalkeia']]){g.fillStyle='#1d160e';g.beginPath();g.arc(w*x,h*y,6,0,7);g.fill();g.font='italic 22px Georgia,serif';g.textAlign='left';g.letterSpacing='0px';g.fillText(n,w*x+10,h*y+6);}
+ for(const [x,y,n] of [[.38,.36,'Arida'],[.58,.34,'Pyrgos'],[.78,.62,'Agravia'],[.44,.72,'Selakano'],[.62,.7,'Chalkeia']]){g.fillStyle='#1d160e';g.beginPath();g.arc(w*x,h*y,6,0,7);g.fill();g.font='500 22px Barlow,sans-serif';g.textAlign='left';g.letterSpacing='0px';g.fillText(n,w*x+10,h*y+6);}
  // Grease-pencil front line with arrows.
  g.strokeStyle='rgba(170,20,20,.85)';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(w*.3,h*.47);g.bezierCurveTo(w*.42,h*.42,w*.5,h*.52,w*.66,h*.4);g.stroke();
  const arrow=(x0,y0,x1,y1)=>{g.beginPath();g.moveTo(x0,y0);g.quadraticCurveTo((x0+x1)/2+20,(y0+y1)/2-30,x1,y1);g.stroke();const a=Math.atan2(y1-y0,x1-x0);g.beginPath();g.moveTo(x1,y1);g.lineTo(x1-28*Math.cos(a-.5),y1-28*Math.sin(a-.5));g.moveTo(x1,y1);g.lineTo(x1-28*Math.cos(a+.5),y1-28*Math.sin(a+.5));g.stroke();};
@@ -110,7 +111,7 @@ function mapTexture(){
  g.strokeStyle='rgba(30,60,140,.8)';arrow(w*.68,h*.62,w*.6,h*.5);
  const rose=[w*.88,h*.18];g.fillStyle='#2a2016';for(let i=0;i<4;i++){g.save();g.translate(...rose);g.rotate(i*Math.PI/2);g.beginPath();g.moveTo(0,-70);g.lineTo(12,0);g.lineTo(-12,0);g.closePath();g.fill();g.restore();}label('N',rose[0],rose[1]-80,28);
  g.fillStyle='rgba(230,220,190,.92)';g.fillRect(70,h-190,520,130);g.strokeStyle='#2a2016';g.lineWidth=3;g.strokeRect(70,h-190,520,130);
- label('YANTIS · OPERATIONAL SITUATION',330,h-138,26);g.font='20px Georgia,serif';g.letterSpacing='2px';g.fillStyle='#4a3a26';g.textAlign='center';g.fillText('14 · III · 2044   —   SHEET 1 OF 1   —   SECRET',330,h-96);
+ label('YANTIS · OPERATIONAL SITUATION',330,h-138,26);g.font='500 20px Barlow,sans-serif';g.letterSpacing='2px';g.fillStyle='#4a3a26';g.textAlign='center';g.fillText('14 · III · 2044   —   SHEET 1 OF 1   —   SECRET',330,h-96);
  g.strokeStyle='#2a2016';g.lineWidth=5;g.strokeRect(24,24,w-48,h-48);
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;
 }
