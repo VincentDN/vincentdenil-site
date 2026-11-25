@@ -10,11 +10,12 @@
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Stardos+Stencil:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=3">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/","./js/main.js":"./js/main.js?v=3","./js/world.js":"./js/world.js?v=3","./js/map.js":"./js/map.js?v=3","./js/overlay.js":"./js/overlay.js?v=3","./js/units.js":"./js/units.js?v=3","./js/audio.js":"./js/audio.js?v=3"}}</script>
 </head>
 <body>
+<div id="projector" aria-hidden="true"><div id="grain"></div></div>
 <div id="stage" role="application" aria-label="Strategic map. Drag to pan, scroll to zoom, click a unit to select it, shift-drag to box select, right-click to move."></div>
 <div id="box" hidden></div>
 <div id="tip" hidden></div>
@@ -26,7 +27,7 @@
     <button class="rb" title="Economy"><svg><use href="img/icons.svg#i-factory"/></svg></button>
     <button class="rb" title="Government"><svg><use href="img/icons.svg#i-capitol"/></svg></button>
     <button class="rb" title="Population"><svg><use href="img/icons.svg#i-person"/></svg></button>
-    <button class="rb" title="Decisions"><svg><use href="img/icons.svg#i-scroll-unfurled"/></svg></button>
+    <button class="rb" title="Decisions"><svg><use href="img/icons.svg#i-quill-ink"/></svg></button>
     <button class="rb" title="Research"><svg><use href="img/icons.svg#i-atom"/></svg></button>
     <button class="rb" title="Intelligence"><svg><use href="img/icons.svg#i-spy"/></svg></button>
     <button class="rb" title="Diplomacy"><svg><use href="img/icons.svg#i-dove"/></svg></button>
@@ -35,26 +36,26 @@
     <button id="pause" class="mini" title="Pause (Space)"><svg><use href="img/icons.svg#i-pause-button"/></svg></button>
     <button id="speed" class="mini speed" title="Speed (1–3)"><i></i><i></i><i></i></button>
     <span class="res" title="Industry"><svg><use href="img/icons.svg#i-gears"/></svg><svg class="r2"><use href="img/icons.svg#i-oil-drum"/></svg></span>
-    <span id="date" class="date">14/3/2044</span>
+    <span id="date" class="date">14 MAR 2044</span>
     <span id="state" class="state">Paused</span>
   </div>
   <div class="tb-right">
     <button class="rb" title="Ledger"><svg><use href="img/icons.svg#i-book-cover"/></svg></button>
     <button class="rb" title="Treasury"><svg><use href="img/icons.svg#i-bank"/></svg></button>
     <button class="rb" title="Missions"><svg><use href="img/icons.svg#i-medal"/></svg></button>
-    <button class="rb" title="Victory"><svg><use href="img/icons.svg#i-laurels-trophy"/></svg></button>
+    <button class="rb" title="Victory"><svg><use href="img/icons.svg#i-trophy-cup"/></svg></button>
     <button class="rb" title="Find"><svg><use href="img/icons.svg#i-magnifying-glass"/></svg></button>
     <button class="rb" id="music" title="Music on/off (M)" aria-pressed="true"><svg><use href="img/icons.svg#i-musical-notes"/></svg></button>
     <button class="rb" id="amb" title="Ambience on/off (N)" aria-pressed="true"><svg><use href="img/icons.svg#i-speaker"/></svg></button>
     <span class="gold" title="Treasury: income per month"><svg><use href="img/icons.svg#i-two-coins"/></svg><b id="gold">4,623</b><em id="income">+135</em></span>
   </div>
-  <div class="portrait" title="Commander, Free Yantis"><img src="img/portrait.webp" alt="Commander portrait"></div>
+  <div class="portrait" title="Commander, Free Yantis"><img src="img/portrait.webp" alt="Commander portrait"><span>Cmdr · Free Yantis</span></div>
 </header>
 <div class="sub-left">
   <button class="rb sm" title="Armies"><svg><use href="img/icons.svg#i-tank"/></svg></button>
   <button class="rb sm" title="Fleets"><svg><use href="img/icons.svg#i-battleship"/></svg></button>
 </div>
-<div id="toast" class="toast" role="status"><svg><use href="img/icons.svg#i-scroll-unfurled"/></svg><span>Coalition formed</span></div>
+<div id="toast" class="toast" role="status"><b class="tg-h">Telegram · Signal Corps <i>Priority</i></b><span>Coalition formed</span></div>
 
 <aside id="card" class="card" hidden aria-live="polite">
   <div class="card-head"><img id="card-img" alt=""><div><h2 id="card-name"></h2><p id="card-sub"></p></div></div>
@@ -75,13 +76,14 @@
 
 <dialog id="credits">
   <h2>WW2044: Total War · Strategic map slice</h2>
-  <p>An original vertical slice. Map, interface layout and code are drawn for WW2044; nothing is copied from the reference game.</p>
+  <p>An original vertical slice. Map, interface, code and music are made for WW2044; nothing is copied from the reference game.</p>
   <ul>
     <li><b>Map:</b> the Yantis island heightfield and settlements from PARTISAN (Vincent De Nil), set in placeholder seas and nations.</li>
-    <li><b>Unit and portrait art:</b> rendered from the WW2044 model gallery (Sherman M4 v2, Sd.Kfz. 251, Fallschirmjäger), Vincent De Nil.</li>
+    <li><b>Units and portrait:</b> slimmed copies and renders of the WW2044 model gallery (Sherman M4, Sd.Kfz. 251, Fallschirmjäger), Vincent De Nil.</li>
     <li><b>Icons:</b> <a href="https://game-icons.net" target="_blank" rel="noopener">game-icons.net</a> by Lorc, Delapouite and contributors, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured.</li>
-    <li><b>Fonts:</b> Cinzel (Natanael Gama) and EB Garamond (Georg Duffner, Octavio Pardo), SIL Open Font License, via Google Fonts.</li>
-    <li><b>Music and ambience:</b> original, synthesised live in the browser (Web Audio), WW2044.</li>
+    <li><b>Fonts:</b> Special Elite (Astigmatic, Apache 2.0), Stardos Stencil (Vernon Adams, SIL OFL) and IBM Plex Mono (IBM, SIL OFL), via Google Fonts.</li>
+    <li><b>Music:</b> original, synthesised live in the browser (Web Audio), WW2044.</li>
+    <li><b>Ambience</b> (the PARTISAN campaign map soundscape), CC0 from <a href="https://freesound.org" target="_blank" rel="noopener">Freesound</a>: countryside by brunoboselli, gravel footsteps by Nox_Sound, voices by xkeril, radio chatter by pushkin, Iam_calderon, -Andreas and DRFX.</li>
     <li><b>Engine:</b> <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> r169, MIT licence.</li>
   </ul>
   <form method="dialog"><button>Close</button></form>
@@ -89,13 +91,13 @@
 
 <div id="start" class="start">
   <div>
-    <p class="kicker">WW2044 · Total War · vertical slice</p>
+    <p class="kicker">WW2044 · Total War · vertical slice · classified</p>
     <h1>Strategic Map</h1>
     <p id="start-msg">Painting the map…</p>
     <button id="go" disabled>Take command</button>
     <p class="back"><a href="../">← Back to Total War</a></p>
   </div>
 </div>
-<script type="module" src="js/main.js"></script>
+<script type="module" src="js/main.js?v=3"></script>
 </body>
 </html>

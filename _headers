@@ -1,0 +1,4 @@
+# Cloudflare Pages headers.
+# WW2044 pages revalidate on every visit. The zone still caches .js and .css for 4 hours, so game pages version those URLs (?v=) in their HTML.
+/projects/ww2044-total-war/*
+  Cache-Control: no-cache
