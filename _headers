@@ -1,4 +1,4 @@
 # Cloudflare Pages headers.
-# WW2044 game files change often and load as ES modules: revalidate every visit (ETag keeps it cheap) so players never run a stale mix of old and new modules.
+# WW2044 pages revalidate on every visit. The zone still caches .js and .css for 4 hours, so game pages version those URLs (?v=) in their HTML.
 /projects/ww2044-total-war/*
   Cache-Control: no-cache
