@@ -5,7 +5,7 @@ import {WORLD, PROVINCES, NATIONS, bake, provinceAt, sampleGrid} from './world.j
 import {buildMap} from './map.js';
 import {buildOverlay} from './overlay.js';
 import {UNITS, PLAYER, buildUnits, setSelected, order, updateUnits, pickables} from './units.js';
-import {startAudio, toggle, sfx, setMarching, acknowledge} from './audio.js';
+import {startAudio, toggle, sfx, setMarching, acknowledge, loadMusic} from './audio.js';
 
 const $ = id => document.getElementById(id);
 const stage = $('stage');
@@ -228,6 +228,7 @@ window.__map = {cam, UNITS, select, setSpeed}; // for tests
 window.__screen = i => { const v = UNITS[i].obj.position.clone().project(camera); return {x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight - 20}; };
 
 // ---------- start screen ----------
+loadMusic();
 $('start-msg').textContent = 'Fourteenth of March, 2044. The island waits.';
 $('go').disabled = false;
 $('go').onclick = () => {

@@ -1,7 +1,7 @@
 /* WW2044 war-room look: gunmetal and olive panels, amber signal lights, typewritten telegram slips, stencil labels. */
 :root{--ink:#e4dfcf;--dim:#9c9a8c;--amber:#e3a33b;--amber2:#f2c46b;--olive:#5b6347;--steel:#1b1f1f;--steel2:#272c2b;--line:#4a5040;--red:#b8402f;--green:#8fbf72;
   --paper:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .45 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-  --type:"Special Elite","Courier New",monospace;--mono:"IBM Plex Mono",ui-monospace,monospace;--stencil:"Stardos Stencil",Impact,sans-serif}
+  --type:"Special Elite","Courier New",monospace;--mono:"IBM Plex Mono",ui-monospace,monospace;--stencil:Oswald,"Arial Narrow",sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#0c0e0e;color:var(--ink);font:14px/1.4 var(--mono);user-select:none;-webkit-user-select:none}
 #stage{position:fixed;inset:0;z-index:0}#stage canvas{display:block;cursor:grab}#stage canvas.dragging{cursor:grabbing}
@@ -72,6 +72,15 @@ svg{width:100%;height:100%;fill:currentColor}
 .act-grid{display:grid;grid-template-columns:repeat(8,32px);gap:5px}
 .act-grid .rb:first-child{background:linear-gradient(#56603f,#38402a);color:#e9efd9}
 
+/* field radio: the soundtrack's YouTube player, kept visible as YouTube requires */
+.radio{position:fixed;left:12px;top:92px;width:212px;padding:6px 10px 8px;z-index:4;background:var(--paper),linear-gradient(#262a27,#1a1d1b);border:1px solid #000;box-shadow:0 4px 14px #000b,inset 0 0 0 1px #ffffff0d}
+.radio b{display:block;font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:2px 0 6px}
+.radio b::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);margin-right:7px;vertical-align:1px}
+.radio iframe,.radio #yt{display:block;width:192px;height:108px;border:1px solid #000;filter:grayscale(.4) contrast(1.05)}
+.radio small{display:block;margin-top:5px;font-size:10px;color:#7d7b6f}
+.radio.off b::before{background:var(--red);box-shadow:none}
+.radio.off small::after{content:" · unavailable"}
+
 /* unit file: a typed record card */
 .card{position:fixed;left:12px;bottom:36px;width:310px;padding:10px 14px 10px;z-index:4;
   background:var(--paper),linear-gradient(#262a27,#1a1d1b);border:1px solid #000;box-shadow:0 4px 16px #000c,inset 0 0 0 1px #ffffff0d}
@@ -104,4 +113,4 @@ dialog button{background:var(--olive);border:1px solid #000;color:var(--ink);pad
 .start .back a{color:#9aa9b0;font-size:13px}
 
 @media (max-width:1100px){.tb-left .rb:nth-child(n+6),.tb-right .rb:nth-child(-n+3){display:none}.act-grid{grid-template-columns:repeat(6,30px)}.act-grid .rb{width:30px;height:30px;padding:6px}.act-grid .rb:nth-child(n+19){display:none}}
-@media (max-width:700px){.tb-centre{min-width:0;gap:8px;padding:0 12px}.date{min-width:0;font-size:17px}.tb-left .rb,.tb-right .rb,.res,.sub-left,.gold{display:none}.portrait{width:58px;padding:3px 3px 12px}.portrait span{display:none}.topbar{padding-right:76px}.actions,.hint{display:none}.card{width:auto;right:12px;bottom:12px}.toast{width:calc(100vw - 24px);top:64px}}
+@media (max-width:700px){.radio{display:none}.tb-centre{min-width:0;gap:8px;padding:0 12px}.date{min-width:0;font-size:17px}.tb-left .rb,.tb-right .rb,.res,.sub-left,.gold{display:none}.portrait{width:58px;padding:3px 3px 12px}.portrait span{display:none}.topbar{padding-right:76px}.actions,.hint{display:none}.card{width:auto;right:12px;bottom:12px}.toast{width:calc(100vw - 24px);top:64px}}

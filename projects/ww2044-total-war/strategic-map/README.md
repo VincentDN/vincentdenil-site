@@ -11,7 +11,7 @@ Static, buildless three.js page (open `index.html` from any static server). Sour
 - `js/main.js`: camera, input, clock, interface.
 - `img/`: unit and portrait renders from the WW2044 model gallery (Sherman M4 v2, Sd.Kfz. 251, Fallschirmjäger v3); `icons.svg` from game-icons.net (CC BY 3.0, credited in the page's Credits dialog).
 - `vendor/`: three.js r169 and its GLTFLoader (MIT, `vendor/three-LICENSE.txt`).
-- Look: war-room telegram UI (Special Elite, Stardos Stencil, IBM Plex Mono) and a projector overlay (`#projector`: light falloff, grain, flicker, scan lines).
+- Look: war-room telegram UI (Special Elite, Oswald, IBM Plex Mono) and a projector overlay (`#projector`: light falloff, grain, flicker, scan lines).
 
 The reference screenshot that inspired the layout is not used or shipped here; all art is original or credited.
 
