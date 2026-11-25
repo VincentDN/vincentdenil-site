@@ -74,14 +74,14 @@ export function heightAt(x, z) {
 // ---------- nations and provinces ----------
 // Yantis keeps PARTISAN's three factions; the mainland nations are placeholders.
 export const NATIONS = [
-  {id: 'free', name: 'Free Yantis', color: '#8fae7c'},
-  {id: 'occ', name: 'Occupation Authority', color: '#c98a6a'},
-  {id: 'neu', name: 'Neutral Cantons', color: '#d8c08a'},
-  {id: 'dir', name: 'Northern Directorate', color: '#b27a5e'},
-  {id: 'var', name: 'Kingdom of Varenna', color: '#7d86b8'},
-  {id: 'ost', name: 'Ostmark Federation', color: '#d7876d'},
-  {id: 'sey', name: 'Republic of Seyla', color: '#9a76b5'},
-  {id: 'kau', name: 'Kaur Hegemony', color: '#d9b46a'},
+  {id: 'free', name: 'Free Yantis', color: '#7d9166'},
+  {id: 'occ', name: 'Occupation Authority', color: '#a86a52'},
+  {id: 'neu', name: 'Neutral Cantons', color: '#b5a576'},
+  {id: 'dir', name: 'Northern Directorate', color: '#86705d'},
+  {id: 'var', name: 'Kingdom of Varenna', color: '#66778f'},
+  {id: 'ost', name: 'Ostmark Federation', color: '#a8785f'},
+  {id: 'sey', name: 'Republic of Seyla', color: '#7d6d8e'},
+  {id: 'kau', name: 'Kaur Hegemony', color: '#a99464'},
 ];
 const FACTION = {resistance: 0, invader: 1, neutral: 2};
 // PARTISAN settlements (map/island.js), in island coordinates.

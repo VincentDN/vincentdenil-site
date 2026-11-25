@@ -72,8 +72,8 @@ function arcText(g, text, x, y, angle, size, bend) {
   g.save();
   g.translate(x, y);
   g.rotate(angle);
-  g.font = `600 ${size}px Cinzel, serif`;
-  const spacing = size * 0.18;
+  g.font = `${size}px "Stardos Stencil", Impact, sans-serif`;
+  const spacing = size * 0.3;
   const widths = [...text].map(ch => g.measureText(ch).width + spacing);
   const total = widths.reduce((a, b) => a + b, 0) - spacing;
   const R = total / Math.max(0.05, bend); // the arc's radius: a wider name bends less
@@ -86,9 +86,9 @@ function arcText(g, text, x, y, angle, size, bend) {
     g.translate(Math.sin(mid) * R, R - Math.cos(mid) * R);
     g.rotate(mid);
     g.lineWidth = size * 0.12;
-    g.strokeStyle = 'rgba(40,28,18,.28)';
+    g.strokeStyle = 'rgba(10,14,14,.35)';
     g.strokeText(ch, 0, 0);
-    g.fillStyle = 'rgba(252,246,232,.9)';
+    g.fillStyle = 'rgba(236,240,230,.82)';
     g.fillText(ch, 0, 0);
     g.restore();
     a += w / R;
@@ -133,13 +133,13 @@ function nationLabels(g, grid) {
       const len = 2.4 * Math.sqrt((sxx * Math.cos(ang) ** 2 + szz * Math.sin(ang) ** 2 + 2 * sxz * Math.sin(ang) * Math.cos(ang)) / cells.length);
       const name = NATIONS[n].name.toUpperCase();
       const size = Math.max(30, Math.min(96, ((len * K) / name.length) * 1.15));
-      arcText(g, name, px(mx), pz(mz), ang, size, 0.32);
+      arcText(g, name, px(mx), pz(mz), ang, size, 0.12);
     }
   }
 }
 
 export async function buildOverlay(grid) {
-  try { await Promise.all([document.fonts.load('600 40px Cinzel'), document.fonts.load('italic 20px "EB Garamond"')]); } catch {}
+  try { await Promise.all([document.fonts.load('40px "Stardos Stencil"'), document.fonts.load('20px "Special Elite"'), document.fonts.load('30px "Special Elite"')]); } catch {}
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
   const g = cv.getContext('2d');
@@ -158,12 +158,11 @@ export async function buildOverlay(grid) {
   g.textBaseline = 'middle';
   for (const p of PROVINCES.filter(p => p.seat)) {
     const x = px(p.x), y = pz(p.z);
-    g.beginPath(); g.arc(x, y, 5, 0, 7);
-    g.fillStyle = '#2b2118'; g.fill();
-    g.lineWidth = 2; g.strokeStyle = '#efe4c8'; g.stroke();
-    g.font = 'italic 500 24px "EB Garamond", serif';
-    g.lineWidth = 4; g.strokeStyle = 'rgba(245,236,214,.55)'; g.strokeText(p.name, x + 10, y - 2);
-    g.fillStyle = '#2b2118'; g.fillText(p.name, x + 10, y - 2);
+    g.fillStyle = '#efe9d8'; g.fillRect(x - 5, y - 5, 10, 10);
+    g.lineWidth = 2; g.strokeStyle = '#1a1d1b'; g.strokeRect(x - 5, y - 5, 10, 10);
+    g.font = '22px "Special Elite", monospace';
+    g.lineWidth = 4; g.strokeStyle = 'rgba(15,18,17,.6)'; g.strokeText(p.name.toUpperCase(), x + 10, y - 2);
+    g.fillStyle = '#efe9d8'; g.fillText(p.name.toUpperCase(), x + 10, y - 2);
   }
   nationLabels(g, grid);
   const tex = new T.CanvasTexture(cv);
