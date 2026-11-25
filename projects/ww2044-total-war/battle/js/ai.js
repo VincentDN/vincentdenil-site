@@ -1,5 +1,5 @@
 // Rule-based opponent, re-evaluated every 2 s: keep a production queue, tech when it can, take unlinked points, retreat hurt squads.
-import {order, hq, dist} from './sim.js';
+import {order, hq, dist, sees} from './sim.js';
 import {canBuy, canConstruct, canUpgrade, canReinforce, has} from './build.js';
 
 export function makeAi(side) {
@@ -21,12 +21,12 @@ export function makeAi(side) {
       if (!s.vehicle && s.men.length <= Math.max(1, s.size * 0.34)) { order(w, side, {kind: 'retreat', ids: [s.id]}); continue; }
       if (s.men.length < s.size && !canReinforce(w, s)) { order(w, side, {kind: 'reinforce', ids: [s.id]}); continue; }
       if (s.state !== 'idle') continue;
-      const enemy = w.squads.filter((o) => o.side !== side).sort((a, b) => dist(a, s) - dist(b, s))[0];
+      const enemy = w.squads.filter((o) => o.side !== side && sees(w, side, o.x, o.z)).sort((a, b) => dist(a, s) - dist(b, s))[0];
       if (s.vehicle && enemy && dist(enemy, s) < 70) { order(w, side, {kind: 'attack', ids: [s.id], target: enemy.id}); continue; }
       const goal = w.points.filter((p) => p.owner !== side && !taken.has(p.id)).sort((a, b) => dist(a, s) - dist(b, s) + (a.owner === null ? -30 : 0) - (b.owner === null ? -30 : 0))[0];
       if (goal && !s.vehicle) { taken.add(goal.id); order(w, side, {kind: 'move', ids: [s.id], x: goal.x + (w.rand() - 0.5) * 6, z: goal.z + (w.rand() - 0.5) * 6}); }
       else if (enemy) order(w, side, {kind: 'attack', ids: [s.id], target: enemy.id});
-      else if (h) { const e = hq(w, 1 - side); if (e) order(w, side, {kind: 'attack', ids: [s.id], target: e.id}); }
+      else if (h) { const e = hq(w, 1 - side); if (e) { if (sees(w, side, e.x, e.z)) order(w, side, {kind: 'attack', ids: [s.id], target: e.id}); else order(w, side, {kind: 'move', ids: [s.id], x: e.x, z: e.z + (side ? -30 : 30)}); } }
     }
   };
 }

@@ -6,6 +6,8 @@ import {buildMap} from './map.js';
 import {buildOverlay} from './overlay.js';
 import {UNITS, PLAYER, buildUnits, setSelected, order, updateUnits, pickables} from './units.js';
 import {startAudio, toggle, sfx, setMarching, acknowledge, loadMusic} from './audio.js';
+import {loadSave, writeSave, newCampaign, engage, slug} from '../../battle/js/save.js';
+import {lonlat} from './world.js';
 
 const $ = id => document.getElementById(id);
 const stage = $('stage');
@@ -23,6 +25,9 @@ const overlay = await buildOverlay(grid);
 overlay.flipY = false;
 const map = buildMap(scene, grid, overlay);
 overlay.anisotropy = renderer.capabilities.getMaxAnisotropy();
+// campaign save: armies keep the strength, morale, veterancy and position the battles left them with
+const save = loadSave();
+if (save) for (const u of UNITS) { const a = save.armies[slug(u.name)]; if (a) { Object.assign(u, {str: a.str, mor: a.mor, vet: a.vet}); if (a.pos) [u.x, u.z] = a.pos; } }
 await buildUnits(scene);
 
 // ---------- camera ----------
@@ -60,6 +65,7 @@ function showCard() {
   const card = $('card'), list = [...selected];
   card.hidden = !list.length;
   if (!list.length) return;
+  showEngage();
   const u = list[0];
   $('card-img').src = u.img;
   if (list.length === 1) {
@@ -73,6 +79,22 @@ function showCard() {
   }
 }
 const row = (k, v) => `<dt>${k}</dt><dd>${v}</dd>`;
+// Engage: an own army may attack the nearest enemy army within reach (about 1.5 degrees of longitude)
+const REACH = Math.abs(lonlat(21.5, 52)[0] - lonlat(20, 52)[0]);
+function target(u) { let best = null, bd = REACH; for (const v of UNITS) if (v.nation !== u.nation && !(u.nation !== PLAYER && v.nation !== PLAYER)) { const d = Math.hypot(v.x - u.x, v.z - u.z); if (d < bd) { bd = d; best = v; } } return best; }
+function showEngage() {
+  const list = [...selected], btn = $('engage'), u = list[0];
+  btn.hidden = !(list.length === 1 && u.nation === PLAYER);
+  if (btn.hidden) return;
+  const t = target(u); btn.disabled = !t; btn.dataset.t = t ? UNITS.indexOf(t) : '';
+  btn.textContent = t ? `Engage ${t.name}` : 'No enemy army in reach';
+}
+$('engage').onclick = () => {
+  const u = [...selected][0], t = UNITS[+$('engage').dataset.t]; if (!u || !t) return;
+  const s = loadSave() || newCampaign(UNITS);
+  for (const v of UNITS) { const a = s.armies[slug(v.name)]; if (a) a.pos = [v.x, v.z]; }
+  location.href = engage(s, slug(u.name), slug(t.name), PROVINCES[provinceAt(t.x, t.z)]?.name ?? 'the frontier');
+};
 
 // ---------- input ----------
 const cv = renderer.domElement;
@@ -236,6 +258,8 @@ $('go').onclick = () => {
   startAudio();
   $('start').classList.add('gone');
   cam.want = 1750;
+  const last = save?.history?.at(-1);
+  if (last && !last.reported) { last.reported = true; writeSave(save); setTimeout(() => say(last.winner === PLAYER ? 'FIELD REPORT STOP THE TOWN IS HELD STOP VETERANS PROMOTED STOP' : 'FIELD REPORT STOP OUR ARMY FELL BACK STOP LOSSES HEAVY STOP'), 900); return void setSpeed(1); }
   setTimeout(() => say('POLAND IS NOT YET LOST STOP 2039 PATTERN ARMOUR ISSUED TO ALL ARMIES STOP REICH AND SOVIETS MASSING ON BOTH FRONTIERS STOP'), 900);
   setSpeed(1);
 };

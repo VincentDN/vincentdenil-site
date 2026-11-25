@@ -78,6 +78,7 @@ export function createWorld({map, data, seed = 1}) {
     res: [0, 1].map(() => ({...(eco.start || {m: 300, o: 30, f: 10})})), income: [{m: 0, o: 0, f: 0}, {m: 0, o: 0, f: 0}],
     pool: [eco.victoryPool, eco.victoryPool], winner: null, events: [], orders: []};
   w.grid = buildGrid(map);
+  const nn = w.grid.n * w.grid.n; w.vis = [new Uint8Array(nn), new Uint8Array(nn)]; w.seen = [new Uint8Array(nn), new Uint8Array(nn)];
   map.spawns.forEach((s, side) => addBuilding(w, side, 'command-post', s.at[0], s.at[1], 1));
   return w;
 }
@@ -150,11 +151,30 @@ function movement(w, dt) {
   }
 }
 
+// ---------- fog of war: cells each side can see now (vis) and has ever seen (seen); no line-of-sight occlusion yet ----------
+export function visibility(w) {
+  const g = w.grid, n = g.n;
+  for (const side of [0, 1]) {
+    const vis = w.vis[side]; vis.fill(0);
+    const eyes = [...w.squads.filter((s) => s.side === side).map((s) => [s.x, s.z, w.data.units[s.type].sight * s.vet.sight]), ...w.buildings.filter((b) => b.side === side).map((b) => [b.x, b.z, b.type === 'signal-mast' ? 60 : 30])];
+    for (const [x, z, r] of eyes) {
+      const ci = Math.floor((x + g.half) / g.cell), cj = Math.floor((z + g.half) / g.cell), rc = Math.ceil(r / g.cell);
+      for (let j = Math.max(0, cj - rc); j <= Math.min(n - 1, cj + rc); j++) for (let i = Math.max(0, ci - rc); i <= Math.min(n - 1, ci + rc); i++) {
+        const dx = (i + 0.5) * g.cell - g.half - x, dz = (j + 0.5) * g.cell - g.half - z;
+        if (dx * dx + dz * dz <= r * r) { vis[j * n + i] = 1; w.seen[side][j * n + i] = 1; }
+      }
+    }
+  }
+}
+/** Can `side` see this point right now? */
+export const sees = (w, side, x, z) => { const k = w.grid.idx(x, z); return k >= 0 && w.vis[side][k] === 1; };
+
 /** Advance one tick: orders, movement, then each system (economy, combat, build, AI). */
 export function step(w, systems, handlers = {}) {
   w.events.length = 0;
   applyOrders(w, handlers);
   movement(w, TICK);
+  if (w.tick % 3 === 0) visibility(w);
   for (const sys of systems) sys(w, TICK);
   w.tick++; w.time += TICK;
 }

@@ -56,6 +56,21 @@ export async function createView(canvas, world) {
     else if (b.kind === 'sandbags') { const n = Math.max(2, Math.round(Math.max(w, d) / 0.9)); for (let i = 0; i < n; i++) for (let row = 0; row < 2; row++) { const f = (i + 0.5 + row * 0.5) / n - 0.5; if (row && i === n - 1) continue; box(w > d ? 0.85 : 0.45, 0.32, w > d ? 0.45 : 0.85, burlap, x + (w > d ? f * w : 0), 0.16 + row * 0.3, z + (w > d ? 0 : f * d)); } }
   }
 
+  // fog of war: a data texture over the map, dark where we have never looked, dim where we cannot see now
+  const fn = world.grid.n, fogData = new Uint8Array(fn * fn * 4), fogTex = new T.DataTexture(fogData, fn, fn);
+  fogTex.magFilter = fogTex.minFilter = T.LinearFilter;
+  const fog = new T.Mesh(new T.PlaneGeometry(W, W), new T.MeshBasicMaterial({map: fogTex, transparent: true, depthWrite: false, fog: false}));
+  fog.rotation.x = -Math.PI / 2; fog.position.y = 8; fog.renderOrder = 5; scene.add(fog);
+  const fogAlpha = new Float32Array(fn * fn).fill(200);
+  function updateFog(dt, side) {
+    const vis = world.vis[side], seen = world.seen[side], k = 1 - Math.exp(-dt * 6);
+    for (let j = 0; j < fn; j++) for (let i = 0; i < fn; i++) {
+      const c = j * fn + i, want = vis[c] ? 0 : seen[c] ? 110 : 200; fogAlpha[c] += (want - fogAlpha[c]) * k;
+      const t = ((fn - 1 - j) * fn + i) * 4; fogData[t] = 12; fogData[t + 1] = 14; fogData[t + 2] = 16; fogData[t + 3] = fogAlpha[c]; // texture v runs north to south flipped
+    }
+    fogTex.needsUpdate = true;
+  }
+
   // camera
   const camera = new T.PerspectiveCamera(42, 1, 1, 900);
   const cam = {x: world.map.spawns[0].at[0], z: world.map.spawns[0].at[1] - 30, d: 60, yaw: 0, pitch: 0.82};
@@ -120,6 +135,8 @@ export async function createView(canvas, world) {
   function draw(dt, selected) {
     // squads and men
     const seen = new Set();
+    const me = 0, sees = (x, z) => { const k = world.grid.idx(x, z); return k >= 0 && world.vis[me][k] === 1; };
+    updateFog(dt, me);
     for (const s of world.squads) {
       let v = views.get(s.id);
       if (!v) { v = {men: new Map(), ring: new T.Mesh(ringGeo, ringMats[s.side])}; v.ring.visible = false; scene.add(v.ring); views.set(s.id, v); }
@@ -130,6 +147,7 @@ export async function createView(canvas, world) {
         live.add(m);
         const k = 1 - Math.exp(-dt * 12); o.position.x += (m.x - o.position.x) * k; o.position.z += (m.z - o.position.z) * k;
         const yaw = (s.vehicle ? s.heading : m.face ?? s.heading); o.rotation.y += (((yaw - o.rotation.y + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * k;
+        o.visible = s.side === me || sees(m.x, m.z);
         if (!s.vehicle) o.position.y = s.moving ? Math.abs(Math.sin(performance.now() / 160 + i)) * 0.06 : 0;
       });
       for (const [m, o] of v.men) if (!live.has(m)) { if (s.vehicle) wreck(o); else scene.remove(o); v.men.delete(m); }
@@ -138,7 +156,7 @@ export async function createView(canvas, world) {
     for (const [id, v] of views) if (!seen.has(id)) { for (const o of v.men.values()) scene.remove(o); scene.remove(v.ring); views.delete(id); }
     // buildings
     const bseen = new Set();
-    for (const b of world.buildings) { let g = bviews.get(b.id); if (!g) { g = makeBuilding(b); bviews.set(b.id, g); } bseen.add(b.id); g.scale.y = 0.15 + 0.85 * b.done; }
+    for (const b of world.buildings) { let g = bviews.get(b.id); if (!g) { g = makeBuilding(b); bviews.set(b.id, g); } bseen.add(b.id); g.scale.y = 0.15 + 0.85 * b.done; g.visible = b.side === me || world.seen[me][world.grid.idx(b.x, b.z)] === 1; }
     for (const [id, g] of bviews) if (!bseen.has(id)) { wreck(g); bviews.delete(id); }
     // points
     for (const pv of pointViews) {
@@ -159,6 +177,8 @@ export async function createView(canvas, world) {
   function onEvents(events) {
     for (const e of events) {
       if (e.kind === 'shot') {
+        const vk = (p) => { const k = world.grid.idx(p.x, p.z); return k >= 0 && world.vis[0][k]; };
+        if (!vk(e.from) && !vk(e.to)) continue;
         if (Math.random() > (e.w === 'hmg' || e.w === 'mg' ? 0.4 : 0.9) && e.w !== 'tank-gun') continue;
         const i = tn = (tn + 1) % MAXT, big = e.w === 'tank-gun', miss = e.hit ? 0 : 1.5;
         tpos.set([e.from.x, big ? 2.2 : 1.3, e.from.z, e.to.x + (Math.random() - 0.5) * miss * 2, e.hit ? 1 : 0.2, e.to.z + (Math.random() - 0.5) * miss * 2], i * 6);
@@ -174,5 +194,5 @@ export async function createView(canvas, world) {
   function pick(cx, cy) { ndc.set(cx / innerWidth * 2 - 1, -(cy / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera); const t = -ray.ray.origin.y / ray.ray.direction.y; return t > 0 ? {x: ray.ray.origin.x + ray.ray.direction.x * t, z: ray.ray.origin.z + ray.ray.direction.z * t} : null; }
   /** Screen position of a world point, or null behind the camera. */
   function project(x, y, z) { v3.set(x, y, z).project(camera); return v3.z > 1 ? null : {x: (v3.x + 1) / 2 * innerWidth, y: (1 - v3.y) / 2 * innerHeight}; }
-  return {draw, onEvents, pick, project, marker, cam, renderer};
+  return {draw, onEvents, pick, project, marker, cam, renderer, camera};
 }

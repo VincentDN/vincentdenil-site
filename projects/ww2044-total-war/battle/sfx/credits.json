@@ -1,0 +1,261 @@
+{
+ "note": "Copied from Escape From Claudov assets/sfx (VincentDN/escape-from-claudov); every source CC0 1.0 per its assets/sfx/credits.json.",
+ "files": [
+  {
+   "file": "g_rifle_near-1",
+   "from": "armes/g_rifle_near-1",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_rifle_near-2",
+   "from": "armes/g_rifle_near-2",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_battle_near-1",
+   "from": "armes/g_battle_near-1",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_smg_near-1",
+   "from": "armes/g_smg_near-1",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_smg_near-2",
+   "from": "armes/g_smg_near-2",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_dmr_near-1",
+   "from": "armes/g_dmr_near-1",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_far_rifle-1",
+   "from": "armes/g_far_rifle-1",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_far_rifle-2",
+   "from": "armes/g_far_rifle-2",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_far_smg-1",
+   "from": "armes/g_far_smg-1",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "g_far_smg-2",
+   "from": "armes/g_far_smg-2",
+   "source": "The Free Firearm Sound Library (pistes « Master Tracks » de tir)",
+   "author": "Ben Jaszczak et al. (Still North Media)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/buddingmonkey/FreeFirearmsSFXLibrary"
+  },
+  {
+   "file": "i_ric-1",
+   "from": "impacts/i_ric-1",
+   "source": "« ricochet » (freesound 30932)",
+   "author": "aust_paul",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/aust_paul/sounds/30932/"
+  },
+  {
+   "file": "i_ric-2",
+   "from": "impacts/i_ric-2",
+   "source": "« ricochet » (freesound 30932)",
+   "author": "aust_paul",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/aust_paul/sounds/30932/"
+  },
+  {
+   "file": "i_whiz-1",
+   "from": "impacts/i_whiz-1",
+   "source": "« Whip Cracks » (freesound 118068)",
+   "author": "G.Lamont",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/G.Lamont/sounds/118068/"
+  },
+  {
+   "file": "i_whiz-1",
+   "from": "impacts/i_whiz-1",
+   "source": "Pack Freesound « military sounds » (4366) : choc métallique, explosion, fin de rafale, bip et clics radio",
+   "author": "qubodup (enregistrements du gouvernement américain)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/frostburn/amortization2/tree/main/sounds"
+  },
+  {
+   "file": "i_whiz-1",
+   "from": "impacts/i_whiz-1",
+   "source": "Kenney « RPG Audio », « Foley Sounds », « Impact Sounds »",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/series-ai/jam-ready-assets"
+  },
+  {
+   "file": "i_whiz-2",
+   "from": "impacts/i_whiz-2",
+   "source": "« Whip Cracks » (freesound 118068)",
+   "author": "G.Lamont",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/G.Lamont/sounds/118068/"
+  },
+  {
+   "file": "i_whiz-2",
+   "from": "impacts/i_whiz-2",
+   "source": "Pack Freesound « military sounds » (4366) : choc métallique, explosion, fin de rafale, bip et clics radio",
+   "author": "qubodup (enregistrements du gouvernement américain)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/frostburn/amortization2/tree/main/sounds"
+  },
+  {
+   "file": "i_whiz-2",
+   "from": "impacts/i_whiz-2",
+   "source": "Kenney « RPG Audio », « Foley Sounds », « Impact Sounds »",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/series-ai/jam-ready-assets"
+  },
+  {
+   "file": "x_near-1",
+   "from": "impacts/x_near-1",
+   "source": "Pack Freesound « military sounds » (4366) : choc métallique, explosion, fin de rafale, bip et clics radio",
+   "author": "qubodup (enregistrements du gouvernement américain)",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/frostburn/amortization2/tree/main/sounds"
+  },
+  {
+   "file": "x_near-1",
+   "from": "impacts/x_near-1",
+   "source": "« lock on » (freesound 467881), enemy-lock-r08-a.ogg de conceptgame",
+   "author": "SamsterBirdies",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/papegaaij/conceptgame/tree/main/assets/sfx"
+  },
+  {
+   "file": "x_near-1",
+   "from": "impacts/x_near-1",
+   "source": "« Bullet - Concrete Hit », « Bullet - Metal Hit », « Bullet - Hit Body » (bibliothèque « Valhalla », freesound 522307 à 522509)",
+   "author": "FilmmakersManual",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/FilmmakersManual/"
+  },
+  {
+   "file": "x_near-2",
+   "from": "impacts/x_near-2",
+   "source": "Explosions réelles : « Pipe Bomb », « Real explosion recording » (freesound 737321, 784163), « explosion_big_01/02 » (587193, 587194), « Explosion Pine Forest 200m » (734094), « Explosion, Medium Blast » (516914)",
+   "author": "modusmogulus, derplayer, Kinoton",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/webdevcody/survive-the-night-fps/tree/main/client/audio/samples"
+  },
+  {
+   "file": "x_near-2",
+   "from": "impacts/x_near-2",
+   "source": "« lock on » (freesound 467881), enemy-lock-r08-a.ogg de conceptgame",
+   "author": "SamsterBirdies",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/papegaaij/conceptgame/tree/main/assets/sfx"
+  },
+  {
+   "file": "x_far-1",
+   "from": "impacts/x_far-1",
+   "source": "Explosions réelles : « Pipe Bomb », « Real explosion recording » (freesound 737321, 784163), « explosion_big_01/02 » (587193, 587194), « Explosion Pine Forest 200m » (734094), « Explosion, Medium Blast » (516914)",
+   "author": "modusmogulus, derplayer, Kinoton",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/webdevcody/survive-the-night-fps/tree/main/client/audio/samples"
+  },
+  {
+   "file": "x_far-2",
+   "from": "impacts/x_far-2",
+   "source": "« On a train in Argentina, between two wagons. Metal pieces are squeaking » (freesound 165845), extraits 4-165845-A-45 et -B-45 d'ESC-50",
+   "author": "felix.blume",
+   "licence": "CC0 1.0",
+   "url": "https://github.com/karolpiczak/ESC-50"
+  },
+  {
+   "file": "x_debris-1",
+   "from": "impacts/x_debris-1",
+   "source": "« 75 CC0 breaking / falling / hit sfx »",
+   "author": "rubberduck (opengameart.org)",
+   "licence": "CC0 1.0",
+   "url": "https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx"
+  },
+  {
+   "file": "x_debris-1",
+   "from": "impacts/x_debris-1",
+   "source": "« Fall debris (crash) » (freesound 703248)",
+   "author": "xkeril",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/xkeril/sounds/703248/"
+  },
+  {
+   "file": "a_crow-1",
+   "from": "amb_givre/a_crow-1",
+   "source": "Corneille (freesound 404687)",
+   "author": "Samuel Strågefors (straget)",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/straget/sounds/404687/"
+  },
+  {
+   "file": "amb_bed",
+   "from": "amb_stratus/a_bed",
+   "source": "« Wind singing in the mountain, some night cricket in background » (freesound 165526)",
+   "author": "felix.blume",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/felix.blume/sounds/165526/"
+  },
+  {
+   "file": "amb_bed",
+   "from": "amb_stratus/a_bed",
+   "source": "« Wind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama » (freesound 156414)",
+   "author": "felix.blume",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/felix.blume/sounds/156414/"
+  },
+  {
+   "file": "a_gust-1",
+   "from": "amb_stratus/a_gust-1",
+   "source": "« Gusty Wind on Ridge » (freesound 817188)",
+   "author": "craigsmith",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/craigsmith/sounds/817188/"
+  },
+  {
+   "file": "a_bird-1",
+   "from": "amb_stratus/a_bird-1",
+   "source": "« Two buzzards in a windy forest.wav » (freesound 648430)",
+   "author": "bruno.auzet",
+   "licence": "CC0 1.0",
+   "url": "https://freesound.org/people/bruno.auzet/sounds/648430/"
+  }
+ ]
+}

@@ -1,14 +1,6 @@
 // Campaign <-> battle handoff. The player is always nation 0 (Poland) on side 0.
-import {loadSave, writeSave, applyBattleResult} from './save.js';
+import {loadSave, writeSave, applyBattleResult, engage} from './save.js';
 import {spawnSquad, hq} from './sim.js';
-
-/** Strategic map: queue a battle and go to it. (Wired into the strategic map in M6.) */
-export function engage(save, attackerId, defenderId, province, map = 'town-square') {
-  const id = `b${save.turn}-${Date.now().toString(36)}`;
-  save.pendingBattle = {id, attacker: attackerId, defender: defenderId, province, map, seed: (Math.random() * 2 ** 31) | 0};
-  writeSave(save);
-  return `../battle/index.html?b=${id}`;
-}
 
 /** Put the starting squads on the field: the first two infantry sections of each army in the save, or a default pair. */
 export function deploy(world, save) {
@@ -32,9 +24,11 @@ export function finish(world, save) {
   for (const s of all) if (s.section) result.sections[s.section] = s.men.length
     ? {survivors: s.men.filter((m) => m.idx >= 0).map((m) => m.idx), reinforced: s.men.filter((m) => m.idx < 0).length, xp: s.xp + bonus(s.side), kills: s.kills, upgrades: s.upgrades}
     : {wiped: true};
-  const {promoted} = applyBattleResult(save, result); writeSave(save);
-  if (promoted.length) lines.push(`Promoted: ${promoted.join(', ')}`);
+  const mine = Object.keys(save.armies).find((id) => [save.pendingBattle.attacker, save.pendingBattle.defender].includes(id) && save.armies[id].nation === 0);
+  const {byArmy} = applyBattleResult(save, result); writeSave(save);
+  const up = [...new Set(byArmy[mine] || [])];
+  if (up.length) lines.push(`Promoted: ${up.join(', ')}`);
   return lines;
 }
 
-export {loadSave};
+export {loadSave, engage};

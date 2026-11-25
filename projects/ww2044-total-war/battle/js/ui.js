@@ -32,6 +32,11 @@ export function createHud(world, view, side = 0, onEnd) {
   $('plates').addEventListener('pointerdown', (e) => { const p = e.target.closest('.plate'); if (!p || e.button) return; e.stopPropagation(); if (!e.shiftKey) selected.clear(); selected.add(+p.dataset.id); hud.refresh(); });
   $('mini').addEventListener('pointerdown', (e) => { const r = e.currentTarget.getBoundingClientRect(), W = world.map.size[0]; view.cam.x = ((e.clientX - r.left) / r.width - 0.5) * W; view.cam.z = ((e.clientY - r.top) / r.height - 0.5) * W + 20; });
   $('pause').addEventListener('click', () => hud.togglePause());
+  hud.bindMute = (audio) => {
+    const btn = $('mute'), show = () => { btn.querySelector('use').setAttribute('href', `../strategic-map/img/icons.svg#i-speaker${audio.muted ? '-off' : ''}`); btn.setAttribute('aria-pressed', String(!audio.muted)); };
+    hud.toggleMute = () => { audio.toggle(); show(); }; btn.addEventListener('click', hud.toggleMute); show();
+  };
+  hud.toggleMute = () => {};
   hud.togglePause = () => { hud.paused = !hud.paused; $('paused').hidden = !hud.paused; };
 
   function toast(msg, cls = '') { const t = document.createElement('div'); t.className = 'toast ' + cls; t.textContent = msg; $('toasts').prepend(t); setTimeout(() => t.remove(), 4200); }
@@ -49,7 +54,7 @@ export function createHud(world, view, side = 0, onEnd) {
   hud.refresh = () => {
     const sq = world.squads.filter((s) => selected.has(s.id));
     for (const id of [...selected]) if (!sq.some((s) => s.id === id)) selected.delete(id);
-    if (!sq.length) { $('sel').innerHTML = '<p class="hint">Select squads with a click or a drag. Right-click to move, or on an enemy to attack.<br><kbd>R</kbd> retreat · <kbd>G</kbd> reinforce · <kbd>X</kbd> stop · <kbd>Ctrl</kbd>+<kbd>1-9</kbd> groups · <kbd>Space</kbd> centre · <kbd>P</kbd> pause</p>'; return; }
+    if (!sq.length) { $('sel').innerHTML = '<p class="hint">Select squads with a click or a drag. Right-click to move, or on an enemy to attack.<br><kbd>R</kbd> retreat · <kbd>G</kbd> reinforce · <kbd>X</kbd> stop · <kbd>Ctrl</kbd>+<kbd>1-9</kbd> groups · <kbd>Space</kbd> centre · <kbd>P</kbd> pause · <kbd>M</kbd> sound</p>'; return; }
     const s = sq[0], u = D.units[s.type], st = s.liveStars ?? s.stars;
     const ups = Object.entries(D.upgrades).filter(([, up]) => up.for.includes(s.type));
     $('sel').innerHTML = `<h2>${icon(ICON[s.type])}${sq.length > 1 ? `${sq.length} squads` : u.name}<span class="stars">${stars(st)}</span></h2>
@@ -68,6 +73,7 @@ export function createHud(world, view, side = 0, onEnd) {
     // plates above squads
     const seen = new Set();
     for (const s of world.squads) {
+      if (s.side !== side) { const k = world.grid.idx(s.x, s.z); if (!(k >= 0 && world.vis[side][k])) continue; }
       let el = plates.get(s.id);
       if (!el) { el = document.createElement('div'); el.className = `plate s${s.side}`; el.dataset.id = s.id; $('plates').append(el); plates.set(s.id, el); }
       seen.add(s.id);
@@ -95,8 +101,10 @@ export function createHud(world, view, side = 0, onEnd) {
     mx.strokeStyle = '#8a8270'; mx.lineWidth = 3; for (const [[a, b], [c, d]] of world.map.roads) { mx.beginPath(); mx.moveTo(p(a), p(b)); mx.lineTo(p(c), p(d)); mx.stroke(); }
     for (const b of world.map.blocks) { mx.fillStyle = b.kind === 'hedge' ? '#2a3322' : b.kind === 'sandbags' ? '#8d7d5c' : '#6a6058'; mx.fillRect(p(b.at[0] - b.size[0] / 2), p(b.at[1] - b.size[1] / 2), Math.max(1.5, b.size[0] * k), Math.max(1.5, b.size[1] * k)); }
     for (const pt of world.points) { mx.fillStyle = pt.owner === null ? '#d8d0bc' : pt.owner === side ? '#8fd16a' : '#e0583c'; mx.beginPath(); mx.arc(p(pt.x), p(pt.z), 5, 0, 7); mx.fill(); if (pt.owner !== null && !pt.linked[pt.owner]) { mx.strokeStyle = '#000'; mx.lineWidth = 1.5; mx.stroke(); } }
-    for (const b of world.buildings) { mx.fillStyle = b.side === side ? '#b8f08a' : '#ff7a5c'; mx.fillRect(p(b.x) - 3, p(b.z) - 3, 6, 6); }
-    for (const s of world.squads) { mx.fillStyle = s.side === side ? (selected.has(s.id) ? '#fff' : '#8fd16a') : '#e0583c'; mx.beginPath(); mx.arc(p(s.x), p(s.z), s.vehicle ? 3.2 : 2.4, 0, 7); mx.fill(); }
+    const fn = world.grid.n, ck = S / fn; mx.fillStyle = 'rgba(8,10,12,.55)'; for (let c = 0; c < fn * fn; c++) if (!world.vis[side][c]) mx.fillRect((c % fn) * ck, Math.floor(c / fn) * ck, ck + 0.5, ck + 0.5);
+    const vis = (x, z) => { const k = world.grid.idx(x, z); return k >= 0 && world.vis[side][k]; };
+    for (const b of world.buildings) { if (b.side !== side && !world.seen[side][world.grid.idx(b.x, b.z)]) continue; mx.fillStyle = b.side === side ? '#b8f08a' : '#ff7a5c'; mx.fillRect(p(b.x) - 3, p(b.z) - 3, 6, 6); }
+    for (const s of world.squads) { if (s.side !== side && !vis(s.x, s.z)) continue; mx.fillStyle = s.side === side ? (selected.has(s.id) ? '#fff' : '#8fd16a') : '#e0583c'; mx.beginPath(); mx.arc(p(s.x), p(s.z), s.vehicle ? 3.2 : 2.4, 0, 7); mx.fill(); }
     const c = view.cam; mx.strokeStyle = '#e2c98f'; mx.lineWidth = 1; mx.strokeRect(p(c.x) - c.d * 0.6 * k, p(c.z - 20) - c.d * 0.4 * k, c.d * 1.2 * k, c.d * 0.8 * k);
   }
 
