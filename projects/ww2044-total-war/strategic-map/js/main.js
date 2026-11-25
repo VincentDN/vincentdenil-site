@@ -1,7 +1,7 @@
 // The strategic map: camera (pan, zoom toward the cursor), selection (click, shift-click, shift-drag box), move orders
 // (right-click), the province tooltip, the clock and the interface wiring.
 import * as T from 'three';
-import {WORLD, PROVINCES, NATIONS, bake, provinceAt, sampleGrid} from './world.js';
+import {WORLD, PROVINCES, NATIONS, loadWorld, provinceAt, nationAt} from './world.js';
 import {buildMap} from './map.js';
 import {buildOverlay} from './overlay.js';
 import {UNITS, PLAYER, buildUnits, setSelected, order, updateUnits, pickables} from './units.js';
@@ -16,9 +16,9 @@ stage.append(renderer.domElement);
 const scene = new T.Scene();
 scene.background = new T.Color('#0c0e0e');
 const camera = new T.PerspectiveCamera(32, innerWidth / innerHeight, 10, 20000);
-const cam = {x: 20, z: 60, dist: 2000, want: 1500};
+const cam = {x: -20, z: 30, dist: 2000, want: 1500};
 
-const grid = bake();
+const grid = await loadWorld();
 const overlay = await buildOverlay(grid);
 overlay.flipY = false;
 const map = buildMap(scene, grid, overlay);
@@ -65,7 +65,7 @@ function showCard() {
   if (list.length === 1) {
     $('card-name').textContent = u.name;
     $('card-sub').textContent = `${u.kindName} · ${NATIONS[u.nation].name}`;
-    $('card-rows').innerHTML = row('Strength', u.str.toLocaleString('en-GB')) + row('Morale', u.mor + '%') + row('Veterancy', '★'.repeat(u.vet) + '☆'.repeat(3 - u.vet)) + row('Province', PROVINCES[provinceAt(u.x, u.z)].name);
+    $('card-rows').innerHTML = row('Strength', u.str.toLocaleString('en-GB')) + row('Morale', u.mor + '%') + row('Veterancy', '★'.repeat(u.vet) + '☆'.repeat(3 - u.vet)) + row('Province', PROVINCES[provinceAt(u.x, u.z)]?.name ?? 'At sea');
   } else {
     $('card-name').textContent = `${list.length} armies selected`;
     $('card-sub').textContent = [...new Set(list.map(v => NATIONS[v.nation].name))].join(', ');
@@ -123,7 +123,7 @@ cv.addEventListener('pointerup', e => {
     else {
       select([]);
       const p = groundAt(e.clientX, e.clientY);
-      map.uniforms.uSel.value = p && sampleGrid(grid, grid.sd, p.x, p.z) > 0 ? provinceAt(p.x, p.z) : -1;
+      map.uniforms.uSel.value = p ? provinceAt(p.x, p.z) : -1;
       sfx('click');
     }
   }
@@ -141,7 +141,7 @@ function hover(x, y) {
   let html = '';
   if (u) html = `<b>${u.name}</b><small>${u.kindName} · ${u.str.toLocaleString('en-GB')} men · ${NATIONS[u.nation].name}</small>`;
   else if (p && Math.abs(p.x) < WORLD.w / 2 && Math.abs(p.z) < WORLD.d / 2) {
-    const land = sampleGrid(grid, grid.sd, p.x, p.z) > 0, i = provinceAt(p.x, p.z);
+    const i = provinceAt(p.x, p.z), land = i >= 0;
     map.uniforms.uHover.value = land ? i : -1;
     if (land) html = `<b>${PROVINCES[i].name}</b><small>${NATIONS[PROVINCES[i].nation].name}</small>`;
   } else map.uniforms.uHover.value = -1;
@@ -164,7 +164,7 @@ addEventListener('blur', () => keys.clear());
 addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
 
 // ---------- clock and interface ----------
-let speed = 0, lastSpeed = 1, day = new Date(Date.UTC(2044, 2, 14)), acc = 0;
+let speed = 0, lastSpeed = 1, day = new Date(Date.UTC(1936, 0, 1)), acc = 0;
 function setSpeed(s) {
   if (s) lastSpeed = s;
   speed = s;
@@ -225,16 +225,17 @@ function frame() {
 }
 frame();
 window.__map = {cam, UNITS, select, setSpeed}; // for tests
+window.__nat = nationAt;
 window.__screen = i => { const v = UNITS[i].obj.position.clone().project(camera); return {x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight - 20}; };
 
 // ---------- start screen ----------
 loadMusic();
-$('start-msg').textContent = 'Fourteenth of March, 2044. The island waits.';
+$('start-msg').textContent = 'First of January, 1936. With 2039 technology, can you defeat the USSR and Germany?';
 $('go').disabled = false;
 $('go').onclick = () => {
   startAudio();
   $('start').classList.add('gone');
   cam.want = 1750;
-  setTimeout(() => say('COALITION FORMED WITH NEUTRAL CANTONS STOP OCCUPATION FORCES MOBILISING STOP'), 900);
+  setTimeout(() => say('POLAND IS NOT YET LOST STOP 2039 PATTERN ARMOUR ISSUED TO ALL ARMIES STOP REICH AND SOVIETS MASSING ON BOTH FRONTIERS STOP'), 900);
   setSpeed(1);
 };

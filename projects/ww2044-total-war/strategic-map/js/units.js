@@ -3,24 +3,32 @@
 // shadow, an amber ring when selected, and a dashed route while it moves.
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {NATIONS, heightAt} from './world.js';
+import {NATIONS, heightAt, lonlat} from './world.js';
 
 const MODEL = {armour: 'models/sherman-m4.glb', mech: 'models/sdkfz251.glb', infantry: 'models/fallschirmjaeger.glb'};
 const IMG = {armour: 'img/tank.webp', mech: 'img/halftrack.webp', infantry: 'img/infantry.webp'};
-const KIND = {armour: 'Armoured division', mech: 'Mechanised brigade', infantry: 'Airborne regiment'};
+const KIND = {armour: 'Armoured army', mech: 'Mechanised corps', infantry: 'Infantry corps'};
 const SIZE = {armour: 32, mech: 32, infantry: 15}; // longest side / height in map units at the base zoom
+// 1 January 1936: Poland's field armies on their peacetime stations, the Reich in Pomerania, Silesia and East Prussia,
+// the Red Army's western districts beyond the Riga line. Positions in lon, lat.
 export const UNITS = [
-  {name: '1st Lithia Armoured', kind: 'armour', nation: 0, x: -330, z: -230, str: 2620, mor: 82, vet: 2},
-  {name: 'Oros Mountain Rifles', kind: 'infantry', nation: 0, x: -250, z: 20, str: 1840, mor: 91, vet: 3},
-  {name: 'Vrisi Motor Column', kind: 'mech', nation: 0, x: 170, z: -230, str: 1260, mor: 74, vet: 1},
-  {name: '7th Fallschirm Group', kind: 'infantry', nation: 0, x: -600, z: -150, str: 730, mor: 88, vet: 2},
-  {name: 'Orion Garrison Corps', kind: 'armour', nation: 1, x: 120, z: 130, str: 3410, mor: 63, vet: 1},
-  {name: 'Kastro Security Bde', kind: 'mech', nation: 1, x: 260, z: 300, str: 1520, mor: 58, vet: 0},
-  {name: 'Agia Marina Watch', kind: 'infantry', nation: 1, x: -440, z: 60, str: 980, mor: 61, vet: 0},
-  {name: 'Pelekas Militia', kind: 'infantry', nation: 2, x: -230, z: 330, str: 650, mor: 70, vet: 0},
-  {name: 'Varenna Expeditionary', kind: 'armour', nation: 4, x: -300, z: -600, str: 4210, mor: 77, vet: 1},
-  {name: 'Ostmark Lancers', kind: 'mech', nation: 5, x: 300, z: -560, str: 2950, mor: 69, vet: 2},
-];
+  {name: 'Armia Pomorze', kind: 'armour', nation: 0, at: [18.25, 53.3], str: 3120, mor: 84, vet: 1},
+  {name: 'Armia Poznań', kind: 'mech', nation: 0, at: [17.15, 52.3], str: 2480, mor: 86, vet: 1},
+  {name: 'Armia Modlin', kind: 'infantry', nation: 0, at: [20.5, 52.9], str: 1960, mor: 88, vet: 2},
+  {name: 'Armia Łódź', kind: 'armour', nation: 0, at: [19.1, 51.5], str: 2870, mor: 82, vet: 1},
+  {name: 'Armia Kraków', kind: 'mech', nation: 0, at: [19.5, 50.35], str: 2650, mor: 85, vet: 2},
+  {name: 'Armia Karpaty', kind: 'infantry', nation: 0, at: [22.5, 49.65], str: 1540, mor: 90, vet: 3},
+  {name: 'KOP Wilno Brigade', kind: 'infantry', nation: 0, at: [25.7, 54.45], str: 910, mor: 92, vet: 2},
+  {name: 'Armia Prusy', kind: 'armour', nation: 0, at: [20.4, 51.75], str: 3400, mor: 87, vet: 0},
+  {name: 'Heeresgruppe Nord', kind: 'armour', nation: 1, at: [20.6, 53.95], str: 4210, mor: 78, vet: 1},
+  {name: '4. Armee', kind: 'mech', nation: 1, at: [16.6, 53.75], str: 2950, mor: 74, vet: 1},
+  {name: 'Heeresgruppe Süd', kind: 'armour', nation: 1, at: [17.4, 51.05], str: 4630, mor: 76, vet: 1},
+  {name: '8. Armee', kind: 'infantry', nation: 1, at: [16.15, 51.75], str: 2100, mor: 71, vet: 0},
+  {name: 'Belorussian Front', kind: 'armour', nation: 2, at: [28.3, 53.8], str: 5120, mor: 66, vet: 0},
+  {name: 'Kiev Special District', kind: 'armour', nation: 2, at: [28.1, 50.2], str: 4870, mor: 64, vet: 0},
+  {name: '3rd Army', kind: 'mech', nation: 2, at: [28.8, 55.1], str: 2760, mor: 61, vet: 0},
+  {name: '5th Army', kind: 'infantry', nation: 2, at: [28.1, 51.6], str: 2330, mor: 63, vet: 1},
+].map(u => { const [x, z] = lonlat(...u.at); return Object.assign(u, {x, z}); });
 export const PLAYER = 0;
 
 function plate(u, selected) {

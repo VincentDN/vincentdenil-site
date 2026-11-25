@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WW2044: Total War | Strategic map</title>
+<title>WW2044: Total War | Poland Is Not Yet Lost!</title>
 <meta name="robots" content="noindex">
 <meta name="seo_hidden" content="true">
-<meta name="description" content="WW2044: Total War strategic map vertical slice: painted political map, zoom, pan, unit selection, music and ambience.">
+<meta name="description" content="WW2044: Total War strategic map vertical slice: Poland 1936 with its real borders, 2039 technology, against Germany and the USSR.">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
-<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/","./js/main.js":"./js/main.js?v=4","./js/world.js":"./js/world.js?v=4","./js/map.js":"./js/map.js?v=4","./js/overlay.js":"./js/overlay.js?v=4","./js/units.js":"./js/units.js?v=4","./js/audio.js":"./js/audio.js?v=4"}}</script>
+<link rel="stylesheet" href="style.css?v=5">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js","three/addons/":"./vendor/addons/","./js/main.js":"./js/main.js?v=5","./js/world.js":"./js/world.js?v=5","./js/map.js":"./js/map.js?v=5","./js/overlay.js":"./js/overlay.js?v=5","./js/units.js":"./js/units.js?v=5","./js/audio.js":"./js/audio.js?v=5"}}</script>
 </head>
 <body>
 <div id="projector" aria-hidden="true"><div id="grain"></div></div>
@@ -22,7 +22,7 @@
 
 <header class="topbar">
   <div class="tb-left">
-    <button class="emblem" title="Nation: Free Yantis"><svg><use href="img/icons.svg#i-flag-objective"/></svg></button>
+    <button class="emblem" title="Nation: Republic of Poland"><svg><use href="img/icons.svg#i-flag-objective"/></svg></button>
     <button class="rb" title="Military"><svg><use href="img/icons.svg#i-crossed-swords"/></svg></button>
     <button class="rb" title="Economy"><svg><use href="img/icons.svg#i-factory"/></svg></button>
     <button class="rb" title="Government"><svg><use href="img/icons.svg#i-capitol"/></svg></button>
@@ -36,7 +36,7 @@
     <button id="pause" class="mini" title="Pause (Space)"><svg><use href="img/icons.svg#i-pause-button"/></svg></button>
     <button id="speed" class="mini speed" title="Speed (1–3)"><i></i><i></i><i></i></button>
     <span class="res" title="Industry"><svg><use href="img/icons.svg#i-gears"/></svg><svg class="r2"><use href="img/icons.svg#i-oil-drum"/></svg></span>
-    <span id="date" class="date">14 MAR 2044</span>
+    <span id="date" class="date">1 JAN 1936</span>
     <span id="state" class="state">Paused</span>
   </div>
   <div class="tb-right">
@@ -49,13 +49,13 @@
     <button class="rb" id="amb" title="Ambience on/off (N)" aria-pressed="true"><svg><use href="img/icons.svg#i-speaker"/></svg></button>
     <span class="gold" title="Treasury: income per month"><svg><use href="img/icons.svg#i-two-coins"/></svg><b id="gold">4,623</b><em id="income">+135</em></span>
   </div>
-  <div class="portrait" title="Commander, Free Yantis"><img src="img/portrait.webp" alt="Commander portrait"><span>Cmdr · Free Yantis</span></div>
+  <div class="portrait" title="Marshal of Poland"><img src="img/portrait.webp" alt="Commander portrait"><span>Marshal · Poland</span></div>
 </header>
 <div class="sub-left">
   <button class="rb sm" title="Armies"><svg><use href="img/icons.svg#i-tank"/></svg></button>
   <button class="rb sm" title="Fleets"><svg><use href="img/icons.svg#i-battleship"/></svg></button>
 </div>
-<div id="toast" class="toast" role="status"><b class="tg-h">Telegram · Signal Corps <i>Priority</i></b><span>Coalition formed</span></div>
+<div id="toast" class="toast" role="status"><b class="tg-h">Telegram · Signal Corps <i>Priority</i></b><span>Mobilisation ordered</span></div>
 
 <aside id="radio" class="radio" aria-label="Soundtrack"><b>Field radio</b><div id="yt"></div><small>Placeholder music · M toggles</small></aside>
 
@@ -77,10 +77,10 @@
 <p class="hint">Drag to pan · scroll to zoom · click a unit to select · shift-drag to box select · right-click to move · Space pauses · <button id="credits-btn" class="link">Credits</button></p>
 
 <dialog id="credits">
-  <h2>WW2044: Total War · Strategic map slice</h2>
+  <h2>WW2044: Total War · Poland 1936 scenario</h2>
   <p>An original vertical slice. Map, interface and code are made for WW2044; nothing is copied from the reference game.</p>
   <ul>
-    <li><b>Map:</b> the Yantis island heightfield and settlements from PARTISAN (Vincent De Nil), set in placeholder seas and nations.</li>
+    <li><b>Map:</b> coasts, lakes, rivers and today's borders from <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a> (public domain). The 1936 frontiers that have since moved (Danzig, the Corridor, East Prussia, the Wilno line, the Riga line) are hand-digitised from period maps and approximate. Relief from <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">Terrain Tiles</a> on AWS (Mapzen; SRTM, ETOPO1 and other open sources; contains Copernicus EU-DEM data).</li>
     <li><b>Units and portrait:</b> slimmed copies and renders of the WW2044 model gallery (Sherman M4, Sd.Kfz. 251, Fallschirmjäger), Vincent De Nil.</li>
     <li><b>Icons:</b> <a href="https://game-icons.net" target="_blank" rel="noopener">game-icons.net</a> by Lorc, Delapouite and contributors, <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>, recoloured.</li>
     <li><b>Fonts:</b> Special Elite (Astigmatic, Apache 2.0), Oswald (Vernon Adams, SIL OFL) and IBM Plex Mono (IBM, SIL OFL), via Google Fonts.</li>
@@ -93,13 +93,13 @@
 
 <div id="start" class="start">
   <div>
-    <p class="kicker">WW2044 · Total War · vertical slice · classified</p>
-    <h1>Strategic Map</h1>
+    <p class="kicker">WW2044 · Total War · Poland 1936 · classified</p>
+    <h1>Poland Is Not Yet Lost!</h1>
     <p id="start-msg">Painting the map…</p>
     <button id="go" disabled>Take command</button>
     <p class="back"><a href="../">← Back to Total War</a></p>
   </div>
 </div>
-<script type="module" src="js/main.js?v=4"></script>
+<script type="module" src="js/main.js?v=5"></script>
 </body>
 </html>
