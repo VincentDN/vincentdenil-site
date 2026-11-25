@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WW2044: Total War | Battle</title>
+<meta name="robots" content="noindex">
+<meta name="seo_hidden" content="true">
+<meta name="description" content="WW2044: Total War battle vertical slice: squads, capture points, base building, upgrades and veterancy against an AI opponent.">
+<link rel="icon" href="../strategic-map/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+<script type="importmap">{"imports":{"three":"../strategic-map/vendor/three.module.min.js","three/addons/":"../strategic-map/vendor/addons/"}}</script>
+</head>
+<body>
+<div id="stage" role="application" aria-label="Battle. Select squads with the left button, order them with the right button."><canvas></canvas></div>
+<div id="plates"></div>
+<div id="box"></div>
+<div id="loading">Moving up to the line…</div>
+
+<header class="bar">
+  <a class="back" href="../index.html">← Main menu</a>
+  <div id="res" class="res"></div>
+  <div class="pools">
+    <span class="pool us"><i><b id="pool0"></b></i><em id="poolv0">500</em></span>
+    <span id="clock">0:00</span>
+    <span class="pool them"><em id="poolv1">500</em><i><b id="pool1"></b></i></span>
+  </div>
+  <span id="mode" class="mode">Skirmish · Town square</span>
+  <button id="pause" title="Pause (P)"><svg><use href="../strategic-map/img/icons.svg#i-pause-button"/></svg></button>
+</header>
+<div id="toasts"></div>
+<canvas id="mini" width="180" height="180" title="Click to move the camera"></canvas>
+<section id="sel" class="card"></section>
+<section class="cmd card">
+  <h3>Recruit</h3><div id="recruit" class="grid"></div>
+  <div id="queue" class="queue"></div>
+  <h3>Construct</h3><div id="construct" class="grid"></div>
+</section>
+<div id="paused" class="paused" hidden>Paused · press P</div>
+<div id="end" class="end" hidden><div><h1 id="end-title"></h1><p id="end-sub"></p><ul id="end-list"></ul><p><a class="btn" href="../strategic-map/index.html">Strategic map</a> <a class="btn" href="index.html">Fight again</a></p></div></div>
+<script type="module" src="js/main.js?v=1"></script>
+</body>
+</html>

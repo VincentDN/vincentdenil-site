@@ -1,0 +1,442 @@
+{
+ "_note": "Placeholder balance. Costs: m = muster, o = ordnance, f = fuel. Times in seconds.",
+ "units": {
+  "rifle": {
+   "name": "Rifle Section",
+   "men": 4,
+   "pop": 2,
+   "cost": {
+    "m": 240
+   },
+   "build": 20,
+   "from": "rifle-depot",
+   "weapon": "rifle",
+   "hp": 80,
+   "speed": 4.2,
+   "sight": 35,
+   "model": "claudov",
+   "kits": [
+    "assault",
+    "smg"
+   ],
+   "captures": true
+  },
+  "pioneer": {
+   "name": "Assault Pioneers",
+   "men": 3,
+   "pop": 2,
+   "cost": {
+    "m": 180
+   },
+   "build": 18,
+   "from": "command-post",
+   "weapon": "smg",
+   "hp": 80,
+   "speed": 4.2,
+   "sight": 30,
+   "model": "claudov",
+   "kits": [
+    "nomad",
+    "tempest"
+   ],
+   "captures": true,
+   "builds": true
+  },
+  "recon": {
+   "name": "Recon Patrol",
+   "men": 3,
+   "pop": 2,
+   "cost": {
+    "m": 260,
+    "o": 20
+   },
+   "build": 22,
+   "from": "rifle-depot",
+   "weapon": "marksman",
+   "hp": 70,
+   "speed": 4.8,
+   "sight": 55,
+   "model": "claudov",
+   "kits": [
+    "sniper",
+    "verdant"
+   ],
+   "captures": true,
+   "camo": true
+  },
+  "mg": {
+   "name": "MG Team",
+   "men": 2,
+   "pop": 2,
+   "cost": {
+    "m": 260
+   },
+   "build": 22,
+   "from": "rifle-depot",
+   "weapon": "hmg",
+   "hp": 80,
+   "speed": 3.6,
+   "sight": 40,
+   "model": "glb:fallschirmjaeger",
+   "setup": 2
+  },
+  "halftrack": {
+   "name": "Halftrack",
+   "men": 0,
+   "pop": 3,
+   "cost": {
+    "m": 220,
+    "f": 30
+   },
+   "build": 30,
+   "from": "motor-pool",
+   "weapon": "mg",
+   "hp": 320,
+   "armour": [
+    20,
+    12,
+    8
+   ],
+   "speed": 8,
+   "sight": 35,
+   "model": "glb:sdkfz251",
+   "carries": 2,
+   "reinforces": true
+  },
+  "tank": {
+   "name": "Medium Tank",
+   "men": 0,
+   "pop": 4,
+   "cost": {
+    "m": 340,
+    "f": 120
+   },
+   "build": 45,
+   "from": "armour-shed",
+   "weapon": "tank-gun",
+   "hp": 700,
+   "armour": [
+    80,
+    50,
+    30
+   ],
+   "speed": 6.5,
+   "sight": 40,
+   "model": "glb:sherman-m4"
+  }
+ },
+ "buildings": {
+  "command-post": {
+   "name": "Command Post",
+   "cost": {},
+   "hp": 2000,
+   "size": [
+    5,
+    5
+   ],
+   "tier": 0
+  },
+  "rifle-depot": {
+   "name": "Rifle Depot",
+   "cost": {
+    "m": 120
+   },
+   "build": 30,
+   "hp": 900,
+   "size": [
+    4,
+    3
+   ],
+   "tier": 1
+  },
+  "signal-mast": {
+   "name": "Signal Mast",
+   "cost": {
+    "m": 80,
+    "f": 20
+   },
+   "build": 25,
+   "hp": 400,
+   "size": [
+    2,
+    2
+   ],
+   "tier": 1,
+   "income": 0.1
+  },
+  "motor-pool": {
+   "name": "Motor Pool",
+   "cost": {
+    "m": 160,
+    "f": 60
+   },
+   "build": 45,
+   "hp": 1200,
+   "size": [
+    5,
+    4
+   ],
+   "tier": 2,
+   "needs": [
+    "rifle-depot"
+   ]
+  },
+  "armour-shed": {
+   "name": "Armour Shed",
+   "cost": {
+    "m": 200,
+    "f": 120
+   },
+   "build": 60,
+   "hp": 1500,
+   "size": [
+    6,
+    5
+   ],
+   "tier": 3,
+   "needs": [
+    "motor-pool"
+   ]
+  },
+  "sandbags": {
+   "name": "Sandbags",
+   "cost": {
+    "m": 10
+   },
+   "build": 6,
+   "hp": 300,
+   "size": [
+    2,
+    1
+   ],
+   "cover": "heavy"
+  },
+  "wire": {
+   "name": "Wire",
+   "cost": {
+    "m": 15
+   },
+   "build": 8,
+   "hp": 150,
+   "size": [
+    3,
+    1
+   ],
+   "blocks": "infantry"
+  },
+  "mg-nest": {
+   "name": "MG Nest",
+   "cost": {
+    "m": 40,
+    "o": 10
+   },
+   "build": 15,
+   "hp": 500,
+   "size": [
+    2,
+    2
+   ],
+   "weapon": "hmg"
+  }
+ },
+ "upgrades": {
+  "lmg": {
+   "name": "Light MG",
+   "for": [
+    "rifle"
+   ],
+   "cost": {
+    "o": 60
+   },
+   "at": "rifle-depot",
+   "slot": "weapon"
+  },
+  "auto": {
+   "name": "Automatic rifles",
+   "for": [
+    "rifle",
+    "pioneer"
+   ],
+   "cost": {
+    "o": 50
+   },
+   "at": "rifle-depot",
+   "slot": "weapon"
+  },
+  "grenades": {
+   "name": "Grenade bundle",
+   "for": [
+    "rifle",
+    "pioneer"
+   ],
+   "cost": {
+    "o": 30
+   },
+   "at": "rifle-depot",
+   "ability": "grenade"
+  },
+  "extra-man": {
+   "name": "Extra man",
+   "for": [
+    "rifle",
+    "recon"
+   ],
+   "cost": {
+    "m": 60
+   },
+   "at": "signal-mast"
+  },
+  "skirts": {
+   "name": "Armour skirts",
+   "for": [
+    "halftrack",
+    "tank"
+   ],
+   "cost": {
+    "f": 25
+   },
+   "at": "motor-pool"
+  },
+  "pintle": {
+   "name": "Pintle MG",
+   "for": [
+    "tank"
+   ],
+   "cost": {
+    "o": 40
+   },
+   "at": "armour-shed",
+   "slot": "weapon"
+  },
+  "smoke": {
+   "name": "Smoke dischargers",
+   "for": [
+    "halftrack",
+    "tank"
+   ],
+   "cost": {
+    "o": 30
+   },
+   "at": "motor-pool",
+   "ability": "smoke"
+  }
+ },
+ "weapons": {
+  "rifle": {
+   "range": 35,
+   "dmg": 10,
+   "rof": 0.6,
+   "acc": [
+    0.6,
+    0.45,
+    0.3
+   ],
+   "supp": 0.4
+  },
+  "smg": {
+   "range": 20,
+   "dmg": 8,
+   "rof": 1.5,
+   "acc": [
+    0.7,
+    0.45,
+    0.2
+   ],
+   "supp": 0.6
+  },
+  "marksman": {
+   "range": 50,
+   "dmg": 18,
+   "rof": 0.3,
+   "acc": [
+    0.8,
+    0.7,
+    0.6
+   ],
+   "supp": 0.3
+  },
+  "hmg": {
+   "range": 45,
+   "dmg": 6,
+   "rof": 6,
+   "acc": [
+    0.5,
+    0.35,
+    0.25
+   ],
+   "supp": 4,
+   "arc": 60
+  },
+  "mg": {
+   "range": 35,
+   "dmg": 6,
+   "rof": 4,
+   "acc": [
+    0.5,
+    0.35,
+    0.25
+   ],
+   "supp": 2
+  },
+  "tank-gun": {
+   "range": 45,
+   "dmg": 120,
+   "rof": 0.2,
+   "acc": [
+    0.7,
+    0.55,
+    0.4
+   ],
+   "pen": 90,
+   "splash": 3
+  }
+ },
+ "veterancy": {
+  "stars": {
+   "1": 3,
+   "2": 5,
+   "3": 8
+  },
+  "perStar": {
+   "acc": 0.08,
+   "suppResist": 0.1,
+   "speed": 0.05
+  },
+  "star3": {
+   "sight": 1
+  },
+  "xp": {
+   "damage": 0.002,
+   "kill": 0.08,
+   "capture": 0.1,
+   "survive": 0.25,
+   "win": 0.15
+  }
+ },
+ "economy": {
+  "trickle": {
+   "m": 2.5,
+   "o": 0,
+   "f": 0
+  },
+  "relay": {
+   "m": 0.6,
+   "o": 0.25,
+   "f": 0.1
+  },
+  "fuel": {
+   "f": 0.9
+  },
+  "ordnance": {
+   "o": 0.9
+  },
+  "victoryPool": 500,
+  "drainPerPoint": 0.4,
+  "pop": 12,
+  "start": {
+   "m": 360,
+   "o": 40,
+   "f": 10
+  }
+ }
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ww2044/campaign-save/v1",
+  "title": "WW2044 Total War campaign save (shared by strategic map, barracks and battle)",
+  "type": "object",
+  "required": ["version", "scenario", "turn", "armies", "sections"],
+  "properties": {
+    "version": {"const": 1},
+    "scenario": {"type": "string", "examples": ["poland1936"]},
+    "turn": {"type": "integer", "minimum": 0},
+    "date": {"type": "string", "description": "In-game date, ISO 8601"},
+    "wallet": {"type": "object", "properties": {"bonds": {"type": "integer"}, "merit": {"type": "integer"}}},
+    "armies": {
+      "type": "object",
+      "description": "Keyed by army id (slug of the name).",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "kind", "nation", "at", "str", "mor", "vet", "sections"],
+        "properties": {
+          "name": {"type": "string"},
+          "kind": {"enum": ["armour", "mech", "infantry"]},
+          "nation": {"type": "integer", "description": "Index into NATIONS in strategic-map/js/world.js"},
+          "at": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2, "description": "lon, lat"},
+          "str": {"type": "integer", "minimum": 0, "description": "Campaign strength; battle losses scale it"},
+          "mor": {"type": "integer", "minimum": 0, "maximum": 100},
+          "vet": {"type": "integer", "minimum": 0, "maximum": 3, "description": "Derived: strength-weighted mean of section stars"},
+          "sections": {"type": "array", "items": {"type": "string"}, "description": "Section ids, the squads that deploy in battle"}
+        }
+      }
+    },
+    "sections": {
+      "type": "object",
+      "description": "Keyed by section id. One section = one battle squad or vehicle crew.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type", "army", "men"],
+        "properties": {
+          "type": {"type": "string", "description": "Unit id in battle/data/battle-units.json"},
+          "army": {"type": "string"},
+          "name": {"type": "string"},
+          "men": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "level", "xp"],
+              "properties": {
+                "name": {"type": "string"},
+                "level": {"type": "integer", "minimum": 1, "maximum": 10, "description": "Barracks rank; stars at 3, 5, 8"},
+                "xp": {"type": "number", "minimum": 0, "maximum": 1, "description": "Progress to next level, 0 to 1 (barracks shows x1000)"},
+                "kit": {"type": "string", "description": "Barracks kit id"}
+              }
+            }
+          },
+          "hp": {"type": "number", "minimum": 0, "maximum": 1, "description": "Vehicles only: hull condition carried between battles"},
+          "upgrades": {"type": "array", "items": {"type": "string"}},
+          "kills": {"type": "integer", "minimum": 0},
+          "battles": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "provinces": {"type": "object", "additionalProperties": {"type": "integer"}, "description": "Province name to owner nation, only where changed from the scenario"},
+    "pendingBattle": {
+      "type": ["object", "null"],
+      "properties": {
+        "id": {"type": "string"},
+        "attacker": {"type": "string"},
+        "defender": {"type": "string"},
+        "province": {"type": "string"},
+        "map": {"type": "string"},
+        "seed": {"type": "integer"}
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/battleResult"}
+    }
+  },
+  "$defs": {
+    "battleResult": {
+      "type": "object",
+      "required": ["id", "winner", "sections"],
+      "properties": {
+        "id": {"type": "string"},
+        "turn": {"type": "integer"},
+        "winner": {"type": "integer", "description": "Nation index"},
+        "duration": {"type": "number", "description": "Seconds"},
+        "sections": {
+          "type": "object",
+          "description": "Keyed by section id: what happened to it",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "survivors": {"type": "array", "items": {"type": "integer"}, "description": "Indexes into men[] still alive"},
+              "reinforced": {"type": "integer", "description": "New level-1 men added during battle"},
+              "xp": {"type": "number", "description": "Section XP earned, shared out among survivors"},
+              "kills": {"type": "integer"},
+              "hp": {"type": "number"},
+              "upgrades": {"type": "array", "items": {"type": "string"}},
+              "wiped": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    }
+  }
+}
