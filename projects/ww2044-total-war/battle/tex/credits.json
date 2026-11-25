@@ -1,0 +1,59 @@
+{
+ "note": "Copied from Escape From Claudov assets/tex and assets/sky (VincentDN/escape-from-claudov), all CC0 1.0 per its NOTICE.md and assets/tex/credits.json.",
+ "files": [
+  {
+   "key": "plaster",
+   "asset": "white_plaster_rough_01",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "cobble",
+   "asset": "cobblestone_floor_001",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "brick",
+   "asset": "Bricks066",
+   "source": "ambientCG",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "rooftiles",
+   "asset": "clay_roof_tiles_03",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "lawn",
+   "asset": "aerial_grass_rock",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "dirt",
+   "asset": "forest_ground_04",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "burlap",
+   "asset": "hessian_230",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "timber",
+   "asset": "rough_wood",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  },
+  {
+   "key": "sky",
+   "asset": "kloofendal_48d",
+   "source": "Poly Haven",
+   "licence": "CC0 1.0"
+  }
+ ]
+}
