@@ -108,16 +108,18 @@ function nationLabels(g, grid) {
   }
 }
 
-export async function buildOverlay(grid) {
+/** Draw the overlay; `parts` picks layers (the PSD export draws them one at a time). */
+export async function buildOverlay(grid, parts = ['rivers', 'lanes', 'markers', 'names', 'nations']) {
+  const on = k => parts.includes(k);
   try { await Promise.all([document.fonts.load('600 40px Oswald'), document.fonts.load('20px "Special Elite"'), document.fonts.load('30px "Special Elite"')]); } catch {}
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
   const g = cv.getContext('2d');
-  rivers(g);
+  if (on('rivers')) rivers(g);
   // trade routes
   g.setLineDash([18, 13]);
   g.lineCap = 'round';
-  for (const r of LANES) {
+  for (const r of on('lanes') ? LANES : []) {
     g.beginPath(); curve(g, r);
     g.strokeStyle = 'rgba(20,28,36,.3)'; g.lineWidth = 6; g.stroke();
     g.strokeStyle = 'rgba(238,240,234,.85)'; g.lineWidth = 3.4; g.stroke();
@@ -129,13 +131,13 @@ export async function buildOverlay(grid) {
   const CAPITALS = ['Warszawa', 'Berlin', 'Kaunas', 'Rīga', 'Praha', 'Wien', 'Budapest', 'København', 'Danzig', 'Minsk', 'Kiev'];
   for (const p of PROVINCES.filter(p => p.seat && Math.abs(p.x) < WORLD.w / 2 - 20 && Math.abs(p.z) < WORLD.d / 2 - 20)) {
     const x = px(p.x), y = pz(p.z), cap = CAPITALS.includes(p.name), r = cap ? 7 : 4;
-    g.fillStyle = cap ? '#f2c46b' : '#efe9d8'; g.fillRect(x - r, y - r, r * 2, r * 2);
-    g.lineWidth = 2; g.strokeStyle = '#1a1d1b'; g.strokeRect(x - r, y - r, r * 2, r * 2);
+    if (on('markers')) { g.fillStyle = cap ? '#f2c46b' : '#efe9d8'; g.fillRect(x - r, y - r, r * 2, r * 2); g.lineWidth = 2; g.strokeStyle = '#1a1d1b'; g.strokeRect(x - r, y - r, r * 2, r * 2); }
+    if (!on('names')) continue;
     g.font = `${cap ? 26 : 17}px "Special Elite", monospace`;
     g.lineWidth = 4; g.strokeStyle = 'rgba(15,18,17,.6)'; g.strokeText(p.name.toUpperCase(), x + r + 4, y - 1);
     g.fillStyle = '#efe9d8'; g.fillText(p.name.toUpperCase(), x + r + 4, y - 1);
   }
-  nationLabels(g, grid);
+  if (on('nations')) nationLabels(g, grid);
   const tex = new T.CanvasTexture(cv);
   tex.anisotropy = 8;
   tex.generateMipmaps = true;

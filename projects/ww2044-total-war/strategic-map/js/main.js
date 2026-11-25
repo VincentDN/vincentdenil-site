@@ -224,7 +224,7 @@ function frame() {
   requestAnimationFrame(frame);
 }
 frame();
-window.__map = {cam, UNITS, select, setSpeed}; // for tests
+window.__map = {cam, UNITS, select, setSpeed, map, scene, renderer, camera, overlay: parts => buildOverlay(grid, parts)}; // for tests and tools/export-psd-layers.cjs
 window.__nat = nationAt;
 window.__screen = i => { const v = UNITS[i].obj.position.clone().project(camera); return {x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight - 20}; };
 
