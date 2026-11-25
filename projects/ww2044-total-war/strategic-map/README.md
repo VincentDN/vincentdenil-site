@@ -14,3 +14,5 @@ Static, buildless three.js page (open `index.html` from any static server). Sour
 - Look: war-room telegram UI (Special Elite, Stardos Stencil, IBM Plex Mono) and a projector overlay (`#projector`: light falloff, grain, flicker, scan lines).
 
 The reference screenshot that inspired the layout is not used or shipped here; all art is original or credited.
+
+Release: the site's CDN caches .js and .css for 4 hours, so bump `?v=` in `index.html` (stylesheet, module script and every `./js/*.js` entry in the import map) on each deploy. The HTML itself is revalidated on every visit.
