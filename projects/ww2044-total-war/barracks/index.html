@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WW2044: Total War | Barracks</title>
+<meta name="robots" content="noindex">
+<meta name="seo_hidden" content="true">
+<meta name="description" content="WW2044: Total War barracks vertical slice: unit kit customisation, veterancy and levels, three soldiers in a ruined town square.">
+<link rel="icon" href="../strategic-map/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"../strategic-map/vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<div id="stage" role="application" aria-label="Barracks. Drag to look around, click a soldier to select him."></div>
+<div id="plates"></div>
+<div id="loading">Mustering the section…</div>
+
+<aside class="left panel">
+  <h1>Barracks</h1>
+  <p class="sub">Kit locker <span>· choose a soldier, then a kit</span></p>
+  <ul id="kits" class="list"></ul>
+</aside>
+
+<header class="top">
+  <span class="cur" title="War bonds: buy kit"><svg><use href="../strategic-map/img/icons.svg#i-two-coins"/></svg><b id="bonds">0</b></span>
+  <span class="cur merit" title="Merit: train soldiers"><svg><use href="../strategic-map/img/icons.svg#i-medal"/></svg><b id="merit">0</b></span>
+  <button class="rb" id="squad-btn" title="Kit locker"><svg><use href="../strategic-map/img/icons.svg#i-helmet"/></svg></button>
+  <button class="rb" id="unit-btn" title="Sections"><svg><use href="../strategic-map/img/icons.svg#i-crossed-swords"/></svg></button>
+  <button class="rb hide-sm" title="Missions"><svg><use href="../strategic-map/img/icons.svg#i-scroll-unfurled"/></svg></button>
+  <button class="rb hide-sm" title="Awards"><svg><use href="../strategic-map/img/icons.svg#i-ribbon-medal"/></svg></button>
+</header>
+
+<aside class="right panel">
+  <section class="card">
+    <div class="who">
+      <div class="badge"><small>Level</small><b id="man-lv">1</b></div>
+      <div><h2 id="man-name"></h2><p id="man-rank"></p><p id="man-vet" class="vet"></p></div>
+    </div>
+    <div class="xp"><i id="xp-fill"></i><span id="xp-txt"></span></div>
+    <ul id="stats" class="stats"></ul>
+    <button id="train" class="btn">Train <em>40 merit · +350 XP</em></button>
+  </section>
+  <section>
+    <h3 id="sec-name"></h3>
+    <p id="sec-blurb" class="blurb"></p>
+    <ul id="sections" class="list"></ul>
+  </section>
+</aside>
+
+<footer class="bottom">
+  <a class="back" href="../">‹ Back</a>
+  <div class="buyrow">
+    <span id="kit-name" class="kitname"></span>
+    <button id="equip" class="btn" hidden>Issue kit</button>
+    <button id="buy" class="btn gold" hidden></button>
+  </div>
+</footer>
+<div id="toast" class="toast" role="status"></div>
+<p class="hint">Drag to look around · click a soldier or use ← → · <button id="credits-btn" class="link">Credits</button></p>
+
+<dialog id="credits">
+  <h2>Credits</h2>
+  <p>Soldiers: the posed soldiers of <em>Escape From Claudov</em> (procedural bodies and kits from the Riposte: Frontline engine by BenDBSS, MIT; StG 44 model from Partisan Project), baked into static meshes for this page.</p>
+  <p>Icons: game-icons.net (CC BY 3.0), shared with the strategic map. three.js (MIT).</p>
+  <p>Town square, interface, names and text: original placeholders for WW2044: Total War. The layout reference screenshot is not used or shipped.</p>
+  <button id="credits-close" class="btn">Close</button>
+</dialog>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
