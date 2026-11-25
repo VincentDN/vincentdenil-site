@@ -13,7 +13,7 @@
 .menu-mock .note{position:absolute;right:14px;bottom:10px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#161d21cc;border:1px solid #b4c4cc26}
 @media(max-width:620px){.menu-mock{aspect-ratio:3/4}.menu-mock .bar span:first-child{display:none}}
 h1,h2,h3,header strong{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:600;letter-spacing:.02em}h1{letter-spacing:.01em}
-</style></head><body><header><strong>WW2044: TOTAL WAR / GAME DESIGN DOCUMENT</strong><p>25 November 2026 · Pre-production · One-page design for the vertical slice</p><p><a href="/projects/ww2044-total-war/">Back to Total War project</a> · <a href="#section-10">Vertical slice scope</a> · <a href="#section-12">Inspiration references</a></p></header><div class="layout"><nav aria-label="Contents"><a href="#section-1">1. Pitch</a><a href="#section-2">2. Design pillars</a><a href="#section-3">3. Core loop</a><a href="#section-4">4. Strategic layer</a><a href="#section-5">5. Battle layer (RTS)</a><a href="#section-6">6. Troops and upgrades</a><a href="#section-7">7. Scenarios and timelines</a><a href="#section-8">8. Main menu and UI</a><a href="#section-9">9. Art and music direction</a><a href="#section-10">10. Vertical slice scope</a><a href="#section-11">11. Tech and budget</a><a href="#section-12">12. Inspiration references</a><a href="#section-13">13. Open decisions</a></nav><article><h1>WW2044: Total War</h1>
+</style></head><body><header><strong>WW2044: TOTAL WAR / GAME DESIGN DOCUMENT</strong><p>25 November 2026 · Pre-production · One-page design for the vertical slice</p><p><a href="/projects/ww2044-total-war/">Back to Total War project</a> · <a href="#section-10">Vertical slice scope</a> · <a href="#section-12">Inspiration references</a></p></header><div class="layout"><nav aria-label="Contents"><a href="#section-1">1. Pitch</a><a href="#section-2">2. Design pillars</a><a href="#section-3">3. Core loop</a><a href="#section-4">4. Strategic layer</a><a href="#section-5">5. Battle layer (RTS)</a><a href="#section-6">6. Troops and upgrades</a><a href="#section-7">7. Scenarios and timelines</a><a href="#section-8">8. Main menu and UI</a><a href="#section-9">9. Art and music direction</a><a href="#section-10">10. Vertical slice scope</a><a href="#section-11">11. Tech and budget</a><a href="#section-12">12. Inspiration references</a><a href="#section-13">13. Open decisions</a><a href="#section-14">14. Future: OpenGSG</a></nav><article><h1>WW2044: Total War</h1>
 <p class="lede">Shape (alt)history in a genre-bending mix of grand strategy, real-time strategy and 4X. Control any nation in a series of fictional scenarios inspired by history. Pick your scenario and your timeline and relive history's events in your own way: drive the Ottoman Empire to its height in a Cold War setting, reunify Germany in a modern, near sci-fi 2044, or rewrite a crisis of your own choosing.</p>
 
 <h2 id="section-1">1. Pitch</h2>
@@ -156,6 +156,37 @@ h1,h2,h3,header strong{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:
 <tr><td>Campaign time</td><td>Turn-based seasons / real-time with pause</td><td>Turn-based seasons (simpler AI, clear battle hand-off)</td></tr>
 <tr><td>Slice scenario</td><td>Einheit 2044 / Sublime Porte</td><td>Einheit 2044 (fits the existing WW2044 models)</td></tr>
 <tr><td>Music source</td><td>Composed / AI-generated / licensed library</td><td>AI-generated or composed original tracks, rights checked before release</td></tr>
+<tr><td>Open version</td><td>Keep closed / OpenGSG public engine plus data packs</td><td>OpenGSG after M4, deployed on Cloudflare Pages (section 14)</td></tr>
 </tbody></table></div>
+<h2 id="section-14">14. Future: OpenGSG, an open alt-history simulator</h2>
+<p><strong>Idea.</strong> Once the slice works, split it into an open engine and its content. <strong>OpenGSG</strong> is the open-source grand strategy engine plus a base data set. Anyone can play it in the browser and change history with it. WW2044: Total War becomes its flagship scenario pack. The point of the project is modding with AI: players describe the history they want in plain language, and an AI assistant writes the mod for them.</p>
+<h3>How AI modding works</h3>
+<ul>
+<li><strong>Mods are data packs, not code.</strong> A mod is a folder of JSON (provinces, nations, units, research, events, scenario start) plus optional images and sounds. Data packs are safe to load in the browser, so mods can't run code on players' machines.</li>
+<li><strong>A published schema and prompt kit.</strong> The repository ships a JSON schema and a short <code>MODDING.md</code> written for AI assistants. A player pastes both into Claude, ChatGPT or any other assistant and asks, for example, "Byzantium survives to 1960, give me a Cold War scenario for the Aegean". The assistant returns a valid pack.</li>
+<li><strong>Load and check in the browser.</strong> Drop the pack (a zip or a URL to a gist or raw GitHub file) on the main menu. A built-in validator lists errors in plain language, so players can paste them back to the AI to fix.</li>
+<li><strong>No server and no API keys in the game.</strong> The AI step happens in the player's own assistant. An in-game assistant where players bring their own key can come later if there is demand.</li>
+</ul>
+<h3>Public repository</h3>
+<ul>
+<li>A new public repository, for example <code>VincentDN/opengsg</code>. Engine code under MIT, base data under CC BY 4.0, and mods under the licence their authors choose.</li>
+<li>Only cleared, open content goes in. WW2044 models, the inspiration screenshots and the placeholder soundtrack stay in the private <code>vdn-ww2044</code> repository until their rights allow publishing.</li>
+<li>Community mods arrive as pull requests that add a folder under <code>mods/</code>. A GitHub Action runs the same validator, and every pull request gets a preview link to play the mod before it is merged.</li>
+</ul>
+<h3>Where to deploy it</h3>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Good</th><th>Less good</th></tr></thead><tbody>
+<tr><td><strong>Cloudflare Pages</strong> (recommended)</td><td>Already used for vincentdenil.com, free, a preview URL for every pull request (ideal for reviewing mods), custom domain such as <code>opengsg.vincentdenil.com</code></td><td>One more Pages project to look after</td></tr>
+<tr><td>GitHub Pages</td><td>Zero setup in a public repository, the familiar <code>github.io</code> address for open-source players</td><td>No pull request previews without extra work, one site per repository</td></tr>
+<tr><td>itch.io</td><td>A gaming audience, devlogs, comments and optional donations</td><td>Manual uploads, and a weaker fit for a mod catalogue that grows through pull requests</td></tr>
+</tbody></table></div>
+<p><strong>Recommendation:</strong> Cloudflare Pages, connected to the public repository, at <code>opengsg.vincentdenil.com</code>. Mods are reviewed through pull request previews. Add an itch.io page later that links to it, to find players.</p>
+<h3>Steps, after M4</h3>
+<ol>
+<li>Move all slice content into data files with one format (most of this is already in the data-driven plan in section 11).</li>
+<li>Write the JSON schema, the in-browser validator and <code>MODDING.md</code>, and test them by asking both assistants on the $20 plans to write a mod.</li>
+<li>Create the public repository with the engine and the cleared base data, and connect Cloudflare Pages.</li>
+<li>Add the mod loader to the main menu and a <code>mods/</code> gallery page, with validation in CI.</li>
+</ol>
+<p>Risks: contributions about sensitive real-world history need house rules and moderation; licences must be checked for every asset; and the engine split must not delay the slice.</p>
 <footer>WW2044: Total War · game design document v0.1 · 25 November 2026. Page styles from the Partisan master roadmap. Reference screenshots © their owners, credited under each image.</footer>
 </article></div></body></html>
