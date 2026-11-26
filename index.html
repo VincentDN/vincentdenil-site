@@ -13,7 +13,7 @@
   })();
 </script>
 <title>Atelier Vincent De Nil, Creative Director &amp; Founder</title>
-<meta name="description" content="Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I call: 'designing for human creativity in the agentic age'. Occasional video game modder.">
+<meta name="description" content="Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I saw described as: 'AI can help you build faster. AI cannot make people care.' Occasional video game modder.">
 <link rel="canonical" href="https://vincentdenil.com/">
 <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicons/favicon_16x16.png">
@@ -86,7 +86,7 @@
         "url": "https://vincentdenil.com/assets/vincent.jpg",
         "caption": "Vincent De Nil giving his talk 'Creating the World of Kaiserreich' at PDX-CON Berlin, 2019"
       },
-      "description": "Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I call: 'designing for human creativity in the agentic age'. Occasional video game modder.",
+      "description": "Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I saw described as: 'AI can help you build faster. AI cannot make people care.' Occasional video game modder.",
       "nationality": {
         "@type": "Country",
         "name": "Belgium"
@@ -373,6 +373,38 @@
   }
   /* nerd-mode secret button: tapping pins the tooltip open (touch has no hover), with a nudge per tap */
   .btn.tip-open[data-tooltip]::after, .btn.tip-open[data-tooltip]::before{ opacity:1; visibility:visible; }
+  /* nerd mode: retro gold buttons for the two game projects, with a sheen sweep and sparkle stars */
+  .btn.gold-btn{
+    position:relative; isolation:isolate;
+    color:#2a1700; font-weight:700; letter-spacing:.02em;
+    border:2px solid #6b4308;
+    background:
+      linear-gradient(105deg, rgba(0,0,0,0) 42%, rgba(255,252,220,.85) 50%, rgba(0,0,0,0) 58%) 150% 0 / 260% 100% no-repeat,
+      linear-gradient(180deg, #fbe98a 0%, #e0b043 48%, #a8741c 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,230,.7), inset 0 -2px 0 rgba(90,50,5,.35), 0 0 16px rgba(255,200,80,.45);
+    text-shadow: 0 1px 0 rgba(255,245,200,.7);
+    animation: gold-sheen 4.5s ease-in-out infinite;
+  }
+  .btn.gold-btn:hover, .btn.gold-btn:focus-visible{
+    background:
+      linear-gradient(105deg, rgba(0,0,0,0) 42%, rgba(255,252,220,.9) 50%, rgba(0,0,0,0) 58%) 150% 0 / 260% 100% no-repeat,
+      linear-gradient(180deg, #fff1a6 0%, #f0c356 48%, #b9822a 100%);
+  }
+  .btn.gold-btn .gold-spark{
+    position:absolute; z-index:1; pointer-events:none;
+    width:var(--s,12px); height:var(--s,12px); margin:calc(var(--s,12px)/-2) 0 0 calc(var(--s,12px)/-2);
+    background:radial-gradient(circle, #fff 0 14%, rgba(255,246,190,.95) 34%, rgba(255,215,90,0) 72%);
+    clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+    filter:drop-shadow(0 0 3px rgba(255,236,140,.95));
+    opacity:0; transform:scale(.2) rotate(0deg);
+    animation:gold-twinkle 2.6s ease-in-out var(--w,0s) infinite;
+  }
+  @keyframes gold-sheen{ 0%,55%{ background-position:150% 0, 0 0; } 100%{ background-position:-50% 0, 0 0; } }
+  @keyframes gold-twinkle{ 0%,100%{ opacity:0; transform:scale(.2) rotate(0deg);} 45%{ opacity:1; transform:scale(1) rotate(90deg);} 70%{ opacity:.8; transform:scale(.7) rotate(150deg);} }
+  @media (prefers-reduced-motion: reduce){
+    .btn.gold-btn{ animation:none; background-position:0 0, 0 0; }
+    .btn.gold-btn .gold-spark{ animation:none; opacity:.85; transform:scale(.8); }
+  }
   .btn.secret-tap{ animation:secret-tap .18s ease-out; }
   .btn.secret-unlocked{ animation:secret-unlocked .9s ease-out forwards; }
   @keyframes secret-tap{ 0%,100%{ transform:translateX(0); } 30%{ transform:translateX(-3px); } 70%{ transform:translateX(3px); } }
@@ -644,8 +676,8 @@
         <img src="assets/vincent.jpg" alt="Vincent De Nil giving his talk 'Creating the World of Kaiserreich' at PDX-CON Berlin, 2019">
       </div>
       <div class="bio">
-        <h1><span class="hero-tagline">Designing for human creativity in the agentic age</span></h1>
-        <p>Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I call: 'designing for human creativity in the agentic age'. Occasional video game modder.</p>
+        <h1><span class="hero-tagline">“AI can help you build faster. AI cannot make people care.”</span></h1>
+        <p>Belgian founder and creative director working between Stockholm and Raleigh, NC. My work lives at the intersection of narrative design, visual culture, and emerging technology, a mission I saw described as: 'AI can help you build faster. AI cannot make people care.' Occasional video game modder.</p>
       </div>
     </section>
 
@@ -768,9 +800,9 @@
       var nerdNavItems = [
         { text: 'WW2044 Project', href: 'https://kaisercatcinema.com/ww2044', tooltip: 'World War II reimagined with modern-day equipment and vehicles.' },
         { text: 'Cold War Project', href: 'https://kaisercatcinema.com/pages/about-coldwarproject', tooltip: 'What if there had been a three-way Cold War?' },
-        { text: 'PARTISAN Project', href: 'https://vincentdn.github.io/partisan-project/', tooltip: 'AI-coded game design concept blending the extraction mechanics of Escape From Tarkov with “Mount and Blade with guns”. In PARTISAN, you are the resistance. Build your militia out by attacking and stealing weapons and equipment from the Occupier. Take back your island. Free Yantis!' },
+        { text: 'PARTISAN Project', href: 'https://vincentdn.github.io/partisan-project/', gold: true, tooltip: 'AI-coded game design concept blending the extraction mechanics of Escape From Tarkov with “Mount and Blade with guns”. In PARTISAN, you are the resistance. Build your militia out by attacking and stealing weapons and equipment from the Occupier. Take back your island. Free Yantis!' },
         { text: 'Kaiserreich on Steam', href: 'https://steamcommunity.com/workshop/filedetails/?id=1521695605', tooltip: 'Kaiserreich: Legacy of the Weltkrieg — the alt-history mod for Hearts of Iron IV.' },
-        { text: 'Escape From Claudov', href: 'https://vincentdn.github.io/escape-from-claudov/', tooltip: 'An open-source extraction shooter template developed in collab with BenDBSS.' },
+        { text: 'Escape From Claudov', href: 'https://vincentdn.github.io/escape-from-claudov/', gold: true, tooltip: 'An open-source extraction shooter template developed in collab with BenDBSS.' },
         // Android build-number easter egg: 7 taps unlocks /projects/, see "secret projects" below.
         { text: '👻 Experiments and Secret Projects', href: 'projects/', tooltip: SECRET_TIP, secret: true }
       ];
@@ -987,6 +1019,17 @@
         portrait.setAttribute('alt', avatar.alt);
         portraitWrap.setAttribute('data-tooltip', avatar.tooltip);
 
+        // Gold buttons get a few sparkle stars, re-added after every text change (textContent clears them).
+        function addGoldSparks(a){
+          [[10,22,20,0],[72,12,15,.9],[86,64,18,1.6],[32,80,13,2.4],[54,36,12,3.1]].forEach(function(d){
+            var i = document.createElement('i');
+            i.className = 'gold-spark';
+            i.setAttribute('aria-hidden', 'true');
+            i.style.cssText = 'left:'+d[0]+'%;top:'+d[1]+'%;--s:'+d[2]+'px;--w:'+d[3]+'s';
+            a.appendChild(i);
+          });
+        }
+
         navLinks.forEach(function(a, i){
           if(nerdMode){
             if(i < nerdNavItems.length){
@@ -994,6 +1037,8 @@
               a.textContent = nerdNavItems[i].text;
               a.setAttribute('data-tooltip', nerdNavItems[i].tooltip);
               a.classList.toggle('secret-btn', !!nerdNavItems[i].secret);
+              a.classList.toggle('gold-btn', !!nerdNavItems[i].gold);
+              if(nerdNavItems[i].gold) addGoldSparks(a);
               a.style.display = '';
             } else {
               a.style.display = 'none';
@@ -1002,7 +1047,7 @@
             a.setAttribute('href', normalNav[i].href);
             a.textContent = normalNav[i].text;
             a.setAttribute('data-tooltip', normalNav[i].tooltip);
-            a.classList.remove('secret-btn');
+            a.classList.remove('secret-btn', 'gold-btn');
             a.style.display = '';
           }
         });
