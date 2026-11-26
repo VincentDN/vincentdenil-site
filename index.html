@@ -376,20 +376,22 @@
   /* nerd mode: retro gold buttons for the two game projects, with a sheen sweep and sparkle stars */
   .btn.gold-btn{
     position:relative; isolation:isolate;
-    color:#2a1700; font-weight:700; letter-spacing:.02em;
-    border:2px solid #6b4308;
+    color:#2b1205; font-weight:700; letter-spacing:.02em;
+    border:2px solid #7a2e0c;
     background:
-      linear-gradient(105deg, rgba(0,0,0,0) 42%, rgba(255,252,220,.85) 50%, rgba(0,0,0,0) 58%) 150% 0 / 260% 100% no-repeat,
-      linear-gradient(180deg, #fbe98a 0%, #e0b043 48%, #a8741c 100%);
-    box-shadow: inset 0 1px 0 rgba(255,255,230,.7), inset 0 -2px 0 rgba(90,50,5,.35), 0 0 16px rgba(255,200,80,.45);
-    text-shadow: 0 1px 0 rgba(255,245,200,.7);
+      linear-gradient(105deg, rgba(0,0,0,0) 42%, rgba(255,240,215,.7) 50%, rgba(0,0,0,0) 58%) 150% 0 / 260% 100% no-repeat,
+      linear-gradient(180deg, #f6a867 0%, #e5793a 52%, #b8521f 100%);
+    box-shadow: inset 0 1px 0 rgba(255,236,210,.55), inset 0 -2px 0 rgba(90,30,5,.35), 0 0 14px rgba(255,130,50,.4);
+    text-shadow: 0 1px 0 rgba(255,220,180,.5);
     animation: gold-sheen 4.5s ease-in-out infinite;
   }
   .btn.gold-btn:hover, .btn.gold-btn:focus-visible{
     background:
-      linear-gradient(105deg, rgba(0,0,0,0) 42%, rgba(255,252,220,.9) 50%, rgba(0,0,0,0) 58%) 150% 0 / 260% 100% no-repeat,
-      linear-gradient(180deg, #fff1a6 0%, #f0c356 48%, #b9822a 100%);
+      linear-gradient(105deg, rgba(0,0,0,0) 42%, rgba(255,240,215,.8) 50%, rgba(0,0,0,0) 58%) 150% 0 / 260% 100% no-repeat,
+      linear-gradient(180deg, #f9b67a 0%, #ec8442 52%, #c25a24 100%);
   }
+  /* the hover tooltip is a child of the button: keep it readable, not in the gold label's type styling */
+  .btn.gold-btn[data-tooltip]::after{ text-shadow:none; font-weight:400; letter-spacing:normal; color:#EAF2F8; }
   .btn.gold-btn .gold-spark{
     position:absolute; z-index:1; pointer-events:none;
     width:var(--s,12px); height:var(--s,12px); margin:calc(var(--s,12px)/-2) 0 0 calc(var(--s,12px)/-2);
